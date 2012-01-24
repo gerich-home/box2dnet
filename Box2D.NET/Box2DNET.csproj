@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <SchemaVersion>2.0</SchemaVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Box2DNET</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Box2DNET</RootNamespace>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <ProjectGuid>{4ECB9A78-8AE1-4FA7-8344-B7A8FFDDD7B7}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <Name>mscorlib</Name>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design">
+      <Name>System.Design</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Management">
+      <Name>System.Management</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.Xml</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\ContactFilter.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\ContactImpulse.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\ContactListener.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\DebugDraw.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\DestructionListener.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\PairCallback.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\QueryCallback.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\RayCastCallback.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\TreeCallback.cs" />
+    <Compile Include="main\java\org\jbox2d\callbacks\TreeRayCastCallback.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\AABB.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\broadphase\BroadPhase.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\broadphase\DynamicTree.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\broadphase\IBroadphase.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\broadphase\Pair.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\broadphase\TreeNode.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\Collision.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\ContactID.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\Distance.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\DistanceInput.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\DistanceOutput.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\Manifold.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\ManifoldPoint.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\RayCastInput.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\RayCastOutput.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\ChainShape.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\CircleShape.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\EdgeShape.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\MassData.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\PolygonShape.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\Shape.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\shapes\ShapeType.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\TimeOfImpact.cs" />
+    <Compile Include="main\java\org\jbox2d\collision\WorldManifold.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Color3f.cs" />
+    <Compile Include="main\java\org\jbox2d\common\IViewportTransform.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Mat22.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Mat33.cs" />
+    <Compile Include="main\java\org\jbox2d\common\MathUtils.cs" />
+    <Compile Include="main\java\org\jbox2d\common\OBBViewportTransform.cs" />
+    <Compile Include="main\java\org\jbox2d\common\RaycastResult.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Rot.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Settings.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Sweep.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Timer.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Transform.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Vec2.cs" />
+    <Compile Include="main\java\org\jbox2d\common\Vec3.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\Body.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\BodyDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\BodyType.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\ContactManager.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\CircleContact.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\Contact.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\ContactCreator.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\ContactEdge.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\ContactPositionConstraint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\ContactRegister.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\ContactSolver.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\ContactVelocityConstraint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\PolygonAndCircleContact.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\PolygonContact.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\Position.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\contacts\Velocity.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\Filter.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\Fixture.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\FixtureDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\FixtureProxy.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\Island.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\ConstantVolumeJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\ConstantVolumeJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\DistanceJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\DistanceJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\FrictionJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\FrictionJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\GearJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\GearJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\Jacobian.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\Joint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\JointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\JointEdge.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\JointType.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\LimitState.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\LineJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\MouseJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\MouseJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\PrismaticJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\PrismaticJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\PulleyJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\PulleyJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\RevoluteJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\RevoluteJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\WeldJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\WeldJointDef.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\joints\WheelJoint.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\Profile.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\SolverData.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\TimeStep.cs" />
+    <Compile Include="main\java\org\jbox2d\dynamics\World.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\arrays\FloatArray.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\arrays\IntArray.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\arrays\Vec2Array.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\IDynamicStack.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\IOrderedStack.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\IWorldPool.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\normal\CircleStack.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\normal\DefaultWorldPool.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\normal\MutableStack.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\normal\OrderedStack.cs" />
+    <Compile Include="main\java\org\jbox2d\pooling\stacks\DynamicIntStack.cs" />
+    <Compile Include="SupportClass.cs" />
+    <Compile Include="test\java\org\jbox2d\utests\MathTest.cs" />
+    <None Include="_ConversionReport.htm">
+      <SubType>Preview</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
