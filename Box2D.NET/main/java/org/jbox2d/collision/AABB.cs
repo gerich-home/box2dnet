@@ -129,8 +129,8 @@ namespace org.jbox2d.collision
         /// <param name="maxVertex">the top right vertex of the bounding box</param>
         public AABB(Vec2 lowerVertex, Vec2 upperVertex)
         {
-            this.lowerBound = lowerVertex.Clone() as Vec2; // clone to be safe
-            this.upperBound = upperVertex.Clone() as Vec2;
+            this.lowerBound = lowerVertex.Clone(); // clone to be safe
+            this.upperBound = upperVertex.Clone();
         }
 
         /// <summary>

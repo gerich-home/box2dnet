@@ -94,8 +94,8 @@ namespace org.jbox2d.collision
         public Manifold(Manifold other)
         {
             points = new ManifoldPoint[Settings.maxManifoldPoints];
-            localNormal = other.localNormal.Clone() as Vec2;
-            localPoint = other.localPoint.Clone() as Vec2;
+            localNormal = other.localNormal.Clone();
+            localPoint = other.localPoint.Clone();
             pointCount = other.pointCount;
             type = other.type;
             // djm: this is correct now
