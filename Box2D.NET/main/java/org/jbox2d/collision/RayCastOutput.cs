@@ -1,4 +1,4 @@
-/// <summary>****************************************************************************
+/// ****************************************************************************
 /// Copyright (c) 2011, Daniel Murphy
 /// All rights reserved.
 /// 
@@ -21,33 +21,33 @@
 /// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 /// POSSIBILITY OF SUCH DAMAGE.
 /// ****************************************************************************
-/// </summary>
+
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.collision
 {
-	
-	// updated to rev 100
-	/// <summary> Ray-cast output data. The ray hits at p1 + fraction * (p2 - p1), where p1 and p2
-	/// come from b2RayCastInput.
-	/// </summary>
-	public class RayCastOutput
-	{
-		//UPGRADE_NOTE: Final was removed from the declaration of 'normal '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 normal;
-		public float fraction;
-		
-		public RayCastOutput()
-		{
-			normal = new Vec2();
-			fraction = 0;
-		}
-		
-		public virtual void  set_Renamed(RayCastOutput rco)
-		{
-			normal.set_Renamed(rco.normal);
-			fraction = rco.fraction;
-		}
-	}
-	
+    // updated to rev 100
+    /// <summary>
+    /// Ray-cast output data. The ray hits at p1 + fraction * (p2 - p1), where p1 and p2
+    /// come from b2RayCastInput.
+    /// </summary>
+    public class RayCastOutput
+    {
+        public readonly Vec2 normal;
+        public float fraction;
+
+        public RayCastOutput()
+        {
+            normal = new Vec2();
+            fraction = 0;
+        }
+
+        public virtual void set_Renamed(RayCastOutput rco)
+        {
+            normal.set_Renamed(rco.normal);
+            fraction = rco.fraction;
+        }
+    }
+
 }
