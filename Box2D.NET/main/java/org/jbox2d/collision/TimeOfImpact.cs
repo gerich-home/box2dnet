@@ -1,27 +1,27 @@
-/// <summary>****************************************************************************
-/// Copyright (c) 2011, Daniel Murphy
-/// All rights reserved.
-/// 
-/// Redistribution and use in source and binary forms, with or without modification,
-/// are permitted provided that the following conditions are met:
-/// * Redistributions of source code must retain the above copyright notice,
-/// this list of conditions and the following disclaimer.
-/// * Redistributions in binary form must reproduce the above copyright notice,
-/// this list of conditions and the following disclaimer in the documentation
-/// and/or other materials provided with the distribution.
-/// 
-/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-/// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-/// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-/// IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-/// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-/// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-/// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-/// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-/// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-/// POSSIBILITY OF SUCH DAMAGE.
-/// ****************************************************************************
-/// </summary>
+// ****************************************************************************
+// Copyright (c) 2011, Daniel Murphy
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+// * Redistributions of source code must retain the above copyright notice,
+// this list of conditions and the following disclaimer.
+// * Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation
+// and/or other materials provided with the distribution.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
+// ****************************************************************************
+
 using System;
 using DistanceProxy = org.jbox2d.collision.Distance.DistanceProxy;
 using SimplexCache = org.jbox2d.collision.Distance.SimplexCache;
@@ -33,22 +33,27 @@ using Sweep = org.jbox2d.common.Sweep;
 using Transform = org.jbox2d.common.Transform;
 using Vec2 = org.jbox2d.common.Vec2;
 using IWorldPool = org.jbox2d.pooling.IWorldPool;
+using System.Diagnostics;
+
 namespace org.jbox2d.collision
 {
 	
-	/// <summary> Class used for computing the time of impact. This class should not be constructed usually, just
-	/// retrieve from the {@link SingletonPool#getTOI()}.
-	/// 
+	/// <summary>
+	/// Class used for computing the time of impact.
+	/// This class should not be constructed usually, just retrieve from the {@link SingletonPool#getTOI()}.
 	/// </summary>
-	/// <author>  daniel
-	/// </author>
+	/// <author>daniel</author>
 	public class TimeOfImpact
 	{
-		private void  InitBlock()
+		public enum TOIOutputState
 		{
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			UNKNOWN, FAILED, OVERLAPPED, TOUCHING, SEPARATED
+			UNKNOWN,
+			FAILED,
+			OVERLAPPED,
+			TOUCHING,
+			SEPARATED
 		}
+
 		public const int MAX_ITERATIONS = 1000;
 		
 		public static int toiCalls = 0;
@@ -57,32 +62,25 @@ namespace org.jbox2d.collision
 		public static int toiRootIters = 0;
 		public static int toiMaxRootIters = 0;
 		
-		/// <summary> Input parameters for TOI
-		/// 
+		/// <summary>
+		/// Input parameters for TOI
 		/// </summary>
-		/// <author>  Daniel Murphy
-		/// </author>
+		/// <author>Daniel Murphy</author>
 		public class TOIInput
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'proxyA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			public DistanceProxy proxyA = new DistanceProxy();
-			//UPGRADE_NOTE: Final was removed from the declaration of 'proxyB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			public DistanceProxy proxyB = new DistanceProxy();
-			//UPGRADE_NOTE: Final was removed from the declaration of 'sweepA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			public Sweep sweepA = new Sweep();
-			//UPGRADE_NOTE: Final was removed from the declaration of 'sweepB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			public Sweep sweepB = new Sweep();
-			/// <summary> defines sweep interval [0, tMax]</summary>
+			public readonly DistanceProxy proxyA = new DistanceProxy();
+			public readonly DistanceProxy proxyB = new DistanceProxy();
+			public readonly Sweep sweepA = new Sweep();
+			public readonly Sweep sweepB = new Sweep();
+
+			/// <summary>Defines sweep interval [0, tMax]</summary>
 			public float tMax;
 		}
 		
-		public static enum_Renamed TOIOutputState;
-		
-		/// <summary> Output parameters for TimeOfImpact
-		/// 
+		/// <summary>
+		/// Output parameters for TimeOfImpact
 		/// </summary>
-		/// <author>  daniel
-		/// </author>
+		/// <author>daniel</author>
 		public class TOIOutput
 		{
 			public TOIOutputState state;
@@ -91,46 +89,33 @@ namespace org.jbox2d.collision
 		
 		
 		// djm pooling
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cache '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private SimplexCache cache = new SimplexCache();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'distanceInput '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private DistanceInput distanceInput = new DistanceInput();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'xfA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Transform xfA = new Transform();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'xfB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Transform xfB = new Transform();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'distanceOutput '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private DistanceOutput distanceOutput = new DistanceOutput();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'fcn '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private SeparationFunction fcn = new SeparationFunction();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'indexes '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int[] indexes = new int[2];
-		//UPGRADE_NOTE: Final was removed from the declaration of 'sweepA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Sweep sweepA = new Sweep();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'sweepB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Sweep sweepB = new Sweep();
+		private readonly SimplexCache cache = new SimplexCache();
+		private readonly DistanceInput distanceInput = new DistanceInput();
+		private readonly Transform xfA = new Transform();
+		private readonly Transform xfB = new Transform();
+		private readonly DistanceOutput distanceOutput = new DistanceOutput();
+		private readonly SeparationFunction fcn = new SeparationFunction();
+		private readonly int[] indexes = new int[2];
+		private readonly Sweep sweepA = new Sweep();
+		private readonly Sweep sweepB = new Sweep();
 		
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private IWorldPool pool;
 		
 		public TimeOfImpact(IWorldPool argPool)
 		{
-			InitBlock();
 			pool = argPool;
 		}
 		
-		/// <summary> Compute the upper bound on time before two shapes penetrate. Time is represented as a fraction
+		/// <summary>
+		/// Compute the upper bound on time before two shapes penetrate. Time is represented as a fraction
 		/// between [0,tMax]. This uses a swept separating axis and may miss some intermediate,
 		/// non-tunneling collision. If you change the time interval, you should call this function again.
 		/// Note: use Distance to compute the contact point and normal at the time of impact.
-		/// 
 		/// </summary>
-		/// <param name="output">
-		/// </param>
-		/// <param name="input">
-		/// </param>
-		public void  timeOfImpact(TOIOutput output, TOIInput input)
+		/// <param name="output"></param>
+		/// <param name="input"></param>
+		public void timeOfImpact(TOIOutput output, TOIInput input)
 		{
 			// CCD via the local separating axis method. This seeks progression
 			// by computing the largest time at which separation is maintained.
@@ -140,9 +125,7 @@ namespace org.jbox2d.collision
 			output.state = TOIOutputState.UNKNOWN;
 			output.t = input.tMax;
 			
-			//UPGRADE_NOTE: Final was removed from the declaration of 'proxyA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 			DistanceProxy proxyA = input.proxyA;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'proxyB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 			DistanceProxy proxyB = input.proxyB;
 			
 			sweepA.set_Renamed(input.sweepA);
@@ -160,7 +143,7 @@ namespace org.jbox2d.collision
 			float target = MathUtils.max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
 			float tolerance = 0.25f * Settings.linearSlop;
 			
-			assert(target > tolerance);
+			Debug.Assert(target > tolerance);
 			
 			float t1 = 0f;
 			int iter = 0;
@@ -353,12 +336,11 @@ namespace org.jbox2d.collision
 	}
 	
 	
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
 	enum Type
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
 	{ 
-		POINTS, FACE_A, FACE_B;
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
+		POINTS,
+		FACE_A,
+		FACE_B
 	}
 	
 	
@@ -368,38 +350,24 @@ namespace org.jbox2d.collision
 		public DistanceProxy m_proxyA;
 		public DistanceProxy m_proxyB;
 		public Type m_type;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_localPoint '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_localPoint = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_axis '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_axis = new Vec2();
+		public readonly Vec2 m_localPoint = new Vec2();
+		public readonly Vec2 m_axis = new Vec2();
 		public Sweep m_sweepA;
 		public Sweep m_sweepB;
 		
 		// djm pooling
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPointA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 localPointA = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPointB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 localPointB = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pointA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pointA = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pointB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pointB = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPointA1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 localPointA1 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPointA2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 localPointA2 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'normal '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 normal = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPointB1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 localPointB1 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPointB2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 localPointB2 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'temp '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 temp = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'xfa '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Transform xfa = new Transform();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'xfb '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Transform xfb = new Transform();
+		private readonly Vec2 localPointA = new Vec2();
+		private readonly Vec2 localPointB = new Vec2();
+		private readonly Vec2 pointA = new Vec2();
+		private readonly Vec2 pointB = new Vec2();
+		private readonly Vec2 localPointA1 = new Vec2();
+		private readonly Vec2 localPointA2 = new Vec2();
+		private readonly Vec2 normal = new Vec2();
+		private readonly Vec2 localPointB1 = new Vec2();
+		private readonly Vec2 localPointB2 = new Vec2();
+		private readonly Vec2 temp = new Vec2();
+		private readonly Transform xfa = new Transform();
+		private readonly Transform xfb = new Transform();
 		
 		// TODO_ERIN might not need to return the separation
 		
@@ -408,7 +376,7 @@ namespace org.jbox2d.collision
 			m_proxyA = proxyA;
 			m_proxyB = proxyB;
 			int count = cache.count;
-			assert(0 < count && count < 3);
+			Debug.Assert(0 < count && count < 3);
 			
 			m_sweepA = sweepA;
 			m_sweepB = sweepB;
@@ -496,9 +464,7 @@ namespace org.jbox2d.collision
 			}
 		}
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'axisA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private Vec2 axisA = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'axisB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private Vec2 axisB = new Vec2();
 		
 		// float FindMinSeparation(int* indexA, int* indexB, float t) const
@@ -510,8 +476,9 @@ namespace org.jbox2d.collision
 			
 			switch (m_type)
 			{
-				
-				case POINTS:  {
+
+				case Type.POINTS:
+					{
 						Rot.mulTransUnsafe(xfa.q, m_axis, axisA);
 						Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
 						m_axis.negateLocal();
@@ -528,8 +495,9 @@ namespace org.jbox2d.collision
 						float separation = Vec2.dot(pointB.subLocal(pointA), m_axis);
 						return separation;
 					}
-				
-				case FACE_A:  {
+
+				case Type.FACE_A:
+					{
 						Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
 						Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
 						
@@ -546,7 +514,7 @@ namespace org.jbox2d.collision
 						return separation;
 					}
 				
-				case FACE_B:  {
+				case Type.FACE_B:  {
 						Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
 						Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
 						
@@ -563,8 +531,8 @@ namespace org.jbox2d.collision
 						return separation;
 					}
 				
-				default: 
-					assert(false);
+				default:
+					Debug.Assert(false);
 					indexes[0] = - 1;
 					indexes[1] = - 1;
 					return 0f;
@@ -580,7 +548,7 @@ namespace org.jbox2d.collision
 			switch (m_type)
 			{
 				
-				case POINTS:  {
+				case Type.POINTS:  {
 						Rot.mulTransUnsafe(xfa.q, m_axis, axisA);
 						Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
 						m_axis.negateLocal();
@@ -594,8 +562,9 @@ namespace org.jbox2d.collision
 						float separation = Vec2.dot(pointB.subLocal(pointA), m_axis);
 						return separation;
 					}
-				
-				case FACE_A:  {
+
+				case Type.FACE_A:
+					{
 						// System.out.printf("We're faceA\n");
 						Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
 						Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
@@ -608,8 +577,9 @@ namespace org.jbox2d.collision
 						float separation = Vec2.dot(pointB.subLocal(pointA), normal);
 						return separation;
 					}
-				
-				case FACE_B:  {
+
+				case Type.FACE_B:
+					{
 						// System.out.printf("We're faceB\n");
 						Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
 						Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
@@ -625,7 +595,7 @@ namespace org.jbox2d.collision
 					}
 				
 				default: 
-					assert(false);
+					Debug.Assert(false);
 					return 0f;
 				
 			}
