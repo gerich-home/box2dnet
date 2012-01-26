@@ -36,9 +36,11 @@ using ContactVelocityConstraint = org.jbox2d.dynamics.contacts.ContactVelocityCo
 using Position = org.jbox2d.dynamics.contacts.Position;
 using Velocity = org.jbox2d.dynamics.contacts.Velocity;
 using Joint = org.jbox2d.dynamics.joints.Joint;
+using System.Diagnostics;
+
 namespace org.jbox2d.dynamics
 {
-	
+
 	/*
 	Position Correction Notes
 	=========================
@@ -117,7 +119,7 @@ namespace org.jbox2d.dynamics
 	probably default to the slower Full NGS and let the user select the faster
 	Baumgarte method in performance critical scenarios.
 	*/
-	
+
 	/*
 	Cache Performance
 	
@@ -133,7 +135,7 @@ namespace org.jbox2d.dynamics
 	arrays to increase the number of cache hits. Linear and angular velocity are
 	stored in a single array since multiple arrays lead to multiple misses.
 	*/
-	
+
 	/*
 	2D Rotation
 	
@@ -156,37 +158,36 @@ namespace org.jbox2d.dynamics
 	This might be faster than computing sin+cos.
 	However, we can compute sin+cos of the same angle fast.
 	*/
-	
-	/// <summary> This is an internal class.
-	/// 
+
+	/// <summary>
+	/// This is an internal class.
 	/// </summary>
-	/// <author>  Daniel Murphy
-	/// </author>
+	/// <author>Daniel Murphy</author>
 	public class Island
 	{
-		
+
 		public ContactListener m_listener;
-		
+
 		public Body[] m_bodies;
 		public Contact[] m_contacts;
 		public Joint[] m_joints;
-		
+
 		public Position[] m_positions;
 		public Velocity[] m_velocities;
-		
+
 		public int m_bodyCount;
 		public int m_jointCount;
 		public int m_contactCount;
-		
+
 		public int m_bodyCapacity;
 		public int m_contactCapacity;
 		public int m_jointCapacity;
-		
+
 		public Island()
 		{
 		}
-		
-		public virtual void  init(int bodyCapacity, int contactCapacity, int jointCapacity, ContactListener listener)
+
+		public virtual void init(int bodyCapacity, int contactCapacity, int jointCapacity, ContactListener listener)
 		{
 			m_bodyCapacity = bodyCapacity;
 			m_contactCapacity = contactCapacity;
@@ -194,9 +195,9 @@ namespace org.jbox2d.dynamics
 			m_bodyCount = 0;
 			m_contactCount = 0;
 			m_jointCount = 0;
-			
+
 			m_listener = listener;
-			
+
 			if (m_bodies == null || m_bodyCapacity > m_bodies.Length)
 			{
 				m_bodies = new Body[m_bodyCapacity];
@@ -209,12 +210,11 @@ namespace org.jbox2d.dynamics
 			{
 				m_contacts = new Contact[m_contactCapacity];
 			}
-			
+
 			// dynamic array
 			if (m_velocities == null || m_bodyCapacity > m_velocities.Length)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'old '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Velocity[] old = m_velocities == null?new Velocity[0]:m_velocities;
+				Velocity[] old = m_velocities == null ? new Velocity[0] : m_velocities;
 				m_velocities = new Velocity[m_bodyCapacity];
 				Array.Copy(old, 0, m_velocities, 0, old.Length);
 				for (int i = old.Length; i < m_velocities.Length; i++)
@@ -222,12 +222,11 @@ namespace org.jbox2d.dynamics
 					m_velocities[i] = new Velocity();
 				}
 			}
-			
+
 			// dynamic array
 			if (m_positions == null || m_bodyCapacity > m_positions.Length)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'old '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Position[] old = m_positions == null?new Position[0]:m_positions;
+				Position[] old = m_positions == null ? new Position[0] : m_positions;
 				m_positions = new Position[m_bodyCapacity];
 				Array.Copy(old, 0, m_positions, 0, old.Length);
 				for (int i = old.Length; i < m_positions.Length; i++)
@@ -236,51 +235,41 @@ namespace org.jbox2d.dynamics
 				}
 			}
 		}
-		
-		public virtual void  clear()
+
+		public virtual void clear()
 		{
 			m_bodyCount = 0;
 			m_contactCount = 0;
 			m_jointCount = 0;
 		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'temp '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 temp = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'temp2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 temp2 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'contactSolver '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ContactSolver contactSolver = new ContactSolver();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'translation '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 translation = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'timer '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Timer timer = new Timer();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'solverData '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private SolverData solverData = new SolverData();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'solverDef '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ContactSolverDef solverDef = new ContactSolverDef();
-		
-		public virtual void  solve(Profile profile, TimeStep step, Vec2 gravity, bool allowSleep)
+
+		private readonly Vec2 temp = new Vec2();
+		private readonly Vec2 temp2 = new Vec2();
+		private readonly ContactSolver contactSolver = new ContactSolver();
+		private readonly Vec2 translation = new Vec2();
+		private readonly Timer timer = new Timer();
+		private readonly SolverData solverData = new SolverData();
+		private readonly ContactSolverDef solverDef = new ContactSolverDef();
+
+		public virtual void solve(Profile profile, TimeStep step, Vec2 gravity, bool allowSleep)
 		{
-			
+
 			float h = step.dt;
-			
+
 			// Integrate velocities and apply damping. Initialize the body state.
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'b '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 				Body b = m_bodies[i];
-				
-				//UPGRADE_NOTE: Final was removed from the declaration of 'c '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+
 				Vec2 c = b.m_sweep.c;
 				float a = b.m_sweep.a;
-				//UPGRADE_NOTE: Final was removed from the declaration of 'v '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 				Vec2 v = b.m_linearVelocity;
 				float w = b.m_angularVelocity;
-				
+
 				// Store positions for continuous collision.
 				b.m_sweep.c0.set_Renamed(b.m_sweep.c);
 				b.m_sweep.a0 = b.m_sweep.a;
-				
+
 				if (b.m_type == BodyType.DYNAMIC)
 				{
 					// Integrate velocities.
@@ -289,7 +278,7 @@ namespace org.jbox2d.dynamics
 					temp2.set_Renamed(b.m_force).mulLocal(b.m_invMass);
 					v.addLocal(temp.addLocal(temp2).mulLocal(h));
 					w += h * b.m_invI * b.m_torque;
-					
+
 					// Apply damping.
 					// ODE: dv/dt + c * v = 0
 					// Solution: v(t) = v0 * exp(-c * t)
@@ -301,42 +290,42 @@ namespace org.jbox2d.dynamics
 					v.mulLocal(MathUtils.clamp(1.0f - h * b.m_linearDamping, 0.0f, 1.0f));
 					w *= MathUtils.clamp(1.0f - h * b.m_angularDamping, 0.0f, 1.0f);
 				}
-				
+
 				m_positions[i].c.set_Renamed(c);
 				m_positions[i].a = a;
 				m_velocities[i].v.set_Renamed(v);
 				m_velocities[i].w = w;
 			}
-			
+
 			timer.reset();
-			
+
 			// Solver data
 			solverData.step = step;
 			solverData.positions = m_positions;
 			solverData.velocities = m_velocities;
-			
+
 			// Initialize velocity constraints.
 			solverDef.step = step;
 			solverDef.contacts = m_contacts;
 			solverDef.count = m_contactCount;
 			solverDef.positions = m_positions;
 			solverDef.velocities = m_velocities;
-			
+
 			contactSolver.init(solverDef);
 			contactSolver.initializeVelocityConstraints();
-			
+
 			if (step.warmStarting)
 			{
 				contactSolver.warmStart();
 			}
-			
+
 			for (int i = 0; i < m_jointCount; ++i)
 			{
 				m_joints[i].initVelocityConstraints(solverData);
 			}
-			
+
 			profile.solveInit = timer.Milliseconds;
-			
+
 			// Solve velocity constraints
 			timer.reset();
 			for (int i = 0; i < step.velocityIterations; ++i)
@@ -345,65 +334,63 @@ namespace org.jbox2d.dynamics
 				{
 					m_joints[j].solveVelocityConstraints(solverData);
 				}
-				
+
 				contactSolver.solveVelocityConstraints();
 			}
-			
+
 			// Store impulses for warm starting
 			contactSolver.storeImpulses();
 			profile.solveVelocity = timer.Milliseconds;
-			
+
 			// Integrate positions
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'c '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 				Vec2 c = m_positions[i].c;
 				float a = m_positions[i].a;
-				//UPGRADE_NOTE: Final was removed from the declaration of 'v '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 				Vec2 v = m_velocities[i].v;
 				float w = m_velocities[i].w;
-				
+
 				// Check for large velocities
 				translation.x = v.x * h;
 				translation.y = v.y * h;
-				
+
 				if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared)
 				{
 					float ratio = Settings.maxTranslation / translation.length();
 					v.x *= ratio;
 					v.y *= ratio;
 				}
-				
+
 				float rotation = h * w;
 				if (rotation * rotation > Settings.maxRotationSquared)
 				{
 					float ratio = Settings.maxRotation / MathUtils.abs(rotation);
 					w *= ratio;
 				}
-				
+
 				// Integrate
 				c.x += h * v.x;
 				c.y += h * v.y;
 				a += h * w;
-				
+
 				m_positions[i].a = a;
 				m_velocities[i].w = w;
 			}
-			
+
 			// Solve position constraints
 			timer.reset();
 			bool positionSolved = false;
 			for (int i = 0; i < step.positionIterations; ++i)
 			{
 				bool contactsOkay = contactSolver.solvePositionConstraints();
-				
+
 				bool jointsOkay = true;
 				for (int j = 0; j < m_jointCount; ++j)
 				{
 					bool jointOkay = m_joints[j].solvePositionConstraints(solverData);
 					jointsOkay = jointsOkay && jointOkay;
 				}
-				
+
 				if (contactsOkay && jointsOkay)
 				{
 					// Exit early if the position errors are small.
@@ -411,7 +398,7 @@ namespace org.jbox2d.dynamics
 					break;
 				}
 			}
-			
+
 			// Copy state buffers back to the bodies
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
@@ -422,20 +409,18 @@ namespace org.jbox2d.dynamics
 				body.m_angularVelocity = m_velocities[i].w;
 				body.synchronizeTransform();
 			}
-			
+
 			profile.solvePosition = timer.Milliseconds;
-			
+
 			report(contactSolver.m_velocityConstraints);
-			
+
 			if (allowSleep)
 			{
 				float minSleepTime = System.Single.MaxValue;
-				
-				//UPGRADE_NOTE: Final was removed from the declaration of 'linTolSqr '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+
 				float linTolSqr = Settings.linearSleepTolerance * Settings.linearSleepTolerance;
-				//UPGRADE_NOTE: Final was removed from the declaration of 'angTolSqr '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 				float angTolSqr = Settings.angularSleepTolerance * Settings.angularSleepTolerance;
-				
+
 				for (int i = 0; i < m_bodyCount; ++i)
 				{
 					Body b = m_bodies[i];
@@ -443,7 +428,7 @@ namespace org.jbox2d.dynamics
 					{
 						continue;
 					}
-					
+
 					if ((b.m_flags & Body.e_autoSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
 					{
 						b.m_sleepTime = 0.0f;
@@ -455,7 +440,7 @@ namespace org.jbox2d.dynamics
 						minSleepTime = MathUtils.min(minSleepTime, b.m_sleepTime);
 					}
 				}
-				
+
 				if (minSleepTime >= Settings.timeToSleep && positionSolved)
 				{
 					for (int i = 0; i < m_bodyCount; ++i)
@@ -466,17 +451,15 @@ namespace org.jbox2d.dynamics
 				}
 			}
 		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'toiContactSolver '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ContactSolver toiContactSolver = new ContactSolver();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'toiSolverDef '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ContactSolverDef toiSolverDef = new ContactSolverDef();
-		
-		public virtual void  solveTOI(TimeStep subStep, int toiIndexA, int toiIndexB)
+
+		private readonly ContactSolver toiContactSolver = new ContactSolver();
+		private readonly ContactSolverDef toiSolverDef = new ContactSolverDef();
+
+		public virtual void solveTOI(TimeStep subStep, int toiIndexA, int toiIndexB)
 		{
-			assert(toiIndexA < m_bodyCount);
-			assert(toiIndexB < m_bodyCount);
-			
+			Debug.Assert(toiIndexA < m_bodyCount);
+			Debug.Assert(toiIndexB < m_bodyCount);
+
 			// Initialize the body state.
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
@@ -486,14 +469,14 @@ namespace org.jbox2d.dynamics
 				m_velocities[i].v.set_Renamed(b.m_linearVelocity);
 				m_velocities[i].w = b.m_angularVelocity;
 			}
-			
+
 			toiSolverDef.contacts = m_contacts;
 			toiSolverDef.count = m_contactCount;
 			toiSolverDef.step = subStep;
 			toiSolverDef.positions = m_positions;
 			toiSolverDef.velocities = m_velocities;
 			toiContactSolver.init(toiSolverDef);
-			
+
 			// Solve position constraints.
 			for (int i = 0; i < subStep.positionIterations; ++i)
 			{
@@ -503,7 +486,7 @@ namespace org.jbox2d.dynamics
 					break;
 				}
 			}
-			
+
 			// #if 0
 			// // Is the new position really safe?
 			// for (int i = 0; i < m_contactCount; ++i)
@@ -536,28 +519,28 @@ namespace org.jbox2d.dynamics
 			// }
 			// }
 			// #endif
-			
+
 			// Leap of faith to new safe state.
 			m_bodies[toiIndexA].m_sweep.c0.set_Renamed(m_positions[toiIndexA].c);
 			m_bodies[toiIndexA].m_sweep.a0 = m_positions[toiIndexA].a;
 			m_bodies[toiIndexB].m_sweep.c0.set_Renamed(m_positions[toiIndexB].c);
 			m_bodies[toiIndexB].m_sweep.a0 = m_positions[toiIndexB].a;
-			
+
 			// No warm starting is needed for TOI events because warm
 			// starting impulses were applied in the discrete solver.
 			toiContactSolver.initializeVelocityConstraints();
-			
+
 			// Solve velocity constraints.
 			for (int i = 0; i < subStep.velocityIterations; ++i)
 			{
 				toiContactSolver.solveVelocityConstraints();
 			}
-			
+
 			// Don't store the TOI contact forces for warm starting
 			// because they can be quite large.
-			
+
 			float h = subStep.dt;
-			
+
 			// Integrate positions
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
@@ -565,7 +548,7 @@ namespace org.jbox2d.dynamics
 				float a = m_positions[i].a;
 				Vec2 v = m_velocities[i].v;
 				float w = m_velocities[i].w;
-				
+
 				// Check for large velocities
 				translation.set_Renamed(v).mulLocal(h);
 				if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared)
@@ -573,24 +556,24 @@ namespace org.jbox2d.dynamics
 					float ratio = Settings.maxTranslation / translation.length();
 					v.mulLocal(ratio);
 				}
-				
+
 				float rotation = h * w;
 				if (rotation * rotation > Settings.maxRotationSquared)
 				{
 					float ratio = Settings.maxRotation / MathUtils.abs(rotation);
 					w *= ratio;
 				}
-				
+
 				// Integrate
 				c.x += v.x * h;
 				c.y += v.y * h;
 				a += h * w;
-				
+
 				m_positions[i].c.set_Renamed(c);
 				m_positions[i].a = a;
 				m_velocities[i].v.set_Renamed(v);
 				m_velocities[i].w = w;
-				
+
 				// Sync bodies
 				Body body = m_bodies[i];
 				body.m_sweep.c.set_Renamed(c);
@@ -599,44 +582,43 @@ namespace org.jbox2d.dynamics
 				body.m_angularVelocity = w;
 				body.synchronizeTransform();
 			}
-			
+
 			report(toiContactSolver.m_velocityConstraints);
 		}
-		
-		public virtual void  add(Body body)
+
+		public virtual void add(Body body)
 		{
-			assert(m_bodyCount < m_bodyCapacity);
+			Debug.Assert(m_bodyCount < m_bodyCapacity);
 			body.m_islandIndex = m_bodyCount;
 			m_bodies[m_bodyCount] = body;
 			++m_bodyCount;
 		}
-		
-		public virtual void  add(Contact contact)
+
+		public virtual void add(Contact contact)
 		{
-			assert(m_contactCount < m_contactCapacity);
+			Debug.Assert(m_contactCount < m_contactCapacity);
 			m_contacts[m_contactCount++] = contact;
 		}
-		
-		public virtual void  add(Joint joint)
+
+		public virtual void add(Joint joint)
 		{
-			assert(m_jointCount < m_jointCapacity);
+			Debug.Assert(m_jointCount < m_jointCapacity);
 			m_joints[m_jointCount++] = joint;
 		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'impulse '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ContactImpulse impulse = new ContactImpulse();
-		
-		public virtual void  report(ContactVelocityConstraint[] constraints)
+
+		private readonly ContactImpulse impulse = new ContactImpulse();
+
+		public virtual void report(ContactVelocityConstraint[] constraints)
 		{
 			if (m_listener == null)
 			{
-				return ;
+				return;
 			}
-			
+
 			for (int i = 0; i < m_contactCount; ++i)
 			{
 				Contact c = m_contacts[i];
-				
+
 				ContactVelocityConstraint vc = constraints[i];
 				impulse.count = vc.pointCount;
 				for (int j = 0; j < vc.pointCount; ++j)
@@ -644,7 +626,7 @@ namespace org.jbox2d.dynamics
 					impulse.normalImpulses[j] = vc.points[j].normalImpulse;
 					impulse.tangentImpulses[j] = vc.points[j].tangentImpulse;
 				}
-				
+
 				m_listener.postSolve(c, impulse);
 			}
 		}
