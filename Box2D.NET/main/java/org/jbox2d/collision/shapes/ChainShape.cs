@@ -155,7 +155,7 @@ namespace org.jbox2d.collision.shapes
             massData.I = 0.0f;
         }
 
-        public override ChainShape Clone()
+        public override Shape Clone()
         {
             ChainShape clone = new ChainShape();
             clone.createChain(m_vertices, m_count);
