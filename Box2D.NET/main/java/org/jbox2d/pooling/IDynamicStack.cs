@@ -23,38 +23,28 @@
 // ****************************************************************************
 
 using System;
+
 namespace org.jbox2d.pooling
 {
-	
-	/// <summary> Same functionality of a regular java.util stack.  Object
-	/// return order does not matter.
-	/// </summary>
-	/// <author>  Daniel
-	/// 
-	/// </author>
-	/// <param name="<E>">
-	/// </param>
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	public
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	interface IDynamicStack < E >
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	{
-	
-	/// <summary> Pops an item off the stack</summary>
-	/// <returns>
-	/// </returns>
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	public E pop();
-	
-	/// <summary> Pushes an item back on the stack</summary>
-	/// <param name="argObject">
-	/// </param>
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	public
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	void push(E argObject);
-	
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	}
+
+    /// <summary>
+    /// Same functionality of a regular java.util stack.
+    /// Object return order does not matter.
+    /// </summary>
+    /// <author>Daniel</author>
+    /// <param name="<E>"></param>
+    public interface IDynamicStack<E>
+    {
+        /// <summary>
+        /// Pops an item off the stack
+        /// </summary>
+        /// <returns></returns>
+        public E pop();
+
+        /// <summary>
+        /// Pushes an item back on the stack
+        /// </summary>
+        /// <param name="argObject"></param>
+        public void push(E argObject);
+    }
 }
