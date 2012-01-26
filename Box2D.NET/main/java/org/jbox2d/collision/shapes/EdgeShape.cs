@@ -40,14 +40,22 @@ namespace org.jbox2d.collision.shapes
     /// <author>Daniel</author>
     public class EdgeShape : Shape
     {
-        /// <summary> edge vertex 1</summary>
+        /// <summary>
+        /// edge vertex 1
+        /// </summary>
         public readonly Vec2 m_vertex1 = new Vec2();
-        /// <summary> edge vertex 2</summary>
+        /// <summary>
+        /// edge vertex 2
+        /// </summary>
         public readonly Vec2 m_vertex2 = new Vec2();
 
-        /// <summary> optional adjacent vertex 1. Used for smooth collision</summary>
+        /// <summary>
+        /// optional adjacent vertex 1. Used for smooth collision
+        /// </summary>
         public readonly Vec2 m_vertex0 = new Vec2();
-        /// <summary> optional adjacent vertex 2. Used for smooth collision</summary>
+        /// <summary>
+        /// optional adjacent vertex 2. Used for smooth collision
+        /// </summary>
         public readonly Vec2 m_vertex3 = new Vec2();
         public bool m_hasVertex0 = false, m_hasVertex3 = false;
 
@@ -157,9 +165,7 @@ namespace org.jbox2d.collision.shapes
 
         public override void computeAABB(AABB aabb, Transform xf, int childIndex)
         {
-            //UPGRADE_NOTE: Final was removed from the declaration of 'v1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
             Vec2 v1 = pool1;
-            //UPGRADE_NOTE: Final was removed from the declaration of 'v2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
             Vec2 v2 = pool2;
 
             Transform.mulToOutUnsafe(xf, m_vertex1, v1);

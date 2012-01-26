@@ -1,27 +1,27 @@
-/// <summary>****************************************************************************
-/// Copyright (c) 2011, Daniel Murphy
-/// All rights reserved.
-/// 
-/// Redistribution and use in source and binary forms, with or without modification,
-/// are permitted provided that the following conditions are met:
-/// * Redistributions of source code must retain the above copyright notice,
-/// this list of conditions and the following disclaimer.
-/// * Redistributions in binary form must reproduce the above copyright notice,
-/// this list of conditions and the following disclaimer in the documentation
-/// and/or other materials provided with the distribution.
-/// 
-/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-/// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-/// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-/// IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-/// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-/// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-/// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-/// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-/// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-/// POSSIBILITY OF SUCH DAMAGE.
-/// ****************************************************************************
-/// </summary>
+// ****************************************************************************
+// Copyright (c) 2011, Daniel Murphy
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+// * Redistributions of source code must retain the above copyright notice,
+// this list of conditions and the following disclaimer.
+// * Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation
+// and/or other materials provided with the distribution.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
+// ****************************************************************************
+
 /*
 * JBox2D - A Java Port of Erin Catto's Box2D
 * 
@@ -44,55 +44,66 @@
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
 */
+
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.collision.shapes
 {
-	
-	// Updated to rev 100
-	
-	/// <summary>This holds the mass data computed for a shape. </summary>
-	public class MassData : System.ICloneable
-	{
-		/// <summary>The mass of the shape, usually in kilograms. </summary>
-		public float mass;
-		/// <summary>The position of the shape's centroid relative to the shape's origin. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'center '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 center;
-		/// <summary>The rotational inertia of the shape about the local origin. </summary>
-		public float I;
-		
-		/// <summary> Blank mass data</summary>
-		public MassData()
-		{
-			mass = I = 0f;
-			center = new Vec2();
-		}
-		
-		/// <summary> Copies from the given mass data
-		/// 
-		/// </summary>
-		/// <param name="md">mass data to copy from
-		/// </param>
-		public MassData(MassData md)
-		{
-			mass = md.mass;
-			I = md.I;
-			center = md.center.Clone();
-		}
-		
-		public virtual void  set_Renamed(MassData md)
-		{
-			mass = md.mass;
-			I = md.I;
-			center.set_Renamed(md.center);
-		}
-		
-		/// <summary>Return a copy of this object. </summary>
-		//UPGRADE_ISSUE: The equivalent in .NET for method 'java.lang.Object.clone' returns a different type. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1224'"
-		public virtual System.Object Clone()
-		{
-			return new MassData(this);
-		}
-	}
+
+    // Updated to rev 100
+
+    /// <summary>
+    /// This holds the mass data computed for a shape.
+    /// </summary>
+    public class MassData
+    {
+        /// <summary>
+        /// The mass of the shape, usually in kilograms.
+        /// </summary>
+        public float mass;
+        /// <summary>
+        /// The position of the shape's centroid relative to the shape's origin.
+        /// </summary>
+        public Vec2 center;
+        /// <summary>
+        /// The rotational inertia of the shape about the local origin.
+        /// </summary>
+        public float I;
+
+        /// <summary>
+        /// Blank mass data
+        /// </summary>
+        public MassData()
+        {
+            mass = I = 0f;
+            center = new Vec2();
+        }
+
+        /// <summary>
+        /// Copies from the given mass data
+        /// </summary>
+        /// <param name="md">mass data to copy from</param>
+        public MassData(MassData md)
+        {
+            mass = md.mass;
+            I = md.I;
+            center = md.center.Clone();
+        }
+
+        public virtual void set_Renamed(MassData md)
+        {
+            mass = md.mass;
+            I = md.I;
+            center.set_Renamed(md.center);
+        }
+
+        /// <summary>
+        /// Return a copy of this object.
+        /// </summary>
+        public virtual MassData Clone()
+        {
+            return new MassData(this);
+        }
+    }
 }
