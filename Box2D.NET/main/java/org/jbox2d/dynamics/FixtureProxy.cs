@@ -24,20 +24,19 @@
 
 using System;
 using AABB = org.jbox2d.collision.AABB;
+
 namespace org.jbox2d.dynamics
 {
-	
-	/// <summary> This proxy is used internally to connect fixtures to the broad-phase.
-	/// 
-	/// </summary>
-	/// <author>  Daniel
-	/// </author>
-	public class FixtureProxy
-	{
-		//UPGRADE_NOTE: Final was removed from the declaration of 'aabb '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		internal AABB aabb = new AABB();
-		internal Fixture fixture;
-		internal int childIndex;
-		internal int proxyId;
-	}
+
+    /// <summary>
+    /// This proxy is used internally to connect fixtures to the broad-phase.
+    /// </summary>
+    /// <author>Daniel</author>
+    public class FixtureProxy
+    {
+        internal readonly AABB aabb = new AABB();
+        internal Fixture fixture;
+        internal int childIndex;
+        internal int proxyId;
+    }
 }
