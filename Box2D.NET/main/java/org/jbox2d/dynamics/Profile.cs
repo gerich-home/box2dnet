@@ -23,39 +23,33 @@
 // ****************************************************************************
 
 using System;
+using System.Collections.Generic;
+
 namespace org.jbox2d.dynamics
 {
-	
-	public class Profile
-	{
-		public Profile()
-		{
-			InitBlock();
-		}
-		private void  InitBlock()
-		{
-			strings.add("Profile:");
-			strings.add(" step: " + step);
-			strings.add("  collide: " + collide);
-			strings.add("  solve: " + solve);
-			strings.add("   solveInit: " + solveInit);
-			strings.add("   solveVelocity: " + solveVelocity);
-			strings.add("   solvePosition: " + solvePosition);
-			strings.add("   broadphase: " + broadphase);
-			strings.add("  solveTOI: " + solveTOI);
-		}
-		public float step;
-		public float collide;
-		public float solve;
-		public float solveInit;
-		public float solveVelocity;
-		public float solvePosition;
-		public float broadphase;
-		public float solveTOI;
-		
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		public
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		void toDebugStrings(List < String > strings)
-	}
+
+    public class Profile
+    {
+        public float step;
+        public float collide;
+        public float solve;
+        public float solveInit;
+        public float solveVelocity;
+        public float solvePosition;
+        public float broadphase;
+        public float solveTOI;
+
+        public void toDebugStrings(List<String> strings)
+        {
+            strings.Add("Profile:");
+            strings.Add(" step: " + step);
+            strings.Add("  collide: " + collide);
+            strings.Add("  solve: " + solve);
+            strings.Add("   solveInit: " + solveInit);
+            strings.Add("   solveVelocity: " + solveVelocity);
+            strings.Add("   solvePosition: " + solvePosition);
+            strings.Add("   broadphase: " + broadphase);
+            strings.Add("  solveTOI: " + solveTOI);
+        }
+    }
 }
