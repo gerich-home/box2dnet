@@ -23,43 +23,47 @@
 // ****************************************************************************
 
 using System;
+
 namespace org.jbox2d.dynamics
 {
-	
-	// updated to rev 100
-	/// <summary> This holds contact filtering data.
-	/// 
-	/// </summary>
-	/// <author>  daniel
-	/// </author>
-	public class Filter
-	{
-		/// <summary> The collision category bits. Normally you would just set one bit.</summary>
-		public int categoryBits;
-		
-		/// <summary> The collision mask bits. This states the categories that this
-		/// shape would accept for collision.
-		/// </summary>
-		public int maskBits;
-		
-		/// <summary> Collision groups allow a certain group of objects to never collide (negative)
-		/// or always collide (positive). Zero means no collision group. Non-zero group
-		/// filtering always wins against the mask bits.
-		/// </summary>
-		public int groupIndex;
-		
-		public Filter()
-		{
-			categoryBits = 0x0001;
-			maskBits = 0xFFFF;
-			groupIndex = 0;
-		}
-		
-		public virtual void  set_Renamed(Filter argOther)
-		{
-			categoryBits = argOther.categoryBits;
-			maskBits = argOther.maskBits;
-			groupIndex = argOther.groupIndex;
-		}
-	}
+
+    // updated to rev 100
+    /// <summary>
+    /// This holds contact filtering data.
+    /// </summary>
+    /// <author>daniel</author>
+    public class Filter
+    {
+        /// <summary>
+        /// The collision category bits. Normally you would just set one bit.
+        /// </summary>
+        public int categoryBits;
+
+        /// <summary>
+        /// The collision mask bits. This states the categories that this
+        /// shape would accept for collision.
+        /// </summary>
+        public int maskBits;
+
+        /// <summary>
+        /// Collision groups allow a certain group of objects to never collide (negative)
+        /// or always collide (positive). Zero means no collision group. Non-zero group
+        /// filtering always wins against the mask bits.
+        /// </summary>
+        public int groupIndex;
+
+        public Filter()
+        {
+            categoryBits = 0x0001;
+            maskBits = 0xFFFF;
+            groupIndex = 0;
+        }
+
+        public virtual void set_Renamed(Filter argOther)
+        {
+            categoryBits = argOther.categoryBits;
+            maskBits = argOther.maskBits;
+            groupIndex = argOther.groupIndex;
+        }
+    }
 }
