@@ -22,26 +22,34 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 3:59:59 AM Jul 7, 2010</summary>
+// Created at 3:59:59 AM Jul 7, 2010
+
 using System;
+
 namespace org.jbox2d.dynamics
 {
-	
-	// updated to rev 100
-	
-	/// <summary> The body type.
-	/// static: zero mass, zero velocity, may be manually moved
-	/// kinematic: zero mass, non-zero velocity set by user, moved by solver
-	/// dynamic: positive mass, non-zero velocity determined by forces, moved by solver
-	/// 
-	/// </summary>
-	/// <author>  daniel
-	/// </author>
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	public enum BodyType
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	{ 
-		STATIC, KINEMATIC, DYNAMIC
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	}
+
+    // updated to rev 100
+
+    /// <summary>
+    /// The body type.
+    /// </summary>
+    /// <author>daniel</author>
+    public enum BodyType
+    {
+        /// <summary>
+        /// zero mass, zero velocity, may be manually moved
+        /// </summary>
+        STATIC,
+
+        /// <summary>
+        /// zero mass, non-zero velocity set by user, moved by solver
+        /// </summary>
+        KINEMATIC,
+
+        /// <summary>
+        /// positive mass, non-zero velocity determined by forces, moved by solver
+        /// </summary>
+        DYNAMIC
+    }
 }
