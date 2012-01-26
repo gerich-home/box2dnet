@@ -1,4 +1,4 @@
-/// <summary>****************************************************************************
+/// ****************************************************************************
 /// Copyright (c) 2011, Daniel Murphy
 /// All rights reserved.
 /// 
@@ -21,7 +21,7 @@
 /// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 /// POSSIBILITY OF SUCH DAMAGE.
 /// ****************************************************************************
-/// </summary>
+
 using System;
 using AABB = org.jbox2d.collision.AABB;
 using RayCastInput = org.jbox2d.collision.RayCastInput;
@@ -30,195 +30,168 @@ using Rot = org.jbox2d.common.Rot;
 using Settings = org.jbox2d.common.Settings;
 using Transform = org.jbox2d.common.Transform;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.collision.shapes
 {
-	
-	/// <summary> A line segment (edge) shape. These can be connected in chains or loops to other edge shapes. The
-	/// connectivity information is used to ensure correct contact normals.
-	/// 
-	/// </summary>
-	/// <author>  Daniel
-	/// </author>
-	public class EdgeShape:Shape, System.ICloneable
-	{
-		override public int ChildCount
-		{
-			get
-			{
-				return 1;
-			}
-			
-		}
-		
-		/// <summary> edge vertex 1</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_vertex1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_vertex1 = new Vec2();
-		/// <summary> edge vertex 2</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_vertex2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_vertex2 = new Vec2();
-		
-		/// <summary> optional adjacent vertex 1. Used for smooth collision</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_vertex0 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_vertex0 = new Vec2();
-		/// <summary> optional adjacent vertex 2. Used for smooth collision</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_vertex3 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_vertex3 = new Vec2();
-		public bool m_hasVertex0 = false, m_hasVertex3 = false;
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool0 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pool0 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pool1 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pool2 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool3 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pool3 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool4 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pool4 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool5 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 pool5 = new Vec2();
-		
-		public EdgeShape():base(ShapeType.EDGE)
-		{
-			m_radius = Settings.polygonRadius;
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		
-		public virtual void  set_Renamed(Vec2 v1, Vec2 v2)
-		{
-			m_vertex1.set_Renamed(v1);
-			m_vertex2.set_Renamed(v2);
-			m_hasVertex0 = m_hasVertex3 = false;
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override bool testPoint(Transform xf, Vec2 p)
-		{
-			return false;
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override bool raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
-		{
-			
-			// Put the ray into the edge's frame of reference.
-			//UPGRADE_NOTE: Final was removed from the declaration of 'p1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 p1 = pool0.set_Renamed(input.p1).subLocal(xf.p);
-			Rot.mulTrans(xf.q, p1, p1);
-			//UPGRADE_NOTE: Final was removed from the declaration of 'p2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 p2 = pool1.set_Renamed(input.p2).subLocal(xf.p);
-			Rot.mulTrans(xf.q, p1, p1);
-			//UPGRADE_NOTE: Final was removed from the declaration of 'd '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 d = p2.subLocal(p1); // we don't use p2 later
-			
-			//UPGRADE_NOTE: Final was removed from the declaration of 'v1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 v1 = m_vertex1;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'v2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 v2 = m_vertex2;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'normal '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 normal = pool2.set_Renamed(v2).subLocal(v1);
-			normal.set_Renamed(normal.y, - normal.x);
-			normal.normalize();
-			
-			// q = p1 + t * d
-			// dot(normal, q - v1) = 0
-			// dot(normal, p1 - v1) + t * dot(normal, d) = 0
-			pool3.set_Renamed(v1).subLocal(p1);
-			float numerator = Vec2.dot(normal, pool3);
-			float denominator = Vec2.dot(normal, d);
-			
-			if (denominator == 0.0f)
-			{
-				return false;
-			}
-			
-			float t = numerator / denominator;
-			if (t < 0.0f || 1.0f < t)
-			{
-				return false;
-			}
-			
-			//UPGRADE_NOTE: Final was removed from the declaration of 'q '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 q = pool3;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'r '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 r = pool4;
-			
-			// Vec2 q = p1 + t * d;
-			q.set_Renamed(d).mulLocal(t).addLocal(p1);
-			
-			// q = v1 + s * r
-			// s = dot(q - v1, r) / dot(r, r)
-			// Vec2 r = v2 - v1;
-			r.set_Renamed(v2).subLocal(v1);
-			float rr = Vec2.dot(r, r);
-			if (rr == 0.0f)
-			{
-				return false;
-			}
-			
-			pool5.set_Renamed(q).subLocal(v1);
-			float s = Vec2.dot(pool5, r) / rr;
-			if (s < 0.0f || 1.0f < s)
-			{
-				return false;
-			}
-			
-			output.fraction = t;
-			if (numerator > 0.0f)
-			{
-				// argOutput.normal = -normal;
-				output.normal.set_Renamed(normal).negateLocal();
-			}
-			else
-			{
-				// output.normal = normal;
-				output.normal.set_Renamed(normal);
-			}
-			return true;
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override void  computeAABB(AABB aabb, Transform xf, int childIndex)
-		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'v1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 v1 = pool1;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'v2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 v2 = pool2;
-			
-			Transform.mulToOutUnsafe(xf, m_vertex1, v1);
-			Transform.mulToOutUnsafe(xf, m_vertex2, v2);
-			
-			Vec2.minToOut(v1, v2, aabb.lowerBound);
-			Vec2.maxToOut(v1, v2, aabb.upperBound);
-			
-			aabb.lowerBound.x -= m_radius;
-			aabb.lowerBound.y -= m_radius;
-			aabb.upperBound.x += m_radius;
-			aabb.upperBound.y += m_radius;
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override void  computeMass(MassData massData, float density)
-		{
-			massData.mass = 0.0f;
-			massData.center.set_Renamed(m_vertex1).addLocal(m_vertex2).mulLocal(0.5f);
-			massData.I = 0.0f;
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		//UPGRADE_ISSUE: The equivalent in .NET for method 'java.lang.Object.clone' returns a different type. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1224'"
-		public override System.Object Clone()
-		{
-			EdgeShape edge = new EdgeShape();
-			edge.m_radius = this.m_radius;
-			edge.m_hasVertex0 = this.m_hasVertex0;
-			edge.m_hasVertex3 = this.m_hasVertex3;
-			edge.m_vertex0.set_Renamed(this.m_vertex0);
-			edge.m_vertex1.set_Renamed(this.m_vertex1);
-			edge.m_vertex2.set_Renamed(this.m_vertex2);
-			edge.m_vertex3.set_Renamed(this.m_vertex3);
-			return edge;
-		}
-	}
+    /// <summary>
+    /// A line segment (edge) shape. These can be connected in chains or loops to other edge shapes. The
+    /// connectivity information is used to ensure correct contact normals.
+    /// </summary>
+    /// <author>Daniel</author>
+    public class EdgeShape : Shape
+    {
+        /// <summary> edge vertex 1</summary>
+        public readonly Vec2 m_vertex1 = new Vec2();
+        /// <summary> edge vertex 2</summary>
+        public readonly Vec2 m_vertex2 = new Vec2();
+
+        /// <summary> optional adjacent vertex 1. Used for smooth collision</summary>
+        public readonly Vec2 m_vertex0 = new Vec2();
+        /// <summary> optional adjacent vertex 2. Used for smooth collision</summary>
+        public readonly Vec2 m_vertex3 = new Vec2();
+        public bool m_hasVertex0 = false, m_hasVertex3 = false;
+
+        private readonly Vec2 pool0 = new Vec2();
+        private readonly Vec2 pool1 = new Vec2();
+        private readonly Vec2 pool2 = new Vec2();
+        private readonly Vec2 pool3 = new Vec2();
+        private readonly Vec2 pool4 = new Vec2();
+        private readonly Vec2 pool5 = new Vec2();
+
+        public EdgeShape() :
+            base(ShapeType.EDGE)
+        {
+            m_radius = Settings.polygonRadius;
+        }
+
+        override public int ChildCount
+        {
+            get
+            {
+                return 1;
+            }
+        }
+
+        public virtual void set_Renamed(Vec2 v1, Vec2 v2)
+        {
+            m_vertex1.set_Renamed(v1);
+            m_vertex2.set_Renamed(v2);
+            m_hasVertex0 = m_hasVertex3 = false;
+        }
+
+        public override bool testPoint(Transform xf, Vec2 p)
+        {
+            return false;
+        }
+
+        public override bool raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
+        {
+
+            // Put the ray into the edge's frame of reference.
+            Vec2 p1 = pool0.set_Renamed(input.p1).subLocal(xf.p);
+            Rot.mulTrans(xf.q, p1, p1);
+            Vec2 p2 = pool1.set_Renamed(input.p2).subLocal(xf.p);
+            Rot.mulTrans(xf.q, p1, p1);
+            Vec2 d = p2.subLocal(p1); // we don't use p2 later
+
+            Vec2 v1 = m_vertex1;
+            Vec2 v2 = m_vertex2;
+            Vec2 normal = pool2.set_Renamed(v2).subLocal(v1);
+            normal.set_Renamed(normal.y, -normal.x);
+            normal.normalize();
+
+            // q = p1 + t * d
+            // dot(normal, q - v1) = 0
+            // dot(normal, p1 - v1) + t * dot(normal, d) = 0
+            pool3.set_Renamed(v1).subLocal(p1);
+            float numerator = Vec2.dot(normal, pool3);
+            float denominator = Vec2.dot(normal, d);
+
+            if (denominator == 0.0f)
+            {
+                return false;
+            }
+
+            float t = numerator / denominator;
+            if (t < 0.0f || 1.0f < t)
+            {
+                return false;
+            }
+
+            Vec2 q = pool3;
+            Vec2 r = pool4;
+
+            // Vec2 q = p1 + t * d;
+            q.set_Renamed(d).mulLocal(t).addLocal(p1);
+
+            // q = v1 + s * r
+            // s = dot(q - v1, r) / dot(r, r)
+            // Vec2 r = v2 - v1;
+            r.set_Renamed(v2).subLocal(v1);
+            float rr = Vec2.dot(r, r);
+            if (rr == 0.0f)
+            {
+                return false;
+            }
+
+            pool5.set_Renamed(q).subLocal(v1);
+            float s = Vec2.dot(pool5, r) / rr;
+            if (s < 0.0f || 1.0f < s)
+            {
+                return false;
+            }
+
+            output.fraction = t;
+            if (numerator > 0.0f)
+            {
+                // argOutput.normal = -normal;
+                output.normal.set_Renamed(normal).negateLocal();
+            }
+            else
+            {
+                // output.normal = normal;
+                output.normal.set_Renamed(normal);
+            }
+            return true;
+        }
+
+        public override void computeAABB(AABB aabb, Transform xf, int childIndex)
+        {
+            //UPGRADE_NOTE: Final was removed from the declaration of 'v1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+            Vec2 v1 = pool1;
+            //UPGRADE_NOTE: Final was removed from the declaration of 'v2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+            Vec2 v2 = pool2;
+
+            Transform.mulToOutUnsafe(xf, m_vertex1, v1);
+            Transform.mulToOutUnsafe(xf, m_vertex2, v2);
+
+            Vec2.minToOut(v1, v2, aabb.lowerBound);
+            Vec2.maxToOut(v1, v2, aabb.upperBound);
+
+            aabb.lowerBound.x -= m_radius;
+            aabb.lowerBound.y -= m_radius;
+            aabb.upperBound.x += m_radius;
+            aabb.upperBound.y += m_radius;
+        }
+
+        public override void computeMass(MassData massData, float density)
+        {
+            massData.mass = 0.0f;
+            massData.center.set_Renamed(m_vertex1).addLocal(m_vertex2).mulLocal(0.5f);
+            massData.I = 0.0f;
+        }
+
+        public override Shape Clone()
+        {
+            EdgeShape edge = new EdgeShape();
+            edge.m_radius = this.m_radius;
+            edge.m_hasVertex0 = this.m_hasVertex0;
+            edge.m_hasVertex3 = this.m_hasVertex3;
+            edge.m_vertex0.set_Renamed(this.m_vertex0);
+            edge.m_vertex1.set_Renamed(this.m_vertex1);
+            edge.m_vertex2.set_Renamed(this.m_vertex2);
+            edge.m_vertex3.set_Renamed(this.m_vertex3);
+            return edge;
+        }
+    }
 }
