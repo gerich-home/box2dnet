@@ -25,13 +25,14 @@
 using System;
 using Position = org.jbox2d.dynamics.contacts.Position;
 using Velocity = org.jbox2d.dynamics.contacts.Velocity;
+
 namespace org.jbox2d.dynamics
 {
-	
-	public class SolverData
-	{
-		public TimeStep step;
-		public Position[] positions;
-		public Velocity[] velocities;
-	}
+
+    public class SolverData
+    {
+        public TimeStep step;
+        public Position[] positions;
+        public Velocity[] velocities;
+    }
 }
