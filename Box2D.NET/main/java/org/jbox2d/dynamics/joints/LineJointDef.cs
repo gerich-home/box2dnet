@@ -22,67 +22,81 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 7:27:31 AM Jan 21, 2011</summary>
+// Created at 7:27:31 AM Jan 21, 2011
+
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class LineJointDef:JointDef
-	{
-		
-		/// <summary> The local anchor point relative to body1's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorA = new Vec2();
-		
-		/// <summary> The local anchor point relative to body2's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorB = new Vec2();
-		
-		/// <summary> The local translation axis in body1.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAxisA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAxisA = new Vec2();
-		
-		/// <summary> Enable/disable the joint limit.</summary>
-		public bool enableLimit;
-		
-		/// <summary> The lower translation limit, usually in meters.</summary>
-		public float lowerTranslation;
-		
-		/// <summary> The upper translation limit, usually in meters.</summary>
-		public float upperTranslation;
-		
-		/// <summary> Enable/disable the joint motor.</summary>
-		public bool enableMotor;
-		
-		/// <summary> The maximum motor torque, usually in N-m.</summary>
-		public float maxMotorForce;
-		
-		/// <summary> The desired motor speed in radians per second.</summary>
-		public float motorSpeed;
-		
-		public LineJointDef()
-		{
-			type = JointType.WHEEL;
-			localAxisA.set_Renamed(1, 0);
-			enableLimit = false;
-			lowerTranslation = 0;
-			upperTranslation = 0;
-			enableMotor = false;
-			maxMotorForce = 0f;
-			motorSpeed = 0f;
-		}
-		
-		public virtual void  initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
-		{
-			bodyA = b1;
-			bodyB = b2;
-			b1.getLocalPointToOut(anchor, localAnchorA);
-			b2.getLocalPointToOut(anchor, localAnchorB);
-			bodyA.getLocalVectorToOut(axis, localAxisA);
-		}
-	}
+    /// <author>Daniel Murphy</author>
+    public class LineJointDef : JointDef
+    {
+        /// <summary>
+        /// The local anchor point relative to body1's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorA = new Vec2();
+
+        /// <summary>
+        /// The local anchor point relative to body2's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorB = new Vec2();
+
+        /// <summary>
+        /// The local translation axis in body1.
+        /// </summary>
+        public readonly Vec2 localAxisA = new Vec2();
+
+        /// <summary>
+        /// Enable/disable the joint limit.
+        /// </summary>
+        public bool enableLimit;
+
+        /// <summary>
+        /// The lower translation limit, usually in meters.
+        /// </summary>
+        public float lowerTranslation;
+
+        /// <summary>
+        /// The upper translation limit, usually in meters.
+        /// </summary>
+        public float upperTranslation;
+
+        /// <summary>
+        /// Enable/disable the joint motor.
+        /// </summary>
+        public bool enableMotor;
+
+        /// <summary>
+        /// The maximum motor torque, usually in N-m.
+        /// </summary>
+        public float maxMotorForce;
+
+        /// <summary>
+        /// The desired motor speed in radians per second.
+        /// </summary>
+        public float motorSpeed;
+
+        public LineJointDef()
+        {
+            type = JointType.WHEEL;
+            localAxisA.set_Renamed(1, 0);
+            enableLimit = false;
+            lowerTranslation = 0;
+            upperTranslation = 0;
+            enableMotor = false;
+            maxMotorForce = 0f;
+            motorSpeed = 0f;
+        }
+
+        public virtual void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
+        {
+            bodyA = b1;
+            bodyB = b2;
+            b1.getLocalPointToOut(anchor, localAnchorA);
+            b2.getLocalPointToOut(anchor, localAnchorB);
+            bodyA.getLocalVectorToOut(axis, localAxisA);
+        }
+    }
 }
