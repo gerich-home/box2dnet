@@ -22,37 +22,39 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 4:14:34 AM Jul 17, 2010</summary>
+// Created at 4:14:34 AM Jul 17, 2010
+
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+
 namespace org.jbox2d.pooling.arrays
 {
-	
-	/// <summary> Not thread safe int[] pooling</summary>
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class IntArray
-	{
-		
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		private final HashMap < Integer, int [] > map = new HashMap < Integer, int [] >();
-		
-		public virtual int[] get_Renamed(int argLength)
-		{
-			assert(argLength > 0);
-			
-			if (!map.containsKey(argLength))
-			{
-				map.put(argLength, getInitializedArray(argLength));
-			}
-			
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			assert(map.get(argLength).length == argLength): Array not built of correct length;
-			return map.get_Renamed(argLength);
-		}
-		
-		protected internal virtual int[] getInitializedArray(int argLength)
-		{
-			return new int[argLength];
-		}
-	}
+
+    /// <summary>
+    /// Not thread safe int[] pooling
+    /// </summary>
+    /// <author>Daniel Murphy</author>
+    public class IntArray
+    {
+        private readonly Dictionary<int, int[]> map = new Dictionary<int, int[]>();
+
+        public virtual int[] get_Renamed(int argLength)
+        {
+            Debug.Assert(argLength > 0);
+
+            if (!map.ContainsKey(argLength))
+            {
+                map.Add(argLength, getInitializedArray(argLength));
+            }
+
+            Debug.Assert(map[argLength].Length == argLength); // Array not built of correct length
+            return map[argLength];
+        }
+
+        protected internal virtual int[] getInitializedArray(int argLength)
+        {
+            return new int[argLength];
+        }
+    }
 }
