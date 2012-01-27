@@ -24,29 +24,36 @@
 
 using System;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.contacts
 {
-	
-	/// <summary> A contact edge is used to connect bodies and contacts together in a contact graph where each body
-	/// is a node and each contact is an edge. A contact edge belongs to a doubly linked list maintained
-	/// in each attached body. Each contact has two contact nodes, one for each attached body.
-	/// 
-	/// </summary>
-	/// <author>  daniel
-	/// </author>
-	public class ContactEdge
-	{
-		
-		/// <summary> provides quick access to the other body attached.</summary>
-		public Body other = null;
-		
-		/// <summary> the contact</summary>
-		public Contact contact = null;
-		
-		/// <summary> the previous contact edge in the body's contact list</summary>
-		public ContactEdge prev = null;
-		
-		/// <summary> the next contact edge in the body's contact list</summary>
-		public ContactEdge next = null;
-	}
+
+    /// <summary>
+    /// A contact edge is used to connect bodies and contacts together in a contact graph where each body
+    /// is a node and each contact is an edge. A contact edge belongs to a doubly linked list maintained
+    /// in each attached body. Each contact has two contact nodes, one for each attached body.
+    /// </summary>
+    /// <author>daniel</author>
+    public class ContactEdge
+    {
+        /// <summary>
+        /// provides quick access to the other body attached.
+        /// </summary>
+        public Body other = null;
+
+        /// <summary>
+        /// the contact
+        /// </summary>
+        public Contact contact = null;
+
+        /// <summary>
+        /// the previous contact edge in the body's contact list
+        /// </summary>
+        public ContactEdge prev = null;
+
+        /// <summary>
+        /// the next contact edge in the body's contact list
+        /// </summary>
+        public ContactEdge next = null;
+    }
 }
