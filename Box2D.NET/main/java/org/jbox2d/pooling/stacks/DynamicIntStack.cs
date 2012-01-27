@@ -23,52 +23,53 @@
 // ****************************************************************************
 
 using System;
+using System.Diagnostics;
+
 namespace org.jbox2d.pooling.stacks
 {
-	
-	public class DynamicIntStack
-	{
-		virtual public int Count
-		{
-			get
-			{
-				return position;
-			}
-			
-		}
-		
-		private int[] stack;
-		private int size;
-		private int position;
-		
-		public DynamicIntStack(int initialSize)
-		{
-			stack = new int[initialSize];
-			position = 0;
-			size = initialSize;
-		}
-		
-		public virtual void  reset()
-		{
-			position = 0;
-		}
-		
-		public virtual int pop()
-		{
-			assert(position > 0);
-			return stack[--position];
-		}
-		
-		public virtual void  push(int i)
-		{
-			if (position == size)
-			{
-				int[] old = stack;
-				stack = new int[size * 2];
-				size = stack.Length;
-				Array.Copy(old, 0, stack, 0, old.Length);
-			}
-			stack[position++] = i;
-		}
-	}
+
+    public class DynamicIntStack
+    {
+        private int[] stack;
+        private int size;
+        private int position;
+
+        public DynamicIntStack(int initialSize)
+        {
+            stack = new int[initialSize];
+            position = 0;
+            size = initialSize;
+        }
+
+        public virtual void reset()
+        {
+            position = 0;
+        }
+
+        public virtual int pop()
+        {
+            Debug.Assert(position > 0);
+            return stack[--position];
+        }
+
+        public virtual void push(int i)
+        {
+            if (position == size)
+            {
+                int[] old = stack;
+                stack = new int[size * 2];
+                size = stack.Length;
+                Array.Copy(old, 0, stack, 0, old.Length);
+            }
+            stack[position++] = i;
+        }
+
+        virtual public int Count
+        {
+            get
+            {
+                return position;
+            }
+        }
+    }
 }
