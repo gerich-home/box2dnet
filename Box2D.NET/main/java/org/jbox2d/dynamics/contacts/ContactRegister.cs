@@ -23,15 +23,14 @@
 // ****************************************************************************
 
 using System;
-//UPGRADE_TODO: The type 'org.jbox2d.pooling.IDynamicStack' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
-using IDynamicStack = org.jbox2d.pooling.IDynamicStack;
+using org.jbox2d.pooling;
+
 namespace org.jbox2d.dynamics.contacts
 {
-	
-	public class ContactRegister
-	{
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		public IDynamicStack < Contact > creator;
-		public bool primary;
-	}
+
+    public class ContactRegister
+    {
+        public IDynamicStack<Contact> creator;
+        public bool primary;
+    }
 }
