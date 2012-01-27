@@ -22,95 +22,79 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 12:52:04 AM Jan 20, 2011</summary>
+// Created at 12:52:04 AM Jan 20, 2011
+
 using System;
+using System.Diagnostics;
 //UPGRADE_TODO: The type 'org.slf4j.Logger' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
-using Logger = org.slf4j.Logger;
+//using Logger = org.slf4j.Logger;
 //UPGRADE_TODO: The type 'org.slf4j.LoggerFactory' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
-using LoggerFactory = org.slf4j.LoggerFactory;
+//using LoggerFactory = org.slf4j.LoggerFactory;
+
 namespace org.jbox2d.pooling.normal
 {
-	
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class OrderedStack
-	{
-		public OrderedStack()
-		{
-			InitBlock();
-		}
-		private void  InitBlock()
-		{
-			size = argStackSize;
-			pool = (E[]) Array.newInstance(argClass, argStackSize);
-			for (int i = 0; i < argStackSize; i++)
-			{
-				try
-				{
-					pool[i] = argClass.newInstance();
-				}
-				//UPGRADE_NOTE: Exception 'java.lang.InstantiationException' was converted to 'System.Exception' which has different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1100'"
-				catch (System.Exception e)
-				{
-					log.error("Error creating pooled object " + argClass.getSimpleName(), e);
-					//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-					assert(false): Error creating pooled object  + argClass.getCanonicalName();
-				}
-				catch (System.UnauthorizedAccessException e)
-				{
-					log.error("Error creating pooled object " + argClass.getSimpleName(), e);
-					//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-					assert(false): Error creating pooled object  + argClass.getCanonicalName();
-				}
-			}
-			index = 0;
-			container = (E[]) Array.newInstance(argClass, argContainerSize);
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		< E >
-		//UPGRADE_NOTE: Final was removed from the declaration of 'log '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		//UPGRADE_NOTE: The initialization of  'log' was moved to static method 'org.jbox2d.pooling.normal.OrderedStack'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1005'"
-		private static readonly Logger log;
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'pool '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private E[] pool;
-		private int index;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'size '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int size;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'container '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private E[] container;
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		SuppressWarnings(unchecked)
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		public OrderedStack(Class < E > argClass, int argStackSize, int argContainerSize)
-		
-		public E pop()
-		{
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			assert(index < size): End of stack reached, there is probably a leak somewhere;
-			return pool[index++];
-		}
-		
-		public E[] pop(int argNum)
-		{
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			assert(index + argNum < size): End of stack reached, there is probably a leak somewhere;
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			assert(argNum <= container.length): Container array is too small;
-			Array.Copy(pool, index, container, 0, argNum);
-			index += argNum;
-			return container;
-		}
-		
-		public void  push(int argNum)
-		{
-			index -= argNum;
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			assert(index >= 0): Beginning of stack reached, push/pops are unmatched;
-		}
-		static OrderedStack()
-		{
-			log = LoggerFactory.getLogger(typeof(OrderedStack));
-		}
-	}
+    /// <author>Daniel Murphy</author>
+    public class OrderedStack<E>
+        where E : new()
+    {
+        //UPGRADE_TODO: there is no logger class
+        //private static readonly Logger log;
+        //static OrderedStack()
+        //{
+        //	log = LoggerFactory.getLogger(typeof(OrderedStack));
+        //}
+
+        private readonly E[] pool;
+        private int index;
+        private readonly int size;
+        private readonly E[] container;
+
+        public OrderedStack(int argStackSize, int argContainerSize)
+        {
+            size = argStackSize;
+            pool = new E[argStackSize];
+
+            for (int i = 0; i < argStackSize; i++)
+            {
+                try
+                {
+                    pool[i] = new E();
+                }
+                catch (Exception e)
+                {
+                    //log.error("Error creating pooled object " + argClass.getSimpleName(), e);
+                    Debug.Assert(false); //Error creating pooled object  + argClass.getCanonicalName()
+                }
+                /*catch (System.UnauthorizedAccessException e)
+                {
+                    log.error("Error creating pooled object " + argClass.getSimpleName(), e);
+                    //UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
+                    assert(false): Error creating pooled object  + argClass.getCanonicalName();
+                }*/
+            }
+            index = 0;
+            container = new E[argContainerSize];
+        }
+
+        public E pop()
+        {
+            Debug.Assert(index < size); // End of stack reached, there is probably a leak somewhere;
+            return pool[index++];
+        }
+
+        public E[] pop(int argNum)
+        {
+            Debug.Assert(index + argNum < size); //End of stack reached, there is probably a leak somewhere;
+            Debug.Assert(argNum <= container.Length); //Container array is too small;
+            Array.Copy(pool, index, container, 0, argNum);
+            index += argNum;
+            return container;
+        }
+
+        public void push(int argNum)
+        {
+            index -= argNum;
+            Debug.Assert(index >= 0); //Beginning of stack reached, push/pops are unmatched;
+        }
+    }
 }
