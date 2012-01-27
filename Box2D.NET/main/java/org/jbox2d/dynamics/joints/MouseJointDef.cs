@@ -24,38 +24,44 @@
 
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Mouse joint definition. This requires a world target point, tuning parameters, and the time step.
-	/// 
-	/// </summary>
-	/// <author>  Daniel
-	/// </author>
-	public class MouseJointDef:JointDef
-	{
-		/// <summary> The initial world target point. This is assumed to coincide with the body anchor initially.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'target '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 target = new Vec2();
-		
-		/// <summary> The maximum constraint force that can be exerted to move the candidate body. Usually you will
-		/// express as some multiple of the weight (multiplier * mass * gravity).
-		/// </summary>
-		public float maxForce;
-		
-		/// <summary> The response speed.</summary>
-		public float frequencyHz;
-		
-		/// <summary> The damping ratio. 0 = no damping, 1 = critical damping.</summary>
-		public float dampingRatio;
-		
-		public MouseJointDef()
-		{
-			type = JointType.MOUSE;
-			target.set_Renamed(0, 0);
-			maxForce = 0;
-			frequencyHz = 5;
-			dampingRatio = .7f;
-		}
-	}
+
+    /// <summary>
+    /// Mouse joint definition. This requires a world target point, tuning parameters, and the time step.
+    /// </summary>
+    /// <author>Daniel</author>
+    public class MouseJointDef : JointDef
+    {
+        /// <summary>
+        /// The initial world target point. This is assumed to coincide with the body anchor initially.
+        /// </summary>
+        public readonly Vec2 target = new Vec2();
+
+        /// <summary>
+        /// The maximum constraint force that can be exerted to move the candidate body. Usually you will
+        /// express as some multiple of the weight (multiplier * mass * gravity).
+        /// </summary>
+        public float maxForce;
+
+        /// <summary>
+        /// The response speed.
+        /// </summary>
+        public float frequencyHz;
+
+        /// <summary>
+        /// The damping ratio. 0 = no damping, 1 = critical damping.
+        /// </summary>
+        public float dampingRatio;
+
+        public MouseJointDef()
+        {
+            type = JointType.MOUSE;
+            target.set_Renamed(0, 0);
+            maxForce = 0;
+            frequencyHz = 5;
+            dampingRatio = .7f;
+        }
+    }
 }
