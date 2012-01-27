@@ -34,6 +34,7 @@ namespace org.jbox2d.pooling.normal
 {
 
     public class CircleStack<E> : IOrderedStack<E>
+        where E : new()
     {
         //UPGRADE_TODO: there is no logger class
         //private static readonly Logger log;
@@ -47,21 +48,16 @@ namespace org.jbox2d.pooling.normal
         private readonly int size;
         private readonly E[] container;
 
-        //UPGRADE_TODO: check if we can remove first argument and use
-        //              where E : new() constraint in couple with
-        //              pool = new E[argStackSize];
-        //              and
-        //              pool[i] = new E();
-        public CircleStack(Type argClass, int argStackSize, int argContainerSize)
+        public CircleStack(int argStackSize, int argContainerSize)
         {
             size = argStackSize;
-            pool = (E[])Array.CreateInstance(argClass, argStackSize);
+            pool = new E[argStackSize];
 
             for (int i = 0; i < argStackSize; i++)
             {
                 try
                 {
-                    pool[i] = (E)argClass.GetConstructor(Type.EmptyTypes).Invoke(new object[0]);
+                    pool[i] = new E();
                 }
                 catch (Exception e)
                 {
@@ -77,7 +73,7 @@ namespace org.jbox2d.pooling.normal
                 }*/
             }
             index = 0;
-            container = (E[])Array.CreateInstance(argClass, argContainerSize);
+            container = new E[argContainerSize];
         }
 
         public E pop()
