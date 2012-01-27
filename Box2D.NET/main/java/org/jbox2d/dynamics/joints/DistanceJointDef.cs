@@ -44,69 +44,75 @@
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
 */
+
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	//Updated to rev 56->130->142 of b2DistanceJoint.cpp/.h
-	
-	/// <summary> Distance joint definition. This requires defining an
-	/// anchor point on both bodies and the non-zero length of the
-	/// distance joint. The definition uses local anchor points
-	/// so that the initial configuration can violate the constraint
-	/// slightly. This helps when saving and loading a game.
-	/// </summary>
-	/// <warning>  Do not use a zero or short length. </warning>
-	public class DistanceJointDef:JointDef
-	{
-		/// <summary>The local anchor point relative to body1's origin. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorA;
-		
-		/// <summary>The local anchor point relative to body2's origin. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorB;
-		
-		/// <summary>The equilibrium length between the anchor points. </summary>
-		public float length;
-		
-		/// <summary> The mass-spring-damper frequency in Hertz.</summary>
-		public float frequencyHz;
-		
-		/// <summary> The damping ratio. 0 = no damping, 1 = critical damping.</summary>
-		public float dampingRatio;
-		
-		public DistanceJointDef()
-		{
-			type = JointType.DISTANCE;
-			localAnchorA = new Vec2(0.0f, 0.0f);
-			localAnchorB = new Vec2(0.0f, 0.0f);
-			length = 1.0f;
-			frequencyHz = 0.0f;
-			dampingRatio = 0.0f;
-		}
-		
-		/// <summary> Initialize the bodies, anchors, and length using the world
-		/// anchors.
-		/// </summary>
-		/// <param name="b1">First body
-		/// </param>
-		/// <param name="b2">Second body
-		/// </param>
-		/// <param name="anchor1">World anchor on first body
-		/// </param>
-		/// <param name="anchor2">World anchor on second body
-		/// </param>
-		public virtual void  initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
-		{
-			bodyA = b1;
-			bodyB = b2;
-			localAnchorA.set_Renamed(bodyA.getLocalPoint(anchor1));
-			localAnchorB.set_Renamed(bodyB.getLocalPoint(anchor2));
-			Vec2 d = anchor2.sub(anchor1);
-			length = d.length();
-		}
-	}
+
+    //Updated to rev 56->130->142 of b2DistanceJoint.cpp/.h
+
+    /// <summary>
+    /// Distance joint definition. This requires defining an
+    /// anchor point on both bodies and the non-zero length of the
+    /// distance joint. The definition uses local anchor points
+    /// so that the initial configuration can violate the constraint
+    /// slightly. This helps when saving and loading a game.
+    /// </summary>
+    /// <warning>Do not use a zero or short length.</warning>
+    public class DistanceJointDef : JointDef
+    {
+        /// <summary>
+        /// The local anchor point relative to body1's origin.</summary>
+        public readonly Vec2 localAnchorA;
+
+        /// <summary>
+        /// The local anchor point relative to body2's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorB;
+
+        /// <summary>
+        /// The equilibrium length between the anchor points.
+        /// </summary>
+        public float length;
+
+        /// <summary>
+        /// The mass-spring-damper frequency in Hertz.
+        /// </summary>
+        public float frequencyHz;
+
+        /// <summary>
+        /// The damping ratio. 0 = no damping, 1 = critical damping.
+        /// </summary>
+        public float dampingRatio;
+
+        public DistanceJointDef()
+        {
+            type = JointType.DISTANCE;
+            localAnchorA = new Vec2(0.0f, 0.0f);
+            localAnchorB = new Vec2(0.0f, 0.0f);
+            length = 1.0f;
+            frequencyHz = 0.0f;
+            dampingRatio = 0.0f;
+        }
+
+        /// <summary>
+        /// Initialize the bodies, anchors, and length using the world anchors.
+        /// </summary>
+        /// <param name="b1">First body</param>
+        /// <param name="b2">Second body</param>
+        /// <param name="anchor1">World anchor on first body</param>
+        /// <param name="anchor2">World anchor on second body</param>
+        public virtual void initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
+        {
+            bodyA = b1;
+            bodyB = b2;
+            localAnchorA.set_Renamed(bodyA.getLocalPoint(anchor1));
+            localAnchorB.set_Renamed(bodyB.getLocalPoint(anchor2));
+            Vec2 d = anchor2.sub(anchor1);
+            length = d.length();
+        }
+    }
 }
