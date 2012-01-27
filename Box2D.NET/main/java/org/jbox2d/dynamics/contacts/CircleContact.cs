@@ -25,32 +25,32 @@
 using System;
 using Manifold = org.jbox2d.collision.Manifold;
 using CircleShape = org.jbox2d.collision.shapes.CircleShape;
-//UPGRADE_TODO: The type 'org.jbox2d.collision.shapes.ShapeType' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 using ShapeType = org.jbox2d.collision.shapes.ShapeType;
 using Transform = org.jbox2d.common.Transform;
 using Fixture = org.jbox2d.dynamics.Fixture;
 using IWorldPool = org.jbox2d.pooling.IWorldPool;
+using System.Diagnostics;
+
 namespace org.jbox2d.dynamics.contacts
 {
-	
-	public class CircleContact:Contact
-	{
-		
-		public CircleContact(IWorldPool argPool):base(argPool)
-		{
-		}
-		
-		public virtual void  init(Fixture fixtureA, Fixture fixtureB)
-		{
-			base.init(fixtureA, 0, fixtureB, 0);
-			assert(m_fixtureA.Type == ShapeType.CIRCLE);
-			assert(m_fixtureB.Type == ShapeType.CIRCLE);
-		}
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override void  evaluate(Manifold manifold, Transform xfA, Transform xfB)
-		{
-			pool.getCollision().collideCircles(manifold, (CircleShape) m_fixtureA.Shape, xfA, (CircleShape) m_fixtureB.Shape, xfB);
-		}
-	}
+
+    public class CircleContact : Contact
+    {
+        public CircleContact(IWorldPool argPool)
+            : base(argPool)
+        {
+        }
+
+        public virtual void init(Fixture fixtureA, Fixture fixtureB)
+        {
+            base.init(fixtureA, 0, fixtureB, 0);
+            Debug.Assert(m_fixtureA.Type == ShapeType.CIRCLE);
+            Debug.Assert(m_fixtureB.Type == ShapeType.CIRCLE);
+        }
+
+        public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)
+        {
+            pool.getCollision().collideCircles(manifold, (CircleShape)m_fixtureA.Shape, xfA, (CircleShape)m_fixtureB.Shape, xfB);
+        }
+    }
 }
