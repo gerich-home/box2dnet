@@ -24,31 +24,39 @@
 
 using System;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	//updated to rev 100 - ec
-	/// <summary> A joint edge is used to connect bodies and joints together
-	/// in a joint graph where each body is a node and each joint
-	/// is an edge. A joint edge belongs to a doubly linked list
-	/// maintained in each attached body. Each joint has two joint
-	/// nodes, one for each attached body.
-	/// </summary>
-	/// <author>  Daniel
-	/// </author>
-	public class JointEdge
-	{
-		
-		/// <summary> Provides quick access to the other body attached</summary>
-		public Body other = null;
-		
-		/// <summary> the joint</summary>
-		public Joint joint = null;
-		
-		/// <summary> the previous joint edge in the body's joint list</summary>
-		public JointEdge prev = null;
-		
-		/// <summary> the next joint edge in the body's joint list</summary>
-		public JointEdge next = null;
-	}
+
+    //updated to rev 100 - ec
+    /// <summary>
+    /// A joint edge is used to connect bodies and joints together
+    /// in a joint graph where each body is a node and each joint
+    /// is an edge. A joint edge belongs to a doubly linked list
+    /// maintained in each attached body. Each joint has two joint
+    /// nodes, one for each attached body.
+    /// </summary>
+    /// <author>Daniel</author>
+    public class JointEdge
+    {
+        /// <summary>
+        /// Provides quick access to the other body attached
+        /// </summary>
+        public Body other = null;
+
+        /// <summary>
+        /// the joint
+        /// </summary>
+        public Joint joint = null;
+
+        /// <summary>
+        /// the previous joint edge in the body's joint list
+        /// </summary>
+        public JointEdge prev = null;
+
+        /// <summary>
+        /// the next joint edge in the body's joint list
+        /// </summary>
+        public JointEdge next = null;
+    }
 }
