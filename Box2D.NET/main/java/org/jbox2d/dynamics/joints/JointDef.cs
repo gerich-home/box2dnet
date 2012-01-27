@@ -24,37 +24,49 @@
 
 using System;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	//updated to rev 100
-	/// <summary> Joint definitions are used to construct joints.</summary>
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class JointDef
-	{
-		
-		public JointDef()
-		{
-			type = JointType.UNKNOWN;
-			userData = null;
-			bodyA = null;
-			bodyB = null;
-			collideConnected = false;
-		}
-		/// <summary> The joint type is set automatically for concrete joint types.</summary>
-		public JointType type;
-		
-		/// <summary> Use this to attach application specific data to your joints.</summary>
-		public System.Object userData;
-		
-		/// <summary> The first attached body.</summary>
-		public Body bodyA;
-		
-		/// <summary> The second attached body.</summary>
-		public Body bodyB;
-		
-		/// <summary> Set this flag to true if the attached bodies should collide.</summary>
-		public bool collideConnected;
-	}
+
+    //updated to rev 100
+    /// <summary>
+    /// Joint definitions are used to construct joints.
+    /// </summary>
+    /// <author>Daniel Murphy</author>
+    public class JointDef
+    {
+        public JointDef()
+        {
+            type = JointType.UNKNOWN;
+            userData = null;
+            bodyA = null;
+            bodyB = null;
+            collideConnected = false;
+        }
+
+        /// <summary>
+        /// The joint type is set automatically for concrete joint types.
+        /// </summary>
+        public JointType type;
+
+        /// <summary>
+        /// Use this to attach application specific data to your joints.
+        /// </summary>
+        public object userData;
+
+        /// <summary>
+        /// The first attached body.
+        /// </summary>
+        public Body bodyA;
+
+        /// <summary>
+        /// The second attached body.
+        /// </summary>
+        public Body bodyB;
+
+        /// <summary>
+        /// Set this flag to true if the attached bodies should collide.
+        /// </summary>
+        public bool collideConnected;
+    }
 }
