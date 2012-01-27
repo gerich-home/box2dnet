@@ -22,51 +22,59 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 7:23:39 AM Jan 20, 2011</summary>
+// Created at 7:23:39 AM Jan 20, 2011
+
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Friction joint definition.</summary>
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class FrictionJointDef:JointDef
-	{
-		
-		
-		/// <summary> The local anchor point relative to bodyA's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorA;
-		
-		/// <summary> The local anchor point relative to bodyB's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorB;
-		
-		/// <summary> The maximum friction force in N.</summary>
-		public float maxForce;
-		
-		/// <summary> The maximum friction torque in N-m.</summary>
-		public float maxTorque;
-		
-		public FrictionJointDef()
-		{
-			type = JointType.FRICTION;
-			localAnchorA = new Vec2();
-			localAnchorB = new Vec2();
-			maxForce = 0f;
-			maxTorque = 0f;
-		}
-		/// <summary> Initialize the bodies, anchors, axis, and reference angle using the world
-		/// anchor and world axis.
-		/// </summary>
-		public virtual void  initialize(Body bA, Body bB, Vec2 anchor)
-		{
-			bodyA = bA;
-			bodyB = bB;
-			bA.getLocalPointToOut(anchor, localAnchorA);
-			bB.getLocalPointToOut(anchor, localAnchorB);
-		}
-	}
+
+    /// <summary>
+    /// Friction joint definition.
+    /// </summary>
+    /// <author>Daniel Murphy</author>
+    public class FrictionJointDef : JointDef
+    {
+        /// <summary>
+        /// The local anchor point relative to bodyA's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorA;
+
+        /// <summary>
+        /// The local anchor point relative to bodyB's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorB;
+
+        /// <summary>
+        /// The maximum friction force in N.
+        /// </summary>
+        public float maxForce;
+
+        /// <summary>
+        /// The maximum friction torque in N-m.
+        /// </summary>
+        public float maxTorque;
+
+        public FrictionJointDef()
+        {
+            type = JointType.FRICTION;
+            localAnchorA = new Vec2();
+            localAnchorB = new Vec2();
+            maxForce = 0f;
+            maxTorque = 0f;
+        }
+
+        /// <summary>
+        /// Initialize the bodies, anchors, axis, and reference angle using the world anchor and world axis.
+        /// </summary>
+        public virtual void initialize(Body bA, Body bB, Vec2 anchor)
+        {
+            bodyA = bA;
+            bodyB = bB;
+            bA.getLocalPointToOut(anchor, localAnchorA);
+            bB.getLocalPointToOut(anchor, localAnchorB);
+        }
+    }
 }
