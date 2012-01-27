@@ -22,35 +22,42 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 5:20:39 AM Jan 22, 2011</summary>
+// Created at 5:20:39 AM Jan 22, 2011
+
 using System;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Gear joint definition. This definition requires two existing
-	/// revolute or prismatic joints (any combination will work).
-	/// The provided joints must attach a dynamic body to a static body.
-	/// </summary>
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class GearJointDef:JointDef
-	{
-		/// <summary> The first revolute/prismatic joint attached to the gear joint.</summary>
-		public Joint joint1;
-		
-		/// <summary> The second revolute/prismatic joint attached to the gear joint.</summary>
-		public Joint joint2;
-		
-		/// <summary> Gear ratio.</summary>
-		/// <seealso cref="GearJoint">
-		/// </seealso>
-		public float ratio;
-		
-		public GearJointDef()
-		{
-			type = JointType.GEAR;
-			joint1 = null;
-			joint2 = null;
-		}
-	}
+
+    /// <summary>
+    /// Gear joint definition. This definition requires two existing
+    /// revolute or prismatic joints (any combination will work).
+    /// The provided joints must attach a dynamic body to a static body.
+    /// </summary>
+    /// <author>Daniel Murphy</author>
+    public class GearJointDef : JointDef
+    {
+        /// <summary>
+        /// The first revolute/prismatic joint attached to the gear joint.
+        /// </summary>
+        public Joint joint1;
+
+        /// <summary>
+        /// The second revolute/prismatic joint attached to the gear joint.
+        /// </summary>
+        public Joint joint2;
+
+        /// <summary>
+        /// Gear ratio.
+        /// </summary>
+        /// <seealso cref="GearJoint"></seealso>
+        public float ratio;
+
+        public GearJointDef()
+        {
+            type = JointType.GEAR;
+            joint1 = null;
+            joint2 = null;
+        }
+    }
 }
