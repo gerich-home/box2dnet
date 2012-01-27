@@ -24,64 +24,65 @@
 
 using System;
 using Body = org.jbox2d.dynamics.Body;
+using System.Collections.Generic;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Definition for a {@link ConstantVolumeJoint}, which connects a group a bodies together
-	/// so they maintain a constant volume within them.
-	/// </summary>
-	public class ConstantVolumeJointDef:JointDef
-	{
-		public float frequencyHz;
-		public float dampingRatio;
-		
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		ArrayList < Body > bodies;
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		ArrayList < DistanceJoint > joints;
-		
-		//public float relaxationFactor;//1.0 is perfectly stiff (but doesn't work, unstable)
-		
-		public ConstantVolumeJointDef()
-		{
-			type = JointType.CONSTANT_VOLUME;
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			bodies = new ArrayList < Body >();
-			joints = null;
-			//relaxationFactor = 0.9f;
-			collideConnected = false;
-			frequencyHz = 0.0f;
-			dampingRatio = 0.0f;
-		}
-		
-		/// <summary> Adds a body to the group</summary>
-		/// <param name="argBody">
-		/// </param>
-		public virtual void  addBody(Body argBody)
-		{
-			bodies.add(argBody);
-			if (bodies.size() == 1)
-			{
-				bodyA = argBody;
-			}
-			if (bodies.size() == 2)
-			{
-				bodyB = argBody;
-			}
-		}
-		
-		/// <summary> Adds a body and the pre-made distance joint.  Should only
-		/// be used for deserialization.
-		/// </summary>
-		public virtual void  addBodyAndJoint(Body argBody, DistanceJoint argJoint)
-		{
-			addBody(argBody);
-			if (joints == null)
-			{
-				//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-				joints = new ArrayList < DistanceJoint >();
-			}
-			joints.add(argJoint);
-		}
-	}
+
+    /// <summary>
+    /// Definition for a {@link ConstantVolumeJoint}, which connects a group a bodies together
+    /// so they maintain a constant volume within them.
+    /// </summary>
+    public class ConstantVolumeJointDef : JointDef
+    {
+        public float frequencyHz;
+        public float dampingRatio;
+
+        List<Body> bodies;
+        List<DistanceJoint> joints;
+
+        //public float relaxationFactor;//1.0 is perfectly stiff (but doesn't work, unstable)
+
+        public ConstantVolumeJointDef()
+        {
+            type = JointType.CONSTANT_VOLUME;
+            bodies = new List<Body>();
+            joints = null;
+            //relaxationFactor = 0.9f;
+            collideConnected = false;
+            frequencyHz = 0.0f;
+            dampingRatio = 0.0f;
+        }
+
+        /// <summary>
+        /// Adds a body to the group
+        /// </summary>
+        /// <param name="argBody"></param>
+        public virtual void addBody(Body argBody)
+        {
+            bodies.Add(argBody);
+            if (bodies.Count == 1)
+            {
+                bodyA = argBody;
+            }
+            if (bodies.Count == 2)
+            {
+                bodyB = argBody;
+            }
+        }
+
+        /// <summary>
+        /// Adds a body and the pre-made distance joint.
+        /// Should only be used for deserialization.
+        /// </summary>
+        public virtual void addBodyAndJoint(Body argBody, DistanceJoint argJoint)
+        {
+            addBody(argBody);
+            if (joints == null)
+            {
+                joints = new List<DistanceJoint>();
+            }
+            joints.Add(argJoint);
+        }
+    }
 }
