@@ -24,42 +24,41 @@
 
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
+using System.Collections.Generic;
+using System.Diagnostics;
+
 namespace org.jbox2d.pooling.arrays
 {
-	
-	/// <summary> not thread safe Vec2[] pool</summary>
-	/// <author>  dmurph
-	/// 
-	/// </author>
-	public class Vec2Array
-	{
-		
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		private final HashMap < Integer, Vec2 [] > map = new HashMap < Integer, Vec2 [] >();
-		
-		public virtual Vec2[] get_Renamed(int argLength)
-		{
-			assert(argLength > 0);
-			
-			if (!map.containsKey(argLength))
-			{
-				map.put(argLength, getInitializedArray(argLength));
-			}
-			
-			//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-			assert(map.get(argLength).length == argLength): Array not built of correct length;
-			return map.get_Renamed(argLength);
-		}
-		
-		protected internal virtual Vec2[] getInitializedArray(int argLength)
-		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'ray '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2[] ray = new Vec2[argLength];
-			for (int i = 0; i < ray.Length; i++)
-			{
-				ray[i] = new Vec2();
-			}
-			return ray;
-		}
-	}
+
+    /// <summary>
+    /// not thread safe Vec2[] pool
+    /// </summary>
+    /// <author>dmurph</author>
+    public class Vec2Array
+    {
+        private readonly Dictionary<int, Vec2[]> map = new Dictionary<int, Vec2[]>();
+
+        public virtual Vec2[] get_Renamed(int argLength)
+        {
+            Debug.Assert(argLength > 0);
+
+            if (!map.ContainsKey(argLength))
+            {
+                map.Add(argLength, getInitializedArray(argLength));
+            }
+
+            Debug.Assert(map[argLength].Length == argLength); // Array not built of correct length
+            return map[argLength];
+        }
+
+        protected internal virtual Vec2[] getInitializedArray(int argLength)
+        {
+            Vec2[] ray = new Vec2[argLength];
+            for (int i = 0; i < ray.Length; i++)
+            {
+                ray[i] = new Vec2();
+            }
+            return ray;
+        }
+    }
 }
