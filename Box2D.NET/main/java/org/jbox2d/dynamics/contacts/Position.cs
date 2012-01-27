@@ -24,13 +24,13 @@
 
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.dynamics.contacts
 {
-	
-	public class Position
-	{
-		//UPGRADE_NOTE: Final was removed from the declaration of 'c '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 c = new Vec2();
-		public float a;
-	}
+
+    public class Position
+    {
+        public readonly Vec2 c = new Vec2();
+        public float a;
+    }
 }
