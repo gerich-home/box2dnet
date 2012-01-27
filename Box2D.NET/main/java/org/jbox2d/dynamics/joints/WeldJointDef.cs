@@ -22,61 +22,65 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
+// Created at 3:38:52 AM Jan 15, 2011
+
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Created at 3:38:52 AM Jan 15, 2011</summary>
-	
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class WeldJointDef:JointDef
-	{
-		/// <summary> The local anchor point relative to body1's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorA;
-		
-		/// <summary> The local anchor point relative to body2's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorB;
-		
-		/// <summary> The body2 angle minus body1 angle in the reference state (radians).</summary>
-		public float referenceAngle;
-		
-		/// <summary> The mass-spring-damper frequency in Hertz. Rotation only.
-		/// Disable softness with a value of 0.
-		/// </summary>
-		public float frequencyHz;
-		
-		/// <summary> The damping ratio. 0 = no damping, 1 = critical damping.</summary>
-		public float dampingRatio;
-		
-		public WeldJointDef()
-		{
-			type = JointType.WELD;
-			localAnchorA = new Vec2();
-			localAnchorB = new Vec2();
-			referenceAngle = 0.0f;
-		}
-		
-		/// <summary> Initialize the bodies, anchors, and reference angle using a world
-		/// anchor point.
-		/// </summary>
-		/// <param name="bA">
-		/// </param>
-		/// <param name="bB">
-		/// </param>
-		/// <param name="anchor">
-		/// </param>
-		public virtual void  initialize(Body bA, Body bB, Vec2 anchor)
-		{
-			bodyA = bA;
-			bodyB = bB;
-			bodyA.getLocalPointToOut(anchor, localAnchorA);
-			bodyB.getLocalPointToOut(anchor, localAnchorB);
-			referenceAngle = bodyB.Angle - bodyA.Angle;
-		}
-	}
+
+    /// <author>Daniel Murphy</author>
+    public class WeldJointDef : JointDef
+    {
+        /// <summary>
+        /// The local anchor point relative to body1's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorA;
+
+        /// <summary>
+        /// The local anchor point relative to body2's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorB;
+
+        /// <summary>
+        /// The body2 angle minus body1 angle in the reference state (radians).
+        /// </summary>
+        public float referenceAngle;
+
+        /// <summary>
+        /// The mass-spring-damper frequency in Hertz. Rotation only.
+        /// Disable softness with a value of 0.
+        /// </summary>
+        public float frequencyHz;
+
+        /// <summary>
+        /// The damping ratio. 0 = no damping, 1 = critical damping.
+        /// </summary>
+        public float dampingRatio;
+
+        public WeldJointDef()
+        {
+            type = JointType.WELD;
+            localAnchorA = new Vec2();
+            localAnchorB = new Vec2();
+            referenceAngle = 0.0f;
+        }
+
+        /// <summary>
+        /// Initialize the bodies, anchors, and reference angle using a world anchor point.
+        /// </summary>
+        /// <param name="bA"></param>
+        /// <param name="bB"></param>
+        /// <param name="anchor"></param>
+        public virtual void initialize(Body bA, Body bB, Vec2 anchor)
+        {
+            bodyA = bA;
+            bodyB = bB;
+            bodyA.getLocalPointToOut(anchor, localAnchorA);
+            bodyB.getLocalPointToOut(anchor, localAnchorB);
+            referenceAngle = bodyB.Angle - bodyA.Angle;
+        }
+    }
 }
