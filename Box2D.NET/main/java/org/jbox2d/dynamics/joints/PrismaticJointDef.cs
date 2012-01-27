@@ -25,84 +25,98 @@
 using System;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Prismatic joint definition. This requires defining a line of
-	/// motion using an axis and an anchor point. The definition uses local
-	/// anchor points and a local axis so that the initial configuration
-	/// can violate the constraint slightly. The joint translation is zero
-	/// when the local anchor points coincide in world space. Using local
-	/// anchors and a local axis helps when saving and loading a game.
-	/// </summary>
-	/// <warning>  at least one body should by dynamic with a non-fixed rotation. </warning>
-	/// <author>  Daniel
-	/// 
-	/// </author>
-	public class PrismaticJointDef:JointDef
-	{
-		
-		
-		/// <summary> The local anchor point relative to body1's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorA;
-		
-		/// <summary> The local anchor point relative to body2's origin.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAnchorB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAnchorB;
-		
-		/// <summary> The local translation axis in body1.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localAxisA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 localAxisA;
-		
-		/// <summary> The constrained angle between the bodies: body2_angle - body1_angle.</summary>
-		public float referenceAngle;
-		
-		/// <summary> Enable/disable the joint limit.</summary>
-		public bool enableLimit;
-		
-		/// <summary> The lower translation limit, usually in meters.</summary>
-		public float lowerTranslation;
-		
-		/// <summary> The upper translation limit, usually in meters.</summary>
-		public float upperTranslation;
-		
-		/// <summary> Enable/disable the joint motor.</summary>
-		public bool enableMotor;
-		
-		/// <summary> The maximum motor torque, usually in N-m.</summary>
-		public float maxMotorForce;
-		
-		/// <summary> The desired motor speed in radians per second.</summary>
-		public float motorSpeed;
-		
-		public PrismaticJointDef()
-		{
-			type = JointType.PRISMATIC;
-			localAnchorA = new Vec2();
-			localAnchorB = new Vec2();
-			localAxisA = new Vec2(1.0f, 0.0f);
-			referenceAngle = 0.0f;
-			enableLimit = false;
-			lowerTranslation = 0.0f;
-			upperTranslation = 0.0f;
-			enableMotor = false;
-			maxMotorForce = 0.0f;
-			motorSpeed = 0.0f;
-		}
-		
-		
-		/// <summary> Initialize the bodies, anchors, axis, and reference angle using the world
-		/// anchor and world axis.
-		/// </summary>
-		public virtual void  initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
-		{
-			bodyA = b1;
-			bodyB = b2;
-			bodyA.getLocalPointToOut(anchor, localAnchorA);
-			bodyB.getLocalPointToOut(anchor, localAnchorB);
-			bodyA.getLocalVectorToOut(axis, localAxisA);
-			referenceAngle = bodyB.Angle - bodyA.Angle;
-		}
-	}
+
+    /// <summary>
+    /// Prismatic joint definition. This requires defining a line of
+    /// motion using an axis and an anchor point. The definition uses local
+    /// anchor points and a local axis so that the initial configuration
+    /// can violate the constraint slightly. The joint translation is zero
+    /// when the local anchor points coincide in world space. Using local
+    /// anchors and a local axis helps when saving and loading a game.
+    /// </summary>
+    /// <warning>at least one body should by dynamic with a non-fixed rotation.</warning>
+    /// <author>Daniel</author>
+    public class PrismaticJointDef : JointDef
+    {
+        /// <summary>
+        /// The local anchor point relative to body1's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorA;
+
+        /// <summary>
+        /// The local anchor point relative to body2's origin.
+        /// </summary>
+        public readonly Vec2 localAnchorB;
+
+        /// <summary>
+        /// The local translation axis in body1.
+        /// </summary>
+        public readonly Vec2 localAxisA;
+
+        /// <summary>
+        /// The constrained angle between the bodies: body2_angle - body1_angle.
+        /// </summary>
+        public float referenceAngle;
+
+        /// <summary>
+        /// Enable/disable the joint limit.
+        /// </summary>
+        public bool enableLimit;
+
+        /// <summary>
+        /// The lower translation limit, usually in meters.
+        /// </summary>
+        public float lowerTranslation;
+
+        /// <summary>
+        /// The upper translation limit, usually in meters.
+        /// </summary>
+        public float upperTranslation;
+
+        /// <summary>
+        /// Enable/disable the joint motor.
+        /// </summary>
+        public bool enableMotor;
+
+        /// <summary>
+        /// The maximum motor torque, usually in N-m.
+        /// </summary>
+        public float maxMotorForce;
+
+        /// <summary>
+        /// The desired motor speed in radians per second.
+        /// </summary>
+        public float motorSpeed;
+
+        public PrismaticJointDef()
+        {
+            type = JointType.PRISMATIC;
+            localAnchorA = new Vec2();
+            localAnchorB = new Vec2();
+            localAxisA = new Vec2(1.0f, 0.0f);
+            referenceAngle = 0.0f;
+            enableLimit = false;
+            lowerTranslation = 0.0f;
+            upperTranslation = 0.0f;
+            enableMotor = false;
+            maxMotorForce = 0.0f;
+            motorSpeed = 0.0f;
+        }
+
+        /// <summary>
+        /// Initialize the bodies, anchors, axis, and reference angle using the world anchor and world axis.
+        /// </summary>
+        public virtual void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
+        {
+            bodyA = b1;
+            bodyB = b2;
+            bodyA.getLocalPointToOut(anchor, localAnchorA);
+            bodyB.getLocalPointToOut(anchor, localAnchorB);
+            bodyA.getLocalVectorToOut(axis, localAxisA);
+            referenceAngle = bodyB.Angle - bodyA.Angle;
+        }
+    }
 }
