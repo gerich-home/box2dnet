@@ -23,15 +23,16 @@
 // ****************************************************************************
 
 using System;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	//updated to rev 100 - ec
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	public enum LimitState
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	{ 
-		INACTIVE, AT_LOWER, AT_UPPER, EQUAL
-	//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-	}
+
+    //updated to rev 100 - ec
+    public enum LimitState
+    {
+        INACTIVE,
+        AT_LOWER,
+        AT_UPPER,
+        EQUAL
+    }
 }
