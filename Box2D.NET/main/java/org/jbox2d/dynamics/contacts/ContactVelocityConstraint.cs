@@ -26,53 +26,43 @@ using System;
 using Mat22 = org.jbox2d.common.Mat22;
 using Settings = org.jbox2d.common.Settings;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.dynamics.contacts
 {
-	
-	public class ContactVelocityConstraint
-	{
-		private void  InitBlock()
-		{
-			points = new VelocityConstraintPoint[Settings.maxManifoldPoints];
-		}
-		//UPGRADE_NOTE: The initialization of  'points' was moved to method 'InitBlock'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1005'"
-		public VelocityConstraintPoint[] points;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'normal '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 normal = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'normalMass '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Mat22 normalMass = new Mat22();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'K '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Mat22 K = new Mat22();
-		public int indexA;
-		public int indexB;
-		public float invMassA, invMassB;
-		public float invIA, invIB;
-		public float friction;
-		public float restitution;
-		public float tangentSpeed;
-		public int pointCount;
-		public int contactIndex;
-		
-		public ContactVelocityConstraint()
-		{
-			InitBlock();
-			for (int i = 0; i < points.Length; i++)
-			{
-				points[i] = new VelocityConstraintPoint();
-			}
-		}
-		
-		public class VelocityConstraintPoint
-		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'rA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			public Vec2 rA = new Vec2();
-			//UPGRADE_NOTE: Final was removed from the declaration of 'rB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			public Vec2 rB = new Vec2();
-			public float normalImpulse;
-			public float tangentImpulse;
-			public float normalMass;
-			public float tangentMass;
-			public float velocityBias;
-		}
-	}
+
+    public class ContactVelocityConstraint
+    {
+        public VelocityConstraintPoint[] points = new VelocityConstraintPoint[Settings.maxManifoldPoints];
+        public readonly Vec2 normal = new Vec2();
+        public readonly Mat22 normalMass = new Mat22();
+        public readonly Mat22 K = new Mat22();
+        public int indexA;
+        public int indexB;
+        public float invMassA, invMassB;
+        public float invIA, invIB;
+        public float friction;
+        public float restitution;
+        public float tangentSpeed;
+        public int pointCount;
+        public int contactIndex;
+
+        public ContactVelocityConstraint()
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i] = new VelocityConstraintPoint();
+            }
+        }
+
+        public class VelocityConstraintPoint
+        {
+            public readonly Vec2 rA = new Vec2();
+            public readonly Vec2 rB = new Vec2();
+            public float normalImpulse;
+            public float tangentImpulse;
+            public float normalMass;
+            public float tangentMass;
+            public float velocityBias;
+        }
+    }
 }
