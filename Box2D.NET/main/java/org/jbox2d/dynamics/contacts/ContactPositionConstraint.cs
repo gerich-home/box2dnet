@@ -23,44 +23,34 @@
 // ****************************************************************************
 
 using System;
-//UPGRADE_TODO: The type 'org.jbox2d.collision.Manifold.ManifoldType' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 using ManifoldType = org.jbox2d.collision.Manifold.ManifoldType;
 using Settings = org.jbox2d.common.Settings;
 using Vec2 = org.jbox2d.common.Vec2;
+
 namespace org.jbox2d.dynamics.contacts
 {
-	
-	public class ContactPositionConstraint
-	{
-		private void  InitBlock()
-		{
-			localPoints = new Vec2[Settings.maxManifoldPoints];
-		}
-		//UPGRADE_NOTE: The initialization of  'localPoints' was moved to method 'InitBlock'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1005'"
-		internal Vec2[] localPoints;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localNormal '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		internal Vec2 localNormal = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localPoint '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		internal Vec2 localPoint = new Vec2();
-		internal int indexA;
-		internal int indexB;
-		internal float invMassA, invMassB;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localCenterA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		internal Vec2 localCenterA = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'localCenterB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		internal Vec2 localCenterB = new Vec2();
-		internal float invIA, invIB;
-		internal ManifoldType type;
-		internal float radiusA, radiusB;
-		internal int pointCount;
-		
-		public ContactPositionConstraint()
-		{
-			InitBlock();
-			for (int i = 0; i < localPoints.Length; i++)
-			{
-				localPoints[i] = new Vec2();
-			}
-		}
-	}
+
+    public class ContactPositionConstraint
+    {
+        internal Vec2[] localPoints = new Vec2[Settings.maxManifoldPoints];
+        internal readonly Vec2 localNormal = new Vec2();
+        internal readonly Vec2 localPoint = new Vec2();
+        internal int indexA;
+        internal int indexB;
+        internal float invMassA, invMassB;
+        internal readonly Vec2 localCenterA = new Vec2();
+        internal readonly Vec2 localCenterB = new Vec2();
+        internal float invIA, invIB;
+        internal ManifoldType type;
+        internal float radiusA, radiusB;
+        internal int pointCount;
+
+        public ContactPositionConstraint()
+        {
+            for (int i = 0; i < localPoints.Length; i++)
+            {
+                localPoints[i] = new Vec2();
+            }
+        }
+    }
 }
