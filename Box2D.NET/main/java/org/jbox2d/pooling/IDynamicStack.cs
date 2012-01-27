@@ -32,7 +32,7 @@ namespace org.jbox2d.pooling
     /// Object return order does not matter.
     /// </summary>
     /// <author>Daniel</author>
-    /// <param name="<E>"></param>
+    /// <typeparam name="E"></typeparam>
     public interface IDynamicStack<E>
     {
         /// <summary>
