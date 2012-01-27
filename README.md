@@ -13,4 +13,7 @@ First I want to fix all compilation errors, then I will fix all problems with di
 
 Currently I am reworking every file to remove as much //UPGRADE_* comment as I can.
 
+Conversion of code was performed for revision 557 from http://code.google.com/p/jbox2d/source/browse/trunk/jbox2d-library/src/
+When I'll complete all fixes I'll start syncing changes from it with our code.
+
 Feel free to contribute.
