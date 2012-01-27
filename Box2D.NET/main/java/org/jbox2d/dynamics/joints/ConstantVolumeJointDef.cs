@@ -38,8 +38,8 @@ namespace org.jbox2d.dynamics.joints
         public float frequencyHz;
         public float dampingRatio;
 
-        List<Body> bodies;
-        List<DistanceJoint> joints;
+        internal List<Body> bodies;
+        internal List<DistanceJoint> joints;
 
         //public float relaxationFactor;//1.0 is perfectly stiff (but doesn't work, unstable)
 
