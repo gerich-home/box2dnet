@@ -22,72 +22,87 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 12:11:41 PM Jan 23, 2011</summary>
+// Created at 12:11:41 PM Jan 23, 2011
+
 using System;
 using Settings = org.jbox2d.common.Settings;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
+using System.Diagnostics;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	/// <summary> Pulley joint definition. This requires two ground anchors, two dynamic body anchor points, and a
-	/// pulley ratio.
-	/// 
-	/// </summary>
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class PulleyJointDef:JointDef
-	{
-		
-		/// <summary> The first ground anchor in world coordinates. This point never moves.</summary>
-		public Vec2 groundAnchorA;
-		
-		/// <summary> The second ground anchor in world coordinates. This point never moves.</summary>
-		public Vec2 groundAnchorB;
-		
-		/// <summary> The local anchor point relative to bodyA's origin.</summary>
-		public Vec2 localAnchorA;
-		
-		/// <summary> The local anchor point relative to bodyB's origin.</summary>
-		public Vec2 localAnchorB;
-		
-		/// <summary> The a reference length for the segment attached to bodyA.</summary>
-		public float lengthA;
-		
-		/// <summary> The a reference length for the segment attached to bodyB.</summary>
-		public float lengthB;
-		
-		/// <summary> The pulley ratio, used to simulate a block-and-tackle.</summary>
-		public float ratio;
-		
-		public PulleyJointDef()
-		{
-			type = JointType.PULLEY;
-			groundAnchorA = new Vec2(- 1.0f, 1.0f);
-			groundAnchorB = new Vec2(1.0f, 1.0f);
-			localAnchorA = new Vec2(- 1.0f, 0.0f);
-			localAnchorB = new Vec2(1.0f, 0.0f);
-			lengthA = 0.0f;
-			lengthB = 0.0f;
-			ratio = 1.0f;
-			collideConnected = true;
-		}
-		
-		/// <summary> Initialize the bodies, anchors, lengths, max lengths, and ratio using the world anchors.</summary>
-		public virtual void  initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
-		{
-			bodyA = b1;
-			bodyB = b2;
-			groundAnchorA = ga1;
-			groundAnchorB = ga2;
-			localAnchorA = bodyA.getLocalPoint(anchor1);
-			localAnchorB = bodyB.getLocalPoint(anchor2);
-			Vec2 d1 = anchor1.sub(ga1);
-			lengthA = d1.length();
-			Vec2 d2 = anchor2.sub(ga2);
-			lengthB = d2.length();
-			ratio = r;
-			assert(ratio > Settings.EPSILON);
-		}
-	}
+
+    /// <summary>
+    /// Pulley joint definition. This requires two ground anchors, two dynamic body anchor points, and a pulley ratio.
+    /// </summary>
+    /// <author>Daniel Murphy</author>
+    public class PulleyJointDef : JointDef
+    {
+        /// <summary>
+        /// The first ground anchor in world coordinates. This point never moves.
+        /// </summary>
+        public Vec2 groundAnchorA;
+
+        /// <summary> The second ground anchor in world coordinates. This point never moves.
+        /// </summary>
+        public Vec2 groundAnchorB;
+
+        /// <summary>
+        /// The local anchor point relative to bodyA's origin.
+        /// </summary>
+        public Vec2 localAnchorA;
+
+        /// <summary>
+        /// The local anchor point relative to bodyB's origin.
+        /// </summary>
+        public Vec2 localAnchorB;
+
+        /// <summary>
+        /// The a reference length for the segment attached to bodyA.
+        /// </summary>
+        public float lengthA;
+
+        /// <summary>
+        /// The a reference length for the segment attached to bodyB.
+        /// </summary>
+        public float lengthB;
+
+        /// <summary>
+        /// The pulley ratio, used to simulate a block-and-tackle.
+        /// </summary>
+        public float ratio;
+
+        public PulleyJointDef()
+        {
+            type = JointType.PULLEY;
+            groundAnchorA = new Vec2(-1.0f, 1.0f);
+            groundAnchorB = new Vec2(1.0f, 1.0f);
+            localAnchorA = new Vec2(-1.0f, 0.0f);
+            localAnchorB = new Vec2(1.0f, 0.0f);
+            lengthA = 0.0f;
+            lengthB = 0.0f;
+            ratio = 1.0f;
+            collideConnected = true;
+        }
+
+        /// <summary>
+        /// Initialize the bodies, anchors, lengths, max lengths, and ratio using the world anchors.
+        /// </summary>
+        public virtual void initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
+        {
+            bodyA = b1;
+            bodyB = b2;
+            groundAnchorA = ga1;
+            groundAnchorB = ga2;
+            localAnchorA = bodyA.getLocalPoint(anchor1);
+            localAnchorB = bodyB.getLocalPoint(anchor2);
+            Vec2 d1 = anchor1.sub(ga1);
+            lengthA = d1.length();
+            Vec2 d2 = anchor2.sub(ga2);
+            lengthB = d2.length();
+            ratio = r;
+            Debug.Assert(ratio > Settings.EPSILON);
+        }
+    }
 }
