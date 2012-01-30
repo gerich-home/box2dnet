@@ -126,6 +126,6 @@ namespace org.jbox2d.collision.shapes
          * public abstract float computeSubmergedArea(Vec2 normal, float offset, Transform xf, Vec2 c);
          */
 
-        abstract public Shape clone();
+        abstract public Shape Clone();
     }
 }
