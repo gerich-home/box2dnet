@@ -39,12 +39,12 @@ namespace org.jbox2d.pooling
         /// Pops an item off the stack
         /// </summary>
         /// <returns></returns>
-        public E pop();
+        E pop();
 
         /// <summary>
         /// Pushes an item back on the stack
         /// </summary>
         /// <param name="argObject"></param>
-        public void push(E argObject);
+        void push(E argObject);
     }
 }
