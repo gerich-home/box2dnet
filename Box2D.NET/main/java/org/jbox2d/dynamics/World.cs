@@ -120,7 +120,7 @@ namespace org.jbox2d.dynamics
 
         private Profile m_profile;
 
-        private static const int ShapeTypesCount = typeof(ShapeType).GetMembers().Length;
+        private static readonly int ShapeTypesCount = Enum.GetValues(typeof(ShapeType)).Length;
 
         private ContactRegister[][] contactStacks;
 
