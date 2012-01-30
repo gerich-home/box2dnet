@@ -34,6 +34,7 @@ using Body = org.jbox2d.dynamics.Body;
 using SolverData = org.jbox2d.dynamics.SolverData;
 using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+
 namespace org.jbox2d.dynamics.joints
 {
 
