@@ -3,3 +3,6 @@
 /Box2D.NET/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 /Box2DNET.suo
 *.suo
+/Box2D.NET/obj
+/Box2D.NET/Box2DNET.pdb
+/Box2D.NET/Box2DNET.dll

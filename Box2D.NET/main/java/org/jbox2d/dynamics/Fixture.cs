@@ -340,7 +340,7 @@ namespace org.jbox2d.dynamics
 
             m_isSensor = def.isSensor;
 
-            m_shape = def.shape.clone();
+            m_shape = def.shape.Clone();
 
             // Reserve proxy space
             int childCount = m_shape.ChildCount;
