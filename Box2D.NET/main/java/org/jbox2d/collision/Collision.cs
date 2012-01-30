@@ -181,8 +181,8 @@ namespace org.jbox2d.collision
                 // VertexA is hitting edgeB.
                 vOut[numOut].id.indexA = (sbyte)vertexIndexA;
                 vOut[numOut].id.indexB = vIn[0].id.indexB;
-                vOut[numOut].id.typeA = (sbyte)ContactID.Type.VERTEX.ordinal();
-                vOut[numOut].id.typeB = (sbyte)ContactID.Type.FACE.ordinal();
+                vOut[numOut].id.typeA = (sbyte)ContactID.Type.VERTEX;
+                vOut[numOut].id.typeB = (sbyte)ContactID.Type.FACE;
                 ++numOut;
             }
 
@@ -693,14 +693,14 @@ namespace org.jbox2d.collision
             Transform.mulToOutUnsafe(xf2, vertices2[i1], c[0].v); // = Mul(xf2, vertices2[i1]);
             c[0].id.indexA = (sbyte)edge1;
             c[0].id.indexB = (sbyte)i1;
-            c[0].id.typeA = (sbyte)ContactID.Type.FACE.ordinal();
-            c[0].id.typeB = (sbyte)ContactID.Type.VERTEX.ordinal();
+            c[0].id.typeA = (sbyte)ContactID.Type.FACE;
+            c[0].id.typeB = (sbyte)ContactID.Type.VERTEX;
 
             Transform.mulToOutUnsafe(xf2, vertices2[i2], c[1].v); // = Mul(xf2, vertices2[i2]);
             c[1].id.indexA = (sbyte)edge1;
             c[1].id.indexB = (sbyte)i2;
-            c[1].id.typeA = (sbyte)ContactID.Type.FACE.ordinal();
-            c[1].id.typeB = (sbyte)ContactID.Type.VERTEX.ordinal();
+            c[1].id.typeA = (sbyte)ContactID.Type.FACE;
+            c[1].id.typeB = (sbyte)ContactID.Type.VERTEX;
         }
 
         private readonly EdgeResults results1 = new EdgeResults();
