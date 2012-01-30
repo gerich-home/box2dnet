@@ -22,392 +22,353 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-/// <summary> Created at 11:34:45 AM Jan 23, 2011</summary>
+// Created at 11:34:45 AM Jan 23, 2011
+
 using System;
 using Mat22 = org.jbox2d.common.Mat22;
 using Rot = org.jbox2d.common.Rot;
 using Settings = org.jbox2d.common.Settings;
 using Vec2 = org.jbox2d.common.Vec2;
 using Body = org.jbox2d.dynamics.Body;
-//UPGRADE_TODO: The type 'org.jbox2d.dynamics.BodyType' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 using BodyType = org.jbox2d.dynamics.BodyType;
 using TimeStep = org.jbox2d.dynamics.TimeStep;
 using IWorldPool = org.jbox2d.pooling.IWorldPool;
+using System.Diagnostics;
+
 namespace org.jbox2d.dynamics.joints
 {
-	
-	//Gear Joint:
-	//C0 = (coordinate1 + ratio * coordinate2)_initial
-	//C = C0 - (cordinate1 + ratio * coordinate2) = 0
-	//Cdot = -(Cdot1 + ratio * Cdot2)
-	//J = -[J1 ratio * J2]
-	//K = J * invM * JT
-	//= J1 * invM1 * J1T + ratio * ratio * J2 * invM2 * J2T
-	//
-	//Revolute:
-	//coordinate = rotation
-	//Cdot = angularVelocity
-	//J = [0 0 1]
-	//K = J * invM * JT = invI
-	//
-	//Prismatic:
-	//coordinate = dot(p - pg, ug)
-	//Cdot = dot(v + cross(w, r), ug)
-	//J = [ug cross(r, ug)]
-	//K = J * invM * JT = invMass + invI * cross(r, ug)^2
-	
-	/// <summary> A gear joint is used to connect two joints together. Either joint can be a revolute or prismatic
-	/// joint. You specify a gear ratio to bind the motions together: coordinate1 + ratio * coordinate2 =
-	/// constant The ratio can be negative or positive. If one joint is a revolute joint and the other
-	/// joint is a prismatic joint, then the ratio will have units of length or units of 1/length.
-	/// 
-	/// </summary>
-	/// <warning>  The revolute and prismatic joints must be attached to fixed bodies (which must be body1 </warning>
-	/// <summary>          on those joints).
-	/// </summary>
-	/// <author>  Daniel Murphy
-	/// </author>
-	public class GearJoint:Joint
-	{
-		virtual public float Ratio
-		{
-			get
-			{
-				return m_ratio;
-			}
-			
-			set
-			{
-				m_ratio = value;
-			}
-			
-		}
-		virtual public Joint Joint1
-		{
-			get
-			{
-				return m_revolute1 != null?m_revolute1:m_prismatic1;
-			}
-			
-		}
-		virtual public Joint Joint2
-		{
-			get
-			{
-				return m_revolute2 != null?m_revolute2:m_prismatic2;
-			}
-			
-		}
-		
-		private Body m_ground1;
-		private Body m_ground2;
-		
-		// One of these is null.
-		private RevoluteJoint m_revolute1;
-		private PrismaticJoint m_prismatic1;
-		
-		// One of these is null.
-		private RevoluteJoint m_revolute2;
-		private PrismaticJoint m_prismatic2;
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_groundAnchor1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 m_groundAnchor1 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_groundAnchor2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Vec2 m_groundAnchor2 = new Vec2();
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_localAnchor1 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_localAnchor1 = new Vec2();
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_localAnchor2 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public Vec2 m_localAnchor2 = new Vec2();
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'm_J '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private Jacobian m_J;
-		
-		private float m_constant;
-		private float m_ratio;
-		
-		// Effective mass
-		private float m_mass;
-		
-		// Impulse for accumulation/warm starting.
-		private float m_impulse;
-		
-		/// <param name="argWorldPool">
-		/// </param>
-		/// <param name="def">
-		/// </param>
-		public GearJoint(IWorldPool argWorldPool, GearJointDef def):base(argWorldPool, def)
-		{
-			
-			JointType type1 = def.joint1.Type;
-			JointType type2 = def.joint2.Type;
-			
-			assert(type1 == JointType.REVOLUTE || type1 == JointType.PRISMATIC);
-			assert(type2 == JointType.REVOLUTE || type2 == JointType.PRISMATIC);
-			assert(def.joint1.BodyA.Type == BodyType.STATIC);
-			assert(def.joint2.BodyA.Type == BodyType.STATIC);
-			
-			m_revolute1 = null;
-			m_prismatic1 = null;
-			m_revolute2 = null;
-			m_prismatic2 = null;
-			
-			m_J = new Jacobian();
-			
-			float coordinate1, coordinate2;
-			
-			m_ground1 = def.joint1.BodyA;
-			m_bodyA = def.joint1.BodyB;
-			if (type1 == JointType.REVOLUTE)
-			{
-				m_revolute1 = (RevoluteJoint) def.joint1;
-				m_groundAnchor1.set_Renamed(m_revolute1.m_localAnchorA);
-				m_localAnchor1.set_Renamed(m_revolute1.m_localAnchorB);
-				coordinate1 = m_revolute1.JointAngle;
-			}
-			else
-			{
-				m_prismatic1 = (PrismaticJoint) def.joint1;
-				m_groundAnchor1.set_Renamed(m_prismatic1.m_localAnchorA);
-				m_localAnchor1.set_Renamed(m_prismatic1.m_localAnchorB);
-				coordinate1 = m_prismatic1.getJointTranslation();
-			}
-			
-			m_ground2 = def.joint2.BodyA;
-			m_bodyB = def.joint2.BodyB;
-			if (type2 == JointType.REVOLUTE)
-			{
-				m_revolute2 = (RevoluteJoint) def.joint2;
-				m_groundAnchor2.set_Renamed(m_revolute2.m_localAnchorA);
-				m_localAnchor2.set_Renamed(m_revolute2.m_localAnchorB);
-				coordinate2 = m_revolute2.JointAngle;
-			}
-			else
-			{
-				m_prismatic2 = (PrismaticJoint) def.joint2;
-				m_groundAnchor2.set_Renamed(m_prismatic2.m_localAnchorA);
-				m_localAnchor2.set_Renamed(m_prismatic2.m_localAnchorB);
-				coordinate2 = m_prismatic2.getJointTranslation();
-			}
-			
-			m_ratio = def.ratio;
-			
-			m_constant = coordinate1 + m_ratio * coordinate2;
-			
-			m_impulse = 0.0f;
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.getAnchorA(org.jbox2d.common.Vec2)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override void  getAnchorA(Vec2 argOut)
-		{
-			m_bodyA.getWorldPointToOut(m_localAnchor1, argOut);
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.getAnchorB(org.jbox2d.common.Vec2)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override void  getAnchorB(Vec2 argOut)
-		{
-			m_bodyB.getWorldPointToOut(m_localAnchor2, argOut);
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.getReactionForce(float, org.jbox2d.common.Vec2)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override void  getReactionForce(float inv_dt, Vec2 argOut)
-		{
-			// TODO_ERIN not tested
-			argOut.set_Renamed(m_J.linearB).mulLocal(m_impulse);
-			argOut.mulLocal(inv_dt);
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.getReactionTorque(float)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public override float getReactionTorque(float inv_dt)
-		{
-			
-			//UPGRADE_NOTE: Final was removed from the declaration of 'r '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 r = pool.popVec2();
-			//UPGRADE_NOTE: Final was removed from the declaration of 'p '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 p = pool.popVec2();
-			
-			r.set_Renamed(m_localAnchor2).subLocal(m_bodyB.LocalCenter);
-			Rot.mulToOut(m_bodyB.getTransform().q, r, r);
-			p.set_Renamed(m_J.linearB).mulLocal(m_impulse);
-			float L = m_impulse * m_J.angularB - Vec2.cross(r, p);
-			
-			pool.pushVec2(2);
-			return inv_dt * L;
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.initVelocityConstraints(org.jbox2d.dynamics.TimeStep)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public virtual void  initVelocityConstraints(TimeStep step)
-		{
-			Body g1 = m_ground1;
-			Body g2 = m_ground2;
-			Body b1 = m_bodyA;
-			Body b2 = m_bodyB;
-			
-			float K = 0.0f;
-			m_J.setZero();
-			
-			if (m_revolute1 != null)
-			{
-				m_J.angularA = - 1.0f;
-				K += b1.m_invI;
-			}
-			else
-			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'ug '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Vec2 ug = pool.popVec2();
-				//UPGRADE_NOTE: Final was removed from the declaration of 'r '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Vec2 r = pool.popVec2();
-				Rot.mulToOutUnsafe(g1.getTransform().q, m_prismatic1.m_localXAxisA, ug);
-				
-				r.set_Renamed(m_localAnchor1).subLocal(b1.LocalCenter);
-				Rot.mulToOut(b1.getTransform().q, r, r);
-				float crug = Vec2.cross(r, ug);
-				m_J.linearA.set_Renamed(ug).negateLocal();
-				m_J.angularA = - crug;
-				K += b1.m_invMass + b1.m_invI * crug * crug;
-				pool.pushVec2(2);
-			}
-			
-			if (m_revolute2 != null)
-			{
-				m_J.angularB = - m_ratio;
-				K += m_ratio * m_ratio * b2.m_invI;
-			}
-			else
-			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'ug '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Vec2 ug = pool.popVec2();
-				//UPGRADE_NOTE: Final was removed from the declaration of 'r '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Vec2 r = pool.popVec2();
-				
-				Rot.mulToOutUnsafe(g2.getTransform().q, m_prismatic2.m_localXAxisA, ug);
-				
-				r.set_Renamed(m_localAnchor2).subLocal(b2.LocalCenter);
-				Rot.mulToOut(b2.getTransform().q, r, r);
-				float crug = Vec2.cross(r, ug);
-				m_J.linearB.set_Renamed(ug).mulLocal(- m_ratio);
-				m_J.angularB = (- m_ratio) * crug;
-				K += m_ratio * m_ratio * (b2.m_invMass + b2.m_invI * crug * crug);
-				
-				pool.pushVec2(2);
-			}
-			
-			// Compute effective mass.
-			m_mass = K > 0.0f?1.0f / K:0.0f;
-			
-			if (step.warmStarting)
-			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'temp '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-				Vec2 temp = pool.popVec2();
-				// Warm starting.
-				temp.set_Renamed(m_J.linearA).mulLocal(b1.m_invMass).mulLocal(m_impulse);
-				b1.m_linearVelocity.addLocal(temp);
-				b1.m_angularVelocity += b1.m_invI * m_impulse * m_J.angularA;
-				
-				temp.set_Renamed(m_J.linearB).mulLocal(b2.m_invMass).mulLocal(m_impulse);
-				b2.m_linearVelocity.addLocal(temp);
-				b2.m_angularVelocity += b2.m_invI * m_impulse * m_J.angularB;
-				
-				pool.pushVec2(1);
-			}
-			else
-			{
-				m_impulse = 0.0f;
-			}
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.solveVelocityConstraints(org.jbox2d.dynamics.TimeStep)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public virtual void  solveVelocityConstraints(TimeStep step)
-		{
-			Body b1 = m_bodyA;
-			Body b2 = m_bodyB;
-			
-			float Cdot = m_J.compute(b1.m_linearVelocity, b1.m_angularVelocity, b2.m_linearVelocity, b2.m_angularVelocity);
-			
-			float impulse = m_mass * (- Cdot);
-			m_impulse += impulse;
-			
-			//UPGRADE_NOTE: Final was removed from the declaration of 'temp '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 temp = pool.popVec2();
-			temp.set_Renamed(m_J.linearA).mulLocal(b1.m_invMass).mulLocal(impulse);
-			b1.m_linearVelocity.addLocal(temp);
-			b1.m_angularVelocity += b1.m_invI * impulse * m_J.angularA;
-			
-			temp.set_Renamed(m_J.linearB).mulLocal(b2.m_invMass).mulLocal(impulse);
-			b2.m_linearVelocity.addLocal(temp);
-			b2.m_angularVelocity += b2.m_invI * impulse * m_J.angularB;
-			
-			pool.pushVec2(1);
-		}
-		
-		/// <seealso cref="org.jbox2d.dynamics.joints.Joint.solvePositionConstraints(float)">
-		/// </seealso>
-		//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-		Override
-		public virtual bool solvePositionConstraints(float baumgarte)
-		{
-			float linearError = 0.0f;
-			
-			Body b1 = m_bodyA;
-			Body b2 = m_bodyB;
-			
-			float coordinate1, coordinate2;
-			if (m_revolute1 != null)
-			{
-				coordinate1 = m_revolute1.JointAngle;
-			}
-			else
-			{
-				coordinate1 = m_prismatic1.getJointTranslation();
-			}
-			
-			if (m_revolute2 != null)
-			{
-				coordinate2 = m_revolute2.JointAngle;
-			}
-			else
-			{
-				coordinate2 = m_prismatic2.getJointTranslation();
-			}
-			
-			float C = m_constant - (coordinate1 + m_ratio * coordinate2);
-			
-			float impulse = m_mass * (- C);
-			
-			//UPGRADE_NOTE: Final was removed from the declaration of 'temp '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-			Vec2 temp = pool.popVec2();
-			temp.set_Renamed(m_J.linearA).mulLocal(b1.m_invMass).mulLocal(impulse);
-			b1.m_sweep.c.addLocal(temp);
-			b1.m_sweep.a += b1.m_invI * impulse * m_J.angularA;
-			
-			temp.set_Renamed(m_J.linearB).mulLocal(b2.m_invMass).mulLocal(impulse);
-			b2.m_sweep.c.addLocal(temp);
-			b2.m_sweep.a += b2.m_invI * impulse * m_J.angularB;
-			
-			b1.synchronizeTransform();
-			b2.synchronizeTransform();
-			
-			pool.pushVec2(1);
-			// TODO_ERIN not implemented
-			return linearError < Settings.linearSlop;
-		}
-	}
+
+    //Gear Joint:
+    //C0 = (coordinate1 + ratio * coordinate2)_initial
+    //C = C0 - (cordinate1 + ratio * coordinate2) = 0
+    //Cdot = -(Cdot1 + ratio * Cdot2)
+    //J = -[J1 ratio * J2]
+    //K = J * invM * JT
+    //= J1 * invM1 * J1T + ratio * ratio * J2 * invM2 * J2T
+    //
+    //Revolute:
+    //coordinate = rotation
+    //Cdot = angularVelocity
+    //J = [0 0 1]
+    //K = J * invM * JT = invI
+    //
+    //Prismatic:
+    //coordinate = dot(p - pg, ug)
+    //Cdot = dot(v + cross(w, r), ug)
+    //J = [ug cross(r, ug)]
+    //K = J * invM * JT = invMass + invI * cross(r, ug)^2
+
+    /// <summary>
+    /// A gear joint is used to connect two joints together. Either joint can be a revolute or prismatic
+    /// joint. You specify a gear ratio to bind the motions together: coordinate1 + ratio * coordinate2 =
+    /// constant The ratio can be negative or positive. If one joint is a revolute joint and the other
+    /// joint is a prismatic joint, then the ratio will have units of length or units of 1/length.
+    /// </summary>
+    /// <warning>The revolute and prismatic joints must be attached to fixed bodies (which must be body1 on those joints).</warning>
+    /// <author>Daniel Murphy</author>
+    public class GearJoint : Joint
+    {
+        private Body m_ground1;
+        private Body m_ground2;
+
+        // One of these is null.
+        private RevoluteJoint m_revolute1;
+        private PrismaticJoint m_prismatic1;
+
+        // One of these is null.
+        private RevoluteJoint m_revolute2;
+        private PrismaticJoint m_prismatic2;
+
+        private readonly Vec2 m_groundAnchor1 = new Vec2();
+        private readonly Vec2 m_groundAnchor2 = new Vec2();
+
+        public readonly Vec2 m_localAnchor1 = new Vec2();
+        public readonly Vec2 m_localAnchor2 = new Vec2();
+
+        private readonly Jacobian m_J;
+
+        private float m_constant;
+        private float m_ratio;
+
+        // Effective mass
+        private float m_mass;
+
+        // Impulse for accumulation/warm starting.
+        private float m_impulse;
+
+        /// <param name="argWorldPool"></param>
+        /// <param name="def"></param>
+        public GearJoint(IWorldPool argWorldPool, GearJointDef def) :
+            base(argWorldPool, def)
+        {
+
+            JointType type1 = def.joint1.Type;
+            JointType type2 = def.joint2.Type;
+
+            Debug.Assert(type1 == JointType.REVOLUTE || type1 == JointType.PRISMATIC);
+            Debug.Assert(type2 == JointType.REVOLUTE || type2 == JointType.PRISMATIC);
+            Debug.Assert(def.joint1.BodyA.Type == BodyType.STATIC);
+            Debug.Assert(def.joint2.BodyA.Type == BodyType.STATIC);
+
+            m_revolute1 = null;
+            m_prismatic1 = null;
+            m_revolute2 = null;
+            m_prismatic2 = null;
+
+            m_J = new Jacobian();
+
+            float coordinate1, coordinate2;
+
+            m_ground1 = def.joint1.BodyA;
+            m_bodyA = def.joint1.BodyB;
+            if (type1 == JointType.REVOLUTE)
+            {
+                m_revolute1 = (RevoluteJoint)def.joint1;
+                m_groundAnchor1.set_Renamed(m_revolute1.m_localAnchorA);
+                m_localAnchor1.set_Renamed(m_revolute1.m_localAnchorB);
+                coordinate1 = m_revolute1.JointAngle;
+            }
+            else
+            {
+                m_prismatic1 = (PrismaticJoint)def.joint1;
+                m_groundAnchor1.set_Renamed(m_prismatic1.m_localAnchorA);
+                m_localAnchor1.set_Renamed(m_prismatic1.m_localAnchorB);
+                coordinate1 = m_prismatic1.getJointTranslation();
+            }
+
+            m_ground2 = def.joint2.BodyA;
+            m_bodyB = def.joint2.BodyB;
+            if (type2 == JointType.REVOLUTE)
+            {
+                m_revolute2 = (RevoluteJoint)def.joint2;
+                m_groundAnchor2.set_Renamed(m_revolute2.m_localAnchorA);
+                m_localAnchor2.set_Renamed(m_revolute2.m_localAnchorB);
+                coordinate2 = m_revolute2.JointAngle;
+            }
+            else
+            {
+                m_prismatic2 = (PrismaticJoint)def.joint2;
+                m_groundAnchor2.set_Renamed(m_prismatic2.m_localAnchorA);
+                m_localAnchor2.set_Renamed(m_prismatic2.m_localAnchorB);
+                coordinate2 = m_prismatic2.getJointTranslation();
+            }
+
+            m_ratio = def.ratio;
+
+            m_constant = coordinate1 + m_ratio * coordinate2;
+
+            m_impulse = 0.0f;
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.getAnchorA(org.jbox2d.common.Vec2)"></seealso>
+        public override void getAnchorA(Vec2 argOut)
+        {
+            m_bodyA.getWorldPointToOut(m_localAnchor1, argOut);
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.getAnchorB(org.jbox2d.common.Vec2)"></seealso>
+        public override void getAnchorB(Vec2 argOut)
+        {
+            m_bodyB.getWorldPointToOut(m_localAnchor2, argOut);
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.getReactionForce(float, org.jbox2d.common.Vec2)"></seealso>
+        public override void getReactionForce(float inv_dt, Vec2 argOut)
+        {
+            // TODO_ERIN not tested
+            argOut.set_Renamed(m_J.linearB).mulLocal(m_impulse);
+            argOut.mulLocal(inv_dt);
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.getReactionTorque(float)"></seealso>
+        public override float getReactionTorque(float inv_dt)
+        {
+
+            Vec2 r = pool.popVec2();
+            Vec2 p = pool.popVec2();
+
+            r.set_Renamed(m_localAnchor2).subLocal(m_bodyB.LocalCenter);
+            Rot.mulToOut(m_bodyB.getTransform().q, r, r);
+            p.set_Renamed(m_J.linearB).mulLocal(m_impulse);
+            float L = m_impulse * m_J.angularB - Vec2.cross(r, p);
+
+            pool.pushVec2(2);
+            return inv_dt * L;
+        }
+
+        virtual public float Ratio
+        {
+            get
+            {
+                return m_ratio;
+            }
+            set
+            {
+                m_ratio = value;
+            }
+        }
+
+        virtual public Joint Joint1
+        {
+            get
+            {
+                return m_revolute1 != null ? m_revolute1 : m_prismatic1;
+            }
+        }
+
+        virtual public Joint Joint2
+        {
+            get
+            {
+                return m_revolute2 != null ? m_revolute2 : m_prismatic2;
+            }
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.initVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
+        public virtual void initVelocityConstraints(TimeStep step)
+        {
+            Body g1 = m_ground1;
+            Body g2 = m_ground2;
+            Body b1 = m_bodyA;
+            Body b2 = m_bodyB;
+
+            float K = 0.0f;
+            m_J.setZero();
+
+            if (m_revolute1 != null)
+            {
+                m_J.angularA = -1.0f;
+                K += b1.m_invI;
+            }
+            else
+            {
+                Vec2 ug = pool.popVec2();
+                Vec2 r = pool.popVec2();
+                Rot.mulToOutUnsafe(g1.getTransform().q, m_prismatic1.m_localXAxisA, ug);
+
+                r.set_Renamed(m_localAnchor1).subLocal(b1.LocalCenter);
+                Rot.mulToOut(b1.getTransform().q, r, r);
+                float crug = Vec2.cross(r, ug);
+                m_J.linearA.set_Renamed(ug).negateLocal();
+                m_J.angularA = -crug;
+                K += b1.m_invMass + b1.m_invI * crug * crug;
+                pool.pushVec2(2);
+            }
+
+            if (m_revolute2 != null)
+            {
+                m_J.angularB = -m_ratio;
+                K += m_ratio * m_ratio * b2.m_invI;
+            }
+            else
+            {
+                Vec2 ug = pool.popVec2();
+                Vec2 r = pool.popVec2();
+
+                Rot.mulToOutUnsafe(g2.getTransform().q, m_prismatic2.m_localXAxisA, ug);
+
+                r.set_Renamed(m_localAnchor2).subLocal(b2.LocalCenter);
+                Rot.mulToOut(b2.getTransform().q, r, r);
+                float crug = Vec2.cross(r, ug);
+                m_J.linearB.set_Renamed(ug).mulLocal(-m_ratio);
+                m_J.angularB = (-m_ratio) * crug;
+                K += m_ratio * m_ratio * (b2.m_invMass + b2.m_invI * crug * crug);
+
+                pool.pushVec2(2);
+            }
+
+            // Compute effective mass.
+            m_mass = K > 0.0f ? 1.0f / K : 0.0f;
+
+            if (step.warmStarting)
+            {
+                Vec2 temp = pool.popVec2();
+                // Warm starting.
+                temp.set_Renamed(m_J.linearA).mulLocal(b1.m_invMass).mulLocal(m_impulse);
+                b1.m_linearVelocity.addLocal(temp);
+                b1.m_angularVelocity += b1.m_invI * m_impulse * m_J.angularA;
+
+                temp.set_Renamed(m_J.linearB).mulLocal(b2.m_invMass).mulLocal(m_impulse);
+                b2.m_linearVelocity.addLocal(temp);
+                b2.m_angularVelocity += b2.m_invI * m_impulse * m_J.angularB;
+
+                pool.pushVec2(1);
+            }
+            else
+            {
+                m_impulse = 0.0f;
+            }
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solveVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
+        public virtual void solveVelocityConstraints(TimeStep step)
+        {
+            Body b1 = m_bodyA;
+            Body b2 = m_bodyB;
+
+            float Cdot = m_J.compute(b1.m_linearVelocity, b1.m_angularVelocity, b2.m_linearVelocity, b2.m_angularVelocity);
+
+            float impulse = m_mass * (-Cdot);
+            m_impulse += impulse;
+
+            Vec2 temp = pool.popVec2();
+            temp.set_Renamed(m_J.linearA).mulLocal(b1.m_invMass).mulLocal(impulse);
+            b1.m_linearVelocity.addLocal(temp);
+            b1.m_angularVelocity += b1.m_invI * impulse * m_J.angularA;
+
+            temp.set_Renamed(m_J.linearB).mulLocal(b2.m_invMass).mulLocal(impulse);
+            b2.m_linearVelocity.addLocal(temp);
+            b2.m_angularVelocity += b2.m_invI * impulse * m_J.angularB;
+
+            pool.pushVec2(1);
+        }
+
+        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solvePositionConstraints(float)"></seealso>
+        public virtual bool solvePositionConstraints(float baumgarte)
+        {
+            float linearError = 0.0f;
+
+            Body b1 = m_bodyA;
+            Body b2 = m_bodyB;
+
+            float coordinate1, coordinate2;
+            if (m_revolute1 != null)
+            {
+                coordinate1 = m_revolute1.JointAngle;
+            }
+            else
+            {
+                coordinate1 = m_prismatic1.getJointTranslation();
+            }
+
+            if (m_revolute2 != null)
+            {
+                coordinate2 = m_revolute2.JointAngle;
+            }
+            else
+            {
+                coordinate2 = m_prismatic2.getJointTranslation();
+            }
+
+            float C = m_constant - (coordinate1 + m_ratio * coordinate2);
+
+            float impulse = m_mass * (-C);
+
+            Vec2 temp = pool.popVec2();
+            temp.set_Renamed(m_J.linearA).mulLocal(b1.m_invMass).mulLocal(impulse);
+            b1.m_sweep.c.addLocal(temp);
+            b1.m_sweep.a += b1.m_invI * impulse * m_J.angularA;
+
+            temp.set_Renamed(m_J.linearB).mulLocal(b2.m_invMass).mulLocal(impulse);
+            b2.m_sweep.c.addLocal(temp);
+            b2.m_sweep.a += b2.m_invI * impulse * m_J.angularB;
+
+            b1.synchronizeTransform();
+            b2.synchronizeTransform();
+
+            pool.pushVec2(1);
+            // TODO_ERIN not implemented
+            return linearError < Settings.linearSlop;
+        }
+    }
 }
