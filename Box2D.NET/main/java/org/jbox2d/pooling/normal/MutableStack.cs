@@ -99,7 +99,7 @@ namespace org.jbox2d.pooling.normal
             size = newStack.Length;
         }
 
-        public readonly E pop()
+        public E pop()
         {
             if (index >= size)
             {
@@ -108,7 +108,7 @@ namespace org.jbox2d.pooling.normal
             return stack[index++];
         }
 
-        public readonly void push(E argObject)
+        public void push(E argObject)
         {
             Debug.Assert(index > 0);
             stack[--index] = (T)argObject;
