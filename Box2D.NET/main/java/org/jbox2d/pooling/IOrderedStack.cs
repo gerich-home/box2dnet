@@ -39,19 +39,19 @@ namespace org.jbox2d.pooling
 		/// Returns the next object in the pool
 		/// </summary>
 		/// <returns></returns>
-		public E pop();
+		E pop();
 
 		/// <summary>
 		/// Returns the next 'argNum' objects in the pool in an array
 		/// </summary>
 		/// <param name="argNum"></param>
 		/// <returns>an array containing the next pool objects in items 0-argNum. Array length and uniqueness not guaranteed.</returns>
-		public E[] pop(int argNum);
+		E[] pop(int argNum);
 
 		/// <summary>
 		/// Tells the stack to take back the last 'argNum' items
 		/// </summary>
 		/// <param name="argNum"></param>
-		public void push(int argNum);
+		void push(int argNum);
 	}
 }
