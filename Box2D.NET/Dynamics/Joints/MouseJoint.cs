@@ -69,7 +69,7 @@ namespace Box2D.Dynamics.Joints
             Debug.Assert(def.dampingRatio >= 0);
 
             m_targetA.set_Renamed(def.target);
-            Transform.mulTransToOut(m_bodyB.getTransform(), m_targetA, m_localAnchorB);
+            Transform.mulTransToOutUnsafe(m_bodyB.getTransform(), m_targetA, m_localAnchorB);
 
             m_maxForce = def.maxForce;
             m_impulse.setZero();
