@@ -127,6 +127,15 @@ namespace Box2D.Common
             out_Renamed.y = tempy;
         }
 
+        public static void mulTransToOutUnsafe(Transform T, Vec2 v, Vec2 out_Renamed)
+        {
+            Debug.Assert(v != out_Renamed);
+            float px = v.x - T.p.x;
+            float py = v.y - T.p.y;
+            out_Renamed.x = (T.q.c * px + T.q.s * py);
+            out_Renamed.y = (-T.q.s * px + T.q.c * py);
+        }
+
         public static Transform mul(Transform A, Transform B)
         {
             Transform C = new Transform();
