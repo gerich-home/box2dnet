@@ -24,8 +24,7 @@
 
 // Created at 3:43:53 AM Jul 7, 2010
 
-using System;
-using Settings = org.jbox2d.common.Settings;
+using org.jbox2d.common;
 
 namespace org.jbox2d.callbacks
 {

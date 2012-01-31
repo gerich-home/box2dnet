@@ -22,8 +22,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-
 namespace org.jbox2d.common
 {
 

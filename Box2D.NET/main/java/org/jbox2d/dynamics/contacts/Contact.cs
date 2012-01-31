@@ -22,18 +22,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using ContactListener = org.jbox2d.callbacks.ContactListener;
-using ContactID = org.jbox2d.collision.ContactID;
-using Manifold = org.jbox2d.collision.Manifold;
-using ManifoldPoint = org.jbox2d.collision.ManifoldPoint;
-using WorldManifold = org.jbox2d.collision.WorldManifold;
-using Shape = org.jbox2d.collision.shapes.Shape;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Transform = org.jbox2d.common.Transform;
-using Body = org.jbox2d.dynamics.Body;
-using Fixture = org.jbox2d.dynamics.Fixture;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
+using org.jbox2d.callbacks;
+using org.jbox2d.collision;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.contacts
 {
@@ -127,8 +120,8 @@ namespace org.jbox2d.dynamics.contacts
             m_nodeB.other = null;
 
             m_toiCount = 0;
-            m_friction = Contact.mixFriction(fA.m_friction, fB.m_friction);
-            m_restitution = Contact.mixRestitution(fA.m_restitution, fB.m_restitution);
+            m_friction = mixFriction(fA.m_friction, fB.m_friction);
+            m_restitution = mixRestitution(fA.m_restitution, fB.m_restitution);
 
             m_tangentSpeed = 0;
         }
@@ -283,12 +276,12 @@ namespace org.jbox2d.dynamics.contacts
 
         public virtual void resetFriction()
         {
-            m_friction = Contact.mixFriction(m_fixtureA.m_friction, m_fixtureB.m_friction);
+            m_friction = mixFriction(m_fixtureA.m_friction, m_fixtureB.m_friction);
         }
 
         public virtual void resetRestitution()
         {
-            m_restitution = Contact.mixRestitution(m_fixtureA.m_restitution, m_fixtureB.m_restitution);
+            m_restitution = mixRestitution(m_fixtureA.m_restitution, m_fixtureB.m_restitution);
         }
 
         public abstract void evaluate(Manifold manifold, Transform xfA, Transform xfB);

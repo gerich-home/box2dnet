@@ -61,7 +61,7 @@ namespace org.jbox2d.common
 
         public override String ToString()
         {
-            System.String s = "Sweep:\nlocalCenter: " + localCenter + "\n";
+            String s = "Sweep:\nlocalCenter: " + localCenter + "\n";
             s += ("c0: " + c0 + ", c: " + c + "\n");
             s += ("a0: " + a0 + ", a: " + a + "\n");
             return s;

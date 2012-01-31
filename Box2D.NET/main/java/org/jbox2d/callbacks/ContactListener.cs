@@ -22,9 +22,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Manifold = org.jbox2d.collision.Manifold;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
+using org.jbox2d.collision;
+using org.jbox2d.dynamics.contacts;
 
 namespace org.jbox2d.callbacks
 {

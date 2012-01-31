@@ -23,13 +23,9 @@
 // ****************************************************************************
 
 using System;
-using DebugDraw = org.jbox2d.callbacks.DebugDraw;
-using PairCallback = org.jbox2d.callbacks.PairCallback;
-using TreeCallback = org.jbox2d.callbacks.TreeCallback;
-using TreeRayCastCallback = org.jbox2d.callbacks.TreeRayCastCallback;
-using AABB = org.jbox2d.collision.AABB;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using Vec2 = org.jbox2d.common.Vec2;
+using org.jbox2d.callbacks;
+using org.jbox2d.common;
+
 //UPGRADE_TODO: The type 'org.slf4j.Logger' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 //using Logger = org.slf4j.Logger;
 //UPGRADE_TODO: The type 'org.slf4j.LoggerFactory' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
@@ -233,15 +229,15 @@ namespace org.jbox2d.collision.broadphase
 			m_moveCount = 0;
 
 			// Sort the pair buffer to expose duplicates.
-			System.Array.Sort(m_pairBuffer, 0, m_pairCount - 0);
+			Array.Sort(m_pairBuffer, 0, m_pairCount - 0);
 
 			// Send the pairs back to the client.
 			int i2 = 0;
 			while (i2 < m_pairCount)
 			{
 				Pair primaryPair = m_pairBuffer[i2];
-				System.Object userDataA = m_tree.getUserData(primaryPair.proxyIdA);
-				System.Object userDataB = m_tree.getUserData(primaryPair.proxyIdB);
+				Object userDataA = m_tree.getUserData(primaryPair.proxyIdA);
+				Object userDataB = m_tree.getUserData(primaryPair.proxyIdB);
 
 				// log.debug("returning pair: "+userDataA+", "+userDataB);
 				callback.addPair(userDataA, userDataB);

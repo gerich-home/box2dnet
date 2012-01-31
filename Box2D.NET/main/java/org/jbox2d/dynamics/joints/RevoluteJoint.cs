@@ -23,17 +23,9 @@
 // ****************************************************************************
 
 using System;
-using Mat22 = org.jbox2d.common.Mat22;
-using Mat33 = org.jbox2d.common.Mat33;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using Vec3 = org.jbox2d.common.Vec3;
-using Body = org.jbox2d.dynamics.Body;
-using SolverData = org.jbox2d.dynamics.SolverData;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.joints
 {
@@ -124,12 +116,12 @@ namespace org.jbox2d.dynamics.joints
             Vec2 vA = data.velocities[m_indexA].v;
             float wA = data.velocities[m_indexA].w;
 
-            Debug.Assert(!System.Single.IsNaN(wA));
+            Debug.Assert(!Single.IsNaN(wA));
             // Vec2 cB = data.positions[m_indexB].c;
             float aB = data.positions[m_indexB].a;
             Vec2 vB = data.velocities[m_indexB].v;
             float wB = data.velocities[m_indexB].w;
-            Debug.Assert(!System.Single.IsNaN(wB));
+            Debug.Assert(!Single.IsNaN(wB));
 
             Rot qA = pool.popRot();
             Rot qB = pool.popRot();
@@ -225,12 +217,12 @@ namespace org.jbox2d.dynamics.joints
                 vA.x -= mA * P.x;
                 vA.y -= mA * P.y;
                 wA -= iA * (Vec2.cross(m_rA, P) + m_motorImpulse + m_impulse.z);
-                Debug.Assert(!System.Single.IsNaN(wA));
+                Debug.Assert(!Single.IsNaN(wA));
 
                 vB.x += mB * P.x;
                 vB.y += mB * P.y;
                 wB += iB * (Vec2.cross(m_rB, P) + m_motorImpulse + m_impulse.z);
-                Debug.Assert(!System.Single.IsNaN(wB));
+                Debug.Assert(!Single.IsNaN(wB));
                 pool.pushVec2(1);
             }
             else
@@ -239,8 +231,8 @@ namespace org.jbox2d.dynamics.joints
                 m_motorImpulse = 0.0f;
             }
 
-            Debug.Assert(!System.Single.IsNaN(wA));
-            Debug.Assert(!System.Single.IsNaN(wB));
+            Debug.Assert(!Single.IsNaN(wA));
+            Debug.Assert(!Single.IsNaN(wB));
             data.velocities[m_indexA].v.set_Renamed(vA);
             data.velocities[m_indexA].w = wA;
             data.velocities[m_indexB].v.set_Renamed(vB);

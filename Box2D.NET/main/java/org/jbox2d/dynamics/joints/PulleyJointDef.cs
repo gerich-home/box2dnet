@@ -24,11 +24,8 @@
 
 // Created at 12:11:41 PM Jan 23, 2011
 
-using System;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using Body = org.jbox2d.dynamics.Body;
 using System.Diagnostics;
+using org.jbox2d.common;
 
 namespace org.jbox2d.dynamics.joints
 {

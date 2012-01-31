@@ -22,16 +22,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using AABB = org.jbox2d.collision.AABB;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using RayCastOutput = org.jbox2d.collision.RayCastOutput;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
 using System.Diagnostics;
+using org.jbox2d.common;
 
 namespace org.jbox2d.collision.shapes
 {

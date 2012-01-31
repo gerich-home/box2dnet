@@ -24,8 +24,7 @@
 
 // Created at 4:30:03 AM Jul 15, 2010
 
-using System;
-using Fixture = org.jbox2d.dynamics.Fixture;
+using org.jbox2d.dynamics;
 
 namespace org.jbox2d.callbacks
 {

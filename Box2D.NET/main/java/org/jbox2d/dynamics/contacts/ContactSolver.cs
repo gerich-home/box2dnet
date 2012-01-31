@@ -23,21 +23,10 @@
 // ****************************************************************************
 
 using System;
-using Manifold = org.jbox2d.collision.Manifold;
-using ManifoldPoint = org.jbox2d.collision.ManifoldPoint;
-using WorldManifold = org.jbox2d.collision.WorldManifold;
-using Shape = org.jbox2d.collision.shapes.Shape;
-using Mat22 = org.jbox2d.common.Mat22;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using Body = org.jbox2d.dynamics.Body;
-using Fixture = org.jbox2d.dynamics.Fixture;
-using TimeStep = org.jbox2d.dynamics.TimeStep;
-using VelocityConstraintPoint = org.jbox2d.dynamics.contacts.ContactVelocityConstraint.VelocityConstraintPoint;
 using System.Diagnostics;
+using org.jbox2d.collision;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
 
 namespace org.jbox2d.dynamics.contacts
 {
@@ -163,7 +152,7 @@ namespace org.jbox2d.dynamics.contacts
                 for (int j = 0; j < pointCount; j++)
                 {
                     ManifoldPoint cp = manifold.points[j];
-                    VelocityConstraintPoint vcp = vc.points[j];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
 
                     if (m_step.warmStarting)
                     {
@@ -220,7 +209,7 @@ namespace org.jbox2d.dynamics.contacts
 
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    VelocityConstraintPoint vcp = vc.points[j];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
                     temp.set_Renamed(normal).mulLocal(vcp.normalImpulse);
                     P.set_Renamed(tangent).mulLocal(vcp.tangentImpulse).addLocal(temp);
                     wA -= iA * Vec2.cross(vcp.rA, P);
@@ -289,7 +278,7 @@ namespace org.jbox2d.dynamics.contacts
                 int pointCount = vc.pointCount;
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    VelocityConstraintPoint vcp = vc.points[j];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
 
                     vcp.rA.set_Renamed(worldManifold.points[j]).subLocal(cA);
                     vcp.rB.set_Renamed(worldManifold.points[j]).subLocal(cB);
@@ -325,8 +314,8 @@ namespace org.jbox2d.dynamics.contacts
                 // If we have two points, then prepare the block solver.
                 if (vc.pointCount == 2)
                 {
-                    VelocityConstraintPoint vcp1 = vc.points[0];
-                    VelocityConstraintPoint vcp2 = vc.points[1];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp1 = vc.points[0];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp2 = vc.points[1];
 
                     float rn1A = Vec2.cross(vcp1.rA, vc.normal);
                     float rn1B = Vec2.cross(vcp1.rB, vc.normal);
@@ -394,7 +383,7 @@ namespace org.jbox2d.dynamics.contacts
                 // Solve tangent constraints
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    VelocityConstraintPoint vcp = vc.points[j];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
                     Vec2 a = vcp.rA;
 
                     dv.x = (-wB) * vcp.rB.y + vB.x - vA.x + wA * a.y;
@@ -430,7 +419,7 @@ namespace org.jbox2d.dynamics.contacts
                 // Solve normal constraints
                 if (vc.pointCount == 1)
                 {
-                    VelocityConstraintPoint vcp = vc.points[0];
+                    ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[0];
                     Vec2 a1 = vcp.rA;
 
                     // Relative velocity at contact
@@ -508,8 +497,8 @@ namespace org.jbox2d.dynamics.contacts
                     // = A * x + b'
                     // b' = b - A * a;
 
-                    VelocityConstraintPoint cp1 = vc.points[0];
-                    VelocityConstraintPoint cp2 = vc.points[1];
+                    ContactVelocityConstraint.VelocityConstraintPoint cp1 = vc.points[0];
+                    ContactVelocityConstraint.VelocityConstraintPoint cp2 = vc.points[1];
                     a.x = cp1.normalImpulse;
                     a.y = cp2.normalImpulse;
 

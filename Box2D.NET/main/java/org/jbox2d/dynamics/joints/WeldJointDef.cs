@@ -24,9 +24,7 @@
 
 // Created at 3:38:52 AM Jan 15, 2011
 
-using System;
-using Vec2 = org.jbox2d.common.Vec2;
-using Body = org.jbox2d.dynamics.Body;
+using org.jbox2d.common;
 
 namespace org.jbox2d.dynamics.joints
 {

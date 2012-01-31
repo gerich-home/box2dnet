@@ -23,18 +23,11 @@
 // ****************************************************************************
 
 using System;
-using SimplexCache = org.jbox2d.collision.Distance.SimplexCache;
-//UPGRADE_TODO: The type 'org.jbox2d.collision.Manifold.ManifoldType' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
-using ManifoldType = org.jbox2d.collision.Manifold.ManifoldType;
-using CircleShape = org.jbox2d.collision.shapes.CircleShape;
-using PolygonShape = org.jbox2d.collision.shapes.PolygonShape;
-using Shape = org.jbox2d.collision.shapes.Shape;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
+//UPGRADE_TODO: The type 'org.jbox2d.collision.Manifold.ManifoldType' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 
 namespace org.jbox2d.collision
 {
@@ -47,7 +40,7 @@ namespace org.jbox2d.collision
     /// <author>Daniel Murphy</author>
     public class Collision
     {
-        public static readonly int NULL_FEATURE = System.Int32.MaxValue;
+        public static readonly int NULL_FEATURE = Int32.MaxValue;
 
         private readonly IWorldPool pool;
 
@@ -63,7 +56,7 @@ namespace org.jbox2d.collision
         }
 
         private readonly DistanceInput input = new DistanceInput();
-        private readonly SimplexCache cache = new SimplexCache();
+        private readonly Distance.SimplexCache cache = new Distance.SimplexCache();
         private readonly DistanceOutput output = new DistanceOutput();
 
         /// <summary>
@@ -235,7 +228,7 @@ namespace org.jbox2d.collision
                 return;
             }
 
-            manifold.type = ManifoldType.CIRCLES;
+            manifold.type = Manifold.ManifoldType.CIRCLES;
             manifold.localPoint.set_Renamed(circle1.m_p);
             manifold.localNormal.setZero();
             manifold.pointCount = 1;
@@ -282,7 +275,7 @@ namespace org.jbox2d.collision
             // Find the min separating edge.
             int normalIndex = 0;
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-            float separation = System.Single.Epsilon;
+            float separation = Single.Epsilon;
             float radius = polygon.m_radius + circle.m_radius;
             int vertexCount = polygon.m_count;
 
@@ -325,7 +318,7 @@ namespace org.jbox2d.collision
             if (separation < Settings.EPSILON)
             {
                 manifold.pointCount = 1;
-                manifold.type = ManifoldType.FACE_A;
+                manifold.type = Manifold.ManifoldType.FACE_A;
 
                 // before inline:
                 // manifold.localNormal.set(normals[normalIndex]);
@@ -378,7 +371,7 @@ namespace org.jbox2d.collision
                 }
 
                 manifold.pointCount = 1;
-                manifold.type = ManifoldType.FACE_A;
+                manifold.type = Manifold.ManifoldType.FACE_A;
                 // before inline:
                 // manifold.localNormal.set(cLocal).subLocal(v1);
                 // after inline:
@@ -401,7 +394,7 @@ namespace org.jbox2d.collision
                 }
 
                 manifold.pointCount = 1;
-                manifold.type = ManifoldType.FACE_A;
+                manifold.type = Manifold.ManifoldType.FACE_A;
                 // before inline:
                 // manifold.localNormal.set(cLocal).subLocal(v2);
                 // after inline:
@@ -440,7 +433,7 @@ namespace org.jbox2d.collision
                 // end inline
 
                 manifold.pointCount = 1;
-                manifold.type = ManifoldType.FACE_A;
+                manifold.type = Manifold.ManifoldType.FACE_A;
                 manifold.localNormal.set_Renamed(normals[vertIndex1]);
                 manifold.localPoint.x = fcx; // (faceCenter)
                 manifold.localPoint.y = fcy;
@@ -501,7 +494,7 @@ namespace org.jbox2d.collision
 
             // Find support vertex on poly2 for -normal.
             int index = 0;
-            float minDot = System.Single.MaxValue;
+            float minDot = Single.MaxValue;
 
             for (int i = 0; i < count2; ++i)
             {
@@ -581,7 +574,7 @@ namespace org.jbox2d.collision
             int edge = 0;
             float dot;
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-            float maxDot = System.Single.Epsilon;
+            float maxDot = Single.Epsilon;
             for (int i = 0; i < count1; i++)
             {
                 Vec2 normal = normals1[i];
@@ -675,7 +668,7 @@ namespace org.jbox2d.collision
 
             // Find the incident edge on poly2.
             int index = 0;
-            float minDot = System.Single.MaxValue;
+            float minDot = Single.MaxValue;
             for (int i = 0; i < count2; ++i)
             {
                 float dot = Vec2.dot(normal1, normals2[i]);
@@ -764,7 +757,7 @@ namespace org.jbox2d.collision
                 xf1 = xfB;
                 xf2 = xfA;
                 edge1 = results2.edgeIndex;
-                manifold.type = ManifoldType.FACE_B;
+                manifold.type = Manifold.ManifoldType.FACE_B;
                 flip = true;
             }
             else
@@ -774,7 +767,7 @@ namespace org.jbox2d.collision
                 xf1 = xfA;
                 xf2 = xfB;
                 edge1 = results1.edgeIndex;
-                manifold.type = ManifoldType.FACE_A;
+                manifold.type = Manifold.ManifoldType.FACE_A;
                 flip = false;
             }
 

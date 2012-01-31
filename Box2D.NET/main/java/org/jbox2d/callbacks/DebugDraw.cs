@@ -25,10 +25,7 @@
 // Created at 4:35:29 AM Jul 15, 2010
 
 using System;
-using Color3f = org.jbox2d.common.Color3f;
-using IViewportTransform = org.jbox2d.common.IViewportTransform;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
+using org.jbox2d.common;
 
 namespace org.jbox2d.callbacks
 {
@@ -164,7 +161,7 @@ namespace org.jbox2d.callbacks
         /// <param name="y"></param>
         /// <param name="s"></param>
         /// <param name="color"></param>
-        public abstract void drawString(float x, float y, System.String s, Color3f color);
+        public abstract void drawString(float x, float y, String s, Color3f color);
 
         /// <param name="x"></param>
         /// <param name="y"></param>

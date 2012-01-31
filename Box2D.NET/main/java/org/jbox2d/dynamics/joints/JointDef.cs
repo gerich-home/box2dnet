@@ -22,9 +22,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Body = org.jbox2d.dynamics.Body;
-
 namespace org.jbox2d.dynamics.joints
 {
 

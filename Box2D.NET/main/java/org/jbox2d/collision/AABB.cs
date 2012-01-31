@@ -23,11 +23,9 @@
 // ****************************************************************************
 
 using System;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
-using DefaultWorldPool = org.jbox2d.pooling.normal.DefaultWorldPool;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
+using org.jbox2d.pooling.normal;
 
 namespace org.jbox2d.collision
 {

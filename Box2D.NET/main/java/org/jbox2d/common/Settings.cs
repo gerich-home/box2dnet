@@ -38,7 +38,7 @@ namespace org.jbox2d.common
 
         /// <summary>Pi.</summary>
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-        public static readonly float PI = (float)System.Math.PI;
+        public static readonly float PI = (float)Math.PI;
 
         // JBox2D specific settings
         /// <summary>needs to be final, or will slow down math methods</summary>
@@ -75,7 +75,7 @@ namespace org.jbox2d.common
         public const float SINCOS_LUT_PRECISION = .00011f;
 
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-        public static readonly int SINCOS_LUT_LENGTH = (int)System.Math.Ceiling(System.Math.PI * 2 / SINCOS_LUT_PRECISION);
+        public static readonly int SINCOS_LUT_LENGTH = (int)Math.Ceiling(Math.PI * 2 / SINCOS_LUT_PRECISION);
 
         /// <summary>
         /// Use if the table's precision is large (eg .006 or greater). Although it is more expensive, it

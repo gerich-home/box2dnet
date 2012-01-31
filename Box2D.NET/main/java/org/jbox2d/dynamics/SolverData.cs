@@ -22,9 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Position = org.jbox2d.dynamics.contacts.Position;
-using Velocity = org.jbox2d.dynamics.contacts.Velocity;
+using org.jbox2d.dynamics.contacts;
 
 namespace org.jbox2d.dynamics
 {

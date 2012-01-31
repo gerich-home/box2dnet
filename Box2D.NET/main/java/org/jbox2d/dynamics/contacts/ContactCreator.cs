@@ -22,9 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Fixture = org.jbox2d.dynamics.Fixture;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.contacts
 {

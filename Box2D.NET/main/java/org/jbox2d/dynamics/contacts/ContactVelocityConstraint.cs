@@ -22,10 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Mat22 = org.jbox2d.common.Mat22;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
+using org.jbox2d.common;
 
 namespace org.jbox2d.dynamics.contacts
 {

@@ -24,9 +24,8 @@
 
 // Created at 4:23:30 AM Jul 15, 2010
 
-using System;
-using Fixture = org.jbox2d.dynamics.Fixture;
-using Joint = org.jbox2d.dynamics.joints.Joint;
+using org.jbox2d.dynamics;
+using org.jbox2d.dynamics.joints;
 
 namespace org.jbox2d.callbacks
 {

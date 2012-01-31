@@ -22,13 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using ContactFilter = org.jbox2d.callbacks.ContactFilter;
-using ContactListener = org.jbox2d.callbacks.ContactListener;
-using PairCallback = org.jbox2d.callbacks.PairCallback;
-using BroadPhase = org.jbox2d.collision.broadphase.BroadPhase;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
-using ContactEdge = org.jbox2d.dynamics.contacts.ContactEdge;
+using org.jbox2d.callbacks;
+using org.jbox2d.collision.broadphase;
+using org.jbox2d.dynamics.contacts;
 
 namespace org.jbox2d.dynamics
 {

@@ -54,9 +54,9 @@ namespace org.jbox2d.common
     public class MathUtils
     {
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-        public static readonly float PI = (float)System.Math.PI;
+        public static readonly float PI = (float)Math.PI;
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-        public static readonly float TWOPI = (float)(System.Math.PI * 2);
+        public static readonly float TWOPI = (float)(Math.PI * 2);
         public static readonly float INV_PI = 1f / PI;
         public static readonly float HALF_PI = PI / 2;
         public static readonly float QUARTER_PI = PI / 4;
@@ -82,9 +82,9 @@ namespace org.jbox2d.common
                 for (int i = 0; i < Settings.SINCOS_LUT_LENGTH; i++)
                 {
                     //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                    sinLUT_Renamed_Field[i] = (float)System.Math.Sin(i * Settings.SINCOS_LUT_PRECISION);
+                    sinLUT_Renamed_Field[i] = (float)Math.Sin(i * Settings.SINCOS_LUT_PRECISION);
                     //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                    cosLUT[i] = (float)System.Math.Cos(i * Settings.SINCOS_LUT_PRECISION);
+                    cosLUT[i] = (float)Math.Cos(i * Settings.SINCOS_LUT_PRECISION);
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace org.jbox2d.common
             else
             {
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                return (float)System.Math.Sin(x);
+                return (float)Math.Sin(x);
             }
         }
 
@@ -136,7 +136,7 @@ namespace org.jbox2d.common
             }
             else
             {
-                return sinLUT_Renamed_Field[MathUtils.round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
+                return sinLUT_Renamed_Field[round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
             }
         }
 
@@ -176,13 +176,13 @@ namespace org.jbox2d.common
                 }
                 else
                 {
-                    return cosLUT[MathUtils.round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
+                    return cosLUT[round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
                 }
             }
             else
             {
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                return (float)System.Math.Cos(x);
+                return (float)Math.Cos(x);
             }
         }
 
@@ -194,7 +194,7 @@ namespace org.jbox2d.common
             }
             else
             {
-                return System.Math.Abs(x);
+                return Math.Abs(x);
             }
         }
 
@@ -219,7 +219,7 @@ namespace org.jbox2d.common
             else
             {
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                return (int)System.Math.Floor(x);
+                return (int)Math.Floor(x);
             }
         }
 
@@ -238,7 +238,7 @@ namespace org.jbox2d.common
             else
             {
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                return (int)System.Math.Ceiling(x);
+                return (int)Math.Ceiling(x);
             }
         }
 
@@ -251,7 +251,7 @@ namespace org.jbox2d.common
             else
             {
                 //UPGRADE_TODO: Method 'java.lang.StrictMath.round' was converted to 'System.Math.Round' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javalangStrictMathround_float'"
-                return (int)System.Math.Round((double)x);
+                return (int)Math.Round((double)x);
             }
         }
 
@@ -351,7 +351,7 @@ namespace org.jbox2d.common
         public static float fastPow(float a, float b)
         {
             //UPGRADE_TODO: Method 'java.lang.Float.floatToRawIntBits' was converted to 'System.Convert.ToInt32' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javalangFloatfloatToRawIntBits_float'"
-            float x = System.Convert.ToInt32(a);
+            float x = Convert.ToInt32(a);
             x *= INV_SHIFT23;
             x -= 127;
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
@@ -373,7 +373,7 @@ namespace org.jbox2d.common
             else
             {
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                return (float)System.Math.Atan2(y, x);
+                return (float)Math.Atan2(y, x);
             }
         }
 
@@ -436,12 +436,12 @@ namespace org.jbox2d.common
             if (Settings.FAST_MATH)
             {
                 //UPGRADE_TODO: Method 'java.lang.Float.floatToRawIntBits' was converted to 'System.Convert.ToInt32' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javalangFloatfloatToRawIntBits_float'"
-                float x = System.Convert.ToInt32(a);
+                float x = Convert.ToInt32(a);
                 x *= 1.0f / (1 << 23);
                 x = x - 127;
-                float y = x - MathUtils.floor(x);
+                float y = x - floor(x);
                 b *= (x + (y - y * y) * 0.346607f);
-                y = b - MathUtils.floor(b);
+                y = b - floor(b);
                 y = (y - y * y) * 0.33971f;
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
                 return FloatToIntBits((int)((b + 127 - y) * (1 << 23)));
@@ -449,7 +449,7 @@ namespace org.jbox2d.common
             else
             {
                 //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                return (float)System.Math.Pow(a, b);
+                return (float)Math.Pow(a, b);
             }
         }
 
@@ -459,7 +459,7 @@ namespace org.jbox2d.common
             return (float)SupportClass.Random.NextDouble() * (argHigh - argLow) + argLow;
         }
 
-        public static float randomFloat(System.Random r, float argLow, float argHigh)
+        public static float randomFloat(Random r, float argLow, float argHigh)
         {
             return (float)r.NextDouble() * (argHigh - argLow) + argLow;
         }
@@ -467,7 +467,7 @@ namespace org.jbox2d.common
         public static float sqrt(float x)
         {
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            return (float)System.Math.Sqrt(x);
+            return (float)Math.Sqrt(x);
         }
 
         public static float distanceSquared(Vec2 v1, Vec2 v2)

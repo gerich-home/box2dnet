@@ -23,20 +23,11 @@
 // ****************************************************************************
 
 using System;
-using ContactImpulse = org.jbox2d.callbacks.ContactImpulse;
-using ContactListener = org.jbox2d.callbacks.ContactListener;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Settings = org.jbox2d.common.Settings;
-using Timer = org.jbox2d.common.Timer;
-using Vec2 = org.jbox2d.common.Vec2;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
-using ContactSolver = org.jbox2d.dynamics.contacts.ContactSolver;
-using ContactSolverDef = org.jbox2d.dynamics.contacts.ContactSolver.ContactSolverDef;
-using ContactVelocityConstraint = org.jbox2d.dynamics.contacts.ContactVelocityConstraint;
-using Position = org.jbox2d.dynamics.contacts.Position;
-using Velocity = org.jbox2d.dynamics.contacts.Velocity;
-using Joint = org.jbox2d.dynamics.joints.Joint;
 using System.Diagnostics;
+using org.jbox2d.callbacks;
+using org.jbox2d.common;
+using org.jbox2d.dynamics.contacts;
+using org.jbox2d.dynamics.joints;
 
 namespace org.jbox2d.dynamics
 {
@@ -249,7 +240,7 @@ namespace org.jbox2d.dynamics
 		private readonly Vec2 translation = new Vec2();
 		private readonly Timer timer = new Timer();
 		private readonly SolverData solverData = new SolverData();
-		private readonly ContactSolverDef solverDef = new ContactSolverDef();
+		private readonly ContactSolver.ContactSolverDef solverDef = new ContactSolver.ContactSolverDef();
 
 		public virtual void solve(Profile profile, TimeStep step, Vec2 gravity, bool allowSleep)
 		{
@@ -416,7 +407,7 @@ namespace org.jbox2d.dynamics
 
 			if (allowSleep)
 			{
-				float minSleepTime = System.Single.MaxValue;
+				float minSleepTime = Single.MaxValue;
 
 				float linTolSqr = Settings.linearSleepTolerance * Settings.linearSleepTolerance;
 				float angTolSqr = Settings.angularSleepTolerance * Settings.angularSleepTolerance;
@@ -453,7 +444,7 @@ namespace org.jbox2d.dynamics
 		}
 
 		private readonly ContactSolver toiContactSolver = new ContactSolver();
-		private readonly ContactSolverDef toiSolverDef = new ContactSolverDef();
+		private readonly ContactSolver.ContactSolverDef toiSolverDef = new ContactSolver.ContactSolverDef();
 
 		public virtual void solveTOI(TimeStep subStep, int toiIndexA, int toiIndexB)
 		{

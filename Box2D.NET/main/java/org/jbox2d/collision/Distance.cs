@@ -23,18 +23,9 @@
 // ****************************************************************************
 
 using System;
-using ChainShape = org.jbox2d.collision.shapes.ChainShape;
-using CircleShape = org.jbox2d.collision.shapes.CircleShape;
-using EdgeShape = org.jbox2d.collision.shapes.EdgeShape;
-using PolygonShape = org.jbox2d.collision.shapes.PolygonShape;
-using Shape = org.jbox2d.collision.shapes.Shape;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using Transform = org.jbox2d.common.Transform;
 using System.Diagnostics;
 using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
 
 namespace org.jbox2d.collision
 {
@@ -93,12 +84,12 @@ namespace org.jbox2d.collision
             {
                 metric = 0;
                 count = 0;
-                indexA[0] = System.Int32.MaxValue;
-                indexA[1] = System.Int32.MaxValue;
-                indexA[2] = System.Int32.MaxValue;
-                indexB[0] = System.Int32.MaxValue;
-                indexB[1] = System.Int32.MaxValue;
-                indexB[2] = System.Int32.MaxValue;
+                indexA[0] = Int32.MaxValue;
+                indexA[1] = Int32.MaxValue;
+                indexA[2] = Int32.MaxValue;
+                indexB[0] = Int32.MaxValue;
+                indexB[1] = Int32.MaxValue;
+                indexB[2] = Int32.MaxValue;
             }
 
             public virtual void set_Renamed(SimplexCache sc)

@@ -23,19 +23,12 @@
 // ****************************************************************************
 
 using System;
-using AABB = org.jbox2d.collision.AABB;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using RayCastOutput = org.jbox2d.collision.RayCastOutput;
-using BroadPhase = org.jbox2d.collision.broadphase.BroadPhase;
-using MassData = org.jbox2d.collision.shapes.MassData;
-using Shape = org.jbox2d.collision.shapes.Shape;
-using ShapeType = org.jbox2d.collision.shapes.ShapeType;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
-using ContactEdge = org.jbox2d.dynamics.contacts.ContactEdge;
 using System.Diagnostics;
+using org.jbox2d.collision;
+using org.jbox2d.collision.broadphase;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
+using org.jbox2d.dynamics.contacts;
 
 namespace org.jbox2d.dynamics
 {

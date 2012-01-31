@@ -183,7 +183,7 @@ namespace org.jbox2d.common
 
         public override String ToString()
         {
-            System.String s = "XForm:\n";
+            String s = "XForm:\n";
             s += ("Position: " + p + "\n");
             //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Object.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             s += ("R: \n" + q + "\n");

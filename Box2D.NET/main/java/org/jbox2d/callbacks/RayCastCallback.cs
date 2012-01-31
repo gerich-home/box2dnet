@@ -24,9 +24,8 @@
 
 // Created at 4:33:10 AM Jul 15, 2010
 
-using System;
-using Vec2 = org.jbox2d.common.Vec2;
-using Fixture = org.jbox2d.dynamics.Fixture;
+using org.jbox2d.common;
+using org.jbox2d.dynamics;
 
 namespace org.jbox2d.callbacks
 {

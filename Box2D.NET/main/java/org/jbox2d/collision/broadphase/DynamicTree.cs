@@ -23,19 +23,11 @@
 // ****************************************************************************
 
 using System;
-using DebugDraw = org.jbox2d.callbacks.DebugDraw;
-using TreeCallback = org.jbox2d.callbacks.TreeCallback;
-using TreeRayCastCallback = org.jbox2d.callbacks.TreeRayCastCallback;
-using AABB = org.jbox2d.collision.AABB;
-//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-using TreeNode = org.jbox2d.collision.broadphase.TreeNode;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using Color3f = org.jbox2d.common.Color3f;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using DynamicIntStack = org.jbox2d.pooling.stacks.DynamicIntStack;
 using System.Diagnostics;
+using org.jbox2d.callbacks;
+using org.jbox2d.common;
+using org.jbox2d.pooling.stacks;
+//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
 
 namespace org.jbox2d.collision.broadphase
 {
@@ -184,7 +176,7 @@ namespace org.jbox2d.collision.broadphase
         /// <param name="aabb"></param>
         /// <param name="userData"></param>
         /// <returns></returns>
-        public int createProxy(AABB aabb, System.Object userData)
+        public int createProxy(AABB aabb, Object userData)
         {
             int proxyId = allocateNode();
 
@@ -500,7 +492,7 @@ namespace org.jbox2d.collision.broadphase
             AABB b = new AABB();
             while (count > 1)
             {
-                float minCost = System.Single.MaxValue;
+                float minCost = Single.MaxValue;
                 int iMin = -1, jMin = -1;
                 for (int i = 0; i < count; ++i)
                 {

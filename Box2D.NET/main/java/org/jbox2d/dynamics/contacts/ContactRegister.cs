@@ -22,7 +22,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
 using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.contacts

@@ -23,13 +23,7 @@
 // ****************************************************************************
 
 using System;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using Body = org.jbox2d.dynamics.Body;
-using SolverData = org.jbox2d.dynamics.SolverData;
-using TimeStep = org.jbox2d.dynamics.TimeStep;
-using World = org.jbox2d.dynamics.World;
+using org.jbox2d.common;
 
 namespace org.jbox2d.dynamics.joints
 {
@@ -97,7 +91,7 @@ namespace org.jbox2d.dynamics.joints
             world = argWorld;
             if (def.bodies.Count <= 2)
             {
-                throw new System.ArgumentException("You cannot create a constant volume joint with less than three bodies.");
+                throw new ArgumentException("You cannot create a constant volume joint with less than three bodies.");
             }
             bodies = def.bodies.ToArray();
 
@@ -112,7 +106,7 @@ namespace org.jbox2d.dynamics.joints
 
             if (def.joints != null && def.joints.Count != def.bodies.Count)
             {
-                throw new System.ArgumentException("Incorrect joint definition.  Joints have to correspond to the bodies");
+                throw new ArgumentException("Incorrect joint definition.  Joints have to correspond to the bodies");
             }
             if (def.joints == null)
             {

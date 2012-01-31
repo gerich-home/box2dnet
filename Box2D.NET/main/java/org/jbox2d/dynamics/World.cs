@@ -23,46 +23,17 @@
 // ****************************************************************************
 
 using System;
-using ContactFilter = org.jbox2d.callbacks.ContactFilter;
-using ContactListener = org.jbox2d.callbacks.ContactListener;
-using DebugDraw = org.jbox2d.callbacks.DebugDraw;
-using DestructionListener = org.jbox2d.callbacks.DestructionListener;
-using QueryCallback = org.jbox2d.callbacks.QueryCallback;
-using RayCastCallback = org.jbox2d.callbacks.RayCastCallback;
-using TreeCallback = org.jbox2d.callbacks.TreeCallback;
-using TreeRayCastCallback = org.jbox2d.callbacks.TreeRayCastCallback;
-using AABB = org.jbox2d.collision.AABB;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using RayCastOutput = org.jbox2d.collision.RayCastOutput;
-using TOIInput = org.jbox2d.collision.TimeOfImpact.TOIInput;
-using TOIOutput = org.jbox2d.collision.TimeOfImpact.TOIOutput;
-using TOIOutputState = org.jbox2d.collision.TimeOfImpact.TOIOutputState;
-using BroadPhase = org.jbox2d.collision.broadphase.BroadPhase;
-using ChainShape = org.jbox2d.collision.shapes.ChainShape;
-using CircleShape = org.jbox2d.collision.shapes.CircleShape;
-using EdgeShape = org.jbox2d.collision.shapes.EdgeShape;
-using PolygonShape = org.jbox2d.collision.shapes.PolygonShape;
-using ShapeType = org.jbox2d.collision.shapes.ShapeType;
-using Color3f = org.jbox2d.common.Color3f;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Settings = org.jbox2d.common.Settings;
-using Sweep = org.jbox2d.common.Sweep;
-using Timer = org.jbox2d.common.Timer;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
-using ContactEdge = org.jbox2d.dynamics.contacts.ContactEdge;
-using ContactRegister = org.jbox2d.dynamics.contacts.ContactRegister;
-using Joint = org.jbox2d.dynamics.joints.Joint;
-using JointDef = org.jbox2d.dynamics.joints.JointDef;
-using JointEdge = org.jbox2d.dynamics.joints.JointEdge;
-using PulleyJoint = org.jbox2d.dynamics.joints.PulleyJoint;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
-using Vec2Array = org.jbox2d.pooling.arrays.Vec2Array;
-using DefaultWorldPool = org.jbox2d.pooling.normal.DefaultWorldPool;
-using org.jbox2d.pooling;
 using System.Diagnostics;
+using org.jbox2d.callbacks;
+using org.jbox2d.collision;
+using org.jbox2d.collision.broadphase;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
+using org.jbox2d.dynamics.contacts;
 using org.jbox2d.dynamics.joints;
+using org.jbox2d.pooling;
+using org.jbox2d.pooling.arrays;
+using org.jbox2d.pooling.normal;
 
 namespace org.jbox2d.dynamics
 {
@@ -1280,8 +1251,8 @@ namespace org.jbox2d.dynamics
         }
 
         private readonly Island toiIsland = new Island();
-        private readonly TOIInput toiInput = new TOIInput();
-        private readonly TOIOutput toiOutput = new TOIOutput();
+        private readonly TimeOfImpact.TOIInput toiInput = new TimeOfImpact.TOIInput();
+        private readonly TimeOfImpact.TOIOutput toiOutput = new TimeOfImpact.TOIOutput();
         private readonly TimeStep subStep = new TimeStep();
         private readonly Body[] tempBodies = new Body[2];
         private readonly Sweep backup1 = new Sweep();
@@ -1392,7 +1363,7 @@ namespace org.jbox2d.dynamics
                         int indexB = c.ChildIndexB;
 
                         // Compute the time of impact in interval [0, minTOI]
-                        TOIInput input = toiInput;
+                        TimeOfImpact.TOIInput input = toiInput;
                         input.proxyA.set_Renamed(fA.Shape, indexA);
                         input.proxyB.set_Renamed(fB.Shape, indexB);
                         input.sweepA.set_Renamed(bA.m_sweep);
@@ -1403,7 +1374,7 @@ namespace org.jbox2d.dynamics
 
                         // Beta is the fraction of the remaining portion of the .
                         float beta = toiOutput.t;
-                        if (toiOutput.state == TOIOutputState.TOUCHING)
+                        if (toiOutput.state == TimeOfImpact.TOIOutputState.TOUCHING)
                         {
                             alpha = MathUtils.min(alpha0 + (1.0f - alpha0) * beta, 1.0f);
                         }
@@ -1657,7 +1628,7 @@ namespace org.jbox2d.dynamics
 
         // NOTE this corresponds to the liquid test, so the debugdraw can draw
         // the liquid particles correctly. They should be the same.
-        private static System.Int32 LIQUID_INT = 1234598372;
+        private static Int32 LIQUID_INT = 1234598372;
         private float liquidLength = .12f;
         private float averageLinearVel = -1;
         private readonly Vec2 liquidOffset = new Vec2();
@@ -1785,7 +1756,7 @@ namespace org.jbox2d.dynamics
 
         public virtual float raycastCallback(RayCastInput input, int nodeId)
         {
-            System.Object userData = broadPhase.getUserData(nodeId);
+            Object userData = broadPhase.getUserData(nodeId);
             FixtureProxy proxy = (FixtureProxy)userData;
             Fixture fixture = proxy.fixture;
             int index = proxy.childIndex;

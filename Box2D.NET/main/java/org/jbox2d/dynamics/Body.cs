@@ -18,18 +18,12 @@
 // ****************************************************************************
 
 using System;
-using BroadPhase = org.jbox2d.collision.broadphase.BroadPhase;
-using MassData = org.jbox2d.collision.shapes.MassData;
-using Shape = org.jbox2d.collision.shapes.Shape;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Sweep = org.jbox2d.common.Sweep;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
-using ContactEdge = org.jbox2d.dynamics.contacts.ContactEdge;
-using JointEdge = org.jbox2d.dynamics.joints.JointEdge;
 using System.Diagnostics;
+using org.jbox2d.collision.broadphase;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
+using org.jbox2d.dynamics.contacts;
+using org.jbox2d.dynamics.joints;
 
 namespace org.jbox2d.dynamics
 {
@@ -91,7 +85,7 @@ namespace org.jbox2d.dynamics
 
         public float m_sleepTime;
 
-        public System.Object m_userData;
+        public Object m_userData;
 
         public Body(BodyDef bd, World world)
         {

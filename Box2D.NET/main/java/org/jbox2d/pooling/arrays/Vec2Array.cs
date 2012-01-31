@@ -22,10 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Vec2 = org.jbox2d.common.Vec2;
 using System.Collections.Generic;
 using System.Diagnostics;
+using org.jbox2d.common;
 
 namespace org.jbox2d.pooling.arrays
 {

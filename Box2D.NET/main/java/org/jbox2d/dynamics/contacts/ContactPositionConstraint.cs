@@ -22,10 +22,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using ManifoldType = org.jbox2d.collision.Manifold.ManifoldType;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
+using org.jbox2d.collision;
+using org.jbox2d.common;
 
 namespace org.jbox2d.dynamics.contacts
 {
@@ -41,7 +39,7 @@ namespace org.jbox2d.dynamics.contacts
         internal readonly Vec2 localCenterA = new Vec2();
         internal readonly Vec2 localCenterB = new Vec2();
         internal float invIA, invIB;
-        internal ManifoldType type;
+        internal Manifold.ManifoldType type;
         internal float radiusA, radiusB;
         internal int pointCount;
 

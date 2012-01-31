@@ -23,13 +23,9 @@
 // ****************************************************************************
 
 using System;
-using Vec2 = org.jbox2d.common.Vec2;
-using Body = org.jbox2d.dynamics.Body;
-using SolverData = org.jbox2d.dynamics.SolverData;
-using TimeStep = org.jbox2d.dynamics.TimeStep;
-using World = org.jbox2d.dynamics.World;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.joints
 {
@@ -98,7 +94,7 @@ namespace org.jbox2d.dynamics.joints
         public bool m_islandFlag;
         public bool m_collideConnected;
 
-        public System.Object m_userData;
+        public Object m_userData;
 
         protected internal IWorldPool pool;
 

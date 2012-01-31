@@ -22,18 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using DistanceProxy = org.jbox2d.collision.Distance.DistanceProxy;
-using SimplexCache = org.jbox2d.collision.Distance.SimplexCache;
-using Mat22 = org.jbox2d.common.Mat22;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Sweep = org.jbox2d.common.Sweep;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.collision
 {
@@ -68,8 +59,8 @@ namespace org.jbox2d.collision
         /// <author>Daniel Murphy</author>
         public class TOIInput
         {
-            public readonly DistanceProxy proxyA = new DistanceProxy();
-            public readonly DistanceProxy proxyB = new DistanceProxy();
+            public readonly Distance.DistanceProxy proxyA = new Distance.DistanceProxy();
+            public readonly Distance.DistanceProxy proxyB = new Distance.DistanceProxy();
             public readonly Sweep sweepA = new Sweep();
             public readonly Sweep sweepB = new Sweep();
 
@@ -89,7 +80,7 @@ namespace org.jbox2d.collision
 
 
         // djm pooling
-        private readonly SimplexCache cache = new SimplexCache();
+        private readonly Distance.SimplexCache cache = new Distance.SimplexCache();
         private readonly DistanceInput distanceInput = new DistanceInput();
         private readonly Transform xfA = new Transform();
         private readonly Transform xfB = new Transform();
@@ -125,8 +116,8 @@ namespace org.jbox2d.collision
             output.state = TOIOutputState.UNKNOWN;
             output.t = input.tMax;
 
-            DistanceProxy proxyA = input.proxyA;
-            DistanceProxy proxyB = input.proxyB;
+            Distance.DistanceProxy proxyA = input.proxyA;
+            Distance.DistanceProxy proxyB = input.proxyB;
 
             sweepA.set_Renamed(input.sweepA);
             sweepB.set_Renamed(input.sweepB);
@@ -347,8 +338,8 @@ namespace org.jbox2d.collision
     class SeparationFunction
     {
 
-        public DistanceProxy m_proxyA;
-        public DistanceProxy m_proxyB;
+        public Distance.DistanceProxy m_proxyA;
+        public Distance.DistanceProxy m_proxyB;
         public Type m_type;
         public readonly Vec2 m_localPoint = new Vec2();
         public readonly Vec2 m_axis = new Vec2();
@@ -371,7 +362,7 @@ namespace org.jbox2d.collision
 
         // TODO_ERIN might not need to return the separation
 
-        public virtual float initialize(SimplexCache cache, DistanceProxy proxyA, Sweep sweepA, DistanceProxy proxyB, Sweep sweepB, float t1)
+        public virtual float initialize(Distance.SimplexCache cache, Distance.DistanceProxy proxyA, Sweep sweepA, Distance.DistanceProxy proxyB, Sweep sweepB, float t1)
         {
             m_proxyA = proxyA;
             m_proxyB = proxyB;

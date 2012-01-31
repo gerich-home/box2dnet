@@ -22,12 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using QueryCallback = org.jbox2d.callbacks.QueryCallback;
-using RayCastCallback = org.jbox2d.callbacks.RayCastCallback;
-using TreeCallback = org.jbox2d.callbacks.TreeCallback;
-using AABB = org.jbox2d.collision.AABB;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
+using org.jbox2d.callbacks;
 
 namespace org.jbox2d.collision.broadphase
 {

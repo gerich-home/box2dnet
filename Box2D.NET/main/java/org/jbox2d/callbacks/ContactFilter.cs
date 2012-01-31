@@ -23,9 +23,8 @@
 // ****************************************************************************
 
 // Created at 4:25:42 AM Jul 15, 2010
-using System;
-using Filter = org.jbox2d.dynamics.Filter;
-using Fixture = org.jbox2d.dynamics.Fixture;
+
+using org.jbox2d.dynamics;
 
 namespace org.jbox2d.callbacks
 {

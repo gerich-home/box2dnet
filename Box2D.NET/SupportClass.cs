@@ -17,6 +17,6 @@ using System;
 public class SupportClass
 {
 	//Provides access to a static System.Random class instance
-	static public System.Random Random = new System.Random();
+	static public Random Random = new Random();
 
 }

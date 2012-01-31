@@ -24,8 +24,6 @@
 
 // Created at 3:59:59 AM Jul 7, 2010
 
-using System;
-
 namespace org.jbox2d.dynamics
 {
 

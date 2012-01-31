@@ -22,10 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using DynamicTree = org.jbox2d.collision.broadphase.DynamicTree;
-using TreeNode = org.jbox2d.collision.broadphase.TreeNode;
+using org.jbox2d.collision;
 
 namespace org.jbox2d.callbacks
 {

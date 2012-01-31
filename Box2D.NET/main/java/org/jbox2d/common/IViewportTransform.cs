@@ -24,8 +24,6 @@
 
 // 1:13:11 AM, Jul 17, 2009
 
-using System;
-
 namespace org.jbox2d.common
 {
 

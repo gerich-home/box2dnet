@@ -24,14 +24,9 @@
 
 // Created at 12:12:02 PM Jan 23, 2011
 
-using System;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Vec2 = org.jbox2d.common.Vec2;
-using SolverData = org.jbox2d.dynamics.SolverData;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.joints
 {

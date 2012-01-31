@@ -22,14 +22,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Manifold = org.jbox2d.collision.Manifold;
-using PolygonShape = org.jbox2d.collision.shapes.PolygonShape;
-using ShapeType = org.jbox2d.collision.shapes.ShapeType;
-using Transform = org.jbox2d.common.Transform;
-using Fixture = org.jbox2d.dynamics.Fixture;
-using IWorldPool = org.jbox2d.pooling.IWorldPool;
 using System.Diagnostics;
+using org.jbox2d.collision;
+using org.jbox2d.collision.shapes;
+using org.jbox2d.common;
+using org.jbox2d.pooling;
 
 namespace org.jbox2d.dynamics.contacts
 {

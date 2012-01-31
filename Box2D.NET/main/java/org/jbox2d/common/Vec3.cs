@@ -154,7 +154,7 @@ namespace org.jbox2d.common
             return result;
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(Object obj)
         {
             if (this == obj)
                 return true;

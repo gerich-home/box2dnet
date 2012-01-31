@@ -23,17 +23,9 @@
 // ****************************************************************************
 
 using System;
-using AABB = org.jbox2d.collision.AABB;
-using RayCastInput = org.jbox2d.collision.RayCastInput;
-using RayCastOutput = org.jbox2d.collision.RayCastOutput;
-using MathUtils = org.jbox2d.common.MathUtils;
-using Rot = org.jbox2d.common.Rot;
-using Settings = org.jbox2d.common.Settings;
-using Transform = org.jbox2d.common.Transform;
-using Vec2 = org.jbox2d.common.Vec2;
-using IntArray = org.jbox2d.pooling.arrays.IntArray;
-using Vec2Array = org.jbox2d.pooling.arrays.Vec2Array;
 using System.Diagnostics;
+using org.jbox2d.common;
+using org.jbox2d.pooling.arrays;
 
 namespace org.jbox2d.collision.shapes
 {
@@ -368,13 +360,13 @@ namespace org.jbox2d.collision.shapes
 
 			if (m_debug)
 			{
-				System.Console.Out.WriteLine("--testPoint debug--");
-				System.Console.Out.WriteLine("Vertices: ");
+				Console.Out.WriteLine("--testPoint debug--");
+				Console.Out.WriteLine("Vertices: ");
 				for (int i = 0; i < m_count; ++i)
 				{
-					System.Console.Out.WriteLine(m_vertices[i]);
+					Console.Out.WriteLine(m_vertices[i]);
 				}
-				System.Console.Out.WriteLine("pLocal: " + pLocal);
+				Console.Out.WriteLine("pLocal: " + pLocal);
 			}
 
 

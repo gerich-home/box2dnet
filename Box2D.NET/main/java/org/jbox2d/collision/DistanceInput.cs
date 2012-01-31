@@ -22,9 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using DistanceProxy = org.jbox2d.collision.Distance.DistanceProxy;
-using Transform = org.jbox2d.common.Transform;
+using org.jbox2d.common;
 
 namespace org.jbox2d.collision
 {
@@ -36,8 +34,8 @@ namespace org.jbox2d.collision
     /// </summary>
     public class DistanceInput
     {
-        public DistanceProxy proxyA = new DistanceProxy();
-        public DistanceProxy proxyB = new DistanceProxy();
+        public Distance.DistanceProxy proxyA = new Distance.DistanceProxy();
+        public Distance.DistanceProxy proxyB = new Distance.DistanceProxy();
         public Transform transformA = new Transform();
         public Transform transformB = new Transform();
         public bool useRadii;

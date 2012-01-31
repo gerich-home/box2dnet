@@ -22,17 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using AABB = org.jbox2d.collision.AABB;
-using Collision = org.jbox2d.collision.Collision;
-using Distance = org.jbox2d.collision.Distance;
-using TimeOfImpact = org.jbox2d.collision.TimeOfImpact;
-using Mat22 = org.jbox2d.common.Mat22;
-using Mat33 = org.jbox2d.common.Mat33;
-using Rot = org.jbox2d.common.Rot;
-using Vec2 = org.jbox2d.common.Vec2;
-using Vec3 = org.jbox2d.common.Vec3;
-using Contact = org.jbox2d.dynamics.contacts.Contact;
+using org.jbox2d.collision;
+using org.jbox2d.common;
+using org.jbox2d.dynamics.contacts;
 
 namespace org.jbox2d.pooling
 {

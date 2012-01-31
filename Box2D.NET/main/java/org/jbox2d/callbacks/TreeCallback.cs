@@ -22,10 +22,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using DynamicTree = org.jbox2d.collision.broadphase.DynamicTree;
-using TreeNode = org.jbox2d.collision.broadphase.TreeNode;
-
 namespace org.jbox2d.callbacks
 {
     // update to rev 100

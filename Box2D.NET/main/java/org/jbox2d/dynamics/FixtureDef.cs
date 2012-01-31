@@ -22,8 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using Shape = org.jbox2d.collision.shapes.Shape;
+using org.jbox2d.collision.shapes;
 
 namespace org.jbox2d.dynamics
 {

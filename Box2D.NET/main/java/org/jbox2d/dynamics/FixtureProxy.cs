@@ -22,8 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using System;
-using AABB = org.jbox2d.collision.AABB;
+using org.jbox2d.collision;
 
 namespace org.jbox2d.dynamics
 {
