@@ -34,6 +34,9 @@ namespace Box2D.Dynamics.Contacts
     /// <author>Daniel</author>
     public class ContactSolver
     {
+        public const bool DEBUG_SOLVER = false;
+        public const float k_errorTol = 1e-3f;
+
         /// <summary>
         /// For each solver, this is the initial number of constraints in the array, which expands as
         /// needed.
@@ -71,6 +74,7 @@ namespace Box2D.Dynamics.Contacts
 
         public void init(ContactSolverDef def)
         {
+            //Console.WriteLine("Initializing contact solver");
             m_step = def.step;
             m_count = def.count;
 
@@ -103,6 +107,7 @@ namespace Box2D.Dynamics.Contacts
 
             for (int i = 0; i < m_count; ++i)
             {
+                //Console.WriteLine("contacts: " + m_count);
                 Contact contact = m_contacts[i];
 
                 Fixture fixtureA = contact.m_fixtureA;
@@ -149,6 +154,7 @@ namespace Box2D.Dynamics.Contacts
                 pc.radiusB = radiusB;
                 pc.type = manifold.type;
 
+                //Console.WriteLine("contact point count: " + pointCount);
                 for (int j = 0; j < pointCount; j++)
                 {
                     ManifoldPoint cp = manifold.points[j];
@@ -156,6 +162,8 @@ namespace Box2D.Dynamics.Contacts
 
                     if (m_step.warmStarting)
                     {
+                        //Debug.Assert(cp.normalImpulse == 0);
+                        //Console.WriteLine("contact normal impulse: " + cp.normalImpulse);
                         vcp.normalImpulse = m_step.dtRatio * cp.normalImpulse;
                         vcp.tangentImpulse = m_step.dtRatio * cp.tangentImpulse;
                     }
@@ -177,17 +185,14 @@ namespace Box2D.Dynamics.Contacts
         }
 
         // djm pooling, and from above
-        //UPGRADE_NOTE: Final was removed from the declaration of 'P '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-        private Vec2 P = new Vec2();
-        //UPGRADE_NOTE: Final was removed from the declaration of 'temp '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-        private Vec2 temp = new Vec2();
+        private readonly Vec2 P = new Vec2();
+        private readonly Vec2 temp = new Vec2();
 
         public virtual void warmStart()
         {
             // Warm start.
             for (int i = 0; i < m_count; ++i)
             {
-                //UPGRADE_NOTE: Final was removed from the declaration of 'vc '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
                 ContactVelocityConstraint vc = m_velocityConstraints[i];
 
                 int indexA = vc.indexA;
@@ -210,28 +215,34 @@ namespace Box2D.Dynamics.Contacts
                 for (int j = 0; j < pointCount; ++j)
                 {
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
+                    //Console.WriteLine("vcp normal impulse is " + vcp.normalImpulse);
                     temp.set_Renamed(normal).mulLocal(vcp.normalImpulse);
                     P.set_Renamed(tangent).mulLocal(vcp.tangentImpulse).addLocal(temp);
                     wA -= iA * Vec2.cross(vcp.rA, P);
                     vA.subLocal(temp.set_Renamed(P).mulLocal(mA));
+                    //Debug.Assert(vA.x == 0);
+                    //Debug.Assert(wA == 0);
                     wB += iB * Vec2.cross(vcp.rB, P);
                     vB.addLocal(temp.set_Renamed(P).mulLocal(mB));
+                    //Debug.Assert(vB.x == 0);
+                    //Debug.Assert(wB == 0);
                 }
                 m_velocities[indexA].w = wA;
                 m_velocities[indexB].w = wB;
+
+                //Console.WriteLine("Ending velocity for " + indexA + " is " + vA.x + "," + vA.y + " - " + wA);
+                //Console.WriteLine("Ending velocity for " + indexB + " is " + vB.x + "," + vB.y + " - " + wB);
             }
         }
 
         // djm pooling, and from above
-        //UPGRADE_NOTE: Final was removed from the declaration of 'xfA '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-        private Transform xfA = new Transform();
-        //UPGRADE_NOTE: Final was removed from the declaration of 'xfB '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-        private Transform xfB = new Transform();
-        //UPGRADE_NOTE: Final was removed from the declaration of 'worldManifold '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-        private WorldManifold worldManifold = new WorldManifold();
+        private readonly Transform xfA = new Transform();
+        private readonly Transform xfB = new Transform();
+        private readonly WorldManifold worldManifold = new WorldManifold();
 
         public void initializeVelocityConstraints()
         {
+            //Console.WriteLine("Initializing velocity constraints for " + m_count + " contacts");
             // Warm start.
             for (int i = 0; i < m_count; ++i)
             {
@@ -372,8 +383,11 @@ namespace Box2D.Dynamics.Contacts
                 float wA = m_velocities[indexA].w;
                 Vec2 vB = m_velocities[indexB].v;
                 float wB = m_velocities[indexB].w;
+                //Debug.Assert(wA == 0);
+                //Debug.Assert(wB == 0);
 
                 Vec2 normal = vc.normal;
+                //Vec2.crossToOutUnsafe(normal, 1f, tangent);
                 tangent.x = 1.0f * vc.normal.y;
                 tangent.y = (-1.0f) * vc.normal.x;
                 float friction = vc.friction;
@@ -384,6 +398,9 @@ namespace Box2D.Dynamics.Contacts
                 for (int j = 0; j < pointCount; ++j)
                 {
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
+                    //Vec2.crossToOutUnsafe(wA, vcp.rA, temp);
+                    //Vec2.crossToOutUnsafe(wB, vcp.rB, dv);
+                    //dv.addLocal(vB).subLocal(vA).subLocal(temp);
                     Vec2 a = vcp.rA;
 
                     dv.x = (-wB) * vcp.rB.y + vB.x - vA.x + wA * a.y;
@@ -414,6 +431,9 @@ namespace Box2D.Dynamics.Contacts
                     vB.x += Px * mB;
                     vB.y += Py * mB;
                     wB += iB * (vcp.rB.x * Py - vcp.rB.y * Px);
+
+                    //Console.WriteLine("tangent solve velocity (point "+j+") for " + indexA + " is " + vA.x + "," + vA.y + " rot " + wA);
+                    //Console.WriteLine("tangent solve velocity (point "+j+") for " + indexB + " is " + vB.x + "," + vB.y + " rot " + wB);
                 }
 
                 // Solve normal constraints
@@ -423,11 +443,11 @@ namespace Box2D.Dynamics.Contacts
                     Vec2 a1 = vcp.rA;
 
                     // Relative velocity at contact
-                    // Vec2 dv = vB + Cross(wB, ccp.rB) - vA - Cross(wA, ccp.rA);
+                    //Vec2 dv = vB + Cross(wB, vcp.rB) - vA - Cross(wA, vcp.rA);
 
-                    // Vec2.crossToOut(wA, ccp.rA, temp1);
-                    // Vec2.crossToOut(wB, ccp.rB, dv);
-                    // dv.addLocal(vB).subLocal(vA).subLocal(temp1);
+                    //Vec2.crossToOut(wA, vcp.rA, temp1);
+                    //Vec2.crossToOut(wB, vcp.rB, dv);
+                    //dv.addLocal(vB).subLocal(vA).subLocal(temp1);
 
                     dv.x = (-wB) * vcp.rB.y + vB.x - vA.x + wA * a1.y;
                     dv.y = wB * vcp.rB.x + vB.y - vA.y - wA * a1.x;
@@ -440,6 +460,7 @@ namespace Box2D.Dynamics.Contacts
                     float a = vcp.normalImpulse + lambda;
                     float newImpulse = (a > 0.0f ? a : 0.0f);
                     lambda = newImpulse - vcp.normalImpulse;
+                    //Debug.Assert(newImpulse == 0);
                     vcp.normalImpulse = newImpulse;
 
                     // Apply contact impulse
@@ -450,11 +471,13 @@ namespace Box2D.Dynamics.Contacts
                     vA.x -= Px * mA;
                     vA.y -= Py * mA;
                     wA -= iA * (vcp.rA.x * Py - vcp.rA.y * Px);
+                    //Debug.Assert(vA.x == 0);
 
                     // vB += invMassB * P;
                     vB.x += Px * mB;
                     vB.y += Py * mB;
                     wB += iB * (vcp.rB.x * Py - vcp.rB.y * Px);
+                    //Debug.Assert(vB.x == 0);
                 }
                 else
                 {
@@ -518,11 +541,13 @@ namespace Box2D.Dynamics.Contacts
 
                     b.x = vn1 - cp1.velocityBias;
                     b.y = vn2 - cp2.velocityBias;
+                    //Console.WriteLine("b is " + b.x + "," + b.y);
 
                     // Compute b'
                     Mat22 R = vc.K;
                     b.x -= (R.ex.x * a.x + R.ey.x * a.y);
                     b.y -= (R.ex.y * a.x + R.ey.y * a.y);
+                    //Console.WriteLine("b' is " + b.x + "," + b.y);
 
                     // final float k_errorTol = 1e-3f;
                     // B2_NOT_USED(k_errorTol);
@@ -543,6 +568,7 @@ namespace Box2D.Dynamics.Contacts
 
                         if (x.x >= 0.0f && x.y >= 0.0f)
                         {
+                            //Console.WriteLine("case 1");
                             // Get the incremental impulse
                             // Vec2 d = x - a;
                             d.set_Renamed(x).subLocal(a);
@@ -564,6 +590,8 @@ namespace Box2D.Dynamics.Contacts
                             vA.subLocal(temp2);
                             temp2.set_Renamed(temp1).mulLocal(mB);
                             vB.addLocal(temp2);
+                            //Debug.Assert(vA.x == 0);
+                            //Debug.Assert(vB.x == 0);
 
                             wA -= iA * (Vec2.cross(cp1.rA, P1) + Vec2.cross(cp2.rA, P2));
                             wB += iB * (Vec2.cross(cp1.rB, P1) + Vec2.cross(cp2.rB, P2));
@@ -581,6 +609,18 @@ namespace Box2D.Dynamics.Contacts
                             * Debug.Assert(Abs(vn1 - cp1.velocityBias) < k_errorTol); Debug.Assert(Abs(vn2 - cp2.velocityBias)
                             * < k_errorTol); #endif
                             */
+                            if (DEBUG_SOLVER)
+                            {
+                                // Postconditions
+                                Vec2 _dv1 = vB.add(Vec2.cross(wB, cp1.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp1.rA)));
+                                Vec2 _dv2 = vB.add(Vec2.cross(wB, cp2.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp2.rA)));
+                                // Compute normal velocity
+                                vn1 = Vec2.dot(_dv1, normal);
+                                vn2 = Vec2.dot(_dv2, normal);
+
+                                Debug.Assert(MathUtils.abs(vn1 - cp1.velocityBias) < k_errorTol);
+                                Debug.Assert(MathUtils.abs(vn2 - cp2.velocityBias) < k_errorTol);
+                            }
                             break;
                         }
 
@@ -597,6 +637,7 @@ namespace Box2D.Dynamics.Contacts
 
                         if (x.x >= 0.0f && vn2 >= 0.0f)
                         {
+                            //Console.WriteLine("case 2");
                             // Get the incremental impulse
                             d.set_Renamed(x).subLocal(a);
 
@@ -618,12 +659,15 @@ namespace Box2D.Dynamics.Contacts
                             vA.subLocal(temp2);
                             temp2.set_Renamed(temp1).mulLocal(mB);
                             vB.addLocal(temp2);
+                            //Debug.Assert(vA.x == 0);
+                            //Debug.Assert(vB.x == 0);
 
                             wA -= iA * (Vec2.cross(cp1.rA, P1) + Vec2.cross(cp2.rA, P2));
                             wB += iB * (Vec2.cross(cp1.rB, P1) + Vec2.cross(cp2.rB, P2));
 
 
                             // Accumulate
+                            //Debug.Assert(x.x == 0 && x.y == 0);
                             cp1.normalImpulse = x.x;
                             cp2.normalImpulse = x.y;
 
@@ -635,6 +679,15 @@ namespace Box2D.Dynamics.Contacts
                             * 
                             * Debug.Assert(Abs(vn1 - cp1.velocityBias) < k_errorTol); #endif
                             */
+                            if (DEBUG_SOLVER)
+                            {
+                                // Postconditions
+                                Vec2 _dv1 = vB.add(Vec2.cross(wB, cp1.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp1.rA)));
+                                // Compute normal velocity
+                                vn1 = Vec2.dot(_dv1, normal);
+
+                                Debug.Assert(MathUtils.abs(vn1 - cp1.velocityBias) < k_errorTol);
+                            }
                             break;
                         }
 
@@ -652,6 +705,7 @@ namespace Box2D.Dynamics.Contacts
 
                         if (x.y >= 0.0f && vn1 >= 0.0f)
                         {
+                            //Console.WriteLine("case 3");
                             // Resubstitute for the incremental impulse
                             d.set_Renamed(x).subLocal(a);
 
@@ -671,11 +725,14 @@ namespace Box2D.Dynamics.Contacts
                             vA.subLocal(temp2);
                             temp2.set_Renamed(temp1).mulLocal(mB);
                             vB.addLocal(temp2);
+                            //Debug.Assert(vA.x == 0);
+                            //Debug.Assert(vB.x == 0);
 
                             wA -= iA * (Vec2.cross(cp1.rA, P1) + Vec2.cross(cp2.rA, P2));
                             wB += iB * (Vec2.cross(cp1.rB, P1) + Vec2.cross(cp2.rB, P2));
 
                             // Accumulate
+                            //Debug.Assert(x.x == 0 && x.y == 0);
                             cp1.normalImpulse = x.x;
                             cp2.normalImpulse = x.y;
 
@@ -687,6 +744,16 @@ namespace Box2D.Dynamics.Contacts
                             * 
                             * Debug.Assert(Abs(vn2 - cp2.velocityBias) < k_errorTol); #endif
                             */
+                            if (DEBUG_SOLVER)
+                            {
+                                // Postconditions
+                                Vec2 _dv2 =
+                                    vB.add(Vec2.cross(wB, cp2.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp2.rA)));
+                                // Compute normal velocity
+                                vn2 = Vec2.dot(_dv2, normal);
+
+                                Debug.Assert(MathUtils.abs(vn2 - cp2.velocityBias) < k_errorTol);
+                            }
                             break;
                         }
 
@@ -702,6 +769,7 @@ namespace Box2D.Dynamics.Contacts
 
                         if (vn1 >= 0.0f && vn2 >= 0.0f)
                         {
+                            //Console.WriteLine("case 4");
                             // Resubstitute for the incremental impulse
                             d.set_Renamed(x).subLocal(a);
 
@@ -721,12 +789,15 @@ namespace Box2D.Dynamics.Contacts
                             vA.subLocal(temp2);
                             temp2.set_Renamed(temp1).mulLocal(mB);
                             vB.addLocal(temp2);
+                            //Debug.Assert(vA.x == 0);
+                            //Debug.Assert(vB.x == 0);
 
                             wA -= iA * (Vec2.cross(cp1.rA, P1) + Vec2.cross(cp2.rA, P2));
                             wB += iB * (Vec2.cross(cp1.rB, P1) + Vec2.cross(cp2.rB, P2));
 
 
                             // Accumulate
+                            //Debug.Assert(x.x == 0 && x.y == 0);
                             cp1.normalImpulse = x.x;
                             cp2.normalImpulse = x.y;
 
@@ -742,6 +813,9 @@ namespace Box2D.Dynamics.Contacts
                 m_velocities[indexA].w = wA;
                 m_velocities[indexB].v.set_Renamed(vB);
                 m_velocities[indexB].w = wB;
+
+                //Console.WriteLine("Ending velocity for " + indexA + " is " + vA.x + "," + vA.y + " rot " + wA);
+                //Console.WriteLine("Ending velocity for " + indexB + " is " + vB.x + "," + vB.y + " rot " + wB);
             }
         }
 
@@ -820,10 +894,10 @@ namespace Box2D.Dynamics.Contacts
                 int indexB = pc.indexB;
 
                 float mA = pc.invMassA;
-                float mB = pc.invMassB;
                 float iA = pc.invIA;
-                float iB = pc.invIB;
                 Vec2 localCenterA = pc.localCenterA;
+                float mB = pc.invMassB;
+                float iB = pc.invIB;
                 Vec2 localCenterB = pc.localCenterB;
                 int pointCount = pc.pointCount;
 
@@ -831,6 +905,8 @@ namespace Box2D.Dynamics.Contacts
                 float aA = m_positions[indexA].a;
                 Vec2 cB = m_positions[indexB].c;
                 float aB = m_positions[indexB].a;
+                //Console.WriteLine("cA: " + cA.x + "," + cA.y + " - rot " + aA);
+                //Console.WriteLine("cB: " + cB.x + "," + cB.y + " - rot " + aB);
 
                 // Solve normal constraints
                 for (int j = 0; j < pointCount; ++j)
@@ -881,6 +957,8 @@ namespace Box2D.Dynamics.Contacts
 
                 m_positions[indexB].c.set_Renamed(cB);
                 m_positions[indexB].a = aB;
+                //Console.WriteLine("ending pos "+indexA+": " + cA.x + "," + cA.y + " - rot " + aA);
+                //Console.WriteLine("ending pos "+indexB+": " + cB.x + "," + cB.y + " - rot " + aB);
             }
 
             // We can't expect minSpeparation >= -linearSlop because we don't
