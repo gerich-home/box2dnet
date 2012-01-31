@@ -64,7 +64,11 @@ namespace Box2D.Common
             {
                 return c;
             }
+        }
 
+        public override string ToString()
+        {
+            return "Rot(s:" + s + ", c:" + c + ")";
         }
 
         virtual public float Angle
