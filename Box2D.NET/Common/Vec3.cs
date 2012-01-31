@@ -23,6 +23,7 @@
 // ****************************************************************************
 
 using System;
+using System.Diagnostics;
 
 namespace Box2D.Common
 {
@@ -189,6 +190,15 @@ namespace Box2D.Common
             out_Renamed.x = a.y * b.z - a.z * b.y;
             out_Renamed.y = tempy;
             out_Renamed.z = tempz;
+        }
+
+        public static void crossToOutUnsafe(Vec3 a, Vec3 b, Vec3 out_Renamed)
+        {
+            Debug.Assert(out_Renamed != b);
+            Debug.Assert(out_Renamed != a);
+            out_Renamed.x = a.y * b.z - a.z * b.y;
+            out_Renamed.y = a.z * b.x - a.x * b.z;
+            out_Renamed.z = a.x * b.y - a.y * b.x;
         }
     }
 }
