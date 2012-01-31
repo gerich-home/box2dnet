@@ -216,6 +216,10 @@ namespace Box2D.Dynamics.Joints
                 m_angularImpulse = 0.0f;
             }
             data.velocities[m_indexA].v.set_Renamed(vA);
+            if (data.velocities[m_indexA].w != wA)
+            {
+                Debug.Assert(data.velocities[m_indexA].w != wA);
+            }
             data.velocities[m_indexA].w = wA;
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
@@ -233,7 +237,7 @@ namespace Box2D.Dynamics.Joints
             float wB = data.velocities[m_indexB].w;
 
             float mA = m_invMassA, mB = m_invMassB;
-            float iA = m_invIB, iB = m_invIB;
+            float iA = m_invIA, iB = m_invIB;
 
             float h = data.step.dt;
 
@@ -289,11 +293,15 @@ namespace Box2D.Dynamics.Joints
             }
 
             data.velocities[m_indexA].v.set_Renamed(vA);
+            if (data.velocities[m_indexA].w != wA)
+            {
+                Debug.Assert(data.velocities[m_indexA].w != wA);
+            }
             data.velocities[m_indexA].w = wA;
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushVec2(6);
+            pool.pushVec2(4);
         }
 
         public override bool solvePositionConstraints(SolverData data)
