@@ -69,7 +69,7 @@ namespace Box2D.Dynamics.Contacts
         public int m_indexA;
         public int m_indexB;
 
-        public Manifold m_manifold;
+        public readonly Manifold m_manifold;
 
         public float m_toiCount;
         public float m_toi;
