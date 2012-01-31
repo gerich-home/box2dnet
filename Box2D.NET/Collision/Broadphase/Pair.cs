@@ -24,7 +24,7 @@
 
 using System;
 
-namespace org.jbox2d.collision.broadphase
+namespace Box2D.Collision.Broadphase
 {
 
     // updated to rev 100

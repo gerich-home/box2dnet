@@ -25,10 +25,10 @@
 // Created at 7:27:32 AM Jan 20, 2011
 
 using System.Diagnostics;
-using org.jbox2d.common;
-using org.jbox2d.pooling;
+using Box2D.Common;
+using Box2D.Pooling;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     /// <author>Daniel Murphy</author>
@@ -133,7 +133,7 @@ namespace org.jbox2d.dynamics.joints
             }
         }
 
-        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.initVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
+        /// <seealso cref="Joint.initVelocityConstraints(TimeStep)"></seealso>
         public override void initVelocityConstraints(SolverData data)
         {
             m_indexA = m_bodyA.m_islandIndex;

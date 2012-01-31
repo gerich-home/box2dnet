@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
     public class Profile

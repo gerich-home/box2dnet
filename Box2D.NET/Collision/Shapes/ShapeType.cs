@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.collision.shapes
+namespace Box2D.Collision.Shapes
 {
     /// <summary>
     /// Types of shapes

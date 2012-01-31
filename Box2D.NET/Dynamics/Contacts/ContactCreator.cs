@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.pooling;
+using Box2D.Pooling;
 
-namespace org.jbox2d.dynamics.contacts
+namespace Box2D.Dynamics.Contacts
 {
 
     // updated to rev 100

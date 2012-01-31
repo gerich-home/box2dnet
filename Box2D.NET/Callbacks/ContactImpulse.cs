@@ -24,9 +24,9 @@
 
 // Created at 3:43:53 AM Jul 7, 2010
 
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.callbacks
+namespace Box2D.Callbacks
 {
 
     /// <summary>

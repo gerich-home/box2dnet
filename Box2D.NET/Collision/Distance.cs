@@ -24,10 +24,10 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.collision.shapes;
-using org.jbox2d.common;
+using Box2D.Collision.Shapes;
+using Box2D.Common;
 
-namespace org.jbox2d.collision
+namespace Box2D.Collision
 {
 
     // updated to rev 100

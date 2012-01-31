@@ -22,11 +22,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.collision;
-using org.jbox2d.common;
-using org.jbox2d.dynamics.contacts;
+using Box2D.Collision;
+using Box2D.Common;
+using Box2D.Dynamics.Contacts;
 
-namespace org.jbox2d.pooling
+namespace Box2D.Pooling
 {
 
     /// <summary>
@@ -63,7 +63,7 @@ namespace org.jbox2d.pooling
         Rot popRot();
         void pushRot(int num);
 
-        Collision getCollision();
+        Collision.Collision getCollision();
 
         TimeOfImpact getTimeOfImpact();
 

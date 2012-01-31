@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.pooling
+namespace Box2D.Pooling
 {
 
     /// <summary>

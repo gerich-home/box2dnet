@@ -25,9 +25,9 @@
 // Created at 12:11:41 PM Jan 23, 2011
 
 using System.Diagnostics;
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     /// <summary>

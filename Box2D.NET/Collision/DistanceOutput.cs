@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.collision
+namespace Box2D.Collision
 {
 
     /// <summary>Output for Distance.</summary>

@@ -24,10 +24,10 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.common;
-using org.jbox2d.pooling.arrays;
+using Box2D.Common;
+using Box2D.Pooling.Arrays;
 
-namespace org.jbox2d.collision.shapes
+namespace Box2D.Collision.Shapes
 {
 
 	/// <summary>

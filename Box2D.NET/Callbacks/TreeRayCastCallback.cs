@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.collision;
+using Box2D.Collision;
 
-namespace org.jbox2d.callbacks
+namespace Box2D.Callbacks
 {
 
     // updated to rev 100

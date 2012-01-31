@@ -24,11 +24,11 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.collision;
-using org.jbox2d.collision.shapes;
-using org.jbox2d.common;
+using Box2D.Collision;
+using Box2D.Collision.Shapes;
+using Box2D.Common;
 
-namespace org.jbox2d.dynamics.contacts
+namespace Box2D.Dynamics.Contacts
 {
 
     /// <author>Daniel</author>

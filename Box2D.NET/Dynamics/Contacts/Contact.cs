@@ -22,13 +22,13 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.callbacks;
-using org.jbox2d.collision;
-using org.jbox2d.collision.shapes;
-using org.jbox2d.common;
-using org.jbox2d.pooling;
+using Box2D.Callbacks;
+using Box2D.Collision;
+using Box2D.Collision.Shapes;
+using Box2D.Common;
+using Box2D.Pooling;
 
-namespace org.jbox2d.dynamics.contacts
+namespace Box2D.Dynamics.Contacts
 {
 
     /// <summary>

@@ -24,10 +24,10 @@
 
 // Created at 4:23:30 AM Jul 15, 2010
 
-using org.jbox2d.dynamics;
-using org.jbox2d.dynamics.joints;
+using Box2D.Dynamics;
+using Box2D.Dynamics.Joints;
 
-namespace org.jbox2d.callbacks
+namespace Box2D.Callbacks
 {
 
     // updated to rev 100

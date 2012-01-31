@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
     // updated to rev 100

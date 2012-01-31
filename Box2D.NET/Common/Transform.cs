@@ -25,7 +25,7 @@
 using System;
 using System.Diagnostics;
 
-namespace org.jbox2d.common
+namespace Box2D.Common
 {
 
     // updated to rev 100

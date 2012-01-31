@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.collision;
+using Box2D.Collision;
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
     /// <summary>

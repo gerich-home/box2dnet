@@ -24,9 +24,9 @@
 
 // Created at 7:23:39 AM Jan 20, 2011
 
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     /// <summary>

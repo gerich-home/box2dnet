@@ -24,7 +24,7 @@
 
 // 1:13:11 AM, Jul 17, 2009
 
-namespace org.jbox2d.common
+namespace Box2D.Common
 {
 
     // updated to rev 100

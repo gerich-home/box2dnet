@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.callbacks;
+using Box2D.Callbacks;
 
-namespace org.jbox2d.collision.broadphase
+namespace Box2D.Collision.Broadphase
 {
 
     public interface IBroadphase

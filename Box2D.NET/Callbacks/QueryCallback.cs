@@ -24,9 +24,9 @@
 
 // Created at 4:30:03 AM Jul 15, 2010
 
-using org.jbox2d.dynamics;
+using Box2D.Dynamics;
 
-namespace org.jbox2d.callbacks
+namespace Box2D.Callbacks
 {
 
     // update to rev 100

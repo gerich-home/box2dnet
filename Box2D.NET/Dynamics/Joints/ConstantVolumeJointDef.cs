@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     /// <summary>

@@ -45,10 +45,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-using org.jbox2d.common;
-using org.jbox2d.pooling;
+using Box2D.Common;
+using Box2D.Pooling;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     //C = norm(p2 - p1) - L

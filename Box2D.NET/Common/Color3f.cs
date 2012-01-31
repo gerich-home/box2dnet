@@ -45,7 +45,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-namespace org.jbox2d.common
+namespace Box2D.Common
 {
 
     // updated to rev 100

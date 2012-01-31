@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.callbacks
+namespace Box2D.Callbacks
 {
     // update to rev 100
     /// <summary>

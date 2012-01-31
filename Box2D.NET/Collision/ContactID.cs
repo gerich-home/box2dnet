@@ -47,7 +47,7 @@
 
 using System;
 
-namespace org.jbox2d.collision
+namespace Box2D.Collision
 {
 
     /// <summary> Contact ids to facilitate warm starting. Note: the ContactFeatures class is just embedded in here</summary>

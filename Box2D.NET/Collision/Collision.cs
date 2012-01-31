@@ -24,12 +24,11 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.collision.shapes;
-using org.jbox2d.common;
-using org.jbox2d.pooling;
-//UPGRADE_TODO: The type 'org.jbox2d.collision.Manifold.ManifoldType' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
+using Box2D.Collision.Shapes;
+using Box2D.Common;
+using Box2D.Pooling;
 
-namespace org.jbox2d.collision
+namespace Box2D.Collision
 {
 
     /// <summary>

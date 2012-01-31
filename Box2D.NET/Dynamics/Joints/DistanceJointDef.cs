@@ -45,9 +45,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     //Updated to rev 56->130->142 of b2DistanceJoint.cpp/.h

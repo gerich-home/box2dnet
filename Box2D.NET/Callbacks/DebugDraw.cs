@@ -25,9 +25,9 @@
 // Created at 4:35:29 AM Jul 15, 2010
 
 using System;
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.callbacks
+namespace Box2D.Callbacks
 {
 
     // updated to rev 100
@@ -175,7 +175,7 @@ namespace org.jbox2d.callbacks
 
         /// <param name="argScreen"></param>
         /// <param name="argWorld"></param>
-        /// <seealso cref="org.jbox2d.common.IViewportTransform.getScreenToWorld(org.jbox2d.common.Vec2, org.jbox2d.common.Vec2)"></seealso>
+        /// <seealso cref="IViewportTransform.getScreenToWorld(Vec2, Vec2)"></seealso>
         public virtual void getScreenToWorldToOut(Vec2 argScreen, Vec2 argWorld)
         {
             viewportTransform.getScreenToWorld(argScreen, argWorld);
@@ -183,7 +183,7 @@ namespace org.jbox2d.callbacks
 
         /// <param name="argWorld"></param>
         /// <param name="argScreen"></param>
-        /// <seealso cref="org.jbox2d.common.IViewportTransform.getWorldToScreen(org.jbox2d.common.Vec2, org.jbox2d.common.Vec2)"></seealso>
+        /// <seealso cref="IViewportTransform.getWorldToScreen(Vec2, Vec2)"></seealso>
         public virtual void getWorldToScreenToOut(Vec2 argWorld, Vec2 argScreen)
         {
             viewportTransform.getWorldToScreen(argWorld, argScreen);

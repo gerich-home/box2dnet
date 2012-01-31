@@ -24,10 +24,10 @@
 
 // Created at 3:38:38 AM Jan 15, 2011
 
-using org.jbox2d.common;
-using org.jbox2d.pooling;
+using Box2D.Common;
+using Box2D.Pooling;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     //Point-to-point constraint
@@ -101,14 +101,14 @@ namespace org.jbox2d.dynamics.joints
             m_bodyB.getWorldPointToOut(m_localAnchorB, argOut);
         }
 
-        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.getReactionForce(float, org.jbox2d.common.Vec2)"></seealso>
+        /// <seealso cref="Joint.getReactionForce(float, Vec2)"></seealso>
         public override void getReactionForce(float inv_dt, Vec2 argOut)
         {
             argOut.set_Renamed(m_impulse.x, m_impulse.y);
             argOut.mulLocal(inv_dt);
         }
 
-        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.getReactionTorque(float)"></seealso>
+        /// <seealso cref="Joint.getReactionTorque(float)"></seealso>
         public override float getReactionTorque(float inv_dt)
         {
             return inv_dt * m_impulse.z;
@@ -154,7 +154,7 @@ namespace org.jbox2d.dynamics.joints
             }
         }
 
-        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.initVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
+        /// <seealso cref="Joint.initVelocityConstraints(TimeStep)"></seealso>
         public override void initVelocityConstraints(SolverData data)
         {
             m_indexA = m_bodyA.m_islandIndex;
@@ -277,7 +277,7 @@ namespace org.jbox2d.dynamics.joints
             pool.pushMat22(1);
         }
 
-        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solveVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
+        /// <seealso cref="Joint.solveVelocityConstraints(TimeStep)"></seealso>
         public override void solveVelocityConstraints(SolverData data)
         {
             Vec2 vA = data.velocities[m_indexA].v;
@@ -357,7 +357,7 @@ namespace org.jbox2d.dynamics.joints
             pool.pushVec2(3);
         }
 
-        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solvePositionConstraints(float)"></seealso>
+        /// <seealso cref="Joint.solvePositionConstraints(float)"></seealso>
         public override bool solvePositionConstraints(SolverData data)
         {
             Vec2 cA = data.positions[m_indexA].c;

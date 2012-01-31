@@ -22,11 +22,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.callbacks;
-using org.jbox2d.collision.broadphase;
-using org.jbox2d.dynamics.contacts;
+using Box2D.Callbacks;
+using Box2D.Collision.Broadphase;
+using Box2D.Dynamics.Contacts;
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
     /// <summary>

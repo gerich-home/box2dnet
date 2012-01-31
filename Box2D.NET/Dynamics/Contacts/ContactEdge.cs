@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.dynamics.contacts
+namespace Box2D.Dynamics.Contacts
 {
 
     /// <summary>

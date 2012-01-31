@@ -24,9 +24,9 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.pooling.arrays
+namespace Box2D.Pooling.Arrays
 {
 
     /// <summary>

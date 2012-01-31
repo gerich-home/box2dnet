@@ -26,13 +26,12 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using org.jbox2d.collision;
-using org.jbox2d.common;
-using org.jbox2d.dynamics.contacts;
+using Box2D.Collision;
+using Box2D.Common;
+using Box2D.Dynamics.Contacts;
 using Type = System.Type;
-//UPGRADE_TODO: The type 'org.jbox2d.pooling.IDynamicStack' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 
-namespace org.jbox2d.pooling.normal
+namespace Box2D.Pooling.Normal
 {
     /// <summary>
     /// Provides object pooling for all objects used in the engine. Objects retrieved from here should
@@ -61,7 +60,7 @@ namespace org.jbox2d.pooling.normal
 
         private readonly MutableStack<Contact, PolygonAndCircleContact> cpstack;
 
-        private readonly Collision collision;
+        private readonly Collision.Collision collision;
         private readonly TimeOfImpact toi;
         private readonly Distance dist;
 
@@ -83,7 +82,7 @@ namespace org.jbox2d.pooling.normal
             mat33s = new OrderedStack<Mat33>(argSize, argContainerSize);
 
             dist = new Distance();
-            collision = new Collision(this);
+            collision = new Collision.Collision(this);
             toi = new TimeOfImpact(this);
         }
 
@@ -182,7 +181,7 @@ namespace org.jbox2d.pooling.normal
             rots.push(num);
         }
 
-        public Collision getCollision()
+        public Collision.Collision getCollision()
         {
             return collision;
         }

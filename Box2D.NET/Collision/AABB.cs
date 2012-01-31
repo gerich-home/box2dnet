@@ -23,11 +23,11 @@
 // ****************************************************************************
 
 using System;
-using org.jbox2d.common;
-using org.jbox2d.pooling;
-using org.jbox2d.pooling.normal;
+using Box2D.Common;
+using Box2D.Pooling;
+using Box2D.Pooling.Normal;
 
-namespace org.jbox2d.collision
+namespace Box2D.Collision
 {
 
     /// <summary>An axis-aligned bounding box. </summary>

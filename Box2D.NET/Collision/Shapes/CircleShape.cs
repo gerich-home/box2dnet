@@ -23,9 +23,10 @@
 // ****************************************************************************
 
 using System.Diagnostics;
-using org.jbox2d.common;
+using Box2D.Common;
+using Box2D.Dynamics;
 
-namespace org.jbox2d.collision.shapes
+namespace Box2D.Collision.Shapes
 {
 
     /// <summary>

@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.collision.broadphase
+namespace Box2D.Collision.Broadphase
 {
 
     public class TreeNode

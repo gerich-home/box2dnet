@@ -24,13 +24,13 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.collision;
-using org.jbox2d.collision.broadphase;
-using org.jbox2d.collision.shapes;
-using org.jbox2d.common;
-using org.jbox2d.dynamics.contacts;
+using Box2D.Collision;
+using Box2D.Collision.Broadphase;
+using Box2D.Collision.Shapes;
+using Box2D.Common;
+using Box2D.Dynamics.Contacts;
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
     /// <summary>

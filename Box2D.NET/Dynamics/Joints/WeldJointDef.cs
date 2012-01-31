@@ -24,9 +24,9 @@
 
 // Created at 3:38:52 AM Jan 15, 2011
 
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     /// <author>Daniel Murphy</author>

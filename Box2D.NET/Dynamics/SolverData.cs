@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.dynamics.contacts;
+using Box2D.Dynamics.Contacts;
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
     public class SolverData

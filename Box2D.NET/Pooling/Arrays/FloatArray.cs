@@ -25,7 +25,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace org.jbox2d.pooling.arrays
+namespace Box2D.Pooling.Arrays
 {
     /// <summary>
     /// Not thread safe float[] pooling.

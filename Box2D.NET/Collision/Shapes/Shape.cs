@@ -22,9 +22,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-using org.jbox2d.common;
+using Box2D.Common;
 
-namespace org.jbox2d.collision.shapes
+namespace Box2D.Collision.Shapes
 {
     /// <summary>
     /// A shape is used for collision detection. You can create a shape however you like. Shapes used for

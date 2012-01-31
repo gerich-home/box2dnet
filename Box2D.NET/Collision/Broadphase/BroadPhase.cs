@@ -23,15 +23,15 @@
 // ****************************************************************************
 
 using System;
-using org.jbox2d.callbacks;
-using org.jbox2d.common;
+using Box2D.Callbacks;
+using Box2D.Common;
 
 //UPGRADE_TODO: The type 'org.slf4j.Logger' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 //using Logger = org.slf4j.Logger;
 //UPGRADE_TODO: The type 'org.slf4j.LoggerFactory' could not be found. If it was not included in the conversion, there may be compiler issues. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1262'"
 //using LoggerFactory = org.slf4j.LoggerFactory;
 
-namespace org.jbox2d.collision.broadphase
+namespace Box2D.Collision.Broadphase
 {
 
 	/// <summary>

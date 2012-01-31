@@ -24,12 +24,12 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.callbacks;
-using org.jbox2d.common;
-using org.jbox2d.dynamics.contacts;
-using org.jbox2d.dynamics.joints;
+using Box2D.Callbacks;
+using Box2D.Common;
+using Box2D.Dynamics.Contacts;
+using Box2D.Dynamics.Joints;
 
-namespace org.jbox2d.dynamics
+namespace Box2D.Dynamics
 {
 
 	/*

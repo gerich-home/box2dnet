@@ -24,12 +24,13 @@
 
 using System;
 using System.Diagnostics;
-using org.jbox2d.callbacks;
-using org.jbox2d.common;
-using org.jbox2d.pooling.stacks;
+using Box2D.Callbacks;
+using Box2D.Common;
+using Box2D.Pooling.Stacks;
+
 //UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
 
-namespace org.jbox2d.collision.broadphase
+namespace Box2D.Collision.Broadphase
 {
     // updated to rev 100
     /// <summary>

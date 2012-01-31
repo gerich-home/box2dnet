@@ -24,7 +24,7 @@
 
 using System;
 
-namespace org.jbox2d.common
+namespace Box2D.Common
 {
 
     /// <author>Daniel Murphy</author>

@@ -25,7 +25,7 @@
 using System;
 using System.Diagnostics;
 
-namespace org.jbox2d.pooling.stacks
+namespace Box2D.Pooling.Stacks
 {
 
     public class DynamicIntStack

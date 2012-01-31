@@ -23,10 +23,10 @@
 // ****************************************************************************
 
 using System.Diagnostics;
-using org.jbox2d.common;
-using org.jbox2d.pooling;
+using Box2D.Common;
+using Box2D.Pooling;
 
-namespace org.jbox2d.collision
+namespace Box2D.Collision
 {
 
     /// <summary>

@@ -22,7 +22,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ****************************************************************************
 
-namespace org.jbox2d.common
+namespace Box2D.Common
 {
 
     // updated to rev 100

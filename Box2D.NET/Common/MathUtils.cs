@@ -47,7 +47,7 @@
 
 using System;
 
-namespace org.jbox2d.common
+namespace Box2D.Common
 {
 
     /// <summary> A few math methods that don't fit very well anywhere else.</summary>

@@ -24,7 +24,7 @@
 
 // Created at 5:20:39 AM Jan 22, 2011
 
-namespace org.jbox2d.dynamics.joints
+namespace Box2D.Dynamics.Joints
 {
 
     /// <summary>
