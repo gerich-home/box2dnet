@@ -16,26 +16,26 @@ I've already managed to compile library. Currently it's again unstable, because 
 Current tasks:
 1) Sync with 578.
 Remained files:
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/WeldJoint.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/ChainAndCircleContact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/ChainAndPolygonContact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/EdgeAndCircleContact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/EdgeAndPolygonContact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/World.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/Island.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/PrismaticJoint.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/FrictionJoint.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/MouseJoint.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/RevoluteJoint.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/DistanceJoint.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/Contact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/ContactSolver.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/PolygonAndCircleContact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/contacts/PolygonContact.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/dynamics/joints/RevoluteJointDef.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/pooling/IWorldPool.java
-/trunk/jbox2d-library/src/main/java/org/jbox2d/pooling/normal/DefaultWorldPool.java
-/trunk/jbox2d-library/src/test/java/org/jbox2d/utests/MathTest.java
+dynamics/joints/WeldJoint.java
+dynamics/contacts/ChainAndCircleContact.java
+dynamics/contacts/ChainAndPolygonContact.java
+dynamics/contacts/EdgeAndCircleContact.java
+dynamics/contacts/EdgeAndPolygonContact.java
+dynamics/World.java
+dynamics/Island.java
+dynamics/joints/PrismaticJoint.java
+dynamics/joints/FrictionJoint.java
+dynamics/joints/MouseJoint.java
+dynamics/joints/RevoluteJoint.java
+dynamics/joints/DistanceJoint.java
+dynamics/contacts/Contact.java
+dynamics/contacts/ContactSolver.java
+dynamics/contacts/PolygonAndCircleContact.java
+dynamics/contacts/PolygonContact.java
+dynamics/joints/RevoluteJointDef.java
+pooling/IWorldPool.java
+pooling/normal/DefaultWorldPool.java
+test/java/org/jbox2d/utests/MathTest.java
 
 2) Build library
 3) Fix all problems with different behaviour of Java and .Net code.
