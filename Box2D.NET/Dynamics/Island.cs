@@ -180,6 +180,7 @@ namespace Box2D.Dynamics
 
 		public virtual void init(int bodyCapacity, int contactCapacity, int jointCapacity, ContactListener listener)
 		{
+			// Console.WriteLine("Initializing Island");
 			m_bodyCapacity = bodyCapacity;
 			m_contactCapacity = contactCapacity;
 			m_jointCapacity = jointCapacity;
@@ -234,8 +235,6 @@ namespace Box2D.Dynamics
 			m_jointCount = 0;
 		}
 
-		private readonly Vec2 temp = new Vec2();
-		private readonly Vec2 temp2 = new Vec2();
 		private readonly ContactSolver contactSolver = new ContactSolver();
 		private readonly Vec2 translation = new Vec2();
 		private readonly Timer timer = new Timer();
@@ -244,6 +243,7 @@ namespace Box2D.Dynamics
 
 		public virtual void solve(Profile profile, TimeStep step, Vec2 gravity, bool allowSleep)
 		{
+			// Console.WriteLine("Solving Island");
 
 			float h = step.dt;
 
@@ -251,7 +251,6 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
 				Body b = m_bodies[i];
-
 				Vec2 c = b.m_sweep.c;
 				float a = b.m_sweep.a;
 				Vec2 v = b.m_linearVelocity;
@@ -265,9 +264,8 @@ namespace Box2D.Dynamics
 				{
 					// Integrate velocities.
 					// v += h * (b.m_gravityScale * gravity + b.m_invMass * b.m_force);
-					temp.set_Renamed(gravity).mulLocal(b.m_gravityScale);
-					temp2.set_Renamed(b.m_force).mulLocal(b.m_invMass);
-					v.addLocal(temp.addLocal(temp2).mulLocal(h));
+					v.x += h * (b.m_gravityScale * gravity.x + b.m_invMass * b.m_force.x);
+					v.y += h * (b.m_gravityScale * gravity.y + b.m_invMass * b.m_force.y);
 					w += h * b.m_invI * b.m_torque;
 
 					// Apply damping.
@@ -281,6 +279,7 @@ namespace Box2D.Dynamics
 					v.mulLocal(MathUtils.clamp(1.0f - h * b.m_linearDamping, 0.0f, 1.0f));
 					w *= MathUtils.clamp(1.0f - h * b.m_angularDamping, 0.0f, 1.0f);
 				}
+				//Debug.Assert (v.x == 0);
 
 				m_positions[i].c.set_Renamed(c);
 				m_positions[i].a = a;
@@ -303,10 +302,12 @@ namespace Box2D.Dynamics
 			solverDef.velocities = m_velocities;
 
 			contactSolver.init(solverDef);
+			//Console.WriteLine("island init vel");
 			contactSolver.initializeVelocityConstraints();
 
 			if (step.warmStarting)
 			{
+				//Console.WriteLine("island warm start");
 				contactSolver.warmStart();
 			}
 
@@ -319,6 +320,7 @@ namespace Box2D.Dynamics
 
 			// Solve velocity constraints
 			timer.reset();
+			//Console.WriteLine("island solving velocities");
 			for (int i = 0; i < step.velocityIterations; ++i)
 			{
 				for (int j = 0; j < m_jointCount; ++j)
