@@ -11,36 +11,14 @@ It will be better to call this project Plain Box2D.Net :)
 
 Conversion of code was performed for revision 557 from http://code.google.com/p/jbox2d/source/browse/trunk/jbox2d-library/src/
 
-I've already managed to compile library. Currently it's again unstable, because I perform syncing with actual code in svn
+Now code is synced with revision 578.
+
+Library compiles!
 
 Current tasks:
-1) Sync with 578.
-Remained files:
-dynamics/joints/WeldJoint.java
-dynamics/contacts/ChainAndCircleContact.java
-dynamics/contacts/ChainAndPolygonContact.java
-dynamics/contacts/EdgeAndCircleContact.java
-dynamics/contacts/EdgeAndPolygonContact.java
-dynamics/World.java
-dynamics/Island.java
-dynamics/joints/PrismaticJoint.java
-dynamics/joints/FrictionJoint.java
-dynamics/joints/MouseJoint.java
-dynamics/joints/RevoluteJoint.java
-dynamics/joints/DistanceJoint.java
-dynamics/contacts/Contact.java
-dynamics/contacts/ContactSolver.java
-dynamics/contacts/PolygonAndCircleContact.java
-dynamics/contacts/PolygonContact.java
-dynamics/joints/RevoluteJointDef.java
-pooling/IWorldPool.java
-pooling/normal/DefaultWorldPool.java
-test/java/org/jbox2d/utests/MathTest.java
-
-2) Build library
-3) Fix all problems with different behaviour of Java and .Net code.
-4) Remove as much //UPGRADE_* commentS as I can.
-5) Refactor code
-6) Try to implement some test framework
+1) Fix all problems with different behaviour of Java and .Net code.
+2) Remove as much //UPGRADE_* commentS as I can.
+3) Refactor code
+4) Try to implement some test framework
 
 Feel free to contribute.
