@@ -55,10 +55,12 @@ namespace Box2D.Pooling.Normal
         private readonly object[] args;
 
         private readonly MutableStack<Contact, PolygonContact> pcstack;
-
         private readonly MutableStack<Contact, CircleContact> ccstack;
-
         private readonly MutableStack<Contact, PolygonAndCircleContact> cpstack;
+        private readonly MutableStack<Contact, EdgeAndCircleContact> ecstack;
+        private readonly MutableStack<Contact, EdgeAndPolygonContact> epstack;
+        private readonly MutableStack<Contact, ChainAndCircleContact> chcstack;
+        private readonly MutableStack<Contact, ChainAndPolygonContact> chpstack;
 
         private readonly Collision.Collision collision;
         private readonly TimeOfImpact toi;
@@ -69,10 +71,12 @@ namespace Box2D.Pooling.Normal
             args = new object[] { this };
 
             pcstack = new MutableStack<Contact, PolygonContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
-
             ccstack = new MutableStack<Contact, CircleContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
-
             cpstack = new MutableStack<Contact, PolygonAndCircleContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
+            ecstack = new MutableStack<Contact, EdgeAndCircleContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
+            epstack = new MutableStack<Contact, EdgeAndPolygonContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
+            chcstack = new MutableStack<Contact, ChainAndCircleContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
+            chpstack = new MutableStack<Contact, ChainAndPolygonContact>(Settings.CONTACT_STACK_INIT_SIZE, classes, args);
 
             vecs = new OrderedStack<Vec2>(argSize, argContainerSize);
             vec3s = new OrderedStack<Vec3>(argSize, argContainerSize);
@@ -99,6 +103,26 @@ namespace Box2D.Pooling.Normal
         public IDynamicStack<Contact> getPolyCircleContactStack()
         {
             return cpstack;
+        }
+
+        public IDynamicStack<Contact> getEdgeCircleContactStack()
+        {
+            return ecstack;
+        }
+
+        public IDynamicStack<Contact> getEdgePolyContactStack()
+        {
+            return epstack;
+        }
+
+        public IDynamicStack<Contact> getChainCircleContactStack()
+        {
+            return chcstack;
+        }
+
+        public IDynamicStack<Contact> getChainPolyContactStack()
+        {
+            return chpstack;
         }
 
         public Vec2 popVec2()

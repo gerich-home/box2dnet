@@ -36,17 +36,11 @@ namespace Box2D.Pooling
     public interface IWorldPool
     {
         IDynamicStack<Contact> getPolyContactStack();
-
         IDynamicStack<Contact> getCircleContactStack();
-
         IDynamicStack<Contact> getPolyCircleContactStack();
-
         IDynamicStack<Contact> getEdgeCircleContactStack();
-
         IDynamicStack<Contact> getEdgePolyContactStack();
-
         IDynamicStack<Contact> getChainCircleContactStack();
-
         IDynamicStack<Contact> getChainPolyContactStack();
 
         Vec2 popVec2();
