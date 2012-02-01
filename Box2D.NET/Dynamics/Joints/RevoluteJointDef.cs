@@ -137,7 +137,7 @@ namespace Box2D.Dynamics.Joints
             bodyB = b2;
             bodyA.getLocalPointToOut(anchor, localAnchorA);
             bodyB.getLocalPointToOut(anchor, localAnchorB);
-            referenceAngle = bodyA.Angle - bodyB.Angle;
+            referenceAngle = bodyB.Angle - bodyA.Angle;
         }
     }
 }
