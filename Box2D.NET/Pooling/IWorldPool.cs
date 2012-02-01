@@ -41,6 +41,14 @@ namespace Box2D.Pooling
 
         IDynamicStack<Contact> getPolyCircleContactStack();
 
+        IDynamicStack<Contact> getEdgeCircleContactStack();
+
+        IDynamicStack<Contact> getEdgePolyContactStack();
+
+        IDynamicStack<Contact> getChainCircleContactStack();
+
+        IDynamicStack<Contact> getChainPolyContactStack();
+
         Vec2 popVec2();
         Vec2[] popVec2(int num);
         void pushVec2(int num);
