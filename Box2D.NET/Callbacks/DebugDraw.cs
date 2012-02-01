@@ -163,6 +163,11 @@ namespace Box2D.Callbacks
         /// <param name="color"></param>
         public abstract void drawString(float x, float y, String s, Color3f color);
 
+        public void drawString(Vec2 pos, String s, Color3f color)
+        {
+            drawString(pos.x, pos.y, s, color);
+        }
+
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="scale"></param>
