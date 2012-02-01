@@ -274,7 +274,7 @@ namespace Box2D.Dynamics.Joints
 
             pool.pushVec2(1);
             pool.pushRot(2);
-            pool.pushMat22(1);
+            pool.pushMat33(1);
         }
 
         /// <seealso cref="Joint.solveVelocityConstraints(TimeStep)"></seealso>
@@ -441,6 +441,10 @@ namespace Box2D.Dynamics.Joints
             data.positions[m_indexA].a = aA;
             data.positions[m_indexB].c.set_Renamed(cB);
             data.positions[m_indexB].a = aB;
+
+            pool.pushVec2(5);
+            pool.pushRot(2);
+            pool.pushMat33(1);
 
             return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
         }
