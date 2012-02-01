@@ -98,6 +98,7 @@ namespace Box2D.Dynamics.Joints
             m_motorSpeed = def.motorSpeed;
             m_enableLimit = def.enableLimit;
             m_enableMotor = def.enableMotor;
+            m_limitState = LimitState.INACTIVE;
         }
 
         public override void initVelocityConstraints(SolverData data)
@@ -116,12 +117,10 @@ namespace Box2D.Dynamics.Joints
             Vec2 vA = data.velocities[m_indexA].v;
             float wA = data.velocities[m_indexA].w;
 
-            Debug.Assert(!Single.IsNaN(wA));
             // Vec2 cB = data.positions[m_indexB].c;
             float aB = data.positions[m_indexB].a;
             Vec2 vB = data.velocities[m_indexB].v;
             float wB = data.velocities[m_indexB].w;
-            Debug.Assert(!Single.IsNaN(wB));
 
             Rot qA = pool.popRot();
             Rot qB = pool.popRot();
@@ -217,12 +216,10 @@ namespace Box2D.Dynamics.Joints
                 vA.x -= mA * P.x;
                 vA.y -= mA * P.y;
                 wA -= iA * (Vec2.cross(m_rA, P) + m_motorImpulse + m_impulse.z);
-                Debug.Assert(!Single.IsNaN(wA));
 
                 vB.x += mB * P.x;
                 vB.y += mB * P.y;
                 wB += iB * (Vec2.cross(m_rB, P) + m_motorImpulse + m_impulse.z);
-                Debug.Assert(!Single.IsNaN(wB));
                 pool.pushVec2(1);
             }
             else
@@ -231,8 +228,6 @@ namespace Box2D.Dynamics.Joints
                 m_motorImpulse = 0.0f;
             }
 
-            Debug.Assert(!Single.IsNaN(wA));
-            Debug.Assert(!Single.IsNaN(wB));
             data.velocities[m_indexA].v.set_Renamed(vA);
             data.velocities[m_indexA].w = wA;
             data.velocities[m_indexB].v.set_Renamed(vB);
@@ -366,7 +361,7 @@ namespace Box2D.Dynamics.Joints
 
                 vA.x -= mA * impulse.x;
                 vA.y -= mA * impulse.y;
-                wB -= iA * Vec2.cross(m_rA, impulse);
+                wA -= iA * Vec2.cross(m_rA, impulse);
 
                 vB.x += mB * impulse.x;
                 vB.y += mB * impulse.y;
