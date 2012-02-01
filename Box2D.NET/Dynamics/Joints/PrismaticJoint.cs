@@ -96,6 +96,12 @@ namespace Box2D.Dynamics.Joints
     //Now compute impulse to be applied:
     //df = f2 - f1
 
+    /// <summary>
+    ///   A prismatic joint. This joint provides one degree of freedom: translation along an axis fixed in
+    ///   bodyA. Relative rotation is prevented. You can use a joint limit to restrict the range of motion
+    ///   and a joint motor to drive the motion or to model joint friction.
+    /// </summary>
+    /// <author>Daniel</author>
     public class PrismaticJoint : Joint
     {
         // Solver shared
@@ -199,26 +205,26 @@ namespace Box2D.Dynamics.Joints
             return inv_dt * m_impulse.y;
         }
 
-        /// <summary>
-        /// Get the current joint translation, usually in meters.
-        /// </summary>
-        /// <returns></returns>
-        public float getJointTranslation()
-        {
-            Vec2 pA = pool.popVec2();
-            Vec2 pB = pool.popVec2();
-            Vec2 axis = pool.popVec2();
+        ///// <summary>
+        ///// Get the current joint translation, usually in meters.
+        ///// </summary>
+        ///// <returns></returns>
+        //public float getJointTranslation()
+        //{
+        //    Vec2 pA = pool.popVec2();
+        //    Vec2 pB = pool.popVec2();
+        //    Vec2 axis = pool.popVec2();
 
-            m_bodyA.getWorldPointToOut(m_localAnchorA, pA);
-            m_bodyB.getWorldPointToOut(m_localAnchorB, pB);
-            pB.subLocal(pA);
-            m_bodyA.getWorldVectorToOut(m_localXAxisA, axis);
+        //    m_bodyA.getWorldPointToOut(m_localAnchorA, pA);
+        //    m_bodyB.getWorldPointToOut(m_localAnchorB, pB);
+        //    pB.subLocal(pA);
+        //    m_bodyA.getWorldVectorToOut(m_localXAxisA, axis);
 
-            float translation = Vec2.dot(pB, axis);
+        //    float translation = Vec2.dot(pB, axis);
 
-            pool.pushVec2(3);
-            return translation;
-        }
+        //    pool.pushVec2(3);
+        //    return translation;
+        //}
 
         /// <summary>
         /// Get the current joint translation speed, usually in meters per second.
@@ -439,7 +445,7 @@ namespace Box2D.Dynamics.Joints
             // Compute the effective masses.
             Rot.mulToOutUnsafe(qA, d.set_Renamed(m_localAnchorA).subLocal(m_localCenterA), rA);
             Rot.mulToOutUnsafe(qB, d.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), rB);
-            d.set_Renamed(cB).addLocal(rB).subLocal(cA).subLocal(rA);
+            d.set_Renamed(cB).subLocal(cA).addLocal(rB).subLocal(rA);
 
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
@@ -561,155 +567,6 @@ namespace Box2D.Dynamics.Joints
 
             pool.pushRot(2);
             pool.pushVec2(4);
-        }
-
-        public override bool solvePositionConstraints(SolverData data)
-        {
-            Rot qA = pool.popRot();
-            Rot qB = pool.popRot();
-            Vec2 rA = pool.popVec2();
-            Vec2 rB = pool.popVec2();
-            Vec2 d = pool.popVec2();
-            Vec2 axis = pool.popVec2();
-            Vec2 perp = pool.popVec2();
-            Vec2 temp = pool.popVec2();
-            Vec2 C1 = pool.popVec2();
-
-            Vec3 impulse = pool.popVec3();
-
-            Vec2 cA = data.positions[m_indexA].c;
-            float aA = data.positions[m_indexA].a;
-            Vec2 cB = data.positions[m_indexB].c;
-            float aB = data.positions[m_indexB].a;
-
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
-
-            float mA = m_invMassA, mB = m_invMassB;
-            float iA = m_invIA, iB = m_invIB;
-
-            // Compute fresh Jacobians
-            Rot.mulToOutUnsafe(qA, temp.set_Renamed(m_localAnchorA).subLocal(m_localCenterA), rA);
-            Rot.mulToOutUnsafe(qB, temp.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), rB);
-            d.set_Renamed(cB).addLocal(rB).subLocal(cA).subLocal(rA);
-
-            Rot.mulToOutUnsafe(qA, m_localXAxisA, axis);
-            float a1 = Vec2.cross(temp.set_Renamed(d).addLocal(rA), axis);
-            float a2 = Vec2.cross(rB, axis);
-            Rot.mulToOutUnsafe(qA, m_localYAxisA, perp);
-
-            float s1 = Vec2.cross(temp.set_Renamed(d).addLocal(rA), perp);
-            float s2 = Vec2.cross(rB, perp);
-
-            C1.x = Vec2.dot(perp, d);
-            C1.y = aB - aA - m_referenceAngle;
-
-            float linearError = MathUtils.abs(C1.x);
-            float angularError = MathUtils.abs(C1.y);
-
-            bool active = false;
-            float C2 = 0.0f;
-            if (m_enableLimit)
-            {
-                float translation = Vec2.dot(axis, d);
-                if (MathUtils.abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.linearSlop)
-                {
-                    // Prevent large angular corrections
-                    C2 = MathUtils.clamp(translation, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
-                    linearError = MathUtils.max(linearError, MathUtils.abs(translation));
-                    active = true;
-                }
-                else if (translation <= m_lowerTranslation)
-                {
-                    // Prevent large linear corrections and allow some slop.
-                    C2 = MathUtils.clamp(translation - m_lowerTranslation + Settings.linearSlop, -Settings.maxLinearCorrection, 0.0f);
-                    linearError = MathUtils.max(linearError, m_lowerTranslation - translation);
-                    active = true;
-                }
-                else if (translation >= m_upperTranslation)
-                {
-                    // Prevent large linear corrections and allow some slop.
-                    C2 = MathUtils.clamp(translation - m_upperTranslation - Settings.linearSlop, 0.0f, Settings.maxLinearCorrection);
-                    linearError = MathUtils.max(linearError, translation - m_upperTranslation);
-                    active = true;
-                }
-            }
-
-            if (active)
-            {
-                float k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
-                float k12 = iA * s1 + iB * s2;
-                float k13 = iA * s1 * a1 + iB * s2 * a2;
-                float k22 = iA + iB;
-                if (k22 == 0.0f)
-                {
-                    // For fixed rotation
-                    k22 = 1.0f;
-                }
-                float k23 = iA * a1 + iB * a2;
-                float k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2;
-
-                Mat33 K = pool.popMat33();
-                K.ex.set_Renamed(k11, k12, k13);
-                K.ey.set_Renamed(k12, k22, k23);
-                K.ez.set_Renamed(k13, k23, k33);
-
-                Vec3 C = pool.popVec3();
-                C.x = C1.x;
-                C.y = C1.y;
-                C.z = C2;
-
-                K.solve33ToOut(C.negateLocal(), impulse);
-                pool.pushVec3(1);
-                pool.pushMat33(1);
-            }
-            else
-            {
-                float k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
-                float k12 = iA * s1 + iB * s2;
-                float k22 = iA + iB;
-                if (k22 == 0.0f)
-                {
-                    k22 = 1.0f;
-                }
-
-                Mat22 K = pool.popMat22();
-                K.ex.set_Renamed(k11, k12);
-                K.ey.set_Renamed(k12, k22);
-
-                // temp is impulse1
-                K.solveToOut(C1.negateLocal(), temp);
-                C1.negateLocal();
-
-                impulse.x = temp.x;
-                impulse.y = temp.y;
-                impulse.z = 0.0f;
-
-                pool.pushMat22(1);
-            }
-
-            float Px = impulse.x * perp.x + impulse.z * axis.x;
-            float Py = impulse.x * perp.y + impulse.z * axis.y;
-            float LA = impulse.x * s1 + impulse.y + impulse.z * a1;
-            float LB = impulse.x * s2 + impulse.y + impulse.z * a2;
-
-            cA.x -= m_invMassA * Px;
-            cA.y -= m_invMassA * Py;
-            aA -= iA * LA;
-            cB.x += m_invMassB * Px;
-            cB.y += m_invMassB * Py;
-            aB += iB * LB;
-
-            data.positions[m_indexA].c.set_Renamed(cA);
-            data.positions[m_indexA].a = aA;
-            data.positions[m_indexB].c.set_Renamed(cB);
-            data.positions[m_indexB].a = aB;
-
-            pool.pushVec2(7);
-            pool.pushVec3(1);
-            pool.pushRot(2);
-
-            return linearError <= Settings.linearSlop && angularError <= Settings.angularSlop;
         }
 
         public override void solveVelocityConstraints(SolverData data)
@@ -864,6 +721,155 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].w = wB;
 
             pool.pushVec2(2);
+        }
+
+        public override bool solvePositionConstraints(SolverData data)
+        {
+            Rot qA = pool.popRot();
+            Rot qB = pool.popRot();
+            Vec2 rA = pool.popVec2();
+            Vec2 rB = pool.popVec2();
+            Vec2 d = pool.popVec2();
+            Vec2 axis = pool.popVec2();
+            Vec2 perp = pool.popVec2();
+            Vec2 temp = pool.popVec2();
+            Vec2 C1 = pool.popVec2();
+
+            Vec3 impulse = pool.popVec3();
+
+            Vec2 cA = data.positions[m_indexA].c;
+            float aA = data.positions[m_indexA].a;
+            Vec2 cB = data.positions[m_indexB].c;
+            float aB = data.positions[m_indexB].a;
+
+            qA.set_Renamed(aA);
+            qB.set_Renamed(aB);
+
+            float mA = m_invMassA, mB = m_invMassB;
+            float iA = m_invIA, iB = m_invIB;
+
+            // Compute fresh Jacobians
+            Rot.mulToOutUnsafe(qA, temp.set_Renamed(m_localAnchorA).subLocal(m_localCenterA), rA);
+            Rot.mulToOutUnsafe(qB, temp.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), rB);
+            d.set_Renamed(cB).addLocal(rB).subLocal(cA).subLocal(rA);
+
+            Rot.mulToOutUnsafe(qA, m_localXAxisA, axis);
+            float a1 = Vec2.cross(temp.set_Renamed(d).addLocal(rA), axis);
+            float a2 = Vec2.cross(rB, axis);
+            Rot.mulToOutUnsafe(qA, m_localYAxisA, perp);
+
+            float s1 = Vec2.cross(temp.set_Renamed(d).addLocal(rA), perp);
+            float s2 = Vec2.cross(rB, perp);
+
+            C1.x = Vec2.dot(perp, d);
+            C1.y = aB - aA - m_referenceAngle;
+
+            float linearError = MathUtils.abs(C1.x);
+            float angularError = MathUtils.abs(C1.y);
+
+            bool active = false;
+            float C2 = 0.0f;
+            if (m_enableLimit)
+            {
+                float translation = Vec2.dot(axis, d);
+                if (MathUtils.abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.linearSlop)
+                {
+                    // Prevent large angular corrections
+                    C2 = MathUtils.clamp(translation, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+                    linearError = MathUtils.max(linearError, MathUtils.abs(translation));
+                    active = true;
+                }
+                else if (translation <= m_lowerTranslation)
+                {
+                    // Prevent large linear corrections and allow some slop.
+                    C2 = MathUtils.clamp(translation - m_lowerTranslation + Settings.linearSlop, -Settings.maxLinearCorrection, 0.0f);
+                    linearError = MathUtils.max(linearError, m_lowerTranslation - translation);
+                    active = true;
+                }
+                else if (translation >= m_upperTranslation)
+                {
+                    // Prevent large linear corrections and allow some slop.
+                    C2 = MathUtils.clamp(translation - m_upperTranslation - Settings.linearSlop, 0.0f, Settings.maxLinearCorrection);
+                    linearError = MathUtils.max(linearError, translation - m_upperTranslation);
+                    active = true;
+                }
+            }
+
+            if (active)
+            {
+                float k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
+                float k12 = iA * s1 + iB * s2;
+                float k13 = iA * s1 * a1 + iB * s2 * a2;
+                float k22 = iA + iB;
+                if (k22 == 0.0f)
+                {
+                    // For fixed rotation
+                    k22 = 1.0f;
+                }
+                float k23 = iA * a1 + iB * a2;
+                float k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2;
+
+                Mat33 K = pool.popMat33();
+                K.ex.set_Renamed(k11, k12, k13);
+                K.ey.set_Renamed(k12, k22, k23);
+                K.ez.set_Renamed(k13, k23, k33);
+
+                Vec3 C = pool.popVec3();
+                C.x = C1.x;
+                C.y = C1.y;
+                C.z = C2;
+
+                K.solve33ToOut(C.negateLocal(), impulse);
+                pool.pushVec3(1);
+                pool.pushMat33(1);
+            }
+            else
+            {
+                float k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
+                float k12 = iA * s1 + iB * s2;
+                float k22 = iA + iB;
+                if (k22 == 0.0f)
+                {
+                    k22 = 1.0f;
+                }
+
+                Mat22 K = pool.popMat22();
+                K.ex.set_Renamed(k11, k12);
+                K.ey.set_Renamed(k12, k22);
+
+                // temp is impulse1
+                K.solveToOut(C1.negateLocal(), temp);
+                C1.negateLocal();
+
+                impulse.x = temp.x;
+                impulse.y = temp.y;
+                impulse.z = 0.0f;
+
+                pool.pushMat22(1);
+            }
+
+            float Px = impulse.x * perp.x + impulse.z * axis.x;
+            float Py = impulse.x * perp.y + impulse.z * axis.y;
+            float LA = impulse.x * s1 + impulse.y + impulse.z * a1;
+            float LB = impulse.x * s2 + impulse.y + impulse.z * a2;
+
+            cA.x -= mA * Px;
+            cA.y -= mA * Py;
+            aA -= iA * LA;
+            cB.x += mB * Px;
+            cB.y += mB * Py;
+            aB += iB * LB;
+
+            data.positions[m_indexA].c.set_Renamed(cA);
+            data.positions[m_indexA].a = aA;
+            data.positions[m_indexB].c.set_Renamed(cB);
+            data.positions[m_indexB].a = aB;
+
+            pool.pushVec2(7);
+            pool.pushVec3(1);
+            pool.pushRot(2);
+
+            return linearError <= Settings.linearSlop && angularError <= Settings.angularSlop;
         }
     }
 }
