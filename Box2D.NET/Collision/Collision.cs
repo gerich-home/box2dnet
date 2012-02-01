@@ -893,8 +893,8 @@ namespace Box2D.Collision
             // Region A
             if (v <= 0.0f)
             {
-                Vec2 P = A;
-                d.set_Renamed(Q).subLocal(P);
+                Vec2 _P = A;
+                d.set_Renamed(Q).subLocal(_P);
                 float dd = Vec2.dot(d, d);
                 if (dd > radius * radius)
                 {
@@ -921,7 +921,7 @@ namespace Box2D.Collision
                 manifold.pointCount = 1;
                 manifold.type = Manifold.ManifoldType.CIRCLES;
                 manifold.localNormal.setZero();
-                manifold.localPoint.set_Renamed(P);
+                manifold.localPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
                 manifold.points[0].id.set_Renamed(cf);
                 manifold.points[0].localPoint.set_Renamed(circleB.m_p);
@@ -931,8 +931,8 @@ namespace Box2D.Collision
             // Region B
             if (u <= 0.0f)
             {
-                Vec2 P = B;
-                d.set_Renamed(Q).subLocal(P);
+                Vec2 _P = B;
+                d.set_Renamed(Q).subLocal(_P);
                 float dd = Vec2.dot(d, d);
                 if (dd > radius * radius)
                 {
@@ -960,7 +960,7 @@ namespace Box2D.Collision
                 manifold.pointCount = 1;
                 manifold.type = Manifold.ManifoldType.CIRCLES;
                 manifold.localNormal.setZero();
-                manifold.localPoint.set_Renamed(P);
+                manifold.localPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
                 manifold.points[0].id.set_Renamed(cf);
                 manifold.points[0].localPoint.set_Renamed(circleB.m_p);
