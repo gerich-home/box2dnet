@@ -24,17 +24,15 @@
 
 using System.Diagnostics;
 using Box2D.Common;
-using Box2D.Dynamics;
 
 namespace Box2D.Collision.Shapes
 {
-
     /// <summary>
     /// A circle shape.
     /// </summary>
     public class CircleShape : Shape
     {
-        public readonly Vec2 m_p;
+        public readonly Vec2 P;
 
         private readonly Vec2 pool1 = new Vec2();
         private readonly Vec2 pool2 = new Vec2();
@@ -44,13 +42,16 @@ namespace Box2D.Collision.Shapes
         /// this is used internally, instead use {@link Body#createShape(ShapeDef)} with a
         /// {@link CircleDef}
         /// </summary>
-        /// <seealso cref="Body.createShape(ShapeDef)"></seealso>
-        /// <seealso cref="CircleDef"></seealso>
-        /// <param name="def"></param>
+        /// <seealso>
+        ///   <cref>Body.CreateShape(ShapeDef)</cref>
+        /// </seealso>
+        /// <seealso>
+        ///   <cref>CircleDef</cref>
+        /// </seealso>
         public CircleShape() :
             base(ShapeType.Circle)
         {
-            m_p = new Vec2();
+            P = new Vec2();
             Radius = 0;
         }
 
@@ -58,7 +59,7 @@ namespace Box2D.Collision.Shapes
         public override Shape Clone()
         {
             CircleShape shape = new CircleShape();
-            shape.m_p.set_Renamed(m_p);
+            shape.P.set_Renamed(P);
             shape.Radius = Radius;
             return shape;
         }
@@ -69,7 +70,6 @@ namespace Box2D.Collision.Shapes
             {
                 return 1;
             }
-
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="d"></param>
         /// <returns></returns>
-        public int getSupport(Vec2 d)
+        public int GetSupport(Vec2 d)
         {
             return 0;
         }
@@ -87,9 +87,9 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="d"></param>
         /// <returns></returns>
-        public Vec2 getSupportVertex(Vec2 d)
+        public Vec2 GetSupportVertex(Vec2 d)
         {
-            return m_p;
+            return P;
         }
 
         /// <summary>
@@ -109,16 +109,16 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Vec2 getVertex(int index)
+        public Vec2 GetVertex(int index)
         {
             Debug.Assert(index == 0);
-            return m_p;
+            return P;
         }
 
         public override bool TestPoint(Transform transform, Vec2 p)
         {
             Vec2 center = pool1;
-            Rot.mulToOutUnsafe(transform.q, m_p, center);
+            Rot.mulToOutUnsafe(transform.q, P, center);
             center.addLocal(transform.p);
 
             Vec2 d = center.subLocal(p).negateLocal();
@@ -135,7 +135,7 @@ namespace Box2D.Collision.Shapes
             Vec2 s = pool2;
             Vec2 r = pool3;
 
-            Rot.mulToOutUnsafe(transform.q, m_p, position);
+            Rot.mulToOutUnsafe(transform.q, P, position);
             position.addLocal(transform.p);
             s.set_Renamed(input.p1).subLocal(position);
             float b = Vec2.dot(s, s) - Radius * Radius;
@@ -172,7 +172,7 @@ namespace Box2D.Collision.Shapes
         public override void ComputeAABB(AABB aabb, Transform transform, int childIndex)
         {
             Vec2 p = pool1;
-            Rot.mulToOutUnsafe(transform.q, m_p, p);
+            Rot.mulToOutUnsafe(transform.q, P, p);
             p.addLocal(transform.p);
 
             aabb.lowerBound.x = p.x - Radius;
@@ -184,10 +184,10 @@ namespace Box2D.Collision.Shapes
         public override void ComputeMass(MassData massData, float density)
         {
             massData.Mass = density * Settings.PI * Radius * Radius;
-            massData.Center.set_Renamed(m_p);
+            massData.Center.set_Renamed(P);
 
             // inertia about the local origin
-            massData.I = massData.Mass * (0.5f * Radius * Radius + Vec2.dot(m_p, m_p));
+            massData.I = massData.Mass * (0.5f * Radius * Radius + Vec2.dot(P, P));
         }
 
         // djm pooled from above

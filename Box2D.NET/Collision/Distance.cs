@@ -572,7 +572,7 @@ namespace Box2D.Collision
 
                     case ShapeType.Circle:
                         CircleShape circle = (CircleShape)shape;
-                        m_vertices[0].set_Renamed(circle.m_p);
+                        m_vertices[0].set_Renamed(circle.P);
                         m_count = 1;
                         m_radius = circle.Radius;
 

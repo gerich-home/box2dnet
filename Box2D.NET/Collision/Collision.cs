@@ -201,8 +201,8 @@ namespace Box2D.Collision
             manifold.pointCount = 0;
 
             // before inline:
-            Transform.mulToOut(xfA, circle1.m_p, pA);
-            Transform.mulToOut(xfB, circle2.m_p, pB);
+            Transform.mulToOut(xfA, circle1.P, pA);
+            Transform.mulToOut(xfB, circle2.P, pB);
             d.set_Renamed(pB).subLocal(pA);
             float distSqr = d.x * d.x + d.y * d.y;
 
@@ -228,11 +228,11 @@ namespace Box2D.Collision
             }
 
             manifold.type = Manifold.ManifoldType.CIRCLES;
-            manifold.localPoint.set_Renamed(circle1.m_p);
+            manifold.localPoint.set_Renamed(circle1.P);
             manifold.localNormal.setZero();
             manifold.pointCount = 1;
 
-            manifold.points[0].localPoint.set_Renamed(circle2.m_p);
+            manifold.points[0].localPoint.set_Renamed(circle2.P);
             manifold.points[0].id.zero();
         }
 
@@ -255,7 +255,7 @@ namespace Box2D.Collision
 
             // Compute circle position in the frame of the polygon.
             // before inline:
-            Transform.mulToOut(xfB, circle.m_p, c);
+            Transform.mulToOut(xfB, circle.P, c);
             Transform.mulTransToOut(xfA, c, cLocal);
 
             float cLocalx = cLocal.x;
@@ -330,8 +330,8 @@ namespace Box2D.Collision
                 manifold.localPoint.x = (v1.x + v2.x) * .5f;
                 manifold.localPoint.y = (v1.y + v2.y) * .5f;
                 ManifoldPoint mpoint = manifold.points[0];
-                mpoint.localPoint.x = circle.m_p.x;
-                mpoint.localPoint.y = circle.m_p.y;
+                mpoint.localPoint.x = circle.P.x;
+                mpoint.localPoint.y = circle.P.y;
                 mpoint.id.zero();
                 // end inline
                 return;
@@ -379,7 +379,7 @@ namespace Box2D.Collision
                 // end inline
                 manifold.localNormal.normalize();
                 manifold.localPoint.set_Renamed(v1);
-                manifold.points[0].localPoint.set_Renamed(circle.m_p);
+                manifold.points[0].localPoint.set_Renamed(circle.P);
                 manifold.points[0].id.zero();
             }
             else if (u2 <= 0.0f)
@@ -402,7 +402,7 @@ namespace Box2D.Collision
                 // end inline
                 manifold.localNormal.normalize();
                 manifold.localPoint.set_Renamed(v2);
-                manifold.points[0].localPoint.set_Renamed(circle.m_p);
+                manifold.points[0].localPoint.set_Renamed(circle.P);
                 manifold.points[0].id.zero();
             }
             else
@@ -436,7 +436,7 @@ namespace Box2D.Collision
                 manifold.localNormal.set_Renamed(normals[vertIndex1]);
                 manifold.localPoint.x = fcx; // (faceCenter)
                 manifold.localPoint.y = fcy;
-                manifold.points[0].localPoint.set_Renamed(circle.m_p);
+                manifold.points[0].localPoint.set_Renamed(circle.P);
                 manifold.points[0].id.zero();
             }
         }
@@ -873,7 +873,7 @@ namespace Box2D.Collision
 
             // Compute circle in frame of edge
             // Vec2 Q = MulT(xfA, Mul(xfB, circleB.m_p));
-            Transform.mulToOutUnsafe(xfB, circleB.m_p, temp);
+            Transform.mulToOutUnsafe(xfB, circleB.P, temp);
             Transform.mulTransToOutUnsafe(xfA, temp, Q);
 
             Vec2 A = edgeA.m_vertex1;
@@ -924,7 +924,7 @@ namespace Box2D.Collision
                 manifold.localPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
                 manifold.points[0].id.set_Renamed(cf);
-                manifold.points[0].localPoint.set_Renamed(circleB.m_p);
+                manifold.points[0].localPoint.set_Renamed(circleB.P);
                 return;
             }
 
@@ -963,7 +963,7 @@ namespace Box2D.Collision
                 manifold.localPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
                 manifold.points[0].id.set_Renamed(cf);
-                manifold.points[0].localPoint.set_Renamed(circleB.m_p);
+                manifold.points[0].localPoint.set_Renamed(circleB.P);
                 return;
             }
 
@@ -997,7 +997,7 @@ namespace Box2D.Collision
             manifold.localPoint.set_Renamed(A);
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.set_Renamed(cf);
-            manifold.points[0].localPoint.set_Renamed(circleB.m_p);
+            manifold.points[0].localPoint.set_Renamed(circleB.P);
         }
 
         private readonly EPCollider collider = new EPCollider();

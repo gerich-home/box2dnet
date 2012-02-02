@@ -1655,7 +1655,7 @@ namespace Box2D.Dynamics
                         CircleShape circle = (CircleShape)fixture.Shape;
 
                         // Vec2 center = Mul(xf, circle.m_p);
-                        Transform.mulToOutUnsafe(xf, circle.m_p, center);
+                        Transform.mulToOutUnsafe(xf, circle.P, center);
                         float radius = circle.Radius;
                         xf.q.getXAxis(axis);
 
