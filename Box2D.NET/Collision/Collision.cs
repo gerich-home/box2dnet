@@ -76,7 +76,7 @@ namespace Box2D.Collision
 
             cache.count = 0;
 
-            pool.getDistance().distance(output, cache, input);
+            pool.GetDistance().distance(output, cache, input);
             // djm note: anything significant about 10.0f?
             return output.distance < 10.0f * Settings.EPSILON;
         }

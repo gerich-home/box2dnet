@@ -203,8 +203,8 @@ namespace Box2D.Dynamics.Joints
             Vec2 vB = data.velocities[m_indexB].v;
             float wB = data.velocities[m_indexB].w;
 
-            Rot qA = pool.popRot();
-            Rot qB = pool.popRot();
+            Rot qA = pool.PopRot();
+            Rot qB = pool.PopRot();
 
             qA.set_Renamed(aA);
             qB.set_Renamed(aB);
@@ -214,7 +214,7 @@ namespace Box2D.Dynamics.Joints
             Rot.mulToOutUnsafe(qB, m_u.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), m_rB);
             m_u.set_Renamed(cB).addLocal(m_rB).subLocal(cA).subLocal(m_rA);
 
-            pool.pushRot(2);
+            pool.PushRot(2);
 
             // Handle singularity.
             float length = m_u.length();
@@ -269,7 +269,7 @@ namespace Box2D.Dynamics.Joints
                 // Scale the impulse to support a variable time step.
                 m_impulse *= data.step.dtRatio;
 
-                Vec2 P = pool.popVec2();
+                Vec2 P = pool.PopVec2();
                 P.set_Renamed(m_u).mulLocal(m_impulse);
 
                 vA.x -= m_invMassA * P.x;
@@ -280,7 +280,7 @@ namespace Box2D.Dynamics.Joints
                 vB.y += m_invMassB * P.y;
                 wB += m_invIB * Vec2.cross(m_rB, P);
 
-                pool.pushVec2(1);
+                pool.PushVec2(1);
             }
             else
             {
@@ -299,8 +299,8 @@ namespace Box2D.Dynamics.Joints
             Vec2 vB = data.velocities[m_indexB].v;
             float wB = data.velocities[m_indexB].w;
 
-            Vec2 vpA = pool.popVec2();
-            Vec2 vpB = pool.popVec2();
+            Vec2 vpA = pool.PopVec2();
+            Vec2 vpB = pool.PopVec2();
 
             // Cdot = dot(u, v + cross(w, r))
             Vec2.crossToOutUnsafe(wA, m_rA, vpA);
@@ -328,7 +328,7 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushVec2(2);
+            pool.PushVec2(2);
         }
 
         public override bool solvePositionConstraints(SolverData data)
@@ -337,11 +337,11 @@ namespace Box2D.Dynamics.Joints
             {
                 return true;
             }
-            Rot qA = pool.popRot();
-            Rot qB = pool.popRot();
-            Vec2 rA = pool.popVec2();
-            Vec2 rB = pool.popVec2();
-            Vec2 u = pool.popVec2();
+            Rot qA = pool.PopRot();
+            Rot qB = pool.PopRot();
+            Vec2 rA = pool.PopVec2();
+            Vec2 rB = pool.PopVec2();
+            Vec2 u = pool.PopVec2();
 
             Vec2 cA = data.positions[m_indexA].c;
             float aA = data.positions[m_indexA].a;
@@ -376,8 +376,8 @@ namespace Box2D.Dynamics.Joints
             data.positions[m_indexB].c.set_Renamed(cB);
             data.positions[m_indexB].a = aB;
 
-            pool.pushVec2(3);
-            pool.pushRot(2);
+            pool.PushVec2(3);
+            pool.PushRot(2);
 
             return MathUtils.abs(C) < Settings.linearSlop;
         }

@@ -229,10 +229,10 @@ namespace Box2D.Collision
             float tmin = Single.Epsilon;
             float tmax = Single.MaxValue;
 
-            Vec2 p = argPool.popVec2();
-            Vec2 d = argPool.popVec2();
-            Vec2 absD = argPool.popVec2();
-            Vec2 normal = argPool.popVec2();
+            Vec2 p = argPool.PopVec2();
+            Vec2 d = argPool.PopVec2();
+            Vec2 absD = argPool.PopVec2();
+            Vec2 normal = argPool.PopVec2();
 
             p.set_Renamed(input.p1);
             d.set_Renamed(input.p2).subLocal(input.p1);
@@ -244,7 +244,7 @@ namespace Box2D.Collision
                 // Parallel.
                 if (p.x < lowerBound.x || upperBound.x < p.x)
                 {
-                    argPool.pushVec2(4);
+                    argPool.PushVec2(4);
                     return false;
                 }
             }
@@ -278,7 +278,7 @@ namespace Box2D.Collision
 
                 if (tmin > tmax)
                 {
-                    argPool.pushVec2(4);
+                    argPool.PushVec2(4);
                     return false;
                 }
             }
@@ -288,7 +288,7 @@ namespace Box2D.Collision
                 // Parallel.
                 if (p.y < lowerBound.y || upperBound.y < p.y)
                 {
-                    argPool.pushVec2(4);
+                    argPool.PushVec2(4);
                     return false;
                 }
             }
@@ -322,7 +322,7 @@ namespace Box2D.Collision
 
                 if (tmin > tmax)
                 {
-                    argPool.pushVec2(4);
+                    argPool.PushVec2(4);
                     return false;
                 }
             }
@@ -331,7 +331,7 @@ namespace Box2D.Collision
             // Does the ray intersect beyond the max fraction?
             if (tmin < 0.0f || input.maxFraction < tmin)
             {
-                argPool.pushVec2(4);
+                argPool.PushVec2(4);
                 return false;
             }
 
@@ -339,7 +339,7 @@ namespace Box2D.Collision
             output.fraction = tmin;
             output.normal.x = normal.x;
             output.normal.y = normal.y;
-            argPool.pushVec2(4);
+            argPool.PushVec2(4);
             return true;
         }
 

@@ -183,13 +183,13 @@ namespace Box2D.Dynamics
 
         private void initializeRegisters()
         {
-            addType(pool.getCircleContactStack(), ShapeType.CIRCLE, ShapeType.CIRCLE);
-            addType(pool.getPolyCircleContactStack(), ShapeType.POLYGON, ShapeType.CIRCLE);
-            addType(pool.getPolyContactStack(), ShapeType.POLYGON, ShapeType.POLYGON);
-            addType(pool.getEdgeCircleContactStack(), ShapeType.EDGE, ShapeType.CIRCLE);
-            addType(pool.getEdgePolyContactStack(), ShapeType.EDGE, ShapeType.POLYGON);
-            addType(pool.getChainCircleContactStack(), ShapeType.CHAIN, ShapeType.CIRCLE);
-            addType(pool.getChainPolyContactStack(), ShapeType.CHAIN, ShapeType.POLYGON);
+            addType(pool.GetCircleContactStack(), ShapeType.CIRCLE, ShapeType.CIRCLE);
+            addType(pool.GetPolyCircleContactStack(), ShapeType.POLYGON, ShapeType.CIRCLE);
+            addType(pool.GetPolyContactStack(), ShapeType.POLYGON, ShapeType.POLYGON);
+            addType(pool.GetEdgeCircleContactStack(), ShapeType.EDGE, ShapeType.CIRCLE);
+            addType(pool.GetEdgePolyContactStack(), ShapeType.EDGE, ShapeType.POLYGON);
+            addType(pool.GetChainCircleContactStack(), ShapeType.CHAIN, ShapeType.CIRCLE);
+            addType(pool.GetChainPolyContactStack(), ShapeType.CHAIN, ShapeType.POLYGON);
         }
 
         public virtual Contact popContact(Fixture fixtureA, int indexA, Fixture fixtureB, int indexB)
@@ -1374,7 +1374,7 @@ namespace Box2D.Dynamics
                         input.sweepB.set_Renamed(bB.m_sweep);
                         input.tMax = 1.0f;
 
-                        pool.getTimeOfImpact().timeOfImpact(toiOutput, input);
+                        pool.GetTimeOfImpact().timeOfImpact(toiOutput, input);
 
                         // Beta is the fraction of the remaining portion of the .
                         float beta = toiOutput.t;
@@ -1588,8 +1588,8 @@ namespace Box2D.Dynamics
             Transform xf2 = bodyB.getTransform();
             Vec2 x1 = xf1.p;
             Vec2 x2 = xf2.p;
-            Vec2 p1 = pool.popVec2();
-            Vec2 p2 = pool.popVec2();
+            Vec2 p1 = pool.PopVec2();
+            Vec2 p2 = pool.PopVec2();
             joint.getAnchorA(p1);
             joint.getAnchorB(p2);
 
@@ -1627,7 +1627,7 @@ namespace Box2D.Dynamics
                     break;
 
             }
-            pool.pushVec2(2);
+            pool.PushVec2(2);
         }
 
         // NOTE this corresponds to the liquid test, so the debugdraw can draw

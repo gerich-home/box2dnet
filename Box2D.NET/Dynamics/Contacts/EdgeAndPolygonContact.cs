@@ -48,7 +48,7 @@ namespace Box2D.Dynamics.Contacts
 
         public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)
         {
-            pool.getCollision().collideEdgeAndPolygon(manifold, (EdgeShape)m_fixtureA.Shape, xfA, (PolygonShape)m_fixtureB.Shape, xfB);
+            pool.GetCollision().collideEdgeAndPolygon(manifold, (EdgeShape)m_fixtureA.Shape, xfA, (PolygonShape)m_fixtureB.Shape, xfB);
         }
     }
 }

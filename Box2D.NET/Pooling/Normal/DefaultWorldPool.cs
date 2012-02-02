@@ -90,137 +90,137 @@ namespace Box2D.Pooling.Normal
             toi = new TimeOfImpact(this);
         }
 
-        public IDynamicStack<Contact> getPolyContactStack()
+        public IDynamicStack<Contact> GetPolyContactStack()
         {
             return pcstack;
         }
 
-        public IDynamicStack<Contact> getCircleContactStack()
+        public IDynamicStack<Contact> GetCircleContactStack()
         {
             return ccstack;
         }
 
-        public IDynamicStack<Contact> getPolyCircleContactStack()
+        public IDynamicStack<Contact> GetPolyCircleContactStack()
         {
             return cpstack;
         }
 
-        public IDynamicStack<Contact> getEdgeCircleContactStack()
+        public IDynamicStack<Contact> GetEdgeCircleContactStack()
         {
             return ecstack;
         }
 
-        public IDynamicStack<Contact> getEdgePolyContactStack()
+        public IDynamicStack<Contact> GetEdgePolyContactStack()
         {
             return epstack;
         }
 
-        public IDynamicStack<Contact> getChainCircleContactStack()
+        public IDynamicStack<Contact> GetChainCircleContactStack()
         {
             return chcstack;
         }
 
-        public IDynamicStack<Contact> getChainPolyContactStack()
+        public IDynamicStack<Contact> GetChainPolyContactStack()
         {
             return chpstack;
         }
 
-        public Vec2 popVec2()
+        public Vec2 PopVec2()
         {
             return vecs.pop();
         }
 
-        public Vec2[] popVec2(int argNum)
+        public Vec2[] PopVec2(int argNum)
         {
             return vecs.pop(argNum);
         }
 
-        public void pushVec2(int argNum)
+        public void PushVec2(int argNum)
         {
             vecs.push(argNum);
         }
 
-        public Vec3 popVec3()
+        public Vec3 PopVec3()
         {
             return vec3s.pop();
         }
 
-        public Vec3[] popVec3(int argNum)
+        public Vec3[] PopVec3(int argNum)
         {
             return vec3s.pop(argNum);
         }
 
-        public void pushVec3(int argNum)
+        public void PushVec3(int argNum)
         {
             vec3s.push(argNum);
         }
 
-        public Mat22 popMat22()
+        public Mat22 PopMat22()
         {
             return mats.pop();
         }
 
-        public Mat22[] popMat22(int argNum)
+        public Mat22[] PopMat22(int argNum)
         {
             return mats.pop(argNum);
         }
 
-        public void pushMat22(int argNum)
+        public void PushMat22(int argNum)
         {
             mats.push(argNum);
         }
 
-        public Mat33 popMat33()
+        public Mat33 PopMat33()
         {
             return mat33s.pop();
         }
 
-        public void pushMat33(int argNum)
+        public void PushMat33(int argNum)
         {
             mat33s.push(argNum);
         }
 
-        public AABB popAABB()
+        public AABB PopAABB()
         {
             return aabbs.pop();
         }
 
-        public AABB[] popAABB(int argNum)
+        public AABB[] PopAABB(int argNum)
         {
             return aabbs.pop(argNum);
         }
 
-        public void pushAABB(int argNum)
+        public void PushAABB(int argNum)
         {
             aabbs.push(argNum);
         }
 
-        public Rot popRot()
+        public Rot PopRot()
         {
             return rots.pop();
         }
 
-        public void pushRot(int num)
+        public void PushRot(int num)
         {
             rots.push(num);
         }
 
-        public Collision.Collision getCollision()
+        public Collision.Collision GetCollision()
         {
             return collision;
         }
 
-        public TimeOfImpact getTimeOfImpact()
+        public TimeOfImpact GetTimeOfImpact()
         {
             return toi;
         }
 
-        public Distance getDistance()
+        public Distance GetDistance()
         {
             return dist;
         }
 
-        public float[] getFloatArray(int argLength)
+        public float[] GetFloatArray(int argLength)
         {
             if (!afloats.ContainsKey(argLength))
             {
@@ -231,7 +231,7 @@ namespace Box2D.Pooling.Normal
             return afloats[argLength];
         }
 
-        public int[] getIntArray(int argLength)
+        public int[] GetIntArray(int argLength)
         {
             if (!aints.ContainsKey(argLength))
             {
@@ -242,7 +242,7 @@ namespace Box2D.Pooling.Normal
             return aints[argLength];
         }
 
-        public Vec2[] getVec2Array(int argLength)
+        public Vec2[] GetVec2Array(int argLength)
         {
             if (!avecs.ContainsKey(argLength))
             {

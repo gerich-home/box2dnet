@@ -122,9 +122,9 @@ namespace Box2D.Dynamics.Joints
             Vec2 vB = data.velocities[m_indexB].v;
             float wB = data.velocities[m_indexB].w;
 
-            Rot qA = pool.popRot();
-            Rot qB = pool.popRot();
-            Vec2 temp = pool.popVec2();
+            Rot qA = pool.PopRot();
+            Rot qB = pool.PopRot();
+            Vec2 temp = pool.PopVec2();
 
             qA.set_Renamed(aA);
             qB.set_Renamed(aB);
@@ -204,7 +204,7 @@ namespace Box2D.Dynamics.Joints
 
             if (data.step.warmStarting)
             {
-                Vec2 P = pool.popVec2();
+                Vec2 P = pool.PopVec2();
                 // Scale impulses to support a variable time step.
                 m_impulse.x *= data.step.dtRatio;
                 m_impulse.y *= data.step.dtRatio;
@@ -220,7 +220,7 @@ namespace Box2D.Dynamics.Joints
                 vB.x += mB * P.x;
                 vB.y += mB * P.y;
                 wB += iB * (Vec2.cross(m_rB, P) + m_motorImpulse + m_impulse.z);
-                pool.pushVec2(1);
+                pool.PushVec2(1);
             }
             else
             {
@@ -234,8 +234,8 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].w = wB;
 
 
-            pool.pushVec2(1);
-            pool.pushRot(2);
+            pool.PushVec2(1);
+            pool.PushRot(2);
         }
 
         public override void solveVelocityConstraints(SolverData data)
@@ -263,13 +263,13 @@ namespace Box2D.Dynamics.Joints
                 wA -= iA * impulse;
                 wB += iB * impulse;
             }
-            Vec2 temp = pool.popVec2();
+            Vec2 temp = pool.PopVec2();
 
             // Solve limit constraint.
             if (m_enableLimit && m_limitState != LimitState.INACTIVE && fixedRotation == false)
             {
-                Vec2 Cdot1 = pool.popVec2();
-                Vec3 Cdot = pool.popVec3();
+                Vec2 Cdot1 = pool.PopVec2();
+                Vec3 Cdot = pool.PopVec3();
 
                 // Solve point-to-point constraint
                 Vec2.crossToOutUnsafe(wA, m_rA, temp);
@@ -278,7 +278,7 @@ namespace Box2D.Dynamics.Joints
                 float Cdot2 = wB - wA;
                 Cdot.set_Renamed(Cdot1.x, Cdot1.y, Cdot2);
 
-                Vec3 impulse = pool.popVec3();
+                Vec3 impulse = pool.PopVec3();
                 m_mass.solve33ToOut(Cdot, impulse);
                 impulse.negateLocal();
 
@@ -292,7 +292,7 @@ namespace Box2D.Dynamics.Joints
                     if (newImpulse < 0.0f)
                     {
                         //UPGRADE_NOTE: Final was removed from the declaration of 'rhs '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-                        Vec2 rhs = pool.popVec2();
+                        Vec2 rhs = pool.PopVec2();
                         rhs.set_Renamed(m_mass.ez.x, m_mass.ez.y).mulLocal(m_impulse.z).subLocal(Cdot1);
                         m_mass.solve22ToOut(rhs, temp);
                         impulse.x = temp.x;
@@ -301,7 +301,7 @@ namespace Box2D.Dynamics.Joints
                         m_impulse.x += temp.x;
                         m_impulse.y += temp.y;
                         m_impulse.z = 0.0f;
-                        pool.pushVec2(1);
+                        pool.PushVec2(1);
                     }
                     else
                     {
@@ -313,7 +313,7 @@ namespace Box2D.Dynamics.Joints
                     float newImpulse = m_impulse.z + impulse.z;
                     if (newImpulse > 0.0f)
                     {
-                        Vec2 rhs = pool.popVec2();
+                        Vec2 rhs = pool.PopVec2();
                         rhs.set_Renamed(m_mass.ez.x, m_mass.ez.y).mulLocal(m_impulse.z).subLocal(Cdot1);
                         m_mass.solve22ToOut(rhs, temp);
                         impulse.x = temp.x;
@@ -322,14 +322,14 @@ namespace Box2D.Dynamics.Joints
                         m_impulse.x += temp.x;
                         m_impulse.y += temp.y;
                         m_impulse.z = 0.0f;
-                        pool.pushVec2(1);
+                        pool.PushVec2(1);
                     }
                     else
                     {
                         m_impulse.addLocal(impulse);
                     }
                 }
-                Vec2 P = pool.popVec2();
+                Vec2 P = pool.PopVec2();
 
                 P.set_Renamed(impulse.x, impulse.y);
 
@@ -341,15 +341,15 @@ namespace Box2D.Dynamics.Joints
                 vB.y += mB * P.y;
                 wB += iB * (Vec2.cross(m_rB, P) + impulse.z);
 
-                pool.pushVec2(2);
-                pool.pushVec3(2);
+                pool.PushVec2(2);
+                pool.PushVec3(2);
             }
             else
             {
 
                 // Solve point-to-point constraint
-                Vec2 Cdot = pool.popVec2();
-                Vec2 impulse = pool.popVec2();
+                Vec2 Cdot = pool.PopVec2();
+                Vec2 impulse = pool.PopVec2();
 
                 Vec2.crossToOutUnsafe(wA, m_rA, temp);
                 Vec2.crossToOutUnsafe(wB, m_rB, Cdot);
@@ -367,7 +367,7 @@ namespace Box2D.Dynamics.Joints
                 vB.y += mB * impulse.y;
                 wB += iB * Vec2.cross(m_rB, impulse);
 
-                pool.pushVec2(2);
+                pool.PushVec2(2);
             }
 
             data.velocities[m_indexA].v.set_Renamed(vA);
@@ -375,13 +375,13 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushVec2(1);
+            pool.PushVec2(1);
         }
 
         public override bool solvePositionConstraints(SolverData data)
         {
-            Rot qA = pool.popRot();
-            Rot qB = pool.popRot();
+            Rot qA = pool.PopRot();
+            Rot qB = pool.PopRot();
             Vec2 cA = data.positions[m_indexA].c;
             float aA = data.positions[m_indexA].a;
             Vec2 cB = data.positions[m_indexB].c;
@@ -435,10 +435,10 @@ namespace Box2D.Dynamics.Joints
                 qA.set_Renamed(aA);
                 qB.set_Renamed(aB);
 
-                Vec2 rA = pool.popVec2();
-                Vec2 rB = pool.popVec2();
-                Vec2 C = pool.popVec2();
-                Vec2 impulse = pool.popVec2();
+                Vec2 rA = pool.PopVec2();
+                Vec2 rB = pool.PopVec2();
+                Vec2 C = pool.PopVec2();
+                Vec2 impulse = pool.PopVec2();
 
                 Rot.mulToOutUnsafe(qA, C.set_Renamed(m_localAnchorA).subLocal(m_localCenterA), rA);
                 Rot.mulToOutUnsafe(qB, C.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), rB);
@@ -448,7 +448,7 @@ namespace Box2D.Dynamics.Joints
                 float mA = m_invMassA, mB = m_invMassB;
                 float iA = m_invIA, iB = m_invIB;
 
-                Mat22 K = pool.popMat22();
+                Mat22 K = pool.PopMat22();
                 K.ex.x = mA + mB + iA * rA.y * rA.y + iB * rB.y * rB.y;
                 K.ex.y = (-iA) * rA.x * rA.y - iB * rB.x * rB.y;
                 K.ey.x = K.ex.y;
@@ -465,15 +465,15 @@ namespace Box2D.Dynamics.Joints
                 cB.y += mB * impulse.y;
                 aB += iB * Vec2.cross(rB, impulse);
 
-                pool.pushVec2(4);
-                pool.pushMat22(1);
+                pool.PushVec2(4);
+                pool.PushMat22(1);
             }
             data.positions[m_indexA].c.set_Renamed(cA);
             data.positions[m_indexA].a = aA;
             data.positions[m_indexB].c.set_Renamed(cB);
             data.positions[m_indexB].a = aB;
 
-            pool.pushRot(2);
+            pool.PushRot(2);
 
             return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
         }

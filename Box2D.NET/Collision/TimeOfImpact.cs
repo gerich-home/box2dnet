@@ -156,7 +156,7 @@ namespace Box2D.Collision
                 // to get a separating axis
                 distanceInput.transformA = xfA;
                 distanceInput.transformB = xfB;
-                pool.getDistance().distance(distanceOutput, cache, distanceInput);
+                pool.GetDistance().distance(distanceOutput, cache, distanceInput);
 
                 // System.out.printf("Dist: %f at points %f, %f and %f, %f.  %d iterations\n",
                 // distanceOutput.distance, distanceOutput.pointA.x, distanceOutput.pointA.y,

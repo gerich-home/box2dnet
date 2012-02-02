@@ -154,9 +154,9 @@ namespace Box2D.Dynamics.Joints
             float wB = data.velocities[m_indexB].w;
 
 
-            Vec2 temp = pool.popVec2();
-            Rot qA = pool.popRot();
-            Rot qB = pool.popRot();
+            Vec2 temp = pool.PopVec2();
+            Rot qA = pool.PopRot();
+            Rot qB = pool.PopRot();
 
             qA.set_Renamed(aA);
             qB.set_Renamed(aB);
@@ -177,7 +177,7 @@ namespace Box2D.Dynamics.Joints
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
 
-            Mat22 K = pool.popMat22();
+            Mat22 K = pool.PopMat22();
             K.ex.x = mA + mB + iA * m_rA.y * m_rA.y + iB * m_rB.y * m_rB.y;
             K.ex.y = (-iA) * m_rA.x * m_rA.y - iB * m_rB.x * m_rB.y;
             K.ey.x = K.ex.y;
@@ -197,7 +197,7 @@ namespace Box2D.Dynamics.Joints
                 m_linearImpulse.mulLocal(data.step.dtRatio);
                 m_angularImpulse *= data.step.dtRatio;
 
-                Vec2 P = pool.popVec2();
+                Vec2 P = pool.PopVec2();
                 P.set_Renamed(m_linearImpulse);
 
                 temp.set_Renamed(P).mulLocal(mA);
@@ -208,7 +208,7 @@ namespace Box2D.Dynamics.Joints
                 vB.addLocal(temp);
                 wB += iB * (Vec2.cross(m_rB, P) + m_angularImpulse);
 
-                pool.pushVec2(1);
+                pool.PushVec2(1);
             }
             else
             {
@@ -224,9 +224,9 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushRot(2);
-            pool.pushVec2(1);
-            pool.pushMat22(1);
+            pool.PushRot(2);
+            pool.PushVec2(1);
+            pool.PushMat22(1);
         }
 
         public override void solveVelocityConstraints(SolverData data)
@@ -257,19 +257,19 @@ namespace Box2D.Dynamics.Joints
 
             // Solve linear friction
             {
-                Vec2 Cdot = pool.popVec2();
-                Vec2 temp = pool.popVec2();
+                Vec2 Cdot = pool.PopVec2();
+                Vec2 temp = pool.PopVec2();
 
                 Vec2.crossToOutUnsafe(wA, m_rA, temp);
                 Vec2.crossToOutUnsafe(wB, m_rB, Cdot);
                 Cdot.addLocal(vB).subLocal(vA).subLocal(temp);
 
-                Vec2 impulse = pool.popVec2();
+                Vec2 impulse = pool.PopVec2();
                 Mat22.mulToOutUnsafe(m_linearMass, Cdot, impulse);
                 impulse.negateLocal();
 
 
-                Vec2 oldImpulse = pool.popVec2();
+                Vec2 oldImpulse = pool.PopVec2();
                 oldImpulse.set_Renamed(m_linearImpulse);
                 m_linearImpulse.addLocal(impulse);
 
@@ -301,7 +301,7 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushVec2(4);
+            pool.PushVec2(4);
         }
 
         public override bool solvePositionConstraints(SolverData data)

@@ -35,46 +35,46 @@ namespace Box2D.Pooling
     /// <author>Daniel</author>
     public interface IWorldPool
     {
-        IDynamicStack<Contact> getPolyContactStack();
-        IDynamicStack<Contact> getCircleContactStack();
-        IDynamicStack<Contact> getPolyCircleContactStack();
-        IDynamicStack<Contact> getEdgeCircleContactStack();
-        IDynamicStack<Contact> getEdgePolyContactStack();
-        IDynamicStack<Contact> getChainCircleContactStack();
-        IDynamicStack<Contact> getChainPolyContactStack();
+        IDynamicStack<Contact> GetPolyContactStack();
+        IDynamicStack<Contact> GetCircleContactStack();
+        IDynamicStack<Contact> GetPolyCircleContactStack();
+        IDynamicStack<Contact> GetEdgeCircleContactStack();
+        IDynamicStack<Contact> GetEdgePolyContactStack();
+        IDynamicStack<Contact> GetChainCircleContactStack();
+        IDynamicStack<Contact> GetChainPolyContactStack();
 
-        Vec2 popVec2();
-        Vec2[] popVec2(int num);
-        void pushVec2(int num);
+        Vec2 PopVec2();
+        Vec2[] PopVec2(int num);
+        void PushVec2(int num);
 
-        Vec3 popVec3();
-        Vec3[] popVec3(int num);
-        void pushVec3(int num);
+        Vec3 PopVec3();
+        Vec3[] PopVec3(int num);
+        void PushVec3(int num);
 
-        Mat22 popMat22();
-        Mat22[] popMat22(int num);
-        void pushMat22(int num);
+        Mat22 PopMat22();
+        Mat22[] PopMat22(int num);
+        void PushMat22(int num);
 
-        Mat33 popMat33();
-        void pushMat33(int num);
+        Mat33 PopMat33();
+        void PushMat33(int num);
 
-        AABB popAABB();
-        AABB[] popAABB(int num);
-        void pushAABB(int num);
+        AABB PopAABB();
+        AABB[] PopAABB(int num);
+        void PushAABB(int num);
 
-        Rot popRot();
-        void pushRot(int num);
+        Rot PopRot();
+        void PushRot(int num);
 
-        Collision.Collision getCollision();
+        Collision.Collision GetCollision();
 
-        TimeOfImpact getTimeOfImpact();
+        TimeOfImpact GetTimeOfImpact();
 
-        Distance getDistance();
+        Distance GetDistance();
 
-        float[] getFloatArray(int argLength);
+        float[] GetFloatArray(int argLength);
 
-        int[] getIntArray(int argLength);
+        int[] GetIntArray(int argLength);
 
-        Vec2[] getVec2Array(int argLength);
+        Vec2[] GetVec2Array(int argLength);
     }
 }

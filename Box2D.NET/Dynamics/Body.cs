@@ -997,7 +997,7 @@ namespace Box2D.Dynamics
                 m_invI = 1.0f / m_I;
             }
 
-            Vec2 oldCenter = m_world.Pool.popVec2();
+            Vec2 oldCenter = m_world.Pool.PopVec2();
             // Move center of mass.
             oldCenter.set_Renamed(m_sweep.c);
             m_sweep.localCenter.set_Renamed(massData.center);
@@ -1007,12 +1007,12 @@ namespace Box2D.Dynamics
 
             // Update center of mass velocity.
             // m_linearVelocity += Cross(m_angularVelocity, m_sweep.c - oldCenter);
-            Vec2 temp = m_world.Pool.popVec2();
+            Vec2 temp = m_world.Pool.PopVec2();
             temp.set_Renamed(m_sweep.c).subLocal(oldCenter);
             Vec2.crossToOut(m_angularVelocity, temp, temp);
             m_linearVelocity.addLocal(temp);
 
-            m_world.Pool.pushVec2(2);
+            m_world.Pool.PushVec2(2);
         }
 
         private readonly MassData pmd = new MassData();
@@ -1044,9 +1044,9 @@ namespace Box2D.Dynamics
             Debug.Assert(m_type == BodyType.DYNAMIC);
 
             // Accumulate mass over all fixtures.
-            Vec2 localCenter = m_world.Pool.popVec2();
+            Vec2 localCenter = m_world.Pool.PopVec2();
             localCenter.setZero();
-            Vec2 temp = m_world.Pool.popVec2();
+            Vec2 temp = m_world.Pool.PopVec2();
             MassData massData = pmd;
             for (Fixture f = m_fixtureList; f != null; f = f.m_next)
             {
@@ -1088,7 +1088,7 @@ namespace Box2D.Dynamics
                 m_invI = 0.0f;
             }
 
-            Vec2 oldCenter = m_world.Pool.popVec2();
+            Vec2 oldCenter = m_world.Pool.PopVec2();
             // Move center of mass.
             oldCenter.set_Renamed(m_sweep.c);
             m_sweep.localCenter.set_Renamed(localCenter);
@@ -1104,7 +1104,7 @@ namespace Box2D.Dynamics
             Vec2.crossToOutUnsafe(m_angularVelocity, temp, temp2);
             m_linearVelocity.addLocal(temp2);
 
-            m_world.Pool.pushVec2(3);
+            m_world.Pool.PushVec2(3);
         }
 
         /// <summary>

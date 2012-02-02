@@ -171,7 +171,7 @@ namespace Box2D.Dynamics.Joints
                 perimeter += dist;
             }
 
-            Vec2 delta = pool.popVec2();
+            Vec2 delta = pool.PopVec2();
 
             float deltaArea = targetVolume - Area;
             float toExtrude = 0.5f * deltaArea / perimeter; // *relaxationFactor
@@ -198,14 +198,14 @@ namespace Box2D.Dynamics.Joints
                 // bodies[next].m_linearVelocity.y += delta.y * step.inv_dt;
             }
 
-            pool.pushVec2(1);
+            pool.PushVec2(1);
             // System.out.println(sumdeltax);
             return done;
         }
 
         public override void initVelocityConstraints(SolverData data)
         {
-            Vec2[] d = pool.getVec2Array(bodies.Length);
+            Vec2[] d = pool.GetVec2Array(bodies.Length);
 
             for (int i = 0; i < bodies.Length; ++i)
             {
@@ -246,7 +246,7 @@ namespace Box2D.Dynamics.Joints
             float dotMassSum = 0.0f;
 
 
-            Vec2[] d = pool.getVec2Array(bodies.Length);
+            Vec2[] d = pool.GetVec2Array(bodies.Length);
 
             for (int i = 0; i < bodies.Length; ++i)
             {

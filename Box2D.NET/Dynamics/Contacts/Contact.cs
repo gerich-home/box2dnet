@@ -323,7 +323,7 @@ namespace Box2D.Dynamics.Contacts
             {
                 Shape shapeA = m_fixtureA.Shape;
                 Shape shapeB = m_fixtureB.Shape;
-                touching = pool.getCollision().testOverlap(shapeA, m_indexA, shapeB, m_indexB, xfA, xfB);
+                touching = pool.GetCollision().testOverlap(shapeA, m_indexA, shapeB, m_indexB, xfA, xfB);
 
                 // Sensors don't generate manifolds.
                 m_manifold.pointCount = 0;

@@ -175,7 +175,7 @@ namespace Box2D.Dynamics.Joints
             Vec2 vB = data.velocities[m_indexB].v;
             float wB = data.velocities[m_indexB].w;
 
-            Rot qB = pool.popRot();
+            Rot qB = pool.PopRot();
 
             qB.set_Renamed(aB);
 
@@ -202,7 +202,7 @@ namespace Box2D.Dynamics.Joints
             }
             m_beta = h * k * m_gamma;
 
-            Vec2 temp = pool.popVec2();
+            Vec2 temp = pool.PopVec2();
 
             // Compute the effective mass matrix.
             Rot.mulToOutUnsafe(qB, temp.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), m_rB);
@@ -210,7 +210,7 @@ namespace Box2D.Dynamics.Joints
             // K = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
             // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
             // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
-            Mat22 K = pool.popMat22();
+            Mat22 K = pool.PopMat22();
             K.ex.x = m_invMassB + m_invIB * m_rB.y * m_rB.y + m_gamma;
             K.ex.y = (-m_invIB) * m_rB.x * m_rB.y;
             K.ey.x = K.ex.y;
@@ -239,9 +239,9 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushVec2(1);
-            pool.pushMat22(1);
-            pool.pushRot(1);
+            pool.PushVec2(1);
+            pool.PushMat22(1);
+            pool.PushRot(1);
         }
 
         public override bool solvePositionConstraints(SolverData data)
@@ -256,12 +256,12 @@ namespace Box2D.Dynamics.Joints
             float wB = data.velocities[m_indexB].w;
 
             // Cdot = v + cross(w, r)
-            Vec2 Cdot = pool.popVec2();
+            Vec2 Cdot = pool.PopVec2();
             Vec2.crossToOutUnsafe(wB, m_rB, Cdot);
             Cdot.addLocal(vB);
 
-            Vec2 impulse = pool.popVec2();
-            Vec2 temp = pool.popVec2();
+            Vec2 impulse = pool.PopVec2();
+            Vec2 temp = pool.PopVec2();
 
             temp.set_Renamed(m_impulse).mulLocal(m_gamma).addLocal(m_C).addLocal(Cdot).negateLocal();
             Mat22.mulToOutUnsafe(m_mass, temp, impulse);
@@ -283,7 +283,7 @@ namespace Box2D.Dynamics.Joints
             data.velocities[m_indexB].v.set_Renamed(vB);
             data.velocities[m_indexB].w = wB;
 
-            pool.pushVec2(3);
+            pool.PushVec2(3);
         }
     }
 }
