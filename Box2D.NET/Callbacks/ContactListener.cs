@@ -47,13 +47,13 @@ namespace Box2D.Callbacks
         /// Called when two fixtures begin to touch.
         /// </summary>
         /// <param name="contact"></param>
-        void beginContact(Contact contact);
+        void BeginContact(Contact contact);
 
         /// <summary>
         /// Called when two fixtures cease to touch.
         /// </summary>
         /// <param name="contact"></param>
-        void endContact(Contact contact);
+        void EndContact(Contact contact);
 
         /// <summary>
         /// This is called after a contact is updated. This allows you to inspect a
@@ -71,7 +71,7 @@ namespace Box2D.Callbacks
         /// </summary>
         /// <param name="contact"></param>
         /// <param name="oldManifold"></param>
-        void preSolve(Contact contact, Manifold oldManifold);
+        void PreSolve(Contact contact, Manifold oldManifold);
 
         /// <summary>
         /// This lets you inspect a contact after the solver is finished. This is useful
@@ -83,6 +83,6 @@ namespace Box2D.Callbacks
         /// </summary>
         /// <param name="contact"></param>
         /// <param name="impulse">this is usually a pooled variable, so it will be modified after this call</param>
-        void postSolve(Contact contact, ContactImpulse impulse);
+        void PostSolve(Contact contact, ContactImpulse impulse);
     }
 }

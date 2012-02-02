@@ -378,17 +378,17 @@ namespace Box2D.Dynamics.Contacts
 
             if (wasTouching == false && touching == true)
             {
-                listener.beginContact(this);
+                listener.BeginContact(this);
             }
 
             if (wasTouching == true && touching == false)
             {
-                listener.endContact(this);
+                listener.EndContact(this);
             }
 
             if (sensor == false && touching)
             {
-                listener.preSolve(this, oldManifold);
+                listener.PreSolve(this, oldManifold);
             }
         }
 

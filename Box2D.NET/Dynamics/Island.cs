@@ -620,7 +620,7 @@ namespace Box2D.Dynamics
 					impulse.TangentImpulses[j] = vc.points[j].tangentImpulse;
 				}
 
-				m_listener.postSolve(c, impulse);
+				m_listener.PostSolve(c, impulse);
 			}
 		}
 	}

@@ -191,7 +191,7 @@ namespace Box2D.Dynamics
 
             if (m_contactListener != null && c.Touching)
             {
-                m_contactListener.endContact(c);
+                m_contactListener.EndContact(c);
             }
 
             // Remove from the world.
