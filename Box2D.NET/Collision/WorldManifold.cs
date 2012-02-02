@@ -93,7 +93,7 @@ namespace Box2D.Collision
                         // pointB.y = xfB.p.y + xfB.q.ex.y * manifold.points[0].localPoint.x + xfB.q.ey.y *
                         // manifold.points[0].localPoint.y;
                         Transform.mulToOut(xfA, manifold.LocalPoint, pointA);
-                        Transform.mulToOut(xfB, manifold.Points[0].localPoint, pointB);
+                        Transform.mulToOut(xfB, manifold.Points[0].LocalPoint, pointB);
 
                         if (MathUtils.distanceSquared(pointA, pointB) > Settings.EPSILON * Settings.EPSILON)
                         {
@@ -129,7 +129,7 @@ namespace Box2D.Collision
                             // normal)) * normal;
                             // b2Vec2 cB = clipPoint - radiusB * normal;
                             // points[i] = 0.5f * (cA + cB);
-                            Transform.mulToOut(xfB, manifold.Points[i].localPoint, clipPoint);
+                            Transform.mulToOut(xfB, manifold.Points[i].LocalPoint, clipPoint);
                             // use cA as temporary for now
                             // cA.set(clipPoint).subLocal(planePoint);
                             // float scalar = radiusA - Vec2.dot(cA, normal);
@@ -173,7 +173,7 @@ namespace Box2D.Collision
                         // b2Vec2 cA = clipPoint - radiusA * normal;
                         // points[i] = 0.5f * (cA + cB);
 
-                        Transform.mulToOut(xfA, manifold.Points[i].localPoint, clipPoint2);
+                        Transform.mulToOut(xfA, manifold.Points[i].LocalPoint, clipPoint2);
                         // cB.set(clipPoint).subLocal(planePoint);
                         // float scalar = radiusB - Vec2.dot(cB, normal);
                         // cB.set(normal).mulLocal(scalar).addLocal(clipPoint);

@@ -66,42 +66,58 @@ namespace Box2D.Collision
     /// </summary>
     public class ManifoldPoint
     {
-        /// <summary>usage depends on manifold type </summary>
-        public readonly Vec2 localPoint;
-        /// <summary>the non-penetration impulse </summary>
-        public float normalImpulse;
-        /// <summary>the friction impulse </summary>
-        public float tangentImpulse;
-        /// <summary>uniquely identifies a contact point between two shapes </summary>
-        public readonly ContactID id;
+        /// <summary>
+        /// usage depends on manifold type
+        /// </summary>
+        public readonly Vec2 LocalPoint;
 
-        /// <summary>Blank manifold point with everything zeroed out.</summary>
+        /// <summary>
+        /// the non-penetration impulse
+        /// </summary>
+        public float NormalImpulse;
+
+        /// <summary>
+        /// the friction impulse
+        /// </summary>
+        public float TangentImpulse;
+
+        /// <summary>
+        /// uniquely identifies a contact point between two shapes
+        /// </summary>
+        public readonly ContactID Id;
+
+        /// <summary>
+        /// Blank manifold point with everything zeroed out.
+        /// </summary>
         public ManifoldPoint()
         {
-            localPoint = new Vec2();
-            normalImpulse = tangentImpulse = 0f;
-            id = new ContactID();
+            LocalPoint = new Vec2();
+            NormalImpulse = TangentImpulse = 0f;
+            Id = new ContactID();
         }
 
-        /// <summary>Creates a manifold point as a copy of the given point</summary>
+        /// <summary>
+        /// Creates a manifold point as a copy of the given point
+        /// </summary>
         /// <param name="cp">point to copy from</param>
         public ManifoldPoint(ManifoldPoint cp)
         {
-            localPoint = cp.localPoint.Clone();
-            normalImpulse = cp.normalImpulse;
-            tangentImpulse = cp.tangentImpulse;
-            id = new ContactID(cp.id);
+            LocalPoint = cp.LocalPoint.Clone();
+            NormalImpulse = cp.NormalImpulse;
+            TangentImpulse = cp.TangentImpulse;
+            Id = new ContactID(cp.Id);
         }
 
-        /// <summary> Sets this manifold point form the given one</summary>
-        /// <param name="cp">the point to copy from
-        /// </param>
-        public virtual void set_Renamed(ManifoldPoint cp)
+        /// <summary>
+        ///  Sets this manifold point form the given one
+        /// </summary>
+        /// <param name="cp">the point to copy from</param>
+        public virtual void Set(ManifoldPoint cp)
         {
-            localPoint.set_Renamed(cp.localPoint);
-            normalImpulse = cp.normalImpulse;
-            tangentImpulse = cp.tangentImpulse;
-            id.Set(cp.id);
+            LocalPoint.set_Renamed(cp.LocalPoint);
+            NormalImpulse = cp.NormalImpulse;
+            TangentImpulse = cp.TangentImpulse;
+            Id.Set(cp.Id);
         }
     }
 }

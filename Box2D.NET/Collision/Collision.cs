@@ -104,13 +104,13 @@ namespace Box2D.Collision
             // Detect persists and removes.
             for (int i = 0; i < manifold1.PointCount; i++)
             {
-                ContactID id = manifold1.Points[i].id;
+                ContactID id = manifold1.Points[i].Id;
 
                 state1[i] = PointState.RemoveState;
 
                 for (int j = 0; j < manifold2.PointCount; j++)
                 {
-                    if (manifold2.Points[j].id.IsEqual(id))
+                    if (manifold2.Points[j].Id.IsEqual(id))
                     {
                         state1[i] = PointState.PersistState;
                         break;
@@ -121,13 +121,13 @@ namespace Box2D.Collision
             // Detect persists and adds
             for (int i = 0; i < manifold2.PointCount; i++)
             {
-                ContactID id = manifold2.Points[i].id;
+                ContactID id = manifold2.Points[i].Id;
 
                 state2[i] = PointState.AddState;
 
                 for (int j = 0; j < manifold1.PointCount; j++)
                 {
-                    if (manifold1.Points[j].id.IsEqual(id))
+                    if (manifold1.Points[j].Id.IsEqual(id))
                     {
                         state2[i] = PointState.PersistState;
                         break;
@@ -235,8 +235,8 @@ namespace Box2D.Collision
             manifold.LocalNormal.setZero();
             manifold.PointCount = 1;
 
-            manifold.Points[0].localPoint.set_Renamed(circle2.P);
-            manifold.Points[0].id.Zero();
+            manifold.Points[0].LocalPoint.set_Renamed(circle2.P);
+            manifold.Points[0].Id.Zero();
         }
 
         // djm pooling, and from above
@@ -333,9 +333,9 @@ namespace Box2D.Collision
                 manifold.LocalPoint.x = (v1.x + v2.x) * .5f;
                 manifold.LocalPoint.y = (v1.y + v2.y) * .5f;
                 ManifoldPoint mpoint = manifold.Points[0];
-                mpoint.localPoint.x = circle.P.x;
-                mpoint.localPoint.y = circle.P.y;
-                mpoint.id.Zero();
+                mpoint.LocalPoint.x = circle.P.x;
+                mpoint.LocalPoint.y = circle.P.y;
+                mpoint.Id.Zero();
                 // end inline
                 return;
             }
@@ -382,8 +382,8 @@ namespace Box2D.Collision
                 // end inline
                 manifold.LocalNormal.normalize();
                 manifold.LocalPoint.set_Renamed(v1);
-                manifold.Points[0].localPoint.set_Renamed(circle.P);
-                manifold.Points[0].id.Zero();
+                manifold.Points[0].LocalPoint.set_Renamed(circle.P);
+                manifold.Points[0].Id.Zero();
             }
             else if (u2 <= 0.0f)
             {
@@ -405,8 +405,8 @@ namespace Box2D.Collision
                 // end inline
                 manifold.LocalNormal.normalize();
                 manifold.LocalPoint.set_Renamed(v2);
-                manifold.Points[0].localPoint.set_Renamed(circle.P);
-                manifold.Points[0].id.Zero();
+                manifold.Points[0].LocalPoint.set_Renamed(circle.P);
+                manifold.Points[0].Id.Zero();
             }
             else
             {
@@ -439,8 +439,8 @@ namespace Box2D.Collision
                 manifold.LocalNormal.set_Renamed(normals[vertIndex1]);
                 manifold.LocalPoint.x = fcx; // (faceCenter)
                 manifold.LocalPoint.y = fcy;
-                manifold.Points[0].localPoint.set_Renamed(circle.P);
-                manifold.Points[0].id.Zero();
+                manifold.Points[0].LocalPoint.set_Renamed(circle.P);
+                manifold.Points[0].Id.Zero();
             }
         }
 
@@ -842,13 +842,13 @@ namespace Box2D.Collision
                 if (separation <= totalRadius)
                 {
                     ManifoldPoint cp = manifold.Points[pointCount];
-                    Transform.mulTransToOut(xf2, clipPoints2[i].v, cp.localPoint);
+                    Transform.mulTransToOut(xf2, clipPoints2[i].v, cp.LocalPoint);
                     // cp.m_localPoint = MulT(xf2, clipPoints2[i].v);
-                    cp.id.Set(clipPoints2[i].id);
+                    cp.Id.Set(clipPoints2[i].id);
                     if (flip)
                     {
                         // Swap features
-                        cp.id.Flip();
+                        cp.Id.Flip();
                     }
                     ++pointCount;
                 }
@@ -924,8 +924,8 @@ namespace Box2D.Collision
                 manifold.LocalNormal.setZero();
                 manifold.LocalPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
-                manifold.Points[0].id.Set(cf);
-                manifold.Points[0].localPoint.set_Renamed(circleB.P);
+                manifold.Points[0].Id.Set(cf);
+                manifold.Points[0].LocalPoint.set_Renamed(circleB.P);
                 return;
             }
 
@@ -963,8 +963,8 @@ namespace Box2D.Collision
                 manifold.LocalNormal.setZero();
                 manifold.LocalPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
-                manifold.Points[0].id.Set(cf);
-                manifold.Points[0].localPoint.set_Renamed(circleB.P);
+                manifold.Points[0].Id.Set(cf);
+                manifold.Points[0].LocalPoint.set_Renamed(circleB.P);
                 return;
             }
 
@@ -997,8 +997,8 @@ namespace Box2D.Collision
             manifold.LocalNormal.set_Renamed(n);
             manifold.LocalPoint.set_Renamed(A);
             // manifold.points[0].id.key = 0;
-            manifold.Points[0].id.Set(cf);
-            manifold.Points[0].localPoint.set_Renamed(circleB.P);
+            manifold.Points[0].Id.Set(cf);
+            manifold.Points[0].LocalPoint.set_Renamed(circleB.P);
         }
 
         private readonly EPCollider collider = new EPCollider();
@@ -1534,16 +1534,16 @@ namespace Box2D.Collision
                         if (primaryAxis.type == EPAxis.Type.EdgeA)
                         {
                             // cp.localPoint = MulT(m_xf, clipPoints2[i].v);
-                            Transform.mulTransToOutUnsafe(Xf, clipPoints2[i].v, cp.localPoint);
-                            cp.id.Set(clipPoints2[i].id);
+                            Transform.mulTransToOutUnsafe(Xf, clipPoints2[i].v, cp.LocalPoint);
+                            cp.Id.Set(clipPoints2[i].id);
                         }
                         else
                         {
-                            cp.localPoint.set_Renamed(clipPoints2[i].v);
-                            cp.id.TypeA = clipPoints2[i].id.TypeB;
-                            cp.id.TypeB = clipPoints2[i].id.TypeA;
-                            cp.id.IndexA = clipPoints2[i].id.IndexB;
-                            cp.id.IndexB = clipPoints2[i].id.IndexA;
+                            cp.LocalPoint.set_Renamed(clipPoints2[i].v);
+                            cp.Id.TypeA = clipPoints2[i].id.TypeB;
+                            cp.Id.TypeB = clipPoints2[i].id.TypeA;
+                            cp.Id.IndexA = clipPoints2[i].id.IndexB;
+                            cp.Id.IndexB = clipPoints2[i].id.IndexA;
                         }
 
                         ++pointCount;

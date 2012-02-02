@@ -338,18 +338,18 @@ namespace Box2D.Dynamics.Contacts
                 for (int i = 0; i < m_manifold.PointCount; ++i)
                 {
                     ManifoldPoint mp2 = m_manifold.Points[i];
-                    mp2.normalImpulse = 0.0f;
-                    mp2.tangentImpulse = 0.0f;
-                    ContactID id2 = mp2.id;
+                    mp2.NormalImpulse = 0.0f;
+                    mp2.TangentImpulse = 0.0f;
+                    ContactID id2 = mp2.Id;
 
                     for (int j = 0; j < oldManifold.PointCount; ++j)
                     {
                         ManifoldPoint mp1 = oldManifold.Points[j];
 
-                        if (mp1.id.IsEqual(id2))
+                        if (mp1.Id.IsEqual(id2))
                         {
-                            mp2.normalImpulse = mp1.normalImpulse;
-                            mp2.tangentImpulse = mp1.tangentImpulse;
+                            mp2.NormalImpulse = mp1.NormalImpulse;
+                            mp2.TangentImpulse = mp1.TangentImpulse;
                             break;
                         }
                     }

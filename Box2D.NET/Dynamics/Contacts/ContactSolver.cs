@@ -164,8 +164,8 @@ namespace Box2D.Dynamics.Contacts
                     {
                         //Debug.Assert(cp.normalImpulse == 0);
                         //Console.WriteLine("contact normal impulse: " + cp.normalImpulse);
-                        vcp.normalImpulse = m_step.dtRatio * cp.normalImpulse;
-                        vcp.tangentImpulse = m_step.dtRatio * cp.tangentImpulse;
+                        vcp.normalImpulse = m_step.dtRatio * cp.NormalImpulse;
+                        vcp.tangentImpulse = m_step.dtRatio * cp.TangentImpulse;
                     }
                     else
                     {
@@ -179,7 +179,7 @@ namespace Box2D.Dynamics.Contacts
                     vcp.tangentMass = 0;
                     vcp.velocityBias = 0;
 
-                    pc.localPoints[j].set_Renamed(cp.localPoint);
+                    pc.localPoints[j].set_Renamed(cp.LocalPoint);
                 }
             }
         }
@@ -828,8 +828,8 @@ namespace Box2D.Dynamics.Contacts
 
                 for (int j = 0; j < vc.pointCount; j++)
                 {
-                    manifold.Points[j].normalImpulse = vc.points[j].normalImpulse;
-                    manifold.Points[j].tangentImpulse = vc.points[j].tangentImpulse;
+                    manifold.Points[j].NormalImpulse = vc.points[j].normalImpulse;
+                    manifold.Points[j].TangentImpulse = vc.points[j].tangentImpulse;
                 }
             }
         }

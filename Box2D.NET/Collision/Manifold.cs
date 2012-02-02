@@ -121,7 +121,7 @@ namespace Box2D.Collision
         {
             for (int i = 0; i < cp.PointCount; i++)
             {
-                Points[i].set_Renamed(cp.Points[i]);
+                Points[i].Set(cp.Points[i]);
             }
 
             Type = cp.Type;
