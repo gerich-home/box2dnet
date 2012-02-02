@@ -35,8 +35,8 @@ using System.Diagnostics;
 namespace Box2D.Pooling.Normal
 {
     /// <author>Daniel Murphy</author>
-    public class OrderedStack<E>
-        where E : new()
+    public class OrderedStack<T>
+        where T : new()
     {
         //UPGRADE_TODO: there is no logger class
         //private static readonly Logger log;
@@ -45,23 +45,23 @@ namespace Box2D.Pooling.Normal
         //	log = LoggerFactory.getLogger(typeof(OrderedStack));
         //}
 
-        private readonly E[] pool;
+        private readonly T[] pool;
         private int index;
         private readonly int size;
-        private readonly E[] container;
+        private readonly T[] container;
 
         public OrderedStack(int argStackSize, int argContainerSize)
         {
             size = argStackSize;
-            pool = new E[argStackSize];
+            pool = new T[argStackSize];
 
             for (int i = 0; i < argStackSize; i++)
             {
                 try
                 {
-                    pool[i] = new E();
+                    pool[i] = new T();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //log.error("Error creating pooled object " + argClass.getSimpleName(), e);
                     Debug.Assert(false); //Error creating pooled object  + argClass.getCanonicalName()
@@ -74,16 +74,16 @@ namespace Box2D.Pooling.Normal
                 }*/
             }
             index = 0;
-            container = new E[argContainerSize];
+            container = new T[argContainerSize];
         }
 
-        public E pop()
+        public T Pop()
         {
             Debug.Assert(index < size); // End of stack reached, there is probably a leak somewhere;
             return pool[index++];
         }
 
-        public E[] pop(int argNum)
+        public T[] Pop(int argNum)
         {
             Debug.Assert(index + argNum < size); //End of stack reached, there is probably a leak somewhere;
             Debug.Assert(argNum <= container.Length); //Container array is too small;
@@ -92,7 +92,7 @@ namespace Box2D.Pooling.Normal
             return container;
         }
 
-        public void push(int argNum)
+        public void Push(int argNum)
         {
             index -= argNum;
             Debug.Assert(index >= 0); //Beginning of stack reached, push/pops are unmatched;
