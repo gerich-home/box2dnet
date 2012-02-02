@@ -610,8 +610,8 @@ namespace Box2D.Collision
 
                     case ShapeType.Edge:
                         EdgeShape edge = (EdgeShape)shape;
-                        m_vertices[0].set_Renamed(edge.m_vertex1);
-                        m_vertices[1].set_Renamed(edge.m_vertex2);
+                        m_vertices[0].set_Renamed(edge.Vertex1);
+                        m_vertices[1].set_Renamed(edge.Vertex2);
                         m_count = 2;
                         m_radius = edge.Radius;
                         break;

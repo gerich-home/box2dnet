@@ -36,21 +36,25 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// edge vertex 1
         /// </summary>
-        public readonly Vec2 m_vertex1 = new Vec2();
+        public readonly Vec2 Vertex1 = new Vec2();
+
         /// <summary>
         /// edge vertex 2
         /// </summary>
-        public readonly Vec2 m_vertex2 = new Vec2();
+        public readonly Vec2 Vertex2 = new Vec2();
 
         /// <summary>
         /// optional adjacent vertex 1. Used for smooth collision
         /// </summary>
-        public readonly Vec2 m_vertex0 = new Vec2();
+        public readonly Vec2 Vertex0 = new Vec2();
+
         /// <summary>
         /// optional adjacent vertex 2. Used for smooth collision
         /// </summary>
-        public readonly Vec2 m_vertex3 = new Vec2();
-        public bool m_hasVertex0 = false, m_hasVertex3 = false;
+        public readonly Vec2 Vertex3 = new Vec2();
+
+        public bool HasVertex0;
+        public bool HasVertex3;
 
         private readonly Vec2 pool0 = new Vec2();
         private readonly Vec2 pool1 = new Vec2();
@@ -73,11 +77,11 @@ namespace Box2D.Collision.Shapes
             }
         }
 
-        public virtual void set_Renamed(Vec2 v1, Vec2 v2)
+        public virtual void Set(Vec2 v1, Vec2 v2)
         {
-            m_vertex1.set_Renamed(v1);
-            m_vertex2.set_Renamed(v2);
-            m_hasVertex0 = m_hasVertex3 = false;
+            Vertex1.set_Renamed(v1);
+            Vertex2.set_Renamed(v2);
+            HasVertex0 = HasVertex3 = false;
         }
 
         public override bool TestPoint(Transform xf, Vec2 p)
@@ -95,8 +99,8 @@ namespace Box2D.Collision.Shapes
             Rot.mulTrans(xf.q, p1, p1);
             Vec2 d = p2.subLocal(p1); // we don't use p2 later
 
-            Vec2 v1 = m_vertex1;
-            Vec2 v2 = m_vertex2;
+            Vec2 v1 = Vertex1;
+            Vec2 v2 = Vertex2;
             Vec2 normal = pool2.set_Renamed(v2).subLocal(v1);
             normal.set_Renamed(normal.y, -normal.x);
             normal.normalize();
@@ -161,8 +165,8 @@ namespace Box2D.Collision.Shapes
             Vec2 v1 = pool1;
             Vec2 v2 = pool2;
 
-            Transform.mulToOutUnsafe(xf, m_vertex1, v1);
-            Transform.mulToOutUnsafe(xf, m_vertex2, v2);
+            Transform.mulToOutUnsafe(xf, Vertex1, v1);
+            Transform.mulToOutUnsafe(xf, Vertex2, v2);
 
             Vec2.minToOut(v1, v2, aabb.lowerBound);
             Vec2.maxToOut(v1, v2, aabb.upperBound);
@@ -176,7 +180,7 @@ namespace Box2D.Collision.Shapes
         public override void ComputeMass(MassData massData, float density)
         {
             massData.Mass = 0.0f;
-            massData.Center.set_Renamed(m_vertex1).addLocal(m_vertex2).mulLocal(0.5f);
+            massData.Center.set_Renamed(Vertex1).addLocal(Vertex2).mulLocal(0.5f);
             massData.I = 0.0f;
         }
 
@@ -184,12 +188,12 @@ namespace Box2D.Collision.Shapes
         {
             EdgeShape edge = new EdgeShape();
             edge.Radius = this.Radius;
-            edge.m_hasVertex0 = this.m_hasVertex0;
-            edge.m_hasVertex3 = this.m_hasVertex3;
-            edge.m_vertex0.set_Renamed(this.m_vertex0);
-            edge.m_vertex1.set_Renamed(this.m_vertex1);
-            edge.m_vertex2.set_Renamed(this.m_vertex2);
-            edge.m_vertex3.set_Renamed(this.m_vertex3);
+            edge.HasVertex0 = this.HasVertex0;
+            edge.HasVertex3 = this.HasVertex3;
+            edge.Vertex0.set_Renamed(this.Vertex0);
+            edge.Vertex1.set_Renamed(this.Vertex1);
+            edge.Vertex2.set_Renamed(this.Vertex2);
+            edge.Vertex3.set_Renamed(this.Vertex3);
             return edge;
         }
     }

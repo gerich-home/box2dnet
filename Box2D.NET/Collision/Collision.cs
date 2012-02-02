@@ -876,8 +876,8 @@ namespace Box2D.Collision
             Transform.mulToOutUnsafe(xfB, circleB.P, temp);
             Transform.mulTransToOutUnsafe(xfA, temp, Q);
 
-            Vec2 A = edgeA.m_vertex1;
-            Vec2 B = edgeA.m_vertex2;
+            Vec2 A = edgeA.Vertex1;
+            Vec2 B = edgeA.Vertex2;
             e.set_Renamed(B).subLocal(A);
 
             // Barycentric coordinates
@@ -902,9 +902,9 @@ namespace Box2D.Collision
                 }
 
                 // Is there an edge connected to A?
-                if (edgeA.m_hasVertex0)
+                if (edgeA.HasVertex0)
                 {
-                    Vec2 A1 = edgeA.m_vertex0;
+                    Vec2 A1 = edgeA.Vertex0;
                     Vec2 B1 = A;
                     e1.set_Renamed(B1).subLocal(A1);
                     float u1 = Vec2.dot(e1, temp.set_Renamed(B1).subLocal(Q));
@@ -940,9 +940,9 @@ namespace Box2D.Collision
                 }
 
                 // Is there an edge connected to B?
-                if (edgeA.m_hasVertex3)
+                if (edgeA.HasVertex3)
                 {
-                    Vec2 B2 = edgeA.m_vertex3;
+                    Vec2 B2 = edgeA.Vertex3;
                     Vec2 A2 = B;
                     Vec2 e2 = e1;
                     e2.set_Renamed(B2).subLocal(A2);
@@ -1166,13 +1166,13 @@ namespace Box2D.Collision
                 Transform.mulTransToOutUnsafe(xfA, xfB, m_xf);
                 Transform.mulToOutUnsafe(m_xf, polygonB.m_centroid, m_centroidB);
 
-                m_v0 = edgeA.m_vertex0;
-                m_v1 = edgeA.m_vertex1;
-                m_v2 = edgeA.m_vertex2;
-                m_v3 = edgeA.m_vertex3;
+                m_v0 = edgeA.Vertex0;
+                m_v1 = edgeA.Vertex1;
+                m_v2 = edgeA.Vertex2;
+                m_v3 = edgeA.Vertex3;
 
-                bool hasVertex0 = edgeA.m_hasVertex0;
-                bool hasVertex3 = edgeA.m_hasVertex3;
+                bool hasVertex0 = edgeA.HasVertex0;
+                bool hasVertex3 = edgeA.HasVertex3;
 
                 edge1.set_Renamed(m_v2).subLocal(m_v1);
                 edge1.normalize();

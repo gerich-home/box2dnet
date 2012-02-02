@@ -72,29 +72,29 @@ namespace Box2D.Collision.Shapes
             Debug.Assert(0 <= index && index < Count - 1);
             edge.Radius = Radius;
 
-            edge.m_vertex1.set_Renamed(Vertices[index + 0]);
-            edge.m_vertex2.set_Renamed(Vertices[index + 1]);
+            edge.Vertex1.set_Renamed(Vertices[index + 0]);
+            edge.Vertex2.set_Renamed(Vertices[index + 1]);
 
             if (index > 0)
             {
-                edge.m_vertex0.set_Renamed(Vertices[index - 1]);
-                edge.m_hasVertex0 = true;
+                edge.Vertex0.set_Renamed(Vertices[index - 1]);
+                edge.HasVertex0 = true;
             }
             else
             {
-                edge.m_vertex0.set_Renamed(m_prevVertex);
-                edge.m_hasVertex0 = HasPrevVertex;
+                edge.Vertex0.set_Renamed(m_prevVertex);
+                edge.HasVertex0 = HasPrevVertex;
             }
 
             if (index < Count - 2)
             {
-                edge.m_vertex3.set_Renamed(Vertices[index + 2]);
-                edge.m_hasVertex3 = true;
+                edge.Vertex3.set_Renamed(Vertices[index + 2]);
+                edge.HasVertex3 = true;
             }
             else
             {
-                edge.m_vertex3.set_Renamed(m_nextVertex);
-                edge.m_hasVertex3 = HasNextVertex;
+                edge.Vertex3.set_Renamed(m_nextVertex);
+                edge.HasVertex3 = HasNextVertex;
             }
         }
 
@@ -116,8 +116,8 @@ namespace Box2D.Collision.Shapes
                 i2 = 0;
             }
 
-            edgeShape.m_vertex1.set_Renamed(Vertices[i1]);
-            edgeShape.m_vertex2.set_Renamed(Vertices[i2]);
+            edgeShape.Vertex1.set_Renamed(Vertices[i1]);
+            edgeShape.Vertex2.set_Renamed(Vertices[i2]);
 
             return edgeShape.Raycast(output, input, xf, 0);
         }

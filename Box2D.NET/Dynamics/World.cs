@@ -1704,8 +1704,8 @@ namespace Box2D.Dynamics
                 case ShapeType.Edge:
                     {
                         EdgeShape edge = (EdgeShape)fixture.Shape;
-                        Transform.mulToOutUnsafe(xf, edge.m_vertex1, v1);
-                        Transform.mulToOutUnsafe(xf, edge.m_vertex2, v2);
+                        Transform.mulToOutUnsafe(xf, edge.Vertex1, v1);
+                        Transform.mulToOutUnsafe(xf, edge.Vertex2, v2);
                         m_debugDraw.DrawSegment(v1, v2, color);
                     }
                     break;
