@@ -40,63 +40,63 @@ namespace Box2D.Dynamics
         /// The body type: static, kinematic, or dynamic.
         /// Note: if a dynamic body would have zero mass, the mass is set to one.
         /// </summary>
-        public BodyType type;
+        public BodyType Type;
 
         /// <summary>
         /// Use this to store application specific body data.
         /// </summary>
-        public object userData;
+        public object UserData;
 
         /// <summary>
         /// The world position of the body. Avoid creating bodies at the origin
         /// since this can lead to many overlapping shapes.
         /// </summary>
-        public Vec2 position;
+        public Vec2 Position;
 
         /// <summary>
         /// The world angle of the body in radians.
         /// </summary>
-        public float angle;
+        public float Angle;
 
         /// <summary>
         /// The linear velocity of the body in world co-ordinates.
         /// </summary>
-        public Vec2 linearVelocity;
+        public Vec2 LinearVelocity;
 
         /// <summary>
         /// The angular velocity of the body.
         /// </summary>
-        public float angularVelocity;
+        public float AngularVelocity;
 
         /// <summary>
         /// Linear damping is use to reduce the linear velocity. The damping parameter
         /// can be larger than 1.0f but the damping effect becomes sensitive to the
         /// time step when the damping parameter is large.
         /// </summary>
-        public float linearDamping;
+        public float LinearDamping;
 
         /// <summary>
         /// Angular damping is use to reduce the angular velocity. The damping parameter
         /// can be larger than 1.0f but the damping effect becomes sensitive to the
         /// time step when the damping parameter is large.
         /// </summary>
-        public float angularDamping;
+        public float AngularDamping;
 
         /// <summary>
         /// Set this flag to false if this body should never fall asleep. Note that
         /// this increases CPU usage.
         /// </summary>
-        public bool allowSleep;
+        public bool AllowSleep;
 
         /// <summary>
         /// Is this body initially sleeping?
         /// </summary>
-        public bool awake;
+        public bool Awake;
 
         /// <summary>
         /// Should this body be prevented from rotating? Useful for characters.
         /// </summary>
-        public bool fixedRotation;
+        public bool FixedRotation;
 
         /// <summary>
         /// Is this a fast moving body that should be prevented from tunneling through
@@ -104,34 +104,34 @@ namespace Box2D.Dynamics
         /// kinematic and static bodies. This setting is only considered on dynamic bodies.
         /// </summary>
         /// <warning>You should use this flag sparingly since it increases processing time.</warning>
-        public bool bullet;
+        public bool Bullet;
 
         /// <summary>
         /// Does this body start out active?
         /// </summary>
-        public bool active;
+        public bool Active;
 
         /// <summary>
         /// Experimental: scales the inertia tensor.
         /// </summary>
-        public float gravityScale;
+        public float GravityScale;
 
         public BodyDef()
         {
-            userData = null;
-            position = new Vec2();
-            angle = 0f;
-            linearVelocity = new Vec2();
-            angularVelocity = 0f;
-            linearDamping = 0f;
-            angularDamping = 0f;
-            allowSleep = true;
-            awake = true;
-            fixedRotation = false;
-            bullet = false;
-            type = BodyType.STATIC;
-            active = true;
-            gravityScale = 1.0f;
+            UserData = null;
+            Position = new Vec2();
+            Angle = 0f;
+            LinearVelocity = new Vec2();
+            AngularVelocity = 0f;
+            LinearDamping = 0f;
+            AngularDamping = 0f;
+            AllowSleep = true;
+            Awake = true;
+            FixedRotation = false;
+            Bullet = false;
+            Type = BodyType.STATIC;
+            Active = true;
+            GravityScale = 1.0f;
         }
     }
 }

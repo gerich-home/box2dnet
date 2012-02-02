@@ -83,45 +83,45 @@ namespace Box2D.Dynamics
 
         public Body(BodyDef bd, World world)
         {
-            Debug.Assert(bd.position.Valid);
-            Debug.Assert(bd.linearVelocity.Valid);
-            Debug.Assert(bd.gravityScale >= 0.0f);
-            Debug.Assert(bd.angularDamping >= 0.0f);
-            Debug.Assert(bd.linearDamping >= 0.0f);
+            Debug.Assert(bd.Position.Valid);
+            Debug.Assert(bd.LinearVelocity.Valid);
+            Debug.Assert(bd.GravityScale >= 0.0f);
+            Debug.Assert(bd.AngularDamping >= 0.0f);
+            Debug.Assert(bd.LinearDamping >= 0.0f);
 
             Flags = TypeFlags.None;
 
-            if (bd.bullet)
+            if (bd.Bullet)
             {
                 Flags |= TypeFlags.Bullet;
             }
-            if (bd.fixedRotation)
+            if (bd.FixedRotation)
             {
                 Flags |= TypeFlags.FixedRotation;
             }
-            if (bd.allowSleep)
+            if (bd.AllowSleep)
             {
                 Flags |= TypeFlags.AutoSleep;
             }
-            if (bd.awake)
+            if (bd.Awake)
             {
                 Flags |= TypeFlags.Awake;
             }
-            if (bd.active)
+            if (bd.Active)
             {
                 Flags |= TypeFlags.Active;
             }
 
             World = world;
 
-            Xf.p.set_Renamed(bd.position);
-            Xf.q.set_Renamed(bd.angle);
+            Xf.p.set_Renamed(bd.Position);
+            Xf.q.set_Renamed(bd.Angle);
 
             Sweep.localCenter.setZero();
             Sweep.c0.set_Renamed(Xf.p);
             Sweep.c.set_Renamed(Xf.p);
-            Sweep.a0 = bd.angle;
-            Sweep.a = bd.angle;
+            Sweep.a0 = bd.Angle;
+            Sweep.a = bd.Angle;
             Sweep.alpha0 = 0.0f;
 
             JointList = null;
@@ -129,19 +129,19 @@ namespace Box2D.Dynamics
             Prev = null;
             Next = null;
 
-            m_linearVelocity.set_Renamed(bd.linearVelocity);
-            m_angularVelocity = bd.angularVelocity;
+            m_linearVelocity.set_Renamed(bd.LinearVelocity);
+            m_angularVelocity = bd.AngularVelocity;
 
-            LinearDamping = bd.linearDamping;
-            AngularDamping = bd.angularDamping;
-            GravityScale = bd.gravityScale;
+            LinearDamping = bd.LinearDamping;
+            AngularDamping = bd.AngularDamping;
+            GravityScale = bd.GravityScale;
 
             Force.setZero();
             Torque = 0.0f;
 
             SleepTime = 0.0f;
 
-            m_type = bd.type;
+            m_type = bd.Type;
 
             if (m_type == BodyType.DYNAMIC)
             {
@@ -157,7 +157,7 @@ namespace Box2D.Dynamics
             I = 0.0f;
             InvI = 0.0f;
 
-            UserData = bd.userData;
+            UserData = bd.UserData;
 
             FixtureList = null;
             FixtureCount = 0;
