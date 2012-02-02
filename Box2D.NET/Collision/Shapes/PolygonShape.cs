@@ -34,7 +34,7 @@ namespace Box2D.Collision.Shapes
     /// A convex polygon shape. Polygons have a maximum number of vertices equal to _maxPolygonVertices.
     /// In most cases you should not need many vertices for a convex polygon.
     /// </summary>
-    public class PolygonShape : Shape
+    public sealed class PolygonShape : Shape
     {
         /// <summary>
         /// Dump lots of debug information.
@@ -44,62 +44,45 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Local position of the shape centroid in parent body frame.
         /// </summary>
-        public readonly Vec2 m_centroid = new Vec2();
-
-        /// <summary>
-        /// The vertices of the shape. Note: use getVertexCount(), not m_vertices.length, to get number of
-        /// active vertices.
-        /// </summary>
-        public readonly Vec2[] m_vertices;
-
-        /// <summary>
-        /// The normals of the shape. Note: use getVertexCount(), not m_normals.length, to get number of
-        /// active normals.
-        /// </summary>
-        public readonly Vec2[] m_normals;
-
-        /// <summary>
-        /// Number of active vertices in the shape.
-        /// </summary>
-        public int m_count;
+        internal readonly Vec2 Centroid = new Vec2();
 
         // pooling
         private readonly Vec2 pool1 = new Vec2();
         private readonly Vec2 pool2 = new Vec2();
         private readonly Vec2 pool3 = new Vec2();
         private readonly Vec2 pool4 = new Vec2();
-        private Transform poolt1 = new Transform();
+        private readonly Transform poolt1 = new Transform();
 
         public PolygonShape() :
             base(ShapeType.Polygon)
         {
 
-            m_count = 0;
-            m_vertices = new Vec2[Settings.maxPolygonVertices];
-            for (int i = 0; i < m_vertices.Length; i++)
+            VertexCount = 0;
+            Vertices = new Vec2[Settings.maxPolygonVertices];
+            for (int i = 0; i < Vertices.Length; i++)
             {
-                m_vertices[i] = new Vec2();
+                Vertices[i] = new Vec2();
             }
-            m_normals = new Vec2[Settings.maxPolygonVertices];
-            for (int i = 0; i < m_normals.Length; i++)
+            Normals = new Vec2[Settings.maxPolygonVertices];
+            for (int i = 0; i < Normals.Length; i++)
             {
-                m_normals[i] = new Vec2();
+                Normals[i] = new Vec2();
             }
             Radius = Settings.polygonRadius;
-            m_centroid.setZero();
+            Centroid.setZero();
         }
 
         public override Shape Clone()
         {
             PolygonShape shape = new PolygonShape();
-            shape.m_centroid.set_Renamed(this.m_centroid);
-            for (int i = 0; i < shape.m_normals.Length; i++)
+            shape.Centroid.set_Renamed(Centroid);
+            for (int i = 0; i < shape.Normals.Length; i++)
             {
-                shape.m_normals[i].set_Renamed(m_normals[i]);
-                shape.m_vertices[i].set_Renamed(m_vertices[i]);
+                shape.Normals[i].set_Renamed(Normals[i]);
+                shape.Vertices[i].set_Renamed(Vertices[i]);
             }
-            shape.Radius = this.Radius;
-            shape.m_count = this.m_count;
+            shape.Radius = Radius;
+            shape.VertexCount = VertexCount;
             return shape;
         }
 
@@ -109,18 +92,18 @@ namespace Box2D.Collision.Shapes
         /// <param name="v1"></param>
         /// <param name="v2"></param>
         /// <deprecated></deprecated>
-        public void setAsEdge(Vec2 v1, Vec2 v2)
+        public void SetAsEdge(Vec2 v1, Vec2 v2)
         {
-            m_count = 2;
-            m_vertices[0].set_Renamed(v1);
-            m_vertices[1].set_Renamed(v2);
-            m_centroid.set_Renamed(v1).addLocal(v2).mulLocal(0.5f);
+            VertexCount = 2;
+            Vertices[0].set_Renamed(v1);
+            Vertices[1].set_Renamed(v2);
+            Centroid.set_Renamed(v1).addLocal(v2).mulLocal(0.5f);
             // = 0.5f * (v1 + v2);
-            m_normals[0].set_Renamed(v2).subLocal(v1);
-            Vec2.crossToOut(m_normals[0], 1f, m_normals[0]);
+            Normals[0].set_Renamed(v2).subLocal(v1);
+            Vec2.crossToOut(Normals[0], 1f, Normals[0]);
             // m_normals[0] = Cross(v2 - v1, 1.0f);
-            m_normals[0].normalize();
-            m_normals[1].set_Renamed(m_normals[0]).negateLocal();
+            Normals[0].normalize();
+            Normals[1].set_Renamed(Normals[0]).negateLocal();
         }
 
         /// <summary>
@@ -129,9 +112,9 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <warning>the points may be re-ordered, even if they form a convex polygon</warning>
         /// <warning>collinear points are handled but not removed. Collinear points may lead to poor stacking behavior.</warning>
-        public void set_Renamed(Vec2[] vertices, int count)
+        public void Set(Vec2[] vertices, int count)
         {
-            set_Renamed(vertices, count, null, null);
+            Set(vertices, count, null, null);
         }
 
         /// <summary>
@@ -141,12 +124,12 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <warning>the points may be re-ordered, even if they form a convex polygon</warning>
         /// <warning>collinear points are handled but not removed. Collinear points may lead to poor stacking behavior.</warning>
-        public void set_Renamed(Vec2[] verts, int num, Vec2Array vecPool, IntArray intPool)
+        public void Set(Vec2[] verts, int num, Vec2Array vecPool, IntArray intPool)
         {
             Debug.Assert(3 <= num && num <= Settings.maxPolygonVertices);
             if (num < 3)
             {
-                setAsBox(1.0f, 1.0f);
+                SetAsBox(1.0f, 1.0f);
                 return;
             }
 
@@ -216,34 +199,34 @@ namespace Box2D.Collision.Shapes
                 }
             }
 
-            this.m_count = m;
+            VertexCount = m;
 
             // Copy vertices.
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
-                if (m_vertices[i] == null)
+                if (Vertices[i] == null)
                 {
-                    m_vertices[i] = new Vec2();
+                    Vertices[i] = new Vec2();
                 }
-                m_vertices[i].set_Renamed(ps[hull[i]]);
+                Vertices[i].set_Renamed(ps[hull[i]]);
             }
 
             Vec2 edge = pool1;
 
             // Compute normals. Ensure the edges have non-zero length.
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
                 int i1 = i;
-                int i2 = i + 1 < m_count ? i + 1 : 0;
-                edge.set_Renamed(m_vertices[i2]).subLocal(m_vertices[i1]);
+                int i2 = i + 1 < VertexCount ? i + 1 : 0;
+                edge.set_Renamed(Vertices[i2]).subLocal(Vertices[i1]);
 
                 Debug.Assert(edge.lengthSquared() > Settings.EPSILON * Settings.EPSILON);
-                Vec2.crossToOutUnsafe(edge, 1f, m_normals[i]);
-                m_normals[i].normalize();
+                Vec2.crossToOutUnsafe(edge, 1f, Normals[i]);
+                Normals[i].normalize();
             }
 
             // Compute the polygon centroid.
-            computeCentroidToOut(m_vertices, m_count, m_centroid);
+            ComputeCentroidToOut(Vertices, VertexCount, Centroid);
         }
 
         /// <summary>
@@ -251,18 +234,18 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="hx">the half-width.</param>
         /// <param name="hy">the half-height.</param>
-        public void setAsBox(float hx, float hy)
+        public void SetAsBox(float hx, float hy)
         {
-            m_count = 4;
-            m_vertices[0].set_Renamed(-hx, -hy);
-            m_vertices[1].set_Renamed(hx, -hy);
-            m_vertices[2].set_Renamed(hx, hy);
-            m_vertices[3].set_Renamed(-hx, hy);
-            m_normals[0].set_Renamed(0.0f, -1.0f);
-            m_normals[1].set_Renamed(1.0f, 0.0f);
-            m_normals[2].set_Renamed(0.0f, 1.0f);
-            m_normals[3].set_Renamed(-1.0f, 0.0f);
-            m_centroid.setZero();
+            VertexCount = 4;
+            Vertices[0].set_Renamed(-hx, -hy);
+            Vertices[1].set_Renamed(hx, -hy);
+            Vertices[2].set_Renamed(hx, hy);
+            Vertices[3].set_Renamed(-hx, hy);
+            Normals[0].set_Renamed(0.0f, -1.0f);
+            Normals[1].set_Renamed(1.0f, 0.0f);
+            Normals[2].set_Renamed(0.0f, 1.0f);
+            Normals[3].set_Renamed(-1.0f, 0.0f);
+            Centroid.setZero();
         }
 
         /// <summary>
@@ -272,28 +255,28 @@ namespace Box2D.Collision.Shapes
         /// <param name="hy">the half-height.</param>
         /// <param name="center">the center of the box in local coordinates.</param>
         /// <param name="angle">the rotation of the box in local coordinates.</param>
-        public void setAsBox(float hx, float hy, Vec2 center, float angle)
+        public void SetAsBox(float hx, float hy, Vec2 center, float angle)
         {
-            m_count = 4;
-            m_vertices[0].set_Renamed(-hx, -hy);
-            m_vertices[1].set_Renamed(hx, -hy);
-            m_vertices[2].set_Renamed(hx, hy);
-            m_vertices[3].set_Renamed(-hx, hy);
-            m_normals[0].set_Renamed(0.0f, -1.0f);
-            m_normals[1].set_Renamed(1.0f, 0.0f);
-            m_normals[2].set_Renamed(0.0f, 1.0f);
-            m_normals[3].set_Renamed(-1.0f, 0.0f);
-            m_centroid.set_Renamed(center);
+            VertexCount = 4;
+            Vertices[0].set_Renamed(-hx, -hy);
+            Vertices[1].set_Renamed(hx, -hy);
+            Vertices[2].set_Renamed(hx, hy);
+            Vertices[3].set_Renamed(-hx, hy);
+            Normals[0].set_Renamed(0.0f, -1.0f);
+            Normals[1].set_Renamed(1.0f, 0.0f);
+            Normals[2].set_Renamed(0.0f, 1.0f);
+            Normals[3].set_Renamed(-1.0f, 0.0f);
+            Centroid.set_Renamed(center);
 
             Transform xf = poolt1;
             xf.p.set_Renamed(center);
             xf.q.set_Renamed(angle);
 
             // Transform vertices and normals.
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
-                Transform.mulToOut(xf, m_vertices[i], m_vertices[i]);
-                Rot.mulToOut(xf.q, m_normals[i], m_normals[i]);
+                Transform.mulToOut(xf, Vertices[i], Vertices[i]);
+                Rot.mulToOut(xf.q, Normals[i], Normals[i]);
             }
         }
 
@@ -318,18 +301,18 @@ namespace Box2D.Collision.Shapes
             {
                 Console.Out.WriteLine("--testPoint debug--");
                 Console.Out.WriteLine("Vertices: ");
-                for (int i = 0; i < m_count; ++i)
+                for (int i = 0; i < VertexCount; ++i)
                 {
-                    Console.Out.WriteLine(m_vertices[i]);
+                    Console.Out.WriteLine(Vertices[i]);
                 }
                 Console.Out.WriteLine("pLocal: " + pLocal);
             }
 
 
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
-                temp.set_Renamed(pLocal).subLocal(m_vertices[i]);
-                float dot = Vec2.dot(m_normals[i], temp);
+                temp.set_Renamed(pLocal).subLocal(Vertices[i]);
+                float dot = Vec2.dot(Normals[i], temp);
                 if (dot > 0.0f)
                 {
                     return false;
@@ -344,14 +327,14 @@ namespace Box2D.Collision.Shapes
             Vec2 v = pool1;
             Vec2 lower = aabb.lowerBound;
             Vec2 upper = aabb.upperBound;
-            Vec2 v1 = m_vertices[0];
+            Vec2 v1 = Vertices[0];
             lower.x = (xf.q.c * v1.x - xf.q.s * v1.y) + xf.p.x;
             lower.y = (xf.q.s * v1.x + xf.q.c * v1.y) + xf.p.y;
             upper.set_Renamed(lower);
 
-            for (int i = 1; i < m_count; ++i)
+            for (int i = 1; i < VertexCount; ++i)
             {
-                Vec2 v2 = m_vertices[i];
+                Vec2 v2 = Vertices[i];
                 v.x = (xf.q.c * v2.x - xf.q.s * v2.y) + xf.p.x;
                 v.y = (xf.q.s * v2.x + xf.q.c * v2.y) + xf.p.y;
                 // Vec2 v = Mul(xf, m_vertices[i]);
@@ -433,23 +416,17 @@ namespace Box2D.Collision.Shapes
         /// Get the vertex count.
         /// </summary>
         /// <returns></returns>
-        virtual public int VertexCount
-        {
-            get
-            {
-                return m_count;
-            }
-        }
+        public int VertexCount { get; set; }
 
         /// <summary>
         /// Get a vertex by index.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Vec2 getVertex(int index)
+        public Vec2 GetVertex(int index)
         {
-            Debug.Assert(0 <= index && index < m_count);
-            return m_vertices[index];
+            Debug.Assert(0 <= index && index < VertexCount);
+            return Vertices[index];
         }
 
         public override bool Raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
@@ -473,14 +450,14 @@ namespace Box2D.Collision.Shapes
 
             int index = -1;
 
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
                 // p = p1 + a * d
                 // dot(normal, p - v) = 0
                 // dot(normal, p1 - v) + a * dot(normal, d) = 0
-                temp.set_Renamed(m_vertices[i]).subLocal(p1);
-                float numerator = Vec2.dot(m_normals[i], temp);
-                float denominator = Vec2.dot(m_normals[i], d);
+                temp.set_Renamed(Vertices[i]).subLocal(p1);
+                float numerator = Vec2.dot(Normals[i], temp);
+                float denominator = Vec2.dot(Normals[i], d);
 
                 if (denominator == 0.0f)
                 {
@@ -522,18 +499,18 @@ namespace Box2D.Collision.Shapes
             if (index >= 0)
             {
                 output.fraction = lower;
-                Rot.mulToOutUnsafe(xf.q, m_normals[index], output.normal);
+                Rot.mulToOutUnsafe(xf.q, Normals[index], output.normal);
                 // normal = Mul(xf.R, m_normals[index]);
                 return true;
             }
             return false;
         }
 
-        public void computeCentroidToOut(Vec2[] vs, int count, Vec2 out_Renamed)
+        public void ComputeCentroidToOut(Vec2[] vs, int count, Vec2 result)
         {
             Debug.Assert(count >= 3);
 
-            out_Renamed.set_Renamed(0.0f, 0.0f);
+            result.set_Renamed(0.0f, 0.0f);
             float area = 0.0f;
 
             // pRef is the reference point for forming triangles.
@@ -544,7 +521,7 @@ namespace Box2D.Collision.Shapes
             Vec2 e1 = pool2;
             Vec2 e2 = pool3;
 
-            float inv3 = 1.0f / 3.0f;
+            const float inv3 = 1.0f / 3.0f;
 
             for (int i = 0; i < count; ++i)
             {
@@ -563,12 +540,12 @@ namespace Box2D.Collision.Shapes
 
                 // Area weighted centroid
                 e1.set_Renamed(p1).addLocal(p2).addLocal(p3).mulLocal(triangleArea * inv3);
-                out_Renamed.addLocal(e1);
+                result.addLocal(e1);
             }
 
             // Centroid
             Debug.Assert(area > Settings.EPSILON);
-            out_Renamed.mulLocal(1.0f / area);
+            result.mulLocal(1.0f / area);
         }
 
         public override void ComputeMass(MassData massData, float density)
@@ -597,7 +574,7 @@ namespace Box2D.Collision.Shapes
             //
             // The rest of the derivation is handled by computer algebra.
 
-            Debug.Assert(m_count >= 3);
+            Debug.Assert(VertexCount >= 3);
 
             Vec2 center = pool1;
             center.setZero();
@@ -609,22 +586,22 @@ namespace Box2D.Collision.Shapes
             Vec2 s = pool2;
             s.setZero();
             // This code would put the reference point inside the polygon.
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
-                s.addLocal(m_vertices[i]);
+                s.addLocal(Vertices[i]);
             }
-            s.mulLocal(1.0f / m_count);
+            s.mulLocal(1.0f / VertexCount);
 
-            float k_inv3 = 1.0f / 3.0f;
+            const float k_inv3 = 1.0f / 3.0f;
 
             Vec2 e1 = pool3;
             Vec2 e2 = pool4;
 
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
                 // Triangle vertices.
-                e1.set_Renamed(m_vertices[i]).subLocal(s);
-                e2.set_Renamed(s).negateLocal().addLocal(i + 1 < m_count ? m_vertices[i + 1] : m_vertices[0]);
+                e1.set_Renamed(Vertices[i]).subLocal(s);
+                e2.set_Renamed(s).negateLocal().addLocal(i + 1 < VertexCount ? Vertices[i + 1] : Vertices[0]);
 
                 float D = Vec2.cross(e1, e2);
 
@@ -665,23 +642,23 @@ namespace Box2D.Collision.Shapes
         /// Validate convexity. This is a very time consuming operation.
         /// </summary>
         /// <returns></returns>
-        public virtual bool validate()
+        public bool Validate()
         {
-            for (int i = 0; i < m_count; ++i)
+            for (int i = 0; i < VertexCount; ++i)
             {
                 int i1 = i;
-                int i2 = i < m_count - 1 ? i1 + 1 : 0;
-                Vec2 p = m_vertices[i1];
-                Vec2 e = pool1.set_Renamed(m_vertices[i2]).subLocal(p);
+                int i2 = i < VertexCount - 1 ? i1 + 1 : 0;
+                Vec2 p = Vertices[i1];
+                Vec2 e = pool1.set_Renamed(Vertices[i2]).subLocal(p);
 
-                for (int j = 0; j < m_count; ++j)
+                for (int j = 0; j < VertexCount; ++j)
                 {
                     if (j == i1 || j == i2)
                     {
                         continue;
                     }
 
-                    Vec2 v = pool2.set_Renamed(m_vertices[j]).subLocal(p);
+                    Vec2 v = pool2.set_Renamed(Vertices[j]).subLocal(p);
                     float c = Vec2.cross(e, v);
                     if (c < 0.0f)
                     {
@@ -696,42 +673,28 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Get the vertices in local coordinates.
         /// </summary>
-        virtual public Vec2[] Vertices
-        {
-            get
-            {
-                return m_vertices;
-            }
-
-        }
+        public Vec2[] Vertices { get; private set; }
 
         /// <summary>
         /// Get the edge normal vectors. There is one for each vertex.
         /// </summary>
-        virtual public Vec2[] Normals
-        {
-            get
-            {
-                return m_normals;
-            }
+        public Vec2[] Normals { get; private set; }
 
+        /// <summary>
+        /// Get the centroid and apply the supplied transform.
+        /// </summary>
+        public Vec2 GetCentroid(Transform xf)
+        {
+            return Transform.mul(xf, Centroid);
         }
 
         /// <summary>
         /// Get the centroid and apply the supplied transform.
         /// </summary>
-        public virtual Vec2 centroid(Transform xf)
+        public Vec2 CentroidToOut(Transform xf, Vec2 result)
         {
-            return Transform.mul(xf, m_centroid);
-        }
-
-        /// <summary>
-        /// Get the centroid and apply the supplied transform.
-        /// </summary>
-        public virtual Vec2 centroidToOut(Transform xf, Vec2 out_Renamed)
-        {
-            Transform.mulToOut(xf, m_centroid, out_Renamed);
-            return out_Renamed;
+            Transform.mulToOut(xf, Centroid, result);
+            return result;
         }
     }
 }

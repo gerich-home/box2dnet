@@ -276,10 +276,10 @@ namespace Box2D.Collision
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             float separation = Single.Epsilon;
             float radius = polygon.Radius + circle.Radius;
-            int vertexCount = polygon.m_count;
+            int vertexCount = polygon.VertexCount;
 
-            Vec2[] vertices = polygon.m_vertices;
-            Vec2[] normals = polygon.m_normals;
+            Vec2[] vertices = polygon.Vertices;
+            Vec2[] normals = polygon.Normals;
 
             for (int i = 0; i < vertexCount; i++)
             {
@@ -462,12 +462,12 @@ namespace Box2D.Collision
         /// </param>
         public float edgeSeparation(PolygonShape poly1, Transform xf1, int edge1, PolygonShape poly2, Transform xf2)
         {
-            int count1 = poly1.m_count;
-            Vec2[] vertices1 = poly1.m_vertices;
-            Vec2[] normals1 = poly1.m_normals;
+            int count1 = poly1.VertexCount;
+            Vec2[] vertices1 = poly1.Vertices;
+            Vec2[] normals1 = poly1.Normals;
 
-            int count2 = poly2.m_count;
-            Vec2[] vertices2 = poly2.m_vertices;
+            int count2 = poly2.VertexCount;
+            Vec2[] vertices2 = poly2.Vertices;
 
             Debug.Assert(0 <= edge1 && edge1 < count1);
             // Convert normal from poly1's frame into poly2's frame.
@@ -542,14 +542,14 @@ namespace Box2D.Collision
         /// <returns></returns>
         public void findMaxSeparation(EdgeResults results, PolygonShape poly1, Transform xf1, PolygonShape poly2, Transform xf2)
         {
-            int count1 = poly1.m_count;
-            Vec2[] normals1 = poly1.m_normals;
+            int count1 = poly1.VertexCount;
+            Vec2[] normals1 = poly1.Normals;
             //Vec2 v = poly2.m_centroid;
 
             // Vector pointing from the centroid of poly1 to the centroid of poly2.
             // before inline:
-            Transform.mulToOutUnsafe(xf2, poly2.m_centroid, d);
-            Transform.mulToOutUnsafe(xf1, poly1.m_centroid, temp);
+            Transform.mulToOutUnsafe(xf2, poly2.Centroid, d);
+            Transform.mulToOutUnsafe(xf1, poly1.Centroid, temp);
             d.subLocal(temp);
 
             Rot.mulTransUnsafe(xf1.q, d, dLocal1);
@@ -651,12 +651,12 @@ namespace Box2D.Collision
         // djm pooling from above
         public void findIncidentEdge(ClipVertex[] c, PolygonShape poly1, Transform xf1, int edge1, PolygonShape poly2, Transform xf2)
         {
-            int count1 = poly1.m_count;
-            Vec2[] normals1 = poly1.m_normals;
+            int count1 = poly1.VertexCount;
+            Vec2[] normals1 = poly1.Normals;
 
-            int count2 = poly2.m_count;
-            Vec2[] vertices2 = poly2.m_vertices;
-            Vec2[] normals2 = poly2.m_normals;
+            int count2 = poly2.VertexCount;
+            Vec2[] vertices2 = poly2.Vertices;
+            Vec2[] normals2 = poly2.Normals;
 
             Debug.Assert(0 <= edge1 && edge1 < count1);
 
@@ -772,8 +772,8 @@ namespace Box2D.Collision
 
             findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
 
-            int count1 = poly1.m_count;
-            Vec2[] vertices1 = poly1.m_vertices;
+            int count1 = poly1.VertexCount;
+            Vec2[] vertices1 = poly1.Vertices;
 
             int iv1 = edge1;
             int iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
@@ -1164,7 +1164,7 @@ namespace Box2D.Collision
             {
 
                 Transform.mulTransToOutUnsafe(xfA, xfB, m_xf);
-                Transform.mulToOutUnsafe(m_xf, polygonB.m_centroid, m_centroidB);
+                Transform.mulToOutUnsafe(m_xf, polygonB.Centroid, m_centroidB);
 
                 m_v0 = edgeA.Vertex0;
                 m_v1 = edgeA.Vertex1;
@@ -1357,11 +1357,11 @@ namespace Box2D.Collision
                 }
 
                 // Get polygonB in frameA
-                m_polygonB.count = polygonB.m_count;
-                for (int i = 0; i < polygonB.m_count; ++i)
+                m_polygonB.count = polygonB.VertexCount;
+                for (int i = 0; i < polygonB.VertexCount; ++i)
                 {
-                    Transform.mulToOutUnsafe(m_xf, polygonB.m_vertices[i], m_polygonB.vertices[i]);
-                    Rot.mulToOutUnsafe(m_xf.q, polygonB.m_normals[i], m_polygonB.normals[i]);
+                    Transform.mulToOutUnsafe(m_xf, polygonB.Vertices[i], m_polygonB.vertices[i]);
+                    Rot.mulToOutUnsafe(m_xf.q, polygonB.Normals[i], m_polygonB.normals[i]);
                 }
 
                 m_radius = 2.0f * Settings.polygonRadius;
@@ -1510,8 +1510,8 @@ namespace Box2D.Collision
                 }
                 else
                 {
-                    manifold.localNormal.set_Renamed(polygonB.m_normals[rf.i1]);
-                    manifold.localPoint.set_Renamed(polygonB.m_vertices[rf.i1]);
+                    manifold.localNormal.set_Renamed(polygonB.Normals[rf.i1]);
+                    manifold.localPoint.set_Renamed(polygonB.Vertices[rf.i1]);
                 }
 
                 int pointCount = 0;

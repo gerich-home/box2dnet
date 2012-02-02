@@ -1687,14 +1687,14 @@ namespace Box2D.Dynamics
                 case ShapeType.Polygon:
                     {
                         PolygonShape poly = (PolygonShape)fixture.Shape;
-                        int vertexCount = poly.m_count;
+                        int vertexCount = poly.VertexCount;
                         Debug.Assert(vertexCount <= Settings.maxPolygonVertices);
                         Vec2[] vertices = tlvertices.Get(Settings.maxPolygonVertices);
 
                         for (int i = 0; i < vertexCount; ++i)
                         {
                             // vertices[i] = Mul(xf, poly.m_vertices[i]);
-                            Transform.mulToOutUnsafe(xf, poly.m_vertices[i], vertices[i]);
+                            Transform.mulToOutUnsafe(xf, poly.Vertices[i], vertices[i]);
                         }
 
                         m_debugDraw.DrawSolidPolygon(vertices, vertexCount, color);

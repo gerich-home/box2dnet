@@ -580,11 +580,11 @@ namespace Box2D.Collision
 
                     case ShapeType.Polygon:
                         PolygonShape poly = (PolygonShape)shape;
-                        m_count = poly.m_count;
+                        m_count = poly.VertexCount;
                         m_radius = poly.Radius;
                         for (int i = 0; i < m_count; i++)
                         {
-                            m_vertices[i].set_Renamed(poly.m_vertices[i]);
+                            m_vertices[i].set_Renamed(poly.Vertices[i]);
                         }
                         break;
 
