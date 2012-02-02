@@ -262,19 +262,19 @@ namespace Box2D.Dynamics
 
         public virtual void Create(Body body, FixtureDef def)
         {
-            UserData = def.userData;
-            Friction = def.friction;
-            Restitution = def.restitution;
+            UserData = def.UserData;
+            Friction = def.Friction;
+            Restitution = def.Restitution;
 
             Body = body;
             Next = null;
 
 
-            Filter.Set(def.filter);
+            Filter.Set(def.Filter);
 
-            IsSensor = def.isSensor;
+            IsSensor = def.IsSensor;
 
-            Shape = def.shape.Clone();
+            Shape = def.Shape.Clone();
 
             // Reserve proxy space
             int childCount = Shape.ChildCount;
@@ -305,7 +305,7 @@ namespace Box2D.Dynamics
             }
             ProxyCount = 0;
 
-            m_density = def.density;
+            m_density = def.Density;
         }
 
         public virtual void Destroy()

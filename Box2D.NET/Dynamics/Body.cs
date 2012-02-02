@@ -222,8 +222,8 @@ namespace Box2D.Dynamics
         /// <warning>This function is locked during callbacks.</warning>
         public Fixture CreateFixture(Shape shape, float density)
         {
-            fixDef.shape = shape;
-            fixDef.density = density;
+            fixDef.Shape = shape;
+            fixDef.Density = density;
 
             return CreateFixture(fixDef);
         }

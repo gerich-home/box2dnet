@@ -38,48 +38,48 @@ namespace Box2D.Dynamics
         /// The shape, this must be set. The shape will be cloned, so you
         /// can create the shape on the stack.
         /// </summary>
-        public Shape shape = null;
+        public Shape Shape;
 
         /// <summary>
         /// Use this to store application specific fixture data.
         /// </summary>
-        public object userData;
+        public object UserData;
 
         /// <summary>
         /// The friction coefficient, usually in the range [0,1].
         /// </summary>
-        public float friction;
+        public float Friction;
 
         /// <summary>
         /// The restitution (elasticity) usually in the range [0,1].
         /// </summary>
-        public float restitution;
+        public float Restitution;
 
         /// <summary>
         /// The density, usually in kg/m^2
         /// </summary>
-        public float density;
+        public float Density;
 
         /// <summary>
         /// A sensor shape collects contact information but never generates a collision
         /// response.
         /// </summary>
-        public bool isSensor;
+        public bool IsSensor;
 
         /// <summary>
         /// Contact filtering data
         /// </summary>
-        public Filter filter;
+        public Filter Filter;
 
         public FixtureDef()
         {
-            shape = null;
-            userData = null;
-            friction = 0.2f;
-            restitution = 0f;
-            density = 0f;
-            filter = new Filter();
-            isSensor = false;
+            Shape = null;
+            UserData = null;
+            Friction = 0.2f;
+            Restitution = 0f;
+            Density = 0f;
+            Filter = new Filter();
+            IsSensor = false;
         }
     }
 }
