@@ -159,10 +159,10 @@ namespace Box2D.Collision.Shapes
             if (0.0f <= a && a <= input.MaxFraction * rr)
             {
                 a /= rr;
-                output.fraction = a;
-                output.normal.set_Renamed(r).mulLocal(a);
-                output.normal.addLocal(s);
-                output.normal.normalize();
+                output.Fraction = a;
+                output.Normal.set_Renamed(r).mulLocal(a);
+                output.Normal.addLocal(s);
+                output.Normal.normalize();
                 return true;
             }
 

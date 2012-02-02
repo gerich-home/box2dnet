@@ -33,19 +33,19 @@ namespace Box2D.Collision
     /// </summary>
     public class RayCastOutput
     {
-        public readonly Vec2 normal;
-        public float fraction;
+        public readonly Vec2 Normal;
+        public float Fraction;
 
         public RayCastOutput()
         {
-            normal = new Vec2();
-            fraction = 0;
+            Normal = new Vec2();
+            Fraction = 0;
         }
 
-        public virtual void set_Renamed(RayCastOutput rco)
+        public virtual void Set(RayCastOutput rco)
         {
-            normal.set_Renamed(rco.normal);
-            fraction = rco.fraction;
+            Normal.set_Renamed(rco.Normal);
+            Fraction = rco.Fraction;
         }
     }
 

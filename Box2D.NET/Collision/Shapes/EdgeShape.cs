@@ -146,16 +146,16 @@ namespace Box2D.Collision.Shapes
                 return false;
             }
 
-            output.fraction = t;
+            output.Fraction = t;
             if (numerator > 0.0f)
             {
                 // argOutput.normal = -normal;
-                output.normal.set_Renamed(normal).negateLocal();
+                output.Normal.set_Renamed(normal).negateLocal();
             }
             else
             {
                 // output.normal = normal;
-                output.normal.set_Renamed(normal);
+                output.Normal.set_Renamed(normal);
             }
             return true;
         }

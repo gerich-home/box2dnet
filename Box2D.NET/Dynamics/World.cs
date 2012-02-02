@@ -1768,11 +1768,11 @@ namespace Box2D.Dynamics
 
             if (hit)
             {
-                float fraction = output.fraction;
+                float fraction = output.Fraction;
                 // Vec2 point = (1.0f - fraction) * input.p1 + fraction * input.p2;
                 temp.set_Renamed(input.P2).mulLocal(fraction);
                 point.set_Renamed(input.P1).mulLocal(1 - fraction).addLocal(temp);
-                return callback.ReportFixture(fixture, point, output.normal, fraction);
+                return callback.ReportFixture(fixture, point, output.Normal, fraction);
             }
 
             return input.MaxFraction;

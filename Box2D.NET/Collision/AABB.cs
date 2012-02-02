@@ -333,9 +333,9 @@ namespace Box2D.Collision
             }
 
             // Intersection.
-            output.fraction = tmin;
-            output.normal.x = normal.x;
-            output.normal.y = normal.y;
+            output.Fraction = tmin;
+            output.Normal.x = normal.x;
+            output.Normal.y = normal.y;
             argPool.PushVec2(4);
             return true;
         }

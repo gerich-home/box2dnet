@@ -498,8 +498,8 @@ namespace Box2D.Collision.Shapes
 
             if (index >= 0)
             {
-                output.fraction = lower;
-                Rot.mulToOutUnsafe(xf.q, Normals[index], output.normal);
+                output.Fraction = lower;
+                Rot.mulToOutUnsafe(xf.q, Normals[index], output.Normal);
                 // normal = Mul(xf.R, m_normals[index]);
                 return true;
             }
