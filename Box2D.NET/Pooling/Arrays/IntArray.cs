@@ -38,20 +38,20 @@ namespace Box2D.Pooling.Arrays
     {
         private readonly Dictionary<int, int[]> map = new Dictionary<int, int[]>();
 
-        public virtual int[] get_Renamed(int argLength)
+        public virtual int[] Get(int argLength)
         {
             Debug.Assert(argLength > 0);
 
             if (!map.ContainsKey(argLength))
             {
-                map.Add(argLength, getInitializedArray(argLength));
+                map.Add(argLength, GetInitializedArray(argLength));
             }
 
             Debug.Assert(map[argLength].Length == argLength); // Array not built of correct length
             return map[argLength];
         }
 
-        protected internal virtual int[] getInitializedArray(int argLength)
+        protected internal virtual int[] GetInitializedArray(int argLength)
         {
             return new int[argLength];
         }

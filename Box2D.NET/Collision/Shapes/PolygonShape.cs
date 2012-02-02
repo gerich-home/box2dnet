@@ -175,7 +175,7 @@ namespace Box2D.Collision.Shapes
                 }
             }
 
-            int[] hull = (intPool != null) ? intPool.get_Renamed(Settings.maxPolygonVertices) : new int[Settings.maxPolygonVertices];
+            int[] hull = (intPool != null) ? intPool.Get(Settings.maxPolygonVertices) : new int[Settings.maxPolygonVertices];
             int m = 0;
             int ih = i0;
 
