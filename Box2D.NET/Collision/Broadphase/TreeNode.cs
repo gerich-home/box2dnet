@@ -32,35 +32,23 @@ namespace Box2D.Collision.Broadphase
         /// <summary>
         /// Enlarged AABB
         /// </summary>
-        public readonly AABB aabb = new AABB();
+        public readonly AABB AABB = new AABB();
 
-        public object userData;
+        protected internal int Parent;
 
-        protected internal int parent;
-
-        protected internal int child1;
-        protected internal int child2;
-        protected internal int height;
+        protected internal int Child1;
+        protected internal int Child2;
+        protected internal int Height;
 
         virtual public bool Leaf
         {
             get
             {
-                return child1 == NULL_NODE;
+                return Child1 == NULL_NODE;
             }
         }
 
-        virtual public object UserData
-        {
-            get
-            {
-                return userData;
-            }
-            set
-            {
-                userData = value;
-            }
-        }
+        public virtual object UserData { get; set; }
 
         /// <summary>
         /// Should never be constructed outside the engine
