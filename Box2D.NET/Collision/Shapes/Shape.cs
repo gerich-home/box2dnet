@@ -33,42 +33,22 @@ namespace Box2D.Collision.Shapes
     /// </summary>
     public abstract class Shape
     {
-        public readonly ShapeType m_type;
-        public float m_radius;
-
-        public Shape(ShapeType type)
+        protected Shape(ShapeType type)
         {
-            this.m_type = type;
+            Type = type;
         }
 
         /// <summary>
         /// Get the type of this shape. You can use this to down cast to the concrete shape.
         /// </summary>
         /// <returns>the shape type.</returns>
-        virtual public ShapeType Type
-        {
-            get
-            {
-                return m_type;
-            }
-        }
+        public virtual ShapeType Type { get; private set; }
 
         /// <summary>
         /// Gets or sets the radius of the underlying shape. This can refer to different things depending on the shape
         /// implementation
         /// </summary>
-        virtual public float Radius
-        {
-            get
-            {
-                return m_radius;
-            }
-            set
-            {
-                this.m_radius = value;
-            }
-
-        }
+        public virtual float Radius { get; set; }
 
         /// <summary>
         /// Get the number of child primitives
@@ -81,24 +61,25 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="xf">the shape world transform.</param>
         /// <param name="p">a point in world coordinates.</param>
-        public abstract bool testPoint(Transform xf, Vec2 p);
+        public abstract bool TestPoint(Transform xf, Vec2 p);
 
         /// <summary>
         /// Cast a ray against a child shape.
         /// </summary>
-        /// <param name="argOutput">the ray-cast results.</param>
-        /// <param name="argInput">the ray-cast input parameters.</param>
-        /// <param name="argTransform">the transform to be applied to the shape.</param>
-        /// <param name="argChildIndex">the child shape index</param>
+        /// <param name="output">the ray-cast results.</param>
+        /// <param name="input">the ray-cast input parameters.</param>
+        /// <param name="transform">the transform to be applied to the shape.</param>
+        /// <param name="childIndex">the child shape index</param>
         /// <returns>if hit</returns>
-        public abstract bool raycast(RayCastOutput output, RayCastInput input, Transform transform, int childIndex);
+        public abstract bool Raycast(RayCastOutput output, RayCastInput input, Transform transform, int childIndex);
 
         /// <summary>
         /// Given a transform, compute the associated axis aligned bounding box for a child shape.
         /// </summary>
-        /// <param name="argAabb">returns the axis aligned box.</param>
-        /// <param name="argXf">the world transform of the shape.</param>
-        public abstract void computeAABB(AABB aabb, Transform xf, int childIndex);
+        /// <param name="aabb">returns the axis aligned box.</param>
+        /// <param name="xf">the world transform of the shape.</param>
+        /// <param name="childIndex"></param>
+        public abstract void ComputeAABB(AABB aabb, Transform xf, int childIndex);
 
         /// <summary>
         /// Compute the mass properties of this shape using its dimensions and density. The inertia tensor
@@ -106,7 +87,7 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="massData">returns the mass data for this shape.</param>
         /// <param name="density">the density in kilograms per meter squared.</param>
-        public abstract void computeMass(MassData massData, float density);
+        public abstract void ComputeMass(MassData massData, float density);
 
         /*
          * /// <summary>

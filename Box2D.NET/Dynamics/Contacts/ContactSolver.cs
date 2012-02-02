@@ -114,8 +114,8 @@ namespace Box2D.Dynamics.Contacts
                 Fixture fixtureB = contact.m_fixtureB;
                 Shape shapeA = fixtureA.Shape;
                 Shape shapeB = fixtureB.Shape;
-                float radiusA = shapeA.m_radius;
-                float radiusB = shapeB.m_radius;
+                float radiusA = shapeA.Radius;
+                float radiusB = shapeB.Radius;
                 Body bodyA = fixtureA.Body;
                 Body bodyB = fixtureB.Body;
                 Manifold manifold = contact.Manifold;

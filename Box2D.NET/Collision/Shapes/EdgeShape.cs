@@ -62,7 +62,7 @@ namespace Box2D.Collision.Shapes
         public EdgeShape() :
             base(ShapeType.Edge)
         {
-            m_radius = Settings.polygonRadius;
+            Radius = Settings.polygonRadius;
         }
 
         override public int ChildCount
@@ -80,12 +80,12 @@ namespace Box2D.Collision.Shapes
             m_hasVertex0 = m_hasVertex3 = false;
         }
 
-        public override bool testPoint(Transform xf, Vec2 p)
+        public override bool TestPoint(Transform xf, Vec2 p)
         {
             return false;
         }
 
-        public override bool raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
+        public override bool Raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
         {
 
             // Put the ray into the edge's frame of reference.
@@ -156,7 +156,7 @@ namespace Box2D.Collision.Shapes
             return true;
         }
 
-        public override void computeAABB(AABB aabb, Transform xf, int childIndex)
+        public override void ComputeAABB(AABB aabb, Transform xf, int childIndex)
         {
             Vec2 v1 = pool1;
             Vec2 v2 = pool2;
@@ -167,13 +167,13 @@ namespace Box2D.Collision.Shapes
             Vec2.minToOut(v1, v2, aabb.lowerBound);
             Vec2.maxToOut(v1, v2, aabb.upperBound);
 
-            aabb.lowerBound.x -= m_radius;
-            aabb.lowerBound.y -= m_radius;
-            aabb.upperBound.x += m_radius;
-            aabb.upperBound.y += m_radius;
+            aabb.lowerBound.x -= Radius;
+            aabb.lowerBound.y -= Radius;
+            aabb.upperBound.x += Radius;
+            aabb.upperBound.y += Radius;
         }
 
-        public override void computeMass(MassData massData, float density)
+        public override void ComputeMass(MassData massData, float density)
         {
             massData.mass = 0.0f;
             massData.center.set_Renamed(m_vertex1).addLocal(m_vertex2).mulLocal(0.5f);
@@ -183,7 +183,7 @@ namespace Box2D.Collision.Shapes
         public override Shape Clone()
         {
             EdgeShape edge = new EdgeShape();
-            edge.m_radius = this.m_radius;
+            edge.Radius = this.Radius;
             edge.m_hasVertex0 = this.m_hasVertex0;
             edge.m_hasVertex3 = this.m_hasVertex3;
             edge.m_vertex0.set_Renamed(this.m_vertex0);

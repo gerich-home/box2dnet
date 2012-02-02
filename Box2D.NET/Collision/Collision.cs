@@ -221,7 +221,7 @@ namespace Box2D.Collision
             // final float distSqr = dx * dx + dy * dy;
             // end inline
 
-            float radius = circle1.m_radius + circle2.m_radius;
+            float radius = circle1.Radius + circle2.Radius;
             if (distSqr > radius * radius)
             {
                 return;
@@ -275,7 +275,7 @@ namespace Box2D.Collision
             int normalIndex = 0;
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             float separation = Single.Epsilon;
-            float radius = polygon.m_radius + circle.m_radius;
+            float radius = polygon.Radius + circle.Radius;
             int vertexCount = polygon.m_count;
 
             Vec2[] vertices = polygon.m_vertices;
@@ -727,7 +727,7 @@ namespace Box2D.Collision
             // The normal points from 1 to 2
 
             manifold.pointCount = 0;
-            float totalRadius = polyA.m_radius + polyB.m_radius;
+            float totalRadius = polyA.Radius + polyB.Radius;
 
             findMaxSeparation(results1, polyA, xfA, polyB, xfB);
             if (results1.separation > totalRadius)
@@ -884,7 +884,7 @@ namespace Box2D.Collision
             float u = Vec2.dot(e, temp.set_Renamed(B).subLocal(Q));
             float v = Vec2.dot(e, temp.set_Renamed(Q).subLocal(A));
 
-            float radius = edgeA.m_radius + circleB.m_radius;
+            float radius = edgeA.Radius + circleB.Radius;
 
             // ContactFeature cf;
             cf.indexB = 0;

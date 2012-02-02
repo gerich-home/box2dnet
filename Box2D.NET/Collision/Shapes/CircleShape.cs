@@ -51,7 +51,7 @@ namespace Box2D.Collision.Shapes
             base(ShapeType.Circle)
         {
             m_p = new Vec2();
-            m_radius = 0;
+            Radius = 0;
         }
 
 
@@ -59,7 +59,7 @@ namespace Box2D.Collision.Shapes
         {
             CircleShape shape = new CircleShape();
             shape.m_p.set_Renamed(m_p);
-            shape.m_radius = m_radius;
+            shape.Radius = Radius;
             return shape;
         }
 
@@ -115,21 +115,21 @@ namespace Box2D.Collision.Shapes
             return m_p;
         }
 
-        public override bool testPoint(Transform transform, Vec2 p)
+        public override bool TestPoint(Transform transform, Vec2 p)
         {
             Vec2 center = pool1;
             Rot.mulToOutUnsafe(transform.q, m_p, center);
             center.addLocal(transform.p);
 
             Vec2 d = center.subLocal(p).negateLocal();
-            return Vec2.dot(d, d) <= m_radius * m_radius;
+            return Vec2.dot(d, d) <= Radius * Radius;
         }
 
         // Collision Detection in Interactive 3D Environments by Gino van den Bergen
         // From Section 3.1.2
         // x = s + a * r
         // norm(x) = radius
-        public override bool raycast(RayCastOutput output, RayCastInput input, Transform transform, int childIndex)
+        public override bool Raycast(RayCastOutput output, RayCastInput input, Transform transform, int childIndex)
         {
             Vec2 position = pool1;
             Vec2 s = pool2;
@@ -138,7 +138,7 @@ namespace Box2D.Collision.Shapes
             Rot.mulToOutUnsafe(transform.q, m_p, position);
             position.addLocal(transform.p);
             s.set_Renamed(input.p1).subLocal(position);
-            float b = Vec2.dot(s, s) - m_radius * m_radius;
+            float b = Vec2.dot(s, s) - Radius * Radius;
 
             // Solve quadratic equation.
             r.set_Renamed(input.p2).subLocal(input.p1);
@@ -169,25 +169,25 @@ namespace Box2D.Collision.Shapes
             return false;
         }
 
-        public override void computeAABB(AABB aabb, Transform transform, int childIndex)
+        public override void ComputeAABB(AABB aabb, Transform transform, int childIndex)
         {
             Vec2 p = pool1;
             Rot.mulToOutUnsafe(transform.q, m_p, p);
             p.addLocal(transform.p);
 
-            aabb.lowerBound.x = p.x - m_radius;
-            aabb.lowerBound.y = p.y - m_radius;
-            aabb.upperBound.x = p.x + m_radius;
-            aabb.upperBound.y = p.y + m_radius;
+            aabb.lowerBound.x = p.x - Radius;
+            aabb.lowerBound.y = p.y - Radius;
+            aabb.upperBound.x = p.x + Radius;
+            aabb.upperBound.y = p.y + Radius;
         }
 
-        public override void computeMass(MassData massData, float density)
+        public override void ComputeMass(MassData massData, float density)
         {
-            massData.mass = density * Settings.PI * m_radius * m_radius;
+            massData.mass = density * Settings.PI * Radius * Radius;
             massData.center.set_Renamed(m_p);
 
             // inertia about the local origin
-            massData.I = massData.mass * (0.5f * m_radius * m_radius + Vec2.dot(m_p, m_p));
+            massData.I = massData.mass * (0.5f * Radius * Radius + Vec2.dot(m_p, m_p));
         }
 
         // djm pooled from above

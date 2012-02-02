@@ -271,7 +271,7 @@ namespace Box2D.Dynamics.Contacts
             Shape shapeA = m_fixtureA.Shape;
             Shape shapeB = m_fixtureB.Shape;
 
-            worldManifold.initialize(m_manifold, bodyA.getTransform(), shapeA.m_radius, bodyB.getTransform(), shapeB.m_radius);
+            worldManifold.initialize(m_manifold, bodyA.getTransform(), shapeA.Radius, bodyB.getTransform(), shapeB.Radius);
         }
 
         public virtual void resetFriction()

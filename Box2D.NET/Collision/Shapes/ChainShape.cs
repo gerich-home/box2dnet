@@ -52,7 +52,7 @@ namespace Box2D.Collision.Shapes
             base(ShapeType.Chain)
         {
             m_vertices = null;
-            m_radius = Settings.polygonRadius;
+            Radius = Settings.polygonRadius;
             m_count = 0;
         }
 
@@ -70,7 +70,7 @@ namespace Box2D.Collision.Shapes
         public virtual void getChildEdge(EdgeShape edge, int index)
         {
             Debug.Assert(0 <= index && index < m_count - 1);
-            edge.m_radius = m_radius;
+            edge.Radius = Radius;
 
             edge.m_vertex1.set_Renamed(m_vertices[index + 0]);
             edge.m_vertex2.set_Renamed(m_vertices[index + 1]);
@@ -98,12 +98,12 @@ namespace Box2D.Collision.Shapes
             }
         }
 
-        public override bool testPoint(Transform xf, Vec2 p)
+        public override bool TestPoint(Transform xf, Vec2 p)
         {
             return false;
         }
 
-        public override bool raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
+        public override bool Raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
         {
             Debug.Assert(childIndex < m_count);
 
@@ -119,10 +119,10 @@ namespace Box2D.Collision.Shapes
             edgeShape.m_vertex1.set_Renamed(m_vertices[i1]);
             edgeShape.m_vertex2.set_Renamed(m_vertices[i2]);
 
-            return edgeShape.raycast(output, input, xf, 0);
+            return edgeShape.Raycast(output, input, xf, 0);
         }
 
-        public override void computeAABB(AABB aabb, Transform xf, int childIndex)
+        public override void ComputeAABB(AABB aabb, Transform xf, int childIndex)
         {
             Debug.Assert(childIndex < m_count);
 
@@ -142,7 +142,7 @@ namespace Box2D.Collision.Shapes
             Vec2.maxToOut(v1, v2, aabb.upperBound);
         }
 
-        public override void computeMass(MassData massData, float density)
+        public override void ComputeMass(MassData massData, float density)
         {
             massData.mass = 0.0f;
             massData.center.setZero();

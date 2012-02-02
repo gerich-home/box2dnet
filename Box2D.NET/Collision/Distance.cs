@@ -574,14 +574,14 @@ namespace Box2D.Collision
                         CircleShape circle = (CircleShape)shape;
                         m_vertices[0].set_Renamed(circle.m_p);
                         m_count = 1;
-                        m_radius = circle.m_radius;
+                        m_radius = circle.Radius;
 
                         break;
 
                     case ShapeType.Polygon:
                         PolygonShape poly = (PolygonShape)shape;
                         m_count = poly.m_count;
-                        m_radius = poly.m_radius;
+                        m_radius = poly.Radius;
                         for (int i = 0; i < m_count; i++)
                         {
                             m_vertices[i].set_Renamed(poly.m_vertices[i]);
@@ -605,7 +605,7 @@ namespace Box2D.Collision
                         m_vertices[0].set_Renamed(m_buffer[0]);
                         m_vertices[1].set_Renamed(m_buffer[1]);
                         m_count = 2;
-                        m_radius = chain.m_radius;
+                        m_radius = chain.Radius;
                         break;
 
                     case ShapeType.Edge:
@@ -613,7 +613,7 @@ namespace Box2D.Collision
                         m_vertices[0].set_Renamed(edge.m_vertex1);
                         m_vertices[1].set_Renamed(edge.m_vertex2);
                         m_count = 2;
-                        m_radius = edge.m_radius;
+                        m_radius = edge.Radius;
                         break;
 
                     default:

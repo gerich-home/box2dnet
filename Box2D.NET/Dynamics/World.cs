@@ -1656,7 +1656,7 @@ namespace Box2D.Dynamics
 
                         // Vec2 center = Mul(xf, circle.m_p);
                         Transform.mulToOutUnsafe(xf, circle.m_p, center);
-                        float radius = circle.m_radius;
+                        float radius = circle.Radius;
                         xf.q.getXAxis(axis);
 
                         if (fixture.UserData != null && fixture.UserData.Equals(LIQUID_INT))

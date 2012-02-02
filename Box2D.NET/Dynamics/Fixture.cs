@@ -270,7 +270,7 @@ namespace Box2D.Dynamics
         /// <returns></returns>
         public virtual bool testPoint(Vec2 p)
         {
-            return m_shape.testPoint(m_body.m_xf, p);
+            return m_shape.TestPoint(m_body.m_xf, p);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace Box2D.Dynamics
         /// <param name="input"></param>
         public virtual bool raycast(RayCastOutput output, RayCastInput input, int childIndex)
         {
-            return m_shape.raycast(output, input, m_body.m_xf, childIndex);
+            return m_shape.Raycast(output, input, m_body.m_xf, childIndex);
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace Box2D.Dynamics
         /// <returns></returns>
         public virtual void getMassData(MassData massData)
         {
-            m_shape.computeMass(massData, m_density);
+            m_shape.ComputeMass(massData, m_density);
         }
 
         /// <summary>
@@ -394,7 +394,7 @@ namespace Box2D.Dynamics
             for (int i = 0; i < m_proxyCount; ++i)
             {
                 FixtureProxy proxy = m_proxies[i];
-                m_shape.computeAABB(proxy.aabb, xf, i);
+                m_shape.ComputeAABB(proxy.aabb, xf, i);
                 proxy.proxyId = broadPhase.CreateProxy(proxy.aabb, proxy);
                 proxy.fixture = this;
                 proxy.childIndex = i;
@@ -442,8 +442,8 @@ namespace Box2D.Dynamics
                 // Compute an AABB that covers the swept shape (may miss some rotation effect).
                 AABB aabb1 = pool1;
                 AABB aab = pool2;
-                m_shape.computeAABB(aabb1, transform1, proxy.childIndex);
-                m_shape.computeAABB(aab, transform2, proxy.childIndex);
+                m_shape.ComputeAABB(aabb1, transform1, proxy.childIndex);
+                m_shape.ComputeAABB(aab, transform2, proxy.childIndex);
 
                 proxy.aabb.lowerBound.x = aabb1.lowerBound.x < aab.lowerBound.x ? aabb1.lowerBound.x : aab.lowerBound.x;
                 proxy.aabb.lowerBound.y = aabb1.lowerBound.y < aab.lowerBound.y ? aabb1.lowerBound.y : aab.lowerBound.y;

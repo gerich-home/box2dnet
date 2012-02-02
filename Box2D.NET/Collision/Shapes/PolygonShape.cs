@@ -305,7 +305,7 @@ namespace Box2D.Collision.Shapes
             }
         }
 
-        public override bool testPoint(Transform xf, Vec2 p)
+        public override bool TestPoint(Transform xf, Vec2 p)
         {
             Vec2 pLocal = pool1;
             Vec2 temp = pool2;
@@ -339,7 +339,7 @@ namespace Box2D.Collision.Shapes
             return true;
         }
 
-        public override void computeAABB(AABB aabb, Transform xf, int childIndex)
+        public override void ComputeAABB(AABB aabb, Transform xf, int childIndex)
         {
             Vec2 v = pool1;
             Vec2 lower = aabb.lowerBound;
@@ -363,10 +363,10 @@ namespace Box2D.Collision.Shapes
             // aabb.lowerBound = lower - r;
             // aabb.upperBound = upper + r;
 
-            aabb.lowerBound.x -= m_radius;
-            aabb.lowerBound.y -= m_radius;
-            aabb.upperBound.x += m_radius;
-            aabb.upperBound.y += m_radius;
+            aabb.lowerBound.x -= Radius;
+            aabb.lowerBound.y -= Radius;
+            aabb.upperBound.x += Radius;
+            aabb.upperBound.y += Radius;
         }
 
         // djm pooling, and from above
@@ -452,7 +452,7 @@ namespace Box2D.Collision.Shapes
             return m_vertices[index];
         }
 
-        public override bool raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
+        public override bool Raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
         {
             Vec2 p1 = pool1;
             Vec2 p2 = pool2;
@@ -571,7 +571,7 @@ namespace Box2D.Collision.Shapes
             out_Renamed.mulLocal(1.0f / area);
         }
 
-        public override void computeMass(MassData massData, float density)
+        public override void ComputeMass(MassData massData, float density)
         {
             // Polygon mass, centroid, and inertia.
             // Let rho be the polygon density in mass per unit area.
