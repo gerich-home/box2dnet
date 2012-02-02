@@ -184,12 +184,12 @@ namespace Box2D.Dynamics.Joints
 
         public override void getAnchorA(Vec2 argOut)
         {
-            m_bodyA.getWorldPointToOut(m_localAnchorA, argOut);
+            m_bodyA.GetWorldPointToOut(m_localAnchorA, argOut);
         }
 
         public override void getAnchorB(Vec2 argOut)
         {
-            m_bodyB.getWorldPointToOut(m_localAnchorB, argOut);
+            m_bodyB.GetWorldPointToOut(m_localAnchorB, argOut);
         }
 
         public override void getReactionForce(float inv_dt, Vec2 argOut)
@@ -247,17 +247,17 @@ namespace Box2D.Dynamics.Joints
                 Vec2 temp2 = pc[7];
                 Vec2 temp3 = pc[8];
 
-                temp.set_Renamed(m_localAnchorA).subLocal(bA.m_sweep.localCenter);
-                Rot.mulToOutUnsafe(bA.m_xf.q, temp, rA);
+                temp.set_Renamed(m_localAnchorA).subLocal(bA.Sweep.localCenter);
+                Rot.mulToOutUnsafe(bA.Xf.q, temp, rA);
 
-                temp.set_Renamed(m_localAnchorB).subLocal(bB.m_sweep.localCenter);
-                Rot.mulToOutUnsafe(bB.m_xf.q, temp, rB);
+                temp.set_Renamed(m_localAnchorB).subLocal(bB.Sweep.localCenter);
+                Rot.mulToOutUnsafe(bB.Xf.q, temp, rB);
 
-                p1.set_Renamed(bA.m_sweep.c).addLocal(rA);
-                p2.set_Renamed(bB.m_sweep.c).addLocal(rB);
+                p1.set_Renamed(bA.Sweep.c).addLocal(rA);
+                p2.set_Renamed(bB.Sweep.c).addLocal(rB);
 
                 d.set_Renamed(p2).subLocal(p1);
-                Rot.mulToOutUnsafe(bA.m_xf.q, m_localXAxisA, axis);
+                Rot.mulToOutUnsafe(bA.Xf.q, m_localXAxisA, axis);
 
                 Vec2 vA = bA.m_linearVelocity;
                 Vec2 vB = bB.m_linearVelocity;
@@ -413,14 +413,14 @@ namespace Box2D.Dynamics.Joints
 
         public override void initVelocityConstraints(SolverData data)
         {
-            m_indexA = m_bodyA.m_islandIndex;
-            m_indexB = m_bodyB.m_islandIndex;
-            m_localCenterA.set_Renamed(m_bodyA.m_sweep.localCenter);
-            m_localCenterB.set_Renamed(m_bodyB.m_sweep.localCenter);
-            m_invMassA = m_bodyA.m_invMass;
-            m_invMassB = m_bodyB.m_invMass;
-            m_invIA = m_bodyA.m_invI;
-            m_invIB = m_bodyB.m_invI;
+            m_indexA = m_bodyA.IslandIndex;
+            m_indexB = m_bodyB.IslandIndex;
+            m_localCenterA.set_Renamed(m_bodyA.Sweep.localCenter);
+            m_localCenterB.set_Renamed(m_bodyB.Sweep.localCenter);
+            m_invMassA = m_bodyA.InvMass;
+            m_invMassB = m_bodyB.InvMass;
+            m_invIA = m_bodyA.InvI;
+            m_invIB = m_bodyB.InvI;
 
             Vec2 cA = data.positions[m_indexA].c;
             float aA = data.positions[m_indexA].a;

@@ -251,22 +251,22 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
 				Body b = m_bodies[i];
-				Vec2 c = b.m_sweep.c;
-				float a = b.m_sweep.a;
+				Vec2 c = b.Sweep.c;
+				float a = b.Sweep.a;
 				Vec2 v = b.m_linearVelocity;
 				float w = b.m_angularVelocity;
 
 				// Store positions for continuous collision.
-				b.m_sweep.c0.set_Renamed(b.m_sweep.c);
-				b.m_sweep.a0 = b.m_sweep.a;
+				b.Sweep.c0.set_Renamed(b.Sweep.c);
+				b.Sweep.a0 = b.Sweep.a;
 
 				if (b.m_type == BodyType.DYNAMIC)
 				{
 					// Integrate velocities.
 					// v += h * (b.m_gravityScale * gravity + b.m_invMass * b.m_force);
-					v.x += h * (b.m_gravityScale * gravity.x + b.m_invMass * b.m_force.x);
-					v.y += h * (b.m_gravityScale * gravity.y + b.m_invMass * b.m_force.y);
-					w += h * b.m_invI * b.m_torque;
+					v.x += h * (b.GravityScale * gravity.x + b.InvMass * b.Force.x);
+					v.y += h * (b.GravityScale * gravity.y + b.InvMass * b.Force.y);
+					w += h * b.InvI * b.Torque;
 
 					// Apply damping.
 					// ODE: dv/dt + c * v = 0
@@ -276,8 +276,8 @@ namespace Box2D.Dynamics
 					// v2 = exp(-c * dt) * v1
 					// Taylor expansion:
 					// v2 = (1.0f - c * dt) * v1
-					v.mulLocal(MathUtils.clamp(1.0f - h * b.m_linearDamping, 0.0f, 1.0f));
-					w *= MathUtils.clamp(1.0f - h * b.m_angularDamping, 0.0f, 1.0f);
+					v.mulLocal(MathUtils.clamp(1.0f - h * b.LinearDamping, 0.0f, 1.0f));
+					w *= MathUtils.clamp(1.0f - h * b.AngularDamping, 0.0f, 1.0f);
 				}
 				//Debug.Assert (v.x == 0);
 
@@ -396,11 +396,11 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
 				Body body = m_bodies[i];
-				body.m_sweep.c.set_Renamed(m_positions[i].c);
-				body.m_sweep.a = m_positions[i].a;
+				body.Sweep.c.set_Renamed(m_positions[i].c);
+				body.Sweep.a = m_positions[i].a;
 				body.m_linearVelocity.set_Renamed(m_velocities[i].v);
 				body.m_angularVelocity = m_velocities[i].w;
-				body.synchronizeTransform();
+				body.SynchronizeTransform();
 			}
 
 			profile.solvePosition = timer.Milliseconds;
@@ -422,15 +422,15 @@ namespace Box2D.Dynamics
 						continue;
 					}
 
-					if ((b.m_flags & Body.e_autoSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
+					if ((b.Flags & Body.TypeFlags.AutoSleep) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
 					{
-						b.m_sleepTime = 0.0f;
+						b.SleepTime = 0.0f;
 						minSleepTime = 0.0f;
 					}
 					else
 					{
-						b.m_sleepTime += h;
-						minSleepTime = MathUtils.min(minSleepTime, b.m_sleepTime);
+						b.SleepTime += h;
+						minSleepTime = MathUtils.min(minSleepTime, b.SleepTime);
 					}
 				}
 
@@ -457,8 +457,8 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < m_bodyCount; ++i)
 			{
 				Body b = m_bodies[i];
-				m_positions[i].c.set_Renamed(b.m_sweep.c);
-				m_positions[i].a = b.m_sweep.a;
+				m_positions[i].c.set_Renamed(b.Sweep.c);
+				m_positions[i].a = b.Sweep.a;
 				m_velocities[i].v.set_Renamed(b.m_linearVelocity);
 				m_velocities[i].w = b.m_angularVelocity;
 			}
@@ -514,10 +514,10 @@ namespace Box2D.Dynamics
 			// #endif
 
 			// Leap of faith to new safe state.
-			m_bodies[toiIndexA].m_sweep.c0.set_Renamed(m_positions[toiIndexA].c);
-			m_bodies[toiIndexA].m_sweep.a0 = m_positions[toiIndexA].a;
-			m_bodies[toiIndexB].m_sweep.c0.set_Renamed(m_positions[toiIndexB].c);
-			m_bodies[toiIndexB].m_sweep.a0 = m_positions[toiIndexB].a;
+			m_bodies[toiIndexA].Sweep.c0.set_Renamed(m_positions[toiIndexA].c);
+			m_bodies[toiIndexA].Sweep.a0 = m_positions[toiIndexA].a;
+			m_bodies[toiIndexB].Sweep.c0.set_Renamed(m_positions[toiIndexB].c);
+			m_bodies[toiIndexB].Sweep.a0 = m_positions[toiIndexB].a;
 
 			// No warm starting is needed for TOI events because warm
 			// starting impulses were applied in the discrete solver.
@@ -569,11 +569,11 @@ namespace Box2D.Dynamics
 
 				// Sync bodies
 				Body body = m_bodies[i];
-				body.m_sweep.c.set_Renamed(c);
-				body.m_sweep.a = a;
+				body.Sweep.c.set_Renamed(c);
+				body.Sweep.a = a;
 				body.m_linearVelocity.set_Renamed(v);
 				body.m_angularVelocity = w;
-				body.synchronizeTransform();
+				body.SynchronizeTransform();
 			}
 
 			report(toiContactSolver.m_velocityConstraints);
@@ -582,7 +582,7 @@ namespace Box2D.Dynamics
 		public virtual void add(Body body)
 		{
 			Debug.Assert(m_bodyCount < m_bodyCapacity);
-			body.m_islandIndex = m_bodyCount;
+			body.IslandIndex = m_bodyCount;
 			m_bodies[m_bodyCount] = body;
 			++m_bodyCount;
 		}

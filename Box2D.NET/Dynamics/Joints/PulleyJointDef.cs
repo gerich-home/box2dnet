@@ -92,8 +92,8 @@ namespace Box2D.Dynamics.Joints
             bodyB = b2;
             groundAnchorA = ga1;
             groundAnchorB = ga2;
-            localAnchorA = bodyA.getLocalPoint(anchor1);
-            localAnchorB = bodyB.getLocalPoint(anchor2);
+            localAnchorA = bodyA.GetLocalPoint(anchor1);
+            localAnchorB = bodyB.GetLocalPoint(anchor2);
             Vec2 d1 = anchor1.sub(ga1);
             lengthA = d1.length();
             Vec2 d2 = anchor2.sub(ga2);

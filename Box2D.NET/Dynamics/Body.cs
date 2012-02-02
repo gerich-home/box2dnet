@@ -32,60 +32,54 @@ namespace Box2D.Dynamics
     /// A rigid body. These are created via World.createBody.
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public class Body
+    public sealed class Body
     {
-        public const int e_islandFlag = 0x0001;
-        public const int e_awakeFlag = 0x0002;
-        public const int e_autoSleepFlag = 0x0004;
-        public const int e_bulletFlag = 0x0008;
-        public const int e_fixedRotationFlag = 0x0010;
-        public const int e_activeFlag = 0x0020;
-        public const int e_toiFlag = 0x0040;
+        [Flags]
+        public enum TypeFlags
+        {
+            None = 0x0000,
+            Island = 0x0001,
+            Awake = 0x0002,
+            AutoSleep = 0x0004,
+            Bullet = 0x0008,
+            FixedRotation = 0x0010,
+            Active = 0x0020,
+            Toi = 0x0040,
+        }
 
         public BodyType m_type;
 
-        public int m_flags;
+        public TypeFlags Flags;
 
-        public int m_islandIndex;
+        public int IslandIndex;
 
         /// <summary>
         /// The body origin transform.
         /// </summary>
-        public readonly Transform m_xf = new Transform();
+        public readonly Transform Xf = new Transform();
 
         /// <summary>
         /// The swept motion for CCD
         /// </summary>
-        public readonly Sweep m_sweep = new Sweep();
+        public readonly Sweep Sweep = new Sweep();
 
         public readonly Vec2 m_linearVelocity = new Vec2();
-        public float m_angularVelocity = 0;
+        public float m_angularVelocity;
 
-        public readonly Vec2 m_force = new Vec2();
-        public float m_torque = 0;
+        public readonly Vec2 Force = new Vec2();
+        public float Torque = 0;
 
-        public World m_world;
-        public Body m_prev;
-        public Body m_next;
+        public Body Prev;
 
-        public Fixture m_fixtureList;
-        public int m_fixtureCount;
+        public int FixtureCount;
 
-        public JointEdge m_jointList;
-        public ContactEdge m_contactList;
-
-        public float m_mass, m_invMass;
+        public float InvMass;
 
         // Rotational inertia about the center of mass.
-        public float m_I, m_invI;
+        public float I;
+        public float InvI;
 
-        public float m_linearDamping;
-        public float m_angularDamping;
-        public float m_gravityScale;
-
-        public float m_sleepTime;
-
-        public Object m_userData;
+        public float SleepTime;
 
         public Body(BodyDef bd, World world)
         {
@@ -95,78 +89,78 @@ namespace Box2D.Dynamics
             Debug.Assert(bd.angularDamping >= 0.0f);
             Debug.Assert(bd.linearDamping >= 0.0f);
 
-            m_flags = 0;
+            Flags = TypeFlags.None;
 
             if (bd.bullet)
             {
-                m_flags |= e_bulletFlag;
+                Flags |= TypeFlags.Bullet;
             }
             if (bd.fixedRotation)
             {
-                m_flags |= e_fixedRotationFlag;
+                Flags |= TypeFlags.FixedRotation;
             }
             if (bd.allowSleep)
             {
-                m_flags |= e_autoSleepFlag;
+                Flags |= TypeFlags.AutoSleep;
             }
             if (bd.awake)
             {
-                m_flags |= e_awakeFlag;
+                Flags |= TypeFlags.Awake;
             }
             if (bd.active)
             {
-                m_flags |= e_activeFlag;
+                Flags |= TypeFlags.Active;
             }
 
-            m_world = world;
+            World = world;
 
-            m_xf.p.set_Renamed(bd.position);
-            m_xf.q.set_Renamed(bd.angle);
+            Xf.p.set_Renamed(bd.position);
+            Xf.q.set_Renamed(bd.angle);
 
-            m_sweep.localCenter.setZero();
-            m_sweep.c0.set_Renamed(m_xf.p);
-            m_sweep.c.set_Renamed(m_xf.p);
-            m_sweep.a0 = bd.angle;
-            m_sweep.a = bd.angle;
-            m_sweep.alpha0 = 0.0f;
+            Sweep.localCenter.setZero();
+            Sweep.c0.set_Renamed(Xf.p);
+            Sweep.c.set_Renamed(Xf.p);
+            Sweep.a0 = bd.angle;
+            Sweep.a = bd.angle;
+            Sweep.alpha0 = 0.0f;
 
-            m_jointList = null;
-            m_contactList = null;
-            m_prev = null;
-            m_next = null;
+            JointList = null;
+            ContactList = null;
+            Prev = null;
+            Next = null;
 
             m_linearVelocity.set_Renamed(bd.linearVelocity);
             m_angularVelocity = bd.angularVelocity;
 
-            m_linearDamping = bd.linearDamping;
-            m_angularDamping = bd.angularDamping;
-            m_gravityScale = bd.gravityScale;
+            LinearDamping = bd.linearDamping;
+            AngularDamping = bd.angularDamping;
+            GravityScale = bd.gravityScale;
 
-            m_force.setZero();
-            m_torque = 0.0f;
+            Force.setZero();
+            Torque = 0.0f;
 
-            m_sleepTime = 0.0f;
+            SleepTime = 0.0f;
 
             m_type = bd.type;
 
             if (m_type == BodyType.DYNAMIC)
             {
-                m_mass = 1f;
-                m_invMass = 1f;
+                Mass = 1f;
+                InvMass = 1f;
             }
             else
             {
-                m_mass = 0f;
-                m_invMass = 0f;
+                Mass = 0f;
+                InvMass = 0f;
             }
 
-            m_I = 0.0f;
-            m_invI = 0.0f;
+            I = 0.0f;
+            InvI = 0.0f;
 
-            m_userData = bd.userData;
+            UserData = bd.userData;
 
-            m_fixtureList = null;
-            m_fixtureCount = 0;
+            FixtureList = null;
+            FixtureCount = 0;
         }
 
         // TODO djm: check out about this new fixture here
@@ -178,11 +172,11 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="def">the fixture definition.</param>
         /// <warning>This function is locked during callbacks.</warning>
-        public Fixture createFixture(FixtureDef def)
+        public Fixture CreateFixture(FixtureDef def)
         {
-            Debug.Assert(m_world.Locked == false);
+            Debug.Assert(World.Locked == false);
 
-            if (m_world.Locked == true)
+            if (World.Locked == true)
             {
                 return null;
             }
@@ -191,27 +185,27 @@ namespace Box2D.Dynamics
             Fixture fixture = new Fixture();
             fixture.create(this, def);
 
-            if ((m_flags & e_activeFlag) == e_activeFlag)
+            if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
-                BroadPhase broadPhase = m_world.m_contactManager.m_broadPhase;
-                fixture.createProxies(broadPhase, m_xf);
+                BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                fixture.createProxies(broadPhase, Xf);
             }
 
-            fixture.m_next = m_fixtureList;
-            m_fixtureList = fixture;
-            ++m_fixtureCount;
+            fixture.m_next = FixtureList;
+            FixtureList = fixture;
+            ++FixtureCount;
 
             fixture.m_body = this;
 
             // Adjust mass properties if needed.
             if (fixture.m_density > 0.0f)
             {
-                resetMassData();
+                ResetMassData();
             }
 
             // Let the world know we have a new fixture. This will cause new contacts
             // to be created at the beginning of the next time step.
-            m_world.m_flags |= World.NEW_FIXTURE;
+            World.m_flags |= World.NEW_FIXTURE;
 
             return fixture;
         }
@@ -226,12 +220,12 @@ namespace Box2D.Dynamics
         /// <param name="shape">the shape to be cloned.</param>
         /// <param name="density">the shape density (set to zero for static bodies).</param>
         /// <warning>This function is locked during callbacks.</warning>
-        public Fixture createFixture(Shape shape, float density)
+        public Fixture CreateFixture(Shape shape, float density)
         {
             fixDef.shape = shape;
             fixDef.density = density;
 
-            return createFixture(fixDef);
+            return CreateFixture(fixDef);
         }
 
         /// <summary>
@@ -242,10 +236,10 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="fixture">the fixture to be removed.</param>
         /// <warning>This function is locked during callbacks.</warning>
-        public void destroyFixture(Fixture fixture)
+        public void DestroyFixture(Fixture fixture)
         {
-            Debug.Assert(m_world.Locked == false);
-            if (m_world.Locked == true)
+            Debug.Assert(World.Locked == false);
+            if (World.Locked == true)
             {
                 return;
             }
@@ -253,8 +247,8 @@ namespace Box2D.Dynamics
             Debug.Assert(fixture.m_body == this);
 
             // Remove the fixture from this body's singly linked list.
-            Debug.Assert(m_fixtureCount > 0);
-            Fixture node = m_fixtureList;
+            Debug.Assert(FixtureCount > 0);
+            Fixture node = FixtureList;
             Fixture last = null; // java change
             bool found = false;
             while (node != null)
@@ -275,7 +269,7 @@ namespace Box2D.Dynamics
             // java change, remove it from the list
             if (last == null)
             {
-                m_fixtureList = fixture.m_next;
+                FixtureList = fixture.m_next;
             }
             else
             {
@@ -283,7 +277,7 @@ namespace Box2D.Dynamics
             }
 
             // Destroy any contacts associated with the fixture.
-            ContactEdge edge = m_contactList;
+            ContactEdge edge = ContactList;
             while (edge != null)
             {
                 Contact c = edge.contact;
@@ -296,25 +290,24 @@ namespace Box2D.Dynamics
                 {
                     // This destroys the contact and removes it from
                     // this body's contact list.
-                    m_world.m_contactManager.destroy(c);
+                    World.m_contactManager.destroy(c);
                 }
             }
 
-            if ((m_flags & e_activeFlag) == e_activeFlag)
+            if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
-                BroadPhase broadPhase = m_world.m_contactManager.m_broadPhase;
+                BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
                 fixture.destroyProxies(broadPhase);
             }
 
             fixture.destroy();
             fixture.m_body = null;
             fixture.m_next = null;
-            fixture = null;
 
-            --m_fixtureCount;
+            --FixtureCount;
 
             // Reset the mass data.
-            resetMassData();
+            ResetMassData();
         }
 
         /// <summary>
@@ -323,51 +316,51 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="position">the world position of the body's local origin.</param>
         /// <param name="angle">the world rotation in radians.</param>
-        public void setTransform(Vec2 position, float angle)
+        public void SetTransform(Vec2 position, float angle)
         {
-            Debug.Assert(m_world.Locked == false);
-            if (m_world.Locked == true)
+            Debug.Assert(World.Locked == false);
+            if (World.Locked == true)
             {
                 return;
             }
 
-            m_xf.q.set_Renamed(angle);
-            m_xf.p.set_Renamed(position);
+            Xf.q.set_Renamed(angle);
+            Xf.p.set_Renamed(position);
 
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
-            Transform.mulToOutUnsafe(m_xf, m_sweep.localCenter, m_sweep.c);
-            m_sweep.a = angle;
+            Transform.mulToOutUnsafe(Xf, Sweep.localCenter, Sweep.c);
+            Sweep.a = angle;
 
-            m_sweep.c0.set_Renamed(m_sweep.c);
-            m_sweep.a0 = m_sweep.a;
+            Sweep.c0.set_Renamed(Sweep.c);
+            Sweep.a0 = Sweep.a;
 
-            BroadPhase broadPhase = m_world.m_contactManager.m_broadPhase;
-            for (Fixture f = m_fixtureList; f != null; f = f.m_next)
+            BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+            for (Fixture f = FixtureList; f != null; f = f.m_next)
             {
-                f.synchronize(broadPhase, m_xf, m_xf);
+                f.synchronize(broadPhase, Xf, Xf);
             }
 
-            m_world.m_contactManager.findNewContacts();
+            World.m_contactManager.findNewContacts();
         }
 
         /// <summary>
         /// Get the body transform for the body's origin.
         /// </summary>
         /// <returns>the world transform of the body's origin.</returns>
-        public Transform getTransform()
+        public Transform GetTransform()
         {
-            return m_xf;
+            return Xf;
         }
 
         /// <summary>
         /// Get the world body origin position. Do not modify.
         /// </summary>
         /// <returns>the world position of the body's origin.</returns>
-        virtual public Vec2 Position
+        public Vec2 Position
         {
             get
             {
-                return m_xf.p;
+                return Xf.p;
             }
         }
 
@@ -375,40 +368,40 @@ namespace Box2D.Dynamics
         /// Get the angle in radians.
         /// </summary>
         /// <returns>the current world rotation angle in radians.</returns>
-        virtual public float Angle
+        public float Angle
         {
             get
             {
-                return m_sweep.a;
+                return Sweep.a;
             }
         }
 
         /// <summary>
         /// Get the world position of the center of mass. Do not modify.
         /// </summary>
-        virtual public Vec2 WorldCenter
+        public Vec2 WorldCenter
         {
             get
             {
-                return m_sweep.c;
+                return Sweep.c;
             }
         }
 
         /// <summary>
         /// Get the local position of the center of mass. Do not modify.
         /// </summary>
-        virtual public Vec2 LocalCenter
+        public Vec2 LocalCenter
         {
             get
             {
-                return m_sweep.localCenter;
+                return Sweep.localCenter;
             }
         }
 
         /// <summary>
         /// Get or sets the linear velocity of the center of mass.
         /// </summary>
-        virtual public Vec2 LinearVelocity
+        public Vec2 LinearVelocity
         {
             get
             {
@@ -433,7 +426,7 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Get or sets the angular velocity in radians/second.
         /// </summary>
-        virtual public float AngularVelocity
+        public float AngularVelocity
         {
             get
             {
@@ -458,78 +451,42 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Gets or sets the gravity scale of the body.
         /// </summary>
-        virtual public float GravityScale
-        {
-            get
-            {
-                return m_gravityScale;
-            }
-            set
-            {
-                this.m_gravityScale = value;
-            }
-        }
+        public float GravityScale { get; set; }
 
         /// <summary>
         /// Get the total mass of the body.
         /// </summary>
         /// <returns>the mass, usually in kilograms (kg).</returns>
-        virtual public float Mass
-        {
-            get
-            {
-                return m_mass;
-            }
-        }
+        public float Mass { get; set; }
 
         /// <summary>
         /// Get the central rotational inertia of the body.
         /// </summary>
         /// <returns>the rotational inertia, usually in kg-m^2.</returns>
-        virtual public float Inertia
+        public float Inertia
         {
             get
             {
-                return m_I + m_mass * (m_sweep.localCenter.x * m_sweep.localCenter.x + m_sweep.localCenter.y * m_sweep.localCenter.y);
+                return I + Mass * (Sweep.localCenter.x * Sweep.localCenter.x + Sweep.localCenter.y * Sweep.localCenter.y);
             }
         }
 
         /// <summary>
         /// Gets or sets the linear damping of the body.
         /// </summary>
-        virtual public float LinearDamping
-        {
-            get
-            {
-                return m_linearDamping;
-            }
-            set
-            {
-                m_linearDamping = value;
-            }
-        }
+        public float LinearDamping { get; set; }
 
         /// <summary>
         /// Gets or sets the angular damping of the body.
         /// </summary>
-        virtual public float AngularDamping
-        {
-            get
-            {
-                return m_angularDamping;
-            }
-            set
-            {
-                m_angularDamping = value;
-            }
-        }
+        public float AngularDamping { get; set; }
 
         /// <summary>
         /// Gets or sets the type of this body.
         /// Setter may alter the mass and velocity.
         /// </summary>
         /// <param name="type"></param>
-        virtual public BodyType Type
+        public BodyType Type
         {
             get
             {
@@ -537,8 +494,8 @@ namespace Box2D.Dynamics
             }
             set
             {
-                Debug.Assert(m_world.Locked == false);
-                if (m_world.Locked == true)
+                Debug.Assert(World.Locked == false);
+                if (World.Locked == true)
                 {
                     return;
                 }
@@ -550,35 +507,35 @@ namespace Box2D.Dynamics
 
                 m_type = value;
 
-                resetMassData();
+                ResetMassData();
 
                 if (m_type == BodyType.STATIC)
                 {
                     m_linearVelocity.setZero();
                     m_angularVelocity = 0.0f;
-                    m_sweep.a0 = m_sweep.a;
-                    m_sweep.c0.set_Renamed(m_sweep.c);
-                    synchronizeFixtures();
+                    Sweep.a0 = Sweep.a;
+                    Sweep.c0.set_Renamed(Sweep.c);
+                    SynchronizeFixtures();
                 }
 
                 Awake = true;
 
-                m_force.setZero();
-                m_torque = 0.0f;
+                Force.setZero();
+                Torque = 0.0f;
 
                 // Delete the attached contacts.
-                ContactEdge ce = m_contactList;
+                ContactEdge ce = ContactList;
                 while (ce != null)
                 {
                     ContactEdge ce0 = ce;
                     ce = ce.next;
-                    m_world.m_contactManager.destroy(ce0.contact);
+                    World.m_contactManager.destroy(ce0.contact);
                 }
-                m_contactList = null;
+                ContactList = null;
 
                 // Touch the proxies so that new contacts will be created (when appropriate)
-                BroadPhase broadPhase = m_world.m_contactManager.m_broadPhase;
-                for (Fixture f = m_fixtureList; f != null; f = f.m_next)
+                BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                for (Fixture f = FixtureList; f != null; f = f.m_next)
                 {
                     int proxyCount = f.m_proxyCount;
                     for (int i = 0; i < proxyCount; ++i)
@@ -592,21 +549,21 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Is this body treated like a bullet for continuous collision detection?
         /// </summary>
-        virtual public bool Bullet
+        public bool Bullet
         {
             get
             {
-                return (m_flags & e_bulletFlag) == e_bulletFlag;
+                return (Flags & TypeFlags.Bullet) == TypeFlags.Bullet;
             }
             set
             {
                 if (value)
                 {
-                    m_flags |= e_bulletFlag;
+                    Flags |= TypeFlags.Bullet;
                 }
                 else
                 {
-                    m_flags &= ~e_bulletFlag;
+                    Flags &= ~TypeFlags.Bullet;
                 }
             }
         }
@@ -615,21 +572,21 @@ namespace Box2D.Dynamics
         /// Is this body allowed to sleep.
         /// You can disable sleeping on this body. If you disable sleeping, the body will be woken.
         /// </summary>
-        virtual public bool SleepingAllowed
+        public bool SleepingAllowed
         {
             get
             {
-                return (m_flags & e_autoSleepFlag) == e_autoSleepFlag;
+                return (Flags & TypeFlags.AutoSleep) == TypeFlags.AutoSleep;
             }
             set
             {
                 if (value)
                 {
-                    m_flags |= e_autoSleepFlag;
+                    Flags |= TypeFlags.AutoSleep;
                 }
                 else
                 {
-                    m_flags &= ~e_autoSleepFlag;
+                    Flags &= ~TypeFlags.AutoSleep;
                     Awake = true;
                 }
             }
@@ -639,30 +596,30 @@ namespace Box2D.Dynamics
         /// Gets or sets the sleeping state of this body.
         /// A sleeping body has very low CPU cost.
         /// </summary>
-        virtual public bool Awake
+        public bool Awake
         {
             get
             {
-                return (m_flags & e_awakeFlag) == e_awakeFlag;
+                return (Flags & TypeFlags.Awake) == TypeFlags.Awake;
             }
             set
             {
                 if (value)
                 {
-                    if ((m_flags & e_awakeFlag) == 0)
+                    if ((Flags & TypeFlags.Awake) == 0)
                     {
-                        m_flags |= e_awakeFlag;
-                        m_sleepTime = 0.0f;
+                        Flags |= TypeFlags.Awake;
+                        SleepTime = 0.0f;
                     }
                 }
                 else
                 {
-                    m_flags &= ~e_awakeFlag;
-                    m_sleepTime = 0.0f;
+                    Flags &= ~TypeFlags.Awake;
+                    SleepTime = 0.0f;
                     m_linearVelocity.setZero();
                     m_angularVelocity = 0.0f;
-                    m_force.setZero();
-                    m_torque = 0.0f;
+                    Force.setZero();
+                    Torque = 0.0f;
                 }
             }
         }
@@ -679,15 +636,15 @@ namespace Box2D.Dynamics
         /// body are implicitly inactive. An inactive body is still owned by a World object and remains in
         /// the body list.
         /// </summary>
-        virtual public bool Active
+        public bool Active
         {
             get
             {
-                return (m_flags & e_activeFlag) == e_activeFlag;
+                return (Flags & TypeFlags.Active) == TypeFlags.Active;
             }
             set
             {
-                Debug.Assert(m_world.Locked == false);
+                Debug.Assert(World.Locked == false);
 
                 if (value == Active)
                 {
@@ -696,37 +653,37 @@ namespace Box2D.Dynamics
 
                 if (value)
                 {
-                    m_flags |= e_activeFlag;
+                    Flags |= TypeFlags.Active;
 
                     // Create all proxies.
-                    BroadPhase broadPhase = m_world.m_contactManager.m_broadPhase;
-                    for (Fixture f = m_fixtureList; f != null; f = f.m_next)
+                    BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                    for (Fixture f = FixtureList; f != null; f = f.m_next)
                     {
-                        f.createProxies(broadPhase, m_xf);
+                        f.createProxies(broadPhase, Xf);
                     }
 
                     // Contacts are created the next time step.
                 }
                 else
                 {
-                    m_flags &= ~e_activeFlag;
+                    Flags &= ~TypeFlags.Active;
 
                     // Destroy all proxies.
-                    BroadPhase broadPhase = m_world.m_contactManager.m_broadPhase;
-                    for (Fixture f = m_fixtureList; f != null; f = f.m_next)
+                    BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                    for (Fixture f = FixtureList; f != null; f = f.m_next)
                     {
                         f.destroyProxies(broadPhase);
                     }
 
                     // Destroy the attached contacts.
-                    ContactEdge ce = m_contactList;
+                    ContactEdge ce = ContactList;
                     while (ce != null)
                     {
                         ContactEdge ce0 = ce;
                         ce = ce.next;
-                        m_world.m_contactManager.destroy(ce0.contact);
+                        World.m_contactManager.destroy(ce0.contact);
                     }
-                    m_contactList = null;
+                    ContactList = null;
                 }
             }
         }
@@ -735,93 +692,53 @@ namespace Box2D.Dynamics
         /// Does this body have fixed rotation?
         /// Setter causes the mass to be reset.
         /// </summary>
-        virtual public bool FixedRotation
+        public bool FixedRotation
         {
             get
             {
-                return (m_flags & e_fixedRotationFlag) == e_fixedRotationFlag;
+                return (Flags & TypeFlags.FixedRotation) == TypeFlags.FixedRotation;
             }
             set
             {
                 if (value)
                 {
-                    m_flags |= e_fixedRotationFlag;
+                    Flags |= TypeFlags.FixedRotation;
                 }
                 else
                 {
-                    m_flags &= ~e_fixedRotationFlag;
+                    Flags &= ~TypeFlags.FixedRotation;
                 }
 
-                resetMassData();
+                ResetMassData();
             }
         }
 
         /// <summary>
         /// Get the list of all fixtures attached to this body.
         /// </summary>
-        virtual public Fixture FixtureList
-        {
-            get
-            {
-                return m_fixtureList;
-            }
-        }
+        public Fixture FixtureList { get; set; }
 
         /// <summary>
         /// Get the list of all joints attached to this body.
         /// </summary>
-        virtual public JointEdge JointList
-        {
-            get
-            {
-                return m_jointList;
-            }
-        }
+        public JointEdge JointList { get; set; }
 
         /// <summary>
         /// Get the list of all contacts attached to this body.
         /// </summary>
         /// <warning>this list changes during the time step and you may miss some collisions if you don't use ContactListener.</warning>
-        virtual public ContactEdge ContactList
-        {
-            get
-            {
-                return m_contactList;
-            }
-        }
+        public ContactEdge ContactList { get; set; }
 
         /// <summary>
         /// Get the next body in the world's body list.
         /// </summary>
-        virtual public Body Next
-        {
-            get
-            {
-                return m_next;
-            }
-        }
+        public Body Next { get; set; }
 
         /// <summary>Gets or sets the user data pointer that was provided in the body definition.</summary>
-        virtual public object UserData
-        {
-            get
-            {
-                return m_userData;
-            }
-            set
-            {
-                m_userData = value;
-            }
-        }
+        public object UserData { get; set; }
 
         /// <summary>Gets the parent world of this body.</summary>
-        virtual public World World
-        {
-            get
-            {
-                return m_world;
-            }
-        }
+        public World World { get; set; }
 
         /// <summary>
         /// Apply a force at a world point. If the force is not applied at the center of mass, it will
@@ -829,7 +746,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="force">the world force vector, usually in Newtons (N).</param>
         /// <param name="point">the world position of the point of application.</param>
-        public void applyForce(Vec2 force, Vec2 point)
+        public void ApplyForce(Vec2 force, Vec2 point)
         {
             if (m_type != BodyType.DYNAMIC)
             {
@@ -846,17 +763,17 @@ namespace Box2D.Dynamics
             // temp.set(point).subLocal(m_sweep.c);
             // m_torque += Vec2.cross(temp, force);
 
-            m_force.x += force.x;
-            m_force.y += force.y;
+            Force.x += force.x;
+            Force.y += force.y;
 
-            m_torque += (point.x - m_sweep.c.x) * force.y - (point.y - m_sweep.c.y) * force.x;
+            Torque += (point.x - Sweep.c.x) * force.y - (point.y - Sweep.c.y) * force.x;
         }
 
         /// <summary>
         /// Apply a force to the center of mass. This wakes up the body.
         /// </summary>
         /// <param name="force">the world force vector, usually in Newtons (N).</param>
-        public void applyForceToCenter(Vec2 force)
+        public void ApplyForceToCenter(Vec2 force)
         {
             if (m_type != BodyType.DYNAMIC)
             {
@@ -868,8 +785,8 @@ namespace Box2D.Dynamics
                 Awake = true;
             }
 
-            m_force.x += force.x;
-            m_force.y += force.y;
+            Force.x += force.x;
+            Force.y += force.y;
         }
 
         /// <summary>
@@ -877,7 +794,7 @@ namespace Box2D.Dynamics
         /// center of mass. This wakes up the body.
         /// </summary>
         /// <param name="torque">about the z-axis (out of the screen), usually in N-m.</param>
-        public void applyTorque(float torque)
+        public void ApplyTorque(float torque)
         {
             if (m_type != BodyType.DYNAMIC)
             {
@@ -889,7 +806,7 @@ namespace Box2D.Dynamics
                 Awake = true;
             }
 
-            m_torque += torque;
+            Torque += torque;
         }
 
         /// <summary>
@@ -899,7 +816,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="impulse">the world impulse vector, usually in N-seconds or kg-m/s.</param>
         /// <param name="point">the world position of the point of application.</param>
-        public void applyLinearImpulse(Vec2 impulse, Vec2 point)
+        public void ApplyLinearImpulse(Vec2 impulse, Vec2 point)
         {
             if (m_type != BodyType.DYNAMIC)
             {
@@ -918,17 +835,17 @@ namespace Box2D.Dynamics
             // temp.set(point).subLocal(m_sweep.c);
             // m_angularVelocity += m_invI * Vec2.cross(temp, impulse);
 
-            m_linearVelocity.x += impulse.x * m_invMass;
-            m_linearVelocity.y += impulse.y * m_invMass;
+            m_linearVelocity.x += impulse.x * InvMass;
+            m_linearVelocity.y += impulse.y * InvMass;
 
-            m_angularVelocity += m_invI * ((point.x - m_sweep.c.x) * impulse.y - (point.y - m_sweep.c.y) * impulse.x);
+            m_angularVelocity += InvI * ((point.x - Sweep.c.x) * impulse.y - (point.y - Sweep.c.y) * impulse.x);
         }
 
         /// <summary>
         /// Apply an angular impulse.
         /// </summary>
         /// <param name="impulse">the angular impulse in units of kg*m*m/s</param>
-        public virtual void applyAngularImpulse(float impulse)
+        public void ApplyAngularImpulse(float impulse)
         {
             if (m_type != BodyType.DYNAMIC)
             {
@@ -939,23 +856,23 @@ namespace Box2D.Dynamics
             {
                 Awake = true;
             }
-            m_angularVelocity += m_invI * impulse;
+            m_angularVelocity += InvI * impulse;
         }
 
         /// <summary>
         /// Get the mass data of the body. The rotational inertia is relative to the center of mass.
         /// </summary>
         /// <returns>a struct containing the mass, inertia and center of the body.</returns>
-        public void getMassData(MassData data)
+        public void GetMassData(MassData data)
         {
             // data.mass = m_mass;
             // data.I = m_I + m_mass * Vec2.dot(m_sweep.localCenter, m_sweep.localCenter);
             // data.center.set(m_sweep.localCenter);
 
-            data.Mass = m_mass;
-            data.I = m_I + m_mass * (m_sweep.localCenter.x * m_sweep.localCenter.x + m_sweep.localCenter.y * m_sweep.localCenter.y);
-            data.Center.x = m_sweep.localCenter.x;
-            data.Center.y = m_sweep.localCenter.y;
+            data.Mass = Mass;
+            data.I = I + Mass * (Sweep.localCenter.x * Sweep.localCenter.x + Sweep.localCenter.y * Sweep.localCenter.y);
+            data.Center.x = Sweep.localCenter.x;
+            data.Center.y = Sweep.localCenter.y;
         }
 
         /// <summary>
@@ -964,11 +881,11 @@ namespace Box2D.Dynamics
         /// This function has no effect if the body isn't dynamic.
         /// </summary>
         /// <param name="massData">the mass properties.</param>
-        public void setMassData(MassData massData)
+        public void SetMassData(MassData massData)
         {
             // TODO_ERIN adjust linear velocity and torque to account for movement of center.
-            Debug.Assert(m_world.Locked == false);
-            if (m_world.Locked == true)
+            Debug.Assert(World.Locked == false);
+            if (World.Locked == true)
             {
                 return;
             }
@@ -978,41 +895,41 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            m_invMass = 0.0f;
-            m_I = 0.0f;
-            m_invI = 0.0f;
+            InvMass = 0.0f;
+            I = 0.0f;
+            InvI = 0.0f;
 
-            m_mass = massData.Mass;
-            if (m_mass <= 0.0f)
+            Mass = massData.Mass;
+            if (Mass <= 0.0f)
             {
-                m_mass = 1f;
+                Mass = 1f;
             }
 
-            m_invMass = 1.0f / m_mass;
+            InvMass = 1.0f / Mass;
 
-            if (massData.I > 0.0f && (m_flags & e_fixedRotationFlag) == 0)
+            if (massData.I > 0.0f && (Flags & TypeFlags.FixedRotation) == 0)
             {
-                m_I = massData.I - m_mass * Vec2.dot(massData.Center, massData.Center);
-                Debug.Assert(m_I > 0.0f);
-                m_invI = 1.0f / m_I;
+                I = massData.I - Mass * Vec2.dot(massData.Center, massData.Center);
+                Debug.Assert(I > 0.0f);
+                InvI = 1.0f / I;
             }
 
-            Vec2 oldCenter = m_world.Pool.PopVec2();
+            Vec2 oldCenter = World.Pool.PopVec2();
             // Move center of mass.
-            oldCenter.set_Renamed(m_sweep.c);
-            m_sweep.localCenter.set_Renamed(massData.Center);
+            oldCenter.set_Renamed(Sweep.c);
+            Sweep.localCenter.set_Renamed(massData.Center);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
-            Transform.mulToOutUnsafe(m_xf, m_sweep.localCenter, m_sweep.c0);
-            m_sweep.c.set_Renamed(m_sweep.c0);
+            Transform.mulToOutUnsafe(Xf, Sweep.localCenter, Sweep.c0);
+            Sweep.c.set_Renamed(Sweep.c0);
 
             // Update center of mass velocity.
             // m_linearVelocity += Cross(m_angularVelocity, m_sweep.c - oldCenter);
-            Vec2 temp = m_world.Pool.PopVec2();
-            temp.set_Renamed(m_sweep.c).subLocal(oldCenter);
+            Vec2 temp = World.Pool.PopVec2();
+            temp.set_Renamed(Sweep.c).subLocal(oldCenter);
             Vec2.crossToOut(m_angularVelocity, temp, temp);
             m_linearVelocity.addLocal(temp);
 
-            m_world.Pool.PushVec2(2);
+            World.Pool.PushVec2(2);
         }
 
         private readonly MassData pmd = new MassData();
@@ -1022,89 +939,89 @@ namespace Box2D.Dynamics
         /// normally does not need to be called unless you called setMassData to override the mass and you
         /// later want to reset the mass.
         /// </summary>
-        public void resetMassData()
+        public void ResetMassData()
         {
             // Compute mass data from shapes. Each shape has its own density.
-            m_mass = 0.0f;
-            m_invMass = 0.0f;
-            m_I = 0.0f;
-            m_invI = 0.0f;
-            m_sweep.localCenter.setZero();
+            Mass = 0.0f;
+            InvMass = 0.0f;
+            I = 0.0f;
+            InvI = 0.0f;
+            Sweep.localCenter.setZero();
 
             // Static and kinematic bodies have zero mass.
             if (m_type == BodyType.STATIC || m_type == BodyType.KINEMATIC)
             {
                 // m_sweep.c0 = m_sweep.c = m_xf.position;
-                m_sweep.c0.set_Renamed(m_xf.p);
-                m_sweep.c.set_Renamed(m_xf.p);
-                m_sweep.a0 = m_sweep.a;
+                Sweep.c0.set_Renamed(Xf.p);
+                Sweep.c.set_Renamed(Xf.p);
+                Sweep.a0 = Sweep.a;
                 return;
             }
 
             Debug.Assert(m_type == BodyType.DYNAMIC);
 
             // Accumulate mass over all fixtures.
-            Vec2 localCenter = m_world.Pool.PopVec2();
+            Vec2 localCenter = World.Pool.PopVec2();
             localCenter.setZero();
-            Vec2 temp = m_world.Pool.PopVec2();
+            Vec2 temp = World.Pool.PopVec2();
             MassData massData = pmd;
-            for (Fixture f = m_fixtureList; f != null; f = f.m_next)
+            for (Fixture f = FixtureList; f != null; f = f.m_next)
             {
                 if (f.m_density == 0.0f)
                 {
                     continue;
                 }
                 f.getMassData(massData);
-                m_mass += massData.Mass;
+                Mass += massData.Mass;
                 // center += massData.mass * massData.center;
                 temp.set_Renamed(massData.Center).mulLocal(massData.Mass);
                 localCenter.addLocal(temp);
-                m_I += massData.I;
+                I += massData.I;
             }
 
             // Compute center of mass.
-            if (m_mass > 0.0f)
+            if (Mass > 0.0f)
             {
-                m_invMass = 1.0f / m_mass;
-                localCenter.mulLocal(m_invMass);
+                InvMass = 1.0f / Mass;
+                localCenter.mulLocal(InvMass);
             }
             else
             {
                 // Force all dynamic bodies to have a positive mass.
-                m_mass = 1.0f;
-                m_invMass = 1.0f;
+                Mass = 1.0f;
+                InvMass = 1.0f;
             }
 
-            if (m_I > 0.0f && (m_flags & e_fixedRotationFlag) == 0)
+            if (I > 0.0f && (Flags & TypeFlags.FixedRotation) == 0)
             {
                 // Center the inertia about the center of mass.
-                m_I -= m_mass * Vec2.dot(localCenter, localCenter);
-                Debug.Assert(m_I > 0.0f);
-                m_invI = 1.0f / m_I;
+                I -= Mass * Vec2.dot(localCenter, localCenter);
+                Debug.Assert(I > 0.0f);
+                InvI = 1.0f / I;
             }
             else
             {
-                m_I = 0.0f;
-                m_invI = 0.0f;
+                I = 0.0f;
+                InvI = 0.0f;
             }
 
-            Vec2 oldCenter = m_world.Pool.PopVec2();
+            Vec2 oldCenter = World.Pool.PopVec2();
             // Move center of mass.
-            oldCenter.set_Renamed(m_sweep.c);
-            m_sweep.localCenter.set_Renamed(localCenter);
+            oldCenter.set_Renamed(Sweep.c);
+            Sweep.localCenter.set_Renamed(localCenter);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
-            Transform.mulToOutUnsafe(m_xf, m_sweep.localCenter, m_sweep.c0);
-            m_sweep.c.set_Renamed(m_sweep.c0);
+            Transform.mulToOutUnsafe(Xf, Sweep.localCenter, Sweep.c0);
+            Sweep.c.set_Renamed(Sweep.c0);
 
             // Update center of mass velocity.
             // m_linearVelocity += Cross(m_angularVelocity, m_sweep.c - oldCenter);
-            temp.set_Renamed(m_sweep.c).subLocal(oldCenter);
+            temp.set_Renamed(Sweep.c).subLocal(oldCenter);
 
             Vec2 temp2 = oldCenter;
             Vec2.crossToOutUnsafe(m_angularVelocity, temp, temp2);
             m_linearVelocity.addLocal(temp2);
 
-            m_world.Pool.PushVec2(3);
+            World.Pool.PushVec2(3);
         }
 
         /// <summary>
@@ -1112,16 +1029,16 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="localPoint">a point on the body measured relative the the body's origin.</param>
         /// <returns> the same point expressed in world coordinates.</returns>
-        public Vec2 getWorldPoint(Vec2 localPoint)
+        public Vec2 GetWorldPoint(Vec2 localPoint)
         {
             Vec2 v = new Vec2();
-            getWorldPointToOut(localPoint, v);
+            GetWorldPointToOut(localPoint, v);
             return v;
         }
 
-        public void getWorldPointToOut(Vec2 localPoint, Vec2 out_Renamed)
+        public void GetWorldPointToOut(Vec2 localPoint, Vec2 result)
         {
-            Transform.mulToOut(m_xf, localPoint, out_Renamed);
+            Transform.mulToOut(Xf, localPoint, result);
         }
 
         /// <summary>
@@ -1129,103 +1046,103 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="localVector">a vector fixed in the body.</param>
         /// <returns>the same vector expressed in world coordinates.</returns>
-        public Vec2 getWorldVector(Vec2 localVector)
+        public Vec2 GetWorldVector(Vec2 localVector)
         {
-            Vec2 out_Renamed = new Vec2();
-            getWorldVectorToOut(localVector, out_Renamed);
-            return out_Renamed;
+            Vec2 result = new Vec2();
+            GetWorldVectorToOut(localVector, result);
+            return result;
         }
 
-        public void getWorldVectorToOut(Vec2 localVector, Vec2 out_Renamed)
+        public void GetWorldVectorToOut(Vec2 localVector, Vec2 result)
         {
-            Rot.mulToOut(m_xf.q, localVector, out_Renamed);
+            Rot.mulToOut(Xf.q, localVector, result);
         }
 
-        public void getWorldVectorToOutUnsafe(Vec2 localVector, Vec2 out_Renamed)
+        public void GetWorldVectorToOutUnsafe(Vec2 localVector, Vec2 result)
         {
-            Rot.mulToOutUnsafe(m_xf.q, localVector, out_Renamed);
+            Rot.mulToOutUnsafe(Xf.q, localVector, result);
         }
 
         /// <summary>
         /// Gets a local point relative to the body's origin given a world point.
         /// </summary>
-        /// <param name="a">point in world coordinates.</param>
+        /// <param name="worldPoint">point in world coordinates.</param>
         /// <returns>the corresponding local point relative to the body's origin.</returns>
-        public Vec2 getLocalPoint(Vec2 worldPoint)
+        public Vec2 GetLocalPoint(Vec2 worldPoint)
         {
-            Vec2 out_Renamed = new Vec2();
-            getLocalPointToOut(worldPoint, out_Renamed);
-            return out_Renamed;
+            Vec2 result = new Vec2();
+            GetLocalPointToOut(worldPoint, result);
+            return result;
         }
 
-        public void getLocalPointToOut(Vec2 worldPoint, Vec2 out_Renamed)
+        public void GetLocalPointToOut(Vec2 worldPoint, Vec2 result)
         {
-            Transform.mulTransToOut(m_xf, worldPoint, out_Renamed);
+            Transform.mulTransToOut(Xf, worldPoint, result);
         }
 
         /// <summary>
         /// Gets a local vector given a world vector.
         /// </summary>
-        /// <param name="a">vector in world coordinates.</param>
+        /// <param name="worldVector">vector in world coordinates.</param>
         /// <returns>the corresponding local vector.</returns>
-        public Vec2 getLocalVector(Vec2 worldVector)
+        public Vec2 GetLocalVector(Vec2 worldVector)
         {
-            Vec2 out_Renamed = new Vec2();
-            getLocalVectorToOut(worldVector, out_Renamed);
-            return out_Renamed;
+            Vec2 result = new Vec2();
+            GetLocalVectorToOut(worldVector, result);
+            return result;
         }
 
-        public void getLocalVectorToOut(Vec2 worldVector, Vec2 out_Renamed)
+        public void GetLocalVectorToOut(Vec2 worldVector, Vec2 result)
         {
-            Rot.mulTrans(m_xf.q, worldVector, out_Renamed);
+            Rot.mulTrans(Xf.q, worldVector, result);
         }
 
-        public void getLocalVectorToOutUnsafe(Vec2 worldVector, Vec2 out_Renamed)
+        public void GetLocalVectorToOutUnsafe(Vec2 worldVector, Vec2 result)
         {
-            Rot.mulTransUnsafe(m_xf.q, worldVector, out_Renamed);
+            Rot.mulTransUnsafe(Xf.q, worldVector, result);
         }
 
         /// <summary>
         /// Get the world linear velocity of a world point attached to this body.
         /// </summary>
-        /// <param name="a">point in world coordinates.</param>
+        /// <param name="worldPoint">point in world coordinates.</param>
         /// <returns>the world velocity of a point.</returns>
-        public Vec2 getLinearVelocityFromWorldPoint(Vec2 worldPoint)
+        public Vec2 GetLinearVelocityFromWorldPoint(Vec2 worldPoint)
         {
-            Vec2 out_Renamed = new Vec2();
-            getLinearVelocityFromWorldPointToOut(worldPoint, out_Renamed);
-            return out_Renamed;
+            Vec2 result = new Vec2();
+            GetLinearVelocityFromWorldPointToOut(worldPoint, result);
+            return result;
         }
 
-        public void getLinearVelocityFromWorldPointToOut(Vec2 worldPoint, Vec2 out_Renamed)
+        public void GetLinearVelocityFromWorldPointToOut(Vec2 worldPoint, Vec2 result)
         {
-            out_Renamed.set_Renamed(worldPoint).subLocal(m_sweep.c);
-            Vec2.crossToOut(m_angularVelocity, out_Renamed, out_Renamed);
-            out_Renamed.addLocal(m_linearVelocity);
+            result.set_Renamed(worldPoint).subLocal(Sweep.c);
+            Vec2.crossToOut(m_angularVelocity, result, result);
+            result.addLocal(m_linearVelocity);
         }
 
         /// <summary>
         /// Get the world velocity of a local point.
         /// </summary>
-        /// <param name="a">point in local coordinates.</param>
+        /// <param name="localPoint">point in local coordinates.</param>
         /// <returns>the world velocity of a point.</returns>
-        public Vec2 getLinearVelocityFromLocalPoint(Vec2 localPoint)
+        public Vec2 GetLinearVelocityFromLocalPoint(Vec2 localPoint)
         {
-            Vec2 out_Renamed = new Vec2();
-            getLinearVelocityFromLocalPointToOut(localPoint, out_Renamed);
-            return out_Renamed;
+            Vec2 result = new Vec2();
+            GetLinearVelocityFromLocalPointToOut(localPoint, result);
+            return result;
         }
 
-        public void getLinearVelocityFromLocalPointToOut(Vec2 localPoint, Vec2 out_Renamed)
+        public void GetLinearVelocityFromLocalPointToOut(Vec2 localPoint, Vec2 result)
         {
-            getWorldPointToOut(localPoint, out_Renamed);
-            getLinearVelocityFromWorldPointToOut(out_Renamed, out_Renamed);
+            GetWorldPointToOut(localPoint, result);
+            GetLinearVelocityFromWorldPointToOut(result, result);
         }
 
         // djm pooling
         private readonly Transform pxf = new Transform();
 
-        protected internal void synchronizeFixtures()
+        internal void SynchronizeFixtures()
         {
             Transform xf1 = pxf;
             // xf1.position = m_sweep.c0 - Mul(xf1.R, m_sweep.localCenter);
@@ -1234,19 +1151,19 @@ namespace Box2D.Dynamics
             // Rot.mulToOutUnsafe(xf1.q, m_sweep.localCenter, xf1.p);
             // xf1.p.mulLocal(-1).addLocal(m_sweep.c0);
             // inlined:
-            xf1.q.s = MathUtils.sin(m_sweep.a0);
-            xf1.q.c = MathUtils.cos(m_sweep.a0);
-            xf1.p.x = m_sweep.c0.x - xf1.q.c * m_sweep.localCenter.x + xf1.q.s * m_sweep.localCenter.y;
-            xf1.p.y = m_sweep.c0.y - xf1.q.s * m_sweep.localCenter.x - xf1.q.c * m_sweep.localCenter.y;
+            xf1.q.s = MathUtils.sin(Sweep.a0);
+            xf1.q.c = MathUtils.cos(Sweep.a0);
+            xf1.p.x = Sweep.c0.x - xf1.q.c * Sweep.localCenter.x + xf1.q.s * Sweep.localCenter.y;
+            xf1.p.y = Sweep.c0.y - xf1.q.s * Sweep.localCenter.x - xf1.q.c * Sweep.localCenter.y;
             // end inline
 
-            for (Fixture f = m_fixtureList; f != null; f = f.m_next)
+            for (Fixture f = FixtureList; f != null; f = f.m_next)
             {
-                f.synchronize(m_world.m_contactManager.m_broadPhase, xf1, m_xf);
+                f.synchronize(World.m_contactManager.m_broadPhase, xf1, Xf);
             }
         }
 
-        public void synchronizeTransform()
+        public void SynchronizeTransform()
         {
             // m_xf.q.set(m_sweep.a);
             //
@@ -1254,12 +1171,12 @@ namespace Box2D.Dynamics
             // Rot.mulToOutUnsafe(m_xf.q, m_sweep.localCenter, m_xf.p);
             // m_xf.p.mulLocal(-1).addLocal(m_sweep.c);
             //
-            m_xf.q.s = MathUtils.sin(m_sweep.a);
-            m_xf.q.c = MathUtils.cos(m_sweep.a);
-            Rot q = m_xf.q;
-            Vec2 v = m_sweep.localCenter;
-            m_xf.p.x = m_sweep.c.x - q.c * v.x + q.s * v.y;
-            m_xf.p.y = m_sweep.c.y - q.s * v.x - q.c * v.y;
+            Xf.q.s = MathUtils.sin(Sweep.a);
+            Xf.q.c = MathUtils.cos(Sweep.a);
+            Rot q = Xf.q;
+            Vec2 v = Sweep.localCenter;
+            Xf.p.x = Sweep.c.x - q.c * v.x + q.s * v.y;
+            Xf.p.y = Sweep.c.y - q.s * v.x - q.c * v.y;
         }
 
         /// <summary>
@@ -1268,7 +1185,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public virtual bool shouldCollide(Body other)
+        public bool ShouldCollide(Body other)
         {
             // At least one body should be dynamic.
             if (m_type != BodyType.DYNAMIC && other.m_type != BodyType.DYNAMIC)
@@ -1277,7 +1194,7 @@ namespace Box2D.Dynamics
             }
 
             // Does a joint prevent collision?
-            for (JointEdge jn = m_jointList; jn != null; jn = jn.next)
+            for (JointEdge jn = JointList; jn != null; jn = jn.next)
             {
                 if (jn.other == other)
                 {
@@ -1291,16 +1208,16 @@ namespace Box2D.Dynamics
             return true;
         }
 
-        protected internal void advance(float t)
+        internal void Advance(float t)
         {
             // Advance to the new safe time. This doesn't sync the broad-phase.
-            m_sweep.advance(t);
-            m_sweep.c.set_Renamed(m_sweep.c0);
-            m_sweep.a = m_sweep.a0;
-            m_xf.q.set_Renamed(m_sweep.a);
+            Sweep.advance(t);
+            Sweep.c.set_Renamed(Sweep.c0);
+            Sweep.a = Sweep.a0;
+            Xf.q.set_Renamed(Sweep.a);
             // m_xf.position = m_sweep.c - Mul(m_xf.R, m_sweep.localCenter);
-            Rot.mulToOutUnsafe(m_xf.q, m_sweep.localCenter, m_xf.p);
-            m_xf.p.mulLocal(-1).addLocal(m_sweep.c);
+            Rot.mulToOutUnsafe(Xf.q, Sweep.localCenter, Xf.p);
+            Xf.p.mulLocal(-1).addLocal(Sweep.c);
         }
     }
 }

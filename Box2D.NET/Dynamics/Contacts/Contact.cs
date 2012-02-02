@@ -271,7 +271,7 @@ namespace Box2D.Dynamics.Contacts
             Shape shapeA = m_fixtureA.Shape;
             Shape shapeB = m_fixtureB.Shape;
 
-            worldManifold.Initialize(m_manifold, bodyA.getTransform(), shapeA.Radius, bodyB.getTransform(), shapeB.Radius);
+            worldManifold.Initialize(m_manifold, bodyA.GetTransform(), shapeA.Radius, bodyB.GetTransform(), shapeB.Radius);
         }
 
         public virtual void resetFriction()
@@ -314,8 +314,8 @@ namespace Box2D.Dynamics.Contacts
 
             Body bodyA = m_fixtureA.Body;
             Body bodyB = m_fixtureB.Body;
-            Transform xfA = bodyA.getTransform();
-            Transform xfB = bodyB.getTransform();
+            Transform xfA = bodyA.GetTransform();
+            Transform xfB = bodyB.GetTransform();
             // log.debug("TransformA: "+xfA);
             // log.debug("TransformB: "+xfB);
 

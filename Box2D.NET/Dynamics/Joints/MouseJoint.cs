@@ -69,7 +69,7 @@ namespace Box2D.Dynamics.Joints
             Debug.Assert(def.dampingRatio >= 0);
 
             m_targetA.set_Renamed(def.target);
-            Transform.mulTransToOutUnsafe(m_bodyB.getTransform(), m_targetA, m_localAnchorB);
+            Transform.mulTransToOutUnsafe(m_bodyB.GetTransform(), m_targetA, m_localAnchorB);
 
             m_maxForce = def.maxForce;
             m_impulse.setZero();
@@ -88,7 +88,7 @@ namespace Box2D.Dynamics.Joints
 
         public override void getAnchorB(Vec2 argOut)
         {
-            m_bodyB.getWorldPointToOut(m_localAnchorB, argOut);
+            m_bodyB.GetWorldPointToOut(m_localAnchorB, argOut);
         }
 
         public override void getReactionForce(float invDt, Vec2 argOut)
@@ -164,11 +164,11 @@ namespace Box2D.Dynamics.Joints
 
         public override void initVelocityConstraints(SolverData data)
         {
-            m_indexA = m_bodyA.m_islandIndex;
-            m_indexB = m_bodyB.m_islandIndex;
-            m_localCenterB.set_Renamed(m_bodyB.m_sweep.localCenter);
-            m_invMassB = m_bodyB.m_invMass;
-            m_invIB = m_bodyB.m_invI;
+            m_indexA = m_bodyA.IslandIndex;
+            m_indexB = m_bodyB.IslandIndex;
+            m_localCenterB.set_Renamed(m_bodyB.Sweep.localCenter);
+            m_invMassB = m_bodyB.InvMass;
+            m_invIB = m_bodyB.InvI;
 
             Vec2 cB = data.positions[m_indexB].c;
             float aB = data.positions[m_indexB].a;

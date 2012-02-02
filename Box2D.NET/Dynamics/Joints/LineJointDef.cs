@@ -92,9 +92,9 @@ namespace Box2D.Dynamics.Joints
         {
             bodyA = b1;
             bodyB = b2;
-            b1.getLocalPointToOut(anchor, localAnchorA);
-            b2.getLocalPointToOut(anchor, localAnchorB);
-            bodyA.getLocalVectorToOut(axis, localAxisA);
+            b1.GetLocalPointToOut(anchor, localAnchorA);
+            b2.GetLocalPointToOut(anchor, localAnchorB);
+            bodyA.GetLocalVectorToOut(axis, localAxisA);
         }
     }
 }

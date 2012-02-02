@@ -191,9 +191,9 @@ namespace Box2D.Dynamics.Joints
                 {
                     done = false;
                 }
-                bodies[next].m_sweep.c.x += delta.x;
-                bodies[next].m_sweep.c.y += delta.y;
-                bodies[next].synchronizeTransform();
+                bodies[next].Sweep.c.x += delta.x;
+                bodies[next].Sweep.c.y += delta.y;
+                bodies[next].SynchronizeTransform();
                 // bodies[next].m_linearVelocity.x += delta.x * step.inv_dt;
                 // bodies[next].m_linearVelocity.y += delta.y * step.inv_dt;
             }
@@ -225,8 +225,8 @@ namespace Box2D.Dynamics.Joints
                 // m_impulse = lambda;
                 for (int i = 0; i < bodies.Length; ++i)
                 {
-                    bodies[i].m_linearVelocity.x += bodies[i].m_invMass * d[i].y * .5f * m_impulse;
-                    bodies[i].m_linearVelocity.y += bodies[i].m_invMass * (-d[i].x) * .5f * m_impulse;
+                    bodies[i].m_linearVelocity.x += bodies[i].InvMass * d[i].y * .5f * m_impulse;
+                    bodies[i].m_linearVelocity.y += bodies[i].InvMass * (-d[i].x) * .5f * m_impulse;
                 }
             }
             else
@@ -265,8 +265,8 @@ namespace Box2D.Dynamics.Joints
             // System.out.println(m_impulse);
             for (int i = 0; i < bodies.Length; ++i)
             {
-                bodies[i].m_linearVelocity.x += bodies[i].m_invMass * d[i].y * .5f * lambda;
-                bodies[i].m_linearVelocity.y += bodies[i].m_invMass * (-d[i].x) * .5f * lambda;
+                bodies[i].m_linearVelocity.x += bodies[i].InvMass * d[i].y * .5f * lambda;
+                bodies[i].m_linearVelocity.y += bodies[i].InvMass * (-d[i].x) * .5f * lambda;
             }
         }
 

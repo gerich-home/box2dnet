@@ -157,7 +157,7 @@ namespace Box2D.Dynamics
                 m_allowSleep = value;
                 if (m_allowSleep == false)
                 {
-                    for (Body b = m_bodyList; b != null; b = b.m_next)
+                    for (Body b = m_bodyList; b != null; b = b.Next)
                     {
                         b.Awake = true;
                     }
@@ -254,11 +254,11 @@ namespace Box2D.Dynamics
             Body b = new Body(def, this);
 
             // add to world doubly linked list
-            b.m_prev = null;
-            b.m_next = m_bodyList;
+            b.Prev = null;
+            b.Next = m_bodyList;
             if (m_bodyList != null)
             {
-                m_bodyList.m_prev = b;
+                m_bodyList.Prev = b;
             }
             m_bodyList = b;
             ++m_bodyCount;
@@ -283,7 +283,7 @@ namespace Box2D.Dynamics
             }
 
             // Delete the attached joints.
-            JointEdge je = body.m_jointList;
+            JointEdge je = body.JointList;
             while (je != null)
             {
                 JointEdge je0 = je;
@@ -295,21 +295,21 @@ namespace Box2D.Dynamics
 
                 destroyJoint(je0.joint);
 
-                body.m_jointList = je;
+                body.JointList = je;
             }
-            body.m_jointList = null;
+            body.JointList = null;
 
             // Delete the attached contacts.
-            ContactEdge ce = body.m_contactList;
+            ContactEdge ce = body.ContactList;
             while (ce != null)
             {
                 ContactEdge ce0 = ce;
                 ce = ce.next;
                 m_contactManager.destroy(ce0.contact);
             }
-            body.m_contactList = null;
+            body.ContactList = null;
 
-            Fixture f = body.m_fixtureList;
+            Fixture f = body.FixtureList;
             while (f != null)
             {
                 Fixture f0 = f;
@@ -323,26 +323,26 @@ namespace Box2D.Dynamics
                 f0.destroyProxies(m_contactManager.m_broadPhase);
                 f0.destroy();
                 // TODO djm recycle fixtures (here or in that destroy method)
-                body.m_fixtureList = f;
-                body.m_fixtureCount -= 1;
+                body.FixtureList = f;
+                body.FixtureCount -= 1;
             }
-            body.m_fixtureList = null;
-            body.m_fixtureCount = 0;
+            body.FixtureList = null;
+            body.FixtureCount = 0;
 
             // Remove world body list.
-            if (body.m_prev != null)
+            if (body.Prev != null)
             {
-                body.m_prev.m_next = body.m_next;
+                body.Prev.Next = body.Next;
             }
 
-            if (body.m_next != null)
+            if (body.Next != null)
             {
-                body.m_next.m_prev = body.m_prev;
+                body.Next.Prev = body.Prev;
             }
 
             if (body == m_bodyList)
             {
-                m_bodyList = body.m_next;
+                m_bodyList = body.Next;
             }
 
             --m_bodyCount;
@@ -380,22 +380,22 @@ namespace Box2D.Dynamics
             j.m_edgeA.joint = j;
             j.m_edgeA.other = j.m_bodyB;
             j.m_edgeA.prev = null;
-            j.m_edgeA.next = j.m_bodyA.m_jointList;
-            if (j.m_bodyA.m_jointList != null)
+            j.m_edgeA.next = j.m_bodyA.JointList;
+            if (j.m_bodyA.JointList != null)
             {
-                j.m_bodyA.m_jointList.prev = j.m_edgeA;
+                j.m_bodyA.JointList.prev = j.m_edgeA;
             }
-            j.m_bodyA.m_jointList = j.m_edgeA;
+            j.m_bodyA.JointList = j.m_edgeA;
 
             j.m_edgeB.joint = j;
             j.m_edgeB.other = j.m_bodyA;
             j.m_edgeB.prev = null;
-            j.m_edgeB.next = j.m_bodyB.m_jointList;
-            if (j.m_bodyB.m_jointList != null)
+            j.m_edgeB.next = j.m_bodyB.JointList;
+            if (j.m_bodyB.JointList != null)
             {
-                j.m_bodyB.m_jointList.prev = j.m_edgeB;
+                j.m_bodyB.JointList.prev = j.m_edgeB;
             }
-            j.m_bodyB.m_jointList = j.m_edgeB;
+            j.m_bodyB.JointList = j.m_edgeB;
 
             Body bodyA = def.bodyA;
             Body bodyB = def.bodyB;
@@ -472,9 +472,9 @@ namespace Box2D.Dynamics
                 j.m_edgeA.next.prev = j.m_edgeA.prev;
             }
 
-            if (j.m_edgeA == bodyA.m_jointList)
+            if (j.m_edgeA == bodyA.JointList)
             {
-                bodyA.m_jointList = j.m_edgeA.next;
+                bodyA.JointList = j.m_edgeA.next;
             }
 
             j.m_edgeA.prev = null;
@@ -491,9 +491,9 @@ namespace Box2D.Dynamics
                 j.m_edgeB.next.prev = j.m_edgeB.prev;
             }
 
-            if (j.m_edgeB == bodyB.m_jointList)
+            if (j.m_edgeB == bodyB.JointList)
             {
-                bodyB.m_jointList = j.m_edgeB.next;
+                bodyB.JointList = j.m_edgeB.next;
             }
 
             j.m_edgeB.prev = null;
@@ -610,8 +610,8 @@ namespace Box2D.Dynamics
         {
             for (Body body = m_bodyList; body != null; body = body.Next)
             {
-                body.m_force.setZero();
-                body.m_torque = 0.0f;
+                body.Force.setZero();
+                body.Torque = 0.0f;
             }
         }
 
@@ -637,7 +637,7 @@ namespace Box2D.Dynamics
             {
                 for (Body b = m_bodyList; b != null; b = b.Next)
                 {
-                    xf.set_Renamed(b.getTransform());
+                    xf.set_Renamed(b.GetTransform());
                     for (Fixture f = b.FixtureList; f != null; f = f.Next)
                     {
                         if (b.Active == false)
@@ -726,7 +726,7 @@ namespace Box2D.Dynamics
             {
                 for (Body b = m_bodyList; b != null; b = b.Next)
                 {
-                    xf.set_Renamed(b.getTransform());
+                    xf.set_Renamed(b.GetTransform());
                     xf.p.set_Renamed(b.WorldCenter);
                     m_debugDraw.DrawTransform(xf);
                 }
@@ -1082,9 +1082,9 @@ namespace Box2D.Dynamics
             island.init(m_bodyCount, m_contactManager.m_contactCount, m_jointCount, m_contactManager.m_contactListener);
 
             // Clear all the island flags.
-            for (Body b = m_bodyList; b != null; b = b.m_next)
+            for (Body b = m_bodyList; b != null; b = b.Next)
             {
-                b.m_flags &= ~Body.e_islandFlag;
+                b.Flags &= ~Body.TypeFlags.Island;
             }
             for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
             {
@@ -1101,9 +1101,9 @@ namespace Box2D.Dynamics
             {
                 stack = new Body[stackSize];
             }
-            for (Body seed = m_bodyList; seed != null; seed = seed.m_next)
+            for (Body seed = m_bodyList; seed != null; seed = seed.Next)
             {
-                if ((seed.m_flags & Body.e_islandFlag) == Body.e_islandFlag)
+                if ((seed.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
                 {
                     continue;
                 }
@@ -1123,7 +1123,7 @@ namespace Box2D.Dynamics
                 island.clear();
                 int stackCount = 0;
                 stack[stackCount++] = seed;
-                seed.m_flags |= Body.e_islandFlag;
+                seed.Flags |= Body.TypeFlags.Island;
 
                 // Perform a depth first search (DFS) on the constraint graph.
                 while (stackCount > 0)
@@ -1144,7 +1144,7 @@ namespace Box2D.Dynamics
                     }
 
                     // Search all contacts connected to this body.
-                    for (ContactEdge ce = b.m_contactList; ce != null; ce = ce.next)
+                    for (ContactEdge ce = b.ContactList; ce != null; ce = ce.next)
                     {
                         Contact contact = ce.contact;
 
@@ -1174,18 +1174,18 @@ namespace Box2D.Dynamics
                         Body other = ce.other;
 
                         // Was the other body already added to this island?
-                        if ((other.m_flags & Body.e_islandFlag) == Body.e_islandFlag)
+                        if ((other.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
                         {
                             continue;
                         }
 
                         Debug.Assert(stackCount < stackSize);
                         stack[stackCount++] = other;
-                        other.m_flags |= Body.e_islandFlag;
+                        other.Flags |= Body.TypeFlags.Island;
                     }
 
                     // Search all joints connect to this body.
-                    for (JointEdge je = b.m_jointList; je != null; je = je.next)
+                    for (JointEdge je = b.JointList; je != null; je = je.next)
                     {
                         if (je.joint.m_islandFlag == true)
                         {
@@ -1203,14 +1203,14 @@ namespace Box2D.Dynamics
                         island.add(je.joint);
                         je.joint.m_islandFlag = true;
 
-                        if ((other.m_flags & Body.e_islandFlag) == Body.e_islandFlag)
+                        if ((other.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
                         {
                             continue;
                         }
 
                         Debug.Assert(stackCount < stackSize);
                         stack[stackCount++] = other;
-                        other.m_flags |= Body.e_islandFlag;
+                        other.Flags |= Body.TypeFlags.Island;
                     }
                 }
                 island.solve(islandProfile, step, m_gravity, m_allowSleep);
@@ -1225,7 +1225,7 @@ namespace Box2D.Dynamics
                     Body b = island.m_bodies[i];
                     if (b.Type == BodyType.STATIC)
                     {
-                        b.m_flags &= ~Body.e_islandFlag;
+                        b.Flags &= ~Body.TypeFlags.Island;
                     }
                 }
             }
@@ -1235,7 +1235,7 @@ namespace Box2D.Dynamics
             for (Body b = m_bodyList; b != null; b = b.Next)
             {
                 // If a body was not in an island then it did not move.
-                if ((b.m_flags & Body.e_islandFlag) == 0)
+                if ((b.Flags & Body.TypeFlags.Island) == 0)
                 {
                     continue;
                 }
@@ -1246,7 +1246,7 @@ namespace Box2D.Dynamics
                 }
 
                 // Update fixtures (for broad-phase).
-                b.synchronizeFixtures();
+                b.SynchronizeFixtures();
             }
 
             // Look for new contacts.
@@ -1268,10 +1268,10 @@ namespace Box2D.Dynamics
             island.init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, m_contactManager.m_contactListener);
             if (m_stepComplete)
             {
-                for (Body b = m_bodyList; b != null; b = b.m_next)
+                for (Body b = m_bodyList; b != null; b = b.Next)
                 {
-                    b.m_flags &= ~Body.e_islandFlag;
-                    b.m_sweep.alpha0 = 0.0f;
+                    b.Flags &= ~Body.TypeFlags.Island;
+                    b.Sweep.alpha0 = 0.0f;
                 }
 
                 for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
@@ -1348,17 +1348,17 @@ namespace Box2D.Dynamics
 
                         // Compute the TOI for this contact.
                         // Put the sweeps onto the same time interval.
-                        float alpha0 = bA.m_sweep.alpha0;
+                        float alpha0 = bA.Sweep.alpha0;
 
-                        if (bA.m_sweep.alpha0 < bB.m_sweep.alpha0)
+                        if (bA.Sweep.alpha0 < bB.Sweep.alpha0)
                         {
-                            alpha0 = bB.m_sweep.alpha0;
-                            bA.m_sweep.advance(alpha0);
+                            alpha0 = bB.Sweep.alpha0;
+                            bA.Sweep.advance(alpha0);
                         }
-                        else if (bB.m_sweep.alpha0 < bA.m_sweep.alpha0)
+                        else if (bB.Sweep.alpha0 < bA.Sweep.alpha0)
                         {
-                            alpha0 = bA.m_sweep.alpha0;
-                            bB.m_sweep.advance(alpha0);
+                            alpha0 = bA.Sweep.alpha0;
+                            bB.Sweep.advance(alpha0);
                         }
 
                         Debug.Assert(alpha0 < 1.0f);
@@ -1370,8 +1370,8 @@ namespace Box2D.Dynamics
                         TimeOfImpact.TOIInput input = toiInput;
                         input.ProxyA.Set(fA.Shape, indexA);
                         input.ProxyB.Set(fB.Shape, indexB);
-                        input.SweepA.set_Renamed(bA.m_sweep);
-                        input.SweepB.set_Renamed(bB.m_sweep);
+                        input.SweepA.set_Renamed(bA.Sweep);
+                        input.SweepB.set_Renamed(bB.Sweep);
                         input.TMax = 1.0f;
 
                         pool.GetTimeOfImpact().GetTimeOfImpact(toiOutput, input);
@@ -1412,11 +1412,11 @@ namespace Box2D.Dynamics
                 Body bA2 = fA2.Body;
                 Body bB2 = fB2.Body;
 
-                backup1.set_Renamed(bA2.m_sweep);
-                backup2.set_Renamed(bB2.m_sweep);
+                backup1.set_Renamed(bA2.Sweep);
+                backup2.set_Renamed(bB2.Sweep);
 
-                bA2.advance(minAlpha);
-                bB2.advance(minAlpha);
+                bA2.Advance(minAlpha);
+                bB2.Advance(minAlpha);
 
                 // The TOI contact likely has some new contact points.
                 minContact.update(m_contactManager.m_contactListener);
@@ -1428,10 +1428,10 @@ namespace Box2D.Dynamics
                 {
                     // Restore the sweeps.
                     minContact.Enabled = false;
-                    bA2.m_sweep.set_Renamed(backup1);
-                    bB2.m_sweep.set_Renamed(backup2);
-                    bA2.synchronizeTransform();
-                    bB2.synchronizeTransform();
+                    bA2.Sweep.set_Renamed(backup1);
+                    bB2.Sweep.set_Renamed(backup2);
+                    bA2.SynchronizeTransform();
+                    bB2.SynchronizeTransform();
                     continue;
                 }
 
@@ -1444,8 +1444,8 @@ namespace Box2D.Dynamics
                 island.add(bB2);
                 island.add(minContact);
 
-                bA2.m_flags |= Body.e_islandFlag;
-                bB2.m_flags |= Body.e_islandFlag;
+                bA2.Flags |= Body.TypeFlags.Island;
+                bB2.Flags |= Body.TypeFlags.Island;
                 minContact.m_flags |= Contact.ISLAND_FLAG;
 
                 // Get contacts on bodyA and bodyB.
@@ -1456,7 +1456,7 @@ namespace Box2D.Dynamics
                     Body body = tempBodies[i];
                     if (body.m_type == BodyType.DYNAMIC)
                     {
-                        for (ContactEdge ce = body.m_contactList; ce != null; ce = ce.next)
+                        for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                         {
                             if (island.m_bodyCount == island.m_bodyCapacity)
                             {
@@ -1492,10 +1492,10 @@ namespace Box2D.Dynamics
                             }
 
                             // Tentatively advance the body to the TOI.
-                            backup1.set_Renamed(other.m_sweep);
-                            if ((other.m_flags & Body.e_islandFlag) == 0)
+                            backup1.set_Renamed(other.Sweep);
+                            if ((other.Flags & Body.TypeFlags.Island) == 0)
                             {
-                                other.advance(minAlpha);
+                                other.Advance(minAlpha);
                             }
 
                             // Update the contact points
@@ -1504,16 +1504,16 @@ namespace Box2D.Dynamics
                             // Was the contact disabled by the user?
                             if (contact.Enabled == false)
                             {
-                                other.m_sweep.set_Renamed(backup1);
-                                other.synchronizeTransform();
+                                other.Sweep.set_Renamed(backup1);
+                                other.SynchronizeTransform();
                                 continue;
                             }
 
                             // Are there contact points?
                             if (contact.Touching == false)
                             {
-                                other.m_sweep.set_Renamed(backup1);
-                                other.synchronizeTransform();
+                                other.Sweep.set_Renamed(backup1);
+                                other.SynchronizeTransform();
                                 continue;
                             }
 
@@ -1522,13 +1522,13 @@ namespace Box2D.Dynamics
                             island.add(contact);
 
                             // Has the other body already been added to the island?
-                            if ((other.m_flags & Body.e_islandFlag) != 0)
+                            if ((other.Flags & Body.TypeFlags.Island) != 0)
                             {
                                 continue;
                             }
 
                             // Add the other body to the island.
-                            other.m_flags |= Body.e_islandFlag;
+                            other.Flags |= Body.TypeFlags.Island;
 
                             if (other.m_type != BodyType.STATIC)
                             {
@@ -1546,23 +1546,23 @@ namespace Box2D.Dynamics
                 subStep.positionIterations = 20;
                 subStep.velocityIterations = step.velocityIterations;
                 subStep.warmStarting = false;
-                island.solveTOI(subStep, bA2.m_islandIndex, bB2.m_islandIndex);
+                island.solveTOI(subStep, bA2.IslandIndex, bB2.IslandIndex);
 
                 // Reset island flags and synchronize broad-phase proxies.
                 for (int i = 0; i < island.m_bodyCount; ++i)
                 {
                     Body body = island.m_bodies[i];
-                    body.m_flags &= ~Body.e_islandFlag;
+                    body.Flags &= ~Body.TypeFlags.Island;
 
                     if (body.m_type != BodyType.DYNAMIC)
                     {
                         continue;
                     }
 
-                    body.synchronizeFixtures();
+                    body.SynchronizeFixtures();
 
                     // Invalidate all contact TOIs on this displaced body.
-                    for (ContactEdge ce = body.m_contactList; ce != null; ce = ce.next)
+                    for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                     {
                         ce.contact.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
                     }
@@ -1584,8 +1584,8 @@ namespace Box2D.Dynamics
         {
             Body bodyA = joint.BodyA;
             Body bodyB = joint.BodyB;
-            Transform xf1 = bodyA.getTransform();
-            Transform xf2 = bodyB.getTransform();
+            Transform xf1 = bodyA.GetTransform();
+            Transform xf2 = bodyB.GetTransform();
             Vec2 x1 = xf1.p;
             Vec2 x2 = xf2.p;
             Vec2 p1 = pool.PopVec2();

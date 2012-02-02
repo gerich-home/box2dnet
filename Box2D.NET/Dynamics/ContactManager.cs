@@ -109,7 +109,7 @@ namespace Box2D.Dynamics
             }
 
             // Does a joint override collision? is at least one body dynamic?
-            if (bodyB.shouldCollide(bodyA) == false)
+            if (bodyB.ShouldCollide(bodyA) == false)
             {
                 return;
             }
@@ -151,24 +151,24 @@ namespace Box2D.Dynamics
             c.m_nodeA.other = bodyB;
 
             c.m_nodeA.prev = null;
-            c.m_nodeA.next = bodyA.m_contactList;
-            if (bodyA.m_contactList != null)
+            c.m_nodeA.next = bodyA.ContactList;
+            if (bodyA.ContactList != null)
             {
-                bodyA.m_contactList.prev = c.m_nodeA;
+                bodyA.ContactList.prev = c.m_nodeA;
             }
-            bodyA.m_contactList = c.m_nodeA;
+            bodyA.ContactList = c.m_nodeA;
 
             // Connect to body B
             c.m_nodeB.contact = c;
             c.m_nodeB.other = bodyA;
 
             c.m_nodeB.prev = null;
-            c.m_nodeB.next = bodyB.m_contactList;
-            if (bodyB.m_contactList != null)
+            c.m_nodeB.next = bodyB.ContactList;
+            if (bodyB.ContactList != null)
             {
-                bodyB.m_contactList.prev = c.m_nodeB;
+                bodyB.ContactList.prev = c.m_nodeB;
             }
-            bodyB.m_contactList = c.m_nodeB;
+            bodyB.ContactList = c.m_nodeB;
 
             // wake up the bodies
             bodyA.Awake = true;
@@ -221,9 +221,9 @@ namespace Box2D.Dynamics
                 c.m_nodeA.next.prev = c.m_nodeA.prev;
             }
 
-            if (c.m_nodeA == bodyA.m_contactList)
+            if (c.m_nodeA == bodyA.ContactList)
             {
-                bodyA.m_contactList = c.m_nodeA.next;
+                bodyA.ContactList = c.m_nodeA.next;
             }
 
             // Remove from body 2
@@ -237,9 +237,9 @@ namespace Box2D.Dynamics
                 c.m_nodeB.next.prev = c.m_nodeB.prev;
             }
 
-            if (c.m_nodeB == bodyB.m_contactList)
+            if (c.m_nodeB == bodyB.ContactList)
             {
-                bodyB.m_contactList = c.m_nodeB.next;
+                bodyB.ContactList = c.m_nodeB.next;
             }
 
             // Call the factory.
@@ -268,7 +268,7 @@ namespace Box2D.Dynamics
                 if ((c.m_flags & Contact.FILTER_FLAG) == Contact.FILTER_FLAG)
                 {
                     // Should these bodies collide?
-                    if (bodyB.shouldCollide(bodyA) == false)
+                    if (bodyB.ShouldCollide(bodyA) == false)
                     {
                         Contact cNuke = c;
                         c = cNuke.Next;

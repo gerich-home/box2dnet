@@ -270,7 +270,7 @@ namespace Box2D.Dynamics
         /// <returns></returns>
         public virtual bool testPoint(Vec2 p)
         {
-            return m_shape.TestPoint(m_body.m_xf, p);
+            return m_shape.TestPoint(m_body.Xf, p);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace Box2D.Dynamics
         /// <param name="input"></param>
         public virtual bool raycast(RayCastOutput output, RayCastInput input, int childIndex)
         {
-            return m_shape.Raycast(output, input, m_body.m_xf, childIndex);
+            return m_shape.Raycast(output, input, m_body.Xf, childIndex);
         }
 
         /// <summary>
