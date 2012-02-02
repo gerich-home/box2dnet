@@ -1023,10 +1023,10 @@ namespace Box2D.Collision.Broadphase
             node.aabb.getVertices(drawVecs);
 
             color.set_Renamed(1, (height - spot) * 1f / height, (height - spot) * 1f / height);
-            argDraw.drawPolygon(drawVecs, 4, color);
+            argDraw.DrawPolygon(drawVecs, 4, color);
 
             argDraw.ViewportTranform.getWorldToScreen(node.aabb.upperBound, textVec);
-            argDraw.drawString(textVec.x, textVec.y, nodeId + "-" + (spot + 1) + "/" + height, color);
+            argDraw.DrawString(textVec.x, textVec.y, nodeId + "-" + (spot + 1) + "/" + height, color);
 
             if (node.child1 != TreeNode.NULL_NODE)
             {

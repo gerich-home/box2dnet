@@ -631,9 +631,9 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            int flags = m_debugDraw.Flags;
+            DebugDraw.DrawFlags flags = m_debugDraw.Flags;
 
-            if ((flags & DebugDraw.e_shapeBit) == DebugDraw.e_shapeBit)
+            if ((flags & DebugDraw.DrawFlags.Shape) == DebugDraw.DrawFlags.Shape)
             {
                 for (Body b = m_bodyList; b != null; b = b.Next)
                 {
@@ -669,7 +669,7 @@ namespace Box2D.Dynamics
                 }
             }
 
-            if ((flags & DebugDraw.e_jointBit) == DebugDraw.e_jointBit)
+            if ((flags & DebugDraw.DrawFlags.Joint) == DebugDraw.DrawFlags.Joint)
             {
                 for (Joint j = m_jointList; j != null; j = j.Next)
                 {
@@ -677,7 +677,7 @@ namespace Box2D.Dynamics
                 }
             }
 
-            if ((flags & DebugDraw.e_pairBit) == DebugDraw.e_pairBit)
+            if ((flags & DebugDraw.DrawFlags.Pair) == DebugDraw.DrawFlags.Pair)
             {
                 color.set_Renamed(0.3f, 0.9f, 0.9f);
                 for (Contact c = m_contactManager.m_contactList; c != null; c = c.Next)
@@ -692,7 +692,7 @@ namespace Box2D.Dynamics
                 }
             }
 
-            if ((flags & DebugDraw.e_aabbBit) == DebugDraw.e_aabbBit)
+            if ((flags & DebugDraw.DrawFlags.AABB) == DebugDraw.DrawFlags.AABB)
             {
                 color.set_Renamed(0.9f, 0.3f, 0.9f);
 
@@ -716,23 +716,23 @@ namespace Box2D.Dynamics
                             vs[2].set_Renamed(aabb.upperBound.x, aabb.upperBound.y);
                             vs[3].set_Renamed(aabb.lowerBound.x, aabb.upperBound.y);
 
-                            m_debugDraw.drawPolygon(vs, 4, color);
+                            m_debugDraw.DrawPolygon(vs, 4, color);
                         }
                     }
                 }
             }
 
-            if ((flags & DebugDraw.e_centerOfMassBit) == DebugDraw.e_centerOfMassBit)
+            if ((flags & DebugDraw.DrawFlags.CenterOfMass) == DebugDraw.DrawFlags.CenterOfMass)
             {
                 for (Body b = m_bodyList; b != null; b = b.Next)
                 {
                     xf.set_Renamed(b.getTransform());
                     xf.p.set_Renamed(b.WorldCenter);
-                    m_debugDraw.drawTransform(xf);
+                    m_debugDraw.DrawTransform(xf);
                 }
             }
 
-            if ((flags & DebugDraw.e_dynamicTreeBit) == DebugDraw.e_dynamicTreeBit)
+            if ((flags & DebugDraw.DrawFlags.DynamicTree) == DebugDraw.DrawFlags.DynamicTree)
             {
                 m_contactManager.m_broadPhase.drawTree(m_debugDraw);
             }
@@ -1600,7 +1600,7 @@ namespace Box2D.Dynamics
 
                 // TODO djm write after writing joints
                 case JointType.DISTANCE:
-                    m_debugDraw.drawSegment(p1, p2, color);
+                    m_debugDraw.DrawSegment(p1, p2, color);
                     break;
 
 
@@ -1609,9 +1609,9 @@ namespace Box2D.Dynamics
                         PulleyJoint pulley = (PulleyJoint)joint;
                         Vec2 s1 = pulley.GroundAnchorA;
                         Vec2 s2 = pulley.GroundAnchorB;
-                        m_debugDraw.drawSegment(s1, p1, color);
-                        m_debugDraw.drawSegment(s2, p2, color);
-                        m_debugDraw.drawSegment(s1, s2, color);
+                        m_debugDraw.DrawSegment(s1, p1, color);
+                        m_debugDraw.DrawSegment(s2, p2, color);
+                        m_debugDraw.DrawSegment(s1, s2, color);
                     }
                     break;
 
@@ -1621,9 +1621,9 @@ namespace Box2D.Dynamics
                     break;
 
                 default:
-                    m_debugDraw.drawSegment(x1, p1, color);
-                    m_debugDraw.drawSegment(p1, p2, color);
-                    m_debugDraw.drawSegment(x2, p2, color);
+                    m_debugDraw.DrawSegment(x1, p1, color);
+                    m_debugDraw.DrawSegment(p1, p2, color);
+                    m_debugDraw.DrawSegment(x2, p2, color);
                     break;
 
             }
@@ -1675,11 +1675,11 @@ namespace Box2D.Dynamics
                             liquidOffset.mulLocal(liquidLength / averageLinearVel / 2);
                             circCenterMoved.set_Renamed(center).addLocal(liquidOffset);
                             center.subLocal(liquidOffset);
-                            m_debugDraw.drawSegment(center, circCenterMoved, liquidColor);
+                            m_debugDraw.DrawSegment(center, circCenterMoved, liquidColor);
                             return;
                         }
 
-                        m_debugDraw.drawSolidCircle(center, radius, axis, color);
+                        m_debugDraw.DrawSolidCircle(center, radius, axis, color);
                     }
                     break;
 
@@ -1697,7 +1697,7 @@ namespace Box2D.Dynamics
                             Transform.mulToOutUnsafe(xf, poly.m_vertices[i], vertices[i]);
                         }
 
-                        m_debugDraw.drawSolidPolygon(vertices, vertexCount, color);
+                        m_debugDraw.DrawSolidPolygon(vertices, vertexCount, color);
                     }
                     break;
 
@@ -1706,7 +1706,7 @@ namespace Box2D.Dynamics
                         EdgeShape edge = (EdgeShape)fixture.Shape;
                         Transform.mulToOutUnsafe(xf, edge.m_vertex1, v1);
                         Transform.mulToOutUnsafe(xf, edge.m_vertex2, v2);
-                        m_debugDraw.drawSegment(v1, v2, color);
+                        m_debugDraw.DrawSegment(v1, v2, color);
                     }
                     break;
 
@@ -1721,8 +1721,8 @@ namespace Box2D.Dynamics
                         for (int i = 1; i < count; ++i)
                         {
                             Transform.mulToOutUnsafe(xf, vertices[i], v2);
-                            m_debugDraw.drawSegment(v1, v2, color);
-                            m_debugDraw.drawCircle(v1, 0.05f, color);
+                            m_debugDraw.DrawSegment(v1, v2, color);
+                            m_debugDraw.DrawCircle(v1, 0.05f, color);
                             v1.set_Renamed(v2);
                         }
                     }

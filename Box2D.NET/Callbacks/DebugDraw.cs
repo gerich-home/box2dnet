@@ -40,50 +40,61 @@ namespace Box2D.Callbacks
     /// <author>Daniel Murphy</author>
     public abstract class DebugDraw
     {
-        virtual public int Flags
+        [Flags]
+        public enum DrawFlags
         {
-            get
-            {
-                return m_drawFlags;
-            }
-            set
-            {
-                m_drawFlags = value;
-            }
+            /// <summary>
+            /// No draw flags are set
+            /// </summary>
+            None = 0x0000,
+
+            /// <summary>
+            /// Draw shapes
+            /// </summary>
+            Shape = 0x0001,
+
+            /// <summary>
+            /// Draw joint connections
+            /// </summary>
+            Joint = 0x0002,
+
+            /// <summary>
+            /// Draw core (TOI) shapes
+            /// </summary>
+            AABB = 0x0004,
+
+            /// <summary>
+            /// Draw axis aligned bounding boxes
+            /// </summary>
+            Pair = 0x0008,
+
+            /// <summary>
+            /// draw center of mass frame
+            /// </summary>
+            CenterOfMass = 0x0010,
+
+            DynamicTree = 0x0020,
         }
 
-        virtual public IViewportTransform ViewportTranform
+        public virtual DrawFlags Flags { get; set; }
+
+        public virtual IViewportTransform ViewportTranform { get; private set; }
+
+
+        protected DebugDraw(IViewportTransform viewport)
         {
-            get
-            {
-                return viewportTransform;
-            }
+            Flags = DrawFlags.None;
+            ViewportTranform = viewport;
         }
 
-        public const int e_shapeBit = 0x0001; ///< draw shapes
-        public const int e_jointBit = 0x0002; ///< draw joint connections
-        public const int e_aabbBit = 0x0004; ///< draw core (TOI) shapes
-        public const int e_pairBit = 0x0008; ///< draw axis aligned bounding boxes
-        public const int e_centerOfMassBit = 0x0010; ///< draw center of mass frame
-        public const int e_dynamicTreeBit = 0x0020; ///< draw dynamic tree.
-
-        protected internal int m_drawFlags;
-        protected internal readonly IViewportTransform viewportTransform;
-
-        public DebugDraw(IViewportTransform viewport)
+        public virtual void AppendFlags(DrawFlags flags)
         {
-            m_drawFlags = 0;
-            viewportTransform = viewport;
+            Flags |= flags;
         }
 
-        public virtual void appendFlags(int flags)
+        public virtual void ClearFlags(DrawFlags flags)
         {
-            m_drawFlags |= flags;
-        }
-
-        public virtual void clearFlags(int flags)
-        {
-            m_drawFlags &= ~flags;
+            Flags &= ~flags;
         }
 
         /// <summary>
@@ -94,26 +105,26 @@ namespace Box2D.Callbacks
         /// <param name="vertices"></param>
         /// <param name="vertexCount"></param>
         /// <param name="color"></param>
-        public virtual void drawPolygon(Vec2[] vertices, int vertexCount, Color3f color)
+        public virtual void DrawPolygon(Vec2[] vertices, int vertexCount, Color3f color)
         {
             if (vertexCount == 1)
             {
-                drawSegment(vertices[0], vertices[0], color);
+                DrawSegment(vertices[0], vertices[0], color);
                 return;
             }
 
             for (int i = 0; i < vertexCount - 1; i += 1)
             {
-                drawSegment(vertices[i], vertices[i + 1], color);
+                DrawSegment(vertices[i], vertices[i + 1], color);
             }
 
             if (vertexCount > 2)
             {
-                drawSegment(vertices[vertexCount - 1], vertices[0], color);
+                DrawSegment(vertices[vertexCount - 1], vertices[0], color);
             }
         }
 
-        public abstract void drawPoint(Vec2 argPoint, float argRadiusOnScreen, Color3f argColor);
+        public abstract void DrawPoint(Vec2 argPoint, float argRadiusOnScreen, Color3f argColor);
 
         /// <summary>
         /// Draw a solid closed polygon provided in CCW order.
@@ -121,7 +132,7 @@ namespace Box2D.Callbacks
         /// <param name="vertices"></param>
         /// <param name="vertexCount"></param>
         /// <param name="color"></param>
-        public abstract void drawSolidPolygon(Vec2[] vertices, int vertexCount, Color3f color);
+        public abstract void DrawSolidPolygon(Vec2[] vertices, int vertexCount, Color3f color);
 
         /// <summary>
         /// Draw a circle.
@@ -129,7 +140,7 @@ namespace Box2D.Callbacks
         /// <param name="center"></param>
         /// <param name="radius"></param>
         /// <param name="color"></param>
-        public abstract void drawCircle(Vec2 center, float radius, Color3f color);
+        public abstract void DrawCircle(Vec2 center, float radius, Color3f color);
 
         /// <summary>
         /// Draw a solid circle.
@@ -138,7 +149,7 @@ namespace Box2D.Callbacks
         /// <param name="radius"></param>
         /// <param name="axis"></param>
         /// <param name="color"></param>
-        public abstract void drawSolidCircle(Vec2 center, float radius, Vec2 axis, Color3f color);
+        public abstract void DrawSolidCircle(Vec2 center, float radius, Vec2 axis, Color3f color);
 
         /// <summary>
         /// Draw a line segment.
@@ -146,13 +157,13 @@ namespace Box2D.Callbacks
         /// <param name="p1"></param>
         /// <param name="p2"></param>
         /// <param name="color"></param>
-        public abstract void drawSegment(Vec2 p1, Vec2 p2, Color3f color);
+        public abstract void DrawSegment(Vec2 p1, Vec2 p2, Color3f color);
 
         /// <summary>
         /// Draw a transform.  Choose your own length scale
         /// </summary>
         /// <param name="xf"></param>
-        public abstract void drawTransform(Transform xf);
+        public abstract void DrawTransform(Transform xf);
 
         /// <summary>
         /// Draw a string.
@@ -161,37 +172,37 @@ namespace Box2D.Callbacks
         /// <param name="y"></param>
         /// <param name="s"></param>
         /// <param name="color"></param>
-        public abstract void drawString(float x, float y, String s, Color3f color);
+        public abstract void DrawString(float x, float y, String s, Color3f color);
 
-        public void drawString(Vec2 pos, String s, Color3f color)
+        public void DrawString(Vec2 pos, String s, Color3f color)
         {
-            drawString(pos.x, pos.y, s, color);
+            DrawString(pos.x, pos.y, s, color);
         }
 
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="scale"></param>
         /// <seealso cref="IViewportTransform.setCamera(float, float, float)"></seealso>
-        public virtual void setCamera(float x, float y, float scale)
+        public virtual void SetCamera(float x, float y, float scale)
         {
-            viewportTransform.setCamera(x, y, scale);
+            ViewportTranform.setCamera(x, y, scale);
         }
 
 
         /// <param name="argScreen"></param>
         /// <param name="argWorld"></param>
         /// <seealso cref="IViewportTransform.getScreenToWorld(Vec2, Vec2)"></seealso>
-        public virtual void getScreenToWorldToOut(Vec2 argScreen, Vec2 argWorld)
+        public virtual void GetScreenToWorldToOut(Vec2 argScreen, Vec2 argWorld)
         {
-            viewportTransform.getScreenToWorld(argScreen, argWorld);
+            ViewportTranform.getScreenToWorld(argScreen, argWorld);
         }
 
         /// <param name="argWorld"></param>
         /// <param name="argScreen"></param>
         /// <seealso cref="IViewportTransform.getWorldToScreen(Vec2, Vec2)"></seealso>
-        public virtual void getWorldToScreenToOut(Vec2 argWorld, Vec2 argScreen)
+        public virtual void GetWorldToScreenToOut(Vec2 argWorld, Vec2 argScreen)
         {
-            viewportTransform.getWorldToScreen(argWorld, argScreen);
+            ViewportTranform.getWorldToScreen(argWorld, argScreen);
         }
 
         /// <summary>
@@ -201,10 +212,10 @@ namespace Box2D.Callbacks
         /// <param name="worldX"></param>
         /// <param name="worldY"></param>
         /// <param name="argScreen"></param>
-        public virtual void getWorldToScreenToOut(float worldX, float worldY, Vec2 argScreen)
+        public virtual void GetWorldToScreenToOut(float worldX, float worldY, Vec2 argScreen)
         {
             argScreen.set_Renamed(worldX, worldY);
-            viewportTransform.getWorldToScreen(argScreen, argScreen);
+            ViewportTranform.getWorldToScreen(argScreen, argScreen);
         }
 
         /// <summary>
@@ -212,10 +223,10 @@ namespace Box2D.Callbacks
         /// the screen coordinates.
         /// </summary>
         /// <param name="argWorld"></param>
-        public virtual Vec2 getWorldToScreen(Vec2 argWorld)
+        public virtual Vec2 GetWorldToScreen(Vec2 argWorld)
         {
-            Vec2 screen = new Vec2();
-            viewportTransform.getWorldToScreen(argWorld, screen);
+            var screen = new Vec2();
+            ViewportTranform.getWorldToScreen(argWorld, screen);
             return screen;
         }
 
@@ -225,10 +236,10 @@ namespace Box2D.Callbacks
         /// </summary>
         /// <param name="worldX"></param>
         /// <param name="worldY"></param>
-        public virtual Vec2 getWorldToScreen(float worldX, float worldY)
+        public virtual Vec2 GetWorldToScreen(float worldX, float worldY)
         {
-            Vec2 argScreen = new Vec2(worldX, worldY);
-            viewportTransform.getWorldToScreen(argScreen, argScreen);
+            var argScreen = new Vec2(worldX, worldY);
+            ViewportTranform.getWorldToScreen(argScreen, argScreen);
             return argScreen;
         }
 
@@ -239,10 +250,10 @@ namespace Box2D.Callbacks
         /// <param name="screenX"></param>
         /// <param name="screenY"></param>
         /// <param name="argWorld"></param>
-        public virtual void getScreenToWorldToOut(float screenX, float screenY, Vec2 argWorld)
+        public virtual void GetScreenToWorldToOut(float screenX, float screenY, Vec2 argWorld)
         {
             argWorld.set_Renamed(screenX, screenY);
-            viewportTransform.getScreenToWorld(argWorld, argWorld);
+            ViewportTranform.getScreenToWorld(argWorld, argWorld);
         }
 
         /// <summary>
@@ -250,10 +261,10 @@ namespace Box2D.Callbacks
         /// the world coordinates
         /// </summary>
         /// <param name="argScreen"></param>
-        public virtual Vec2 getScreenToWorld(Vec2 argScreen)
+        public virtual Vec2 GetScreenToWorld(Vec2 argScreen)
         {
-            Vec2 world = new Vec2();
-            viewportTransform.getScreenToWorld(argScreen, world);
+            var world = new Vec2();
+            ViewportTranform.getScreenToWorld(argScreen, world);
             return world;
         }
 
@@ -263,10 +274,10 @@ namespace Box2D.Callbacks
         /// </summary>
         /// <param name="screenX"></param>
         /// <param name="screenY"></param>
-        public virtual Vec2 getScreenToWorld(float screenX, float screenY)
+        public virtual Vec2 GetScreenToWorld(float screenX, float screenY)
         {
-            Vec2 screen = new Vec2(screenX, screenY);
-            viewportTransform.getScreenToWorld(screen, screen);
+            var screen = new Vec2(screenX, screenY);
+            ViewportTranform.getScreenToWorld(screen, screen);
             return screen;
         }
     }
