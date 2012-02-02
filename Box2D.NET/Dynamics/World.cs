@@ -1079,7 +1079,7 @@ namespace Box2D.Dynamics
             m_profile.solvePosition = 0;
 
             // Size the island for the worst case.
-            island.init(m_bodyCount, m_contactManager.ContactCount, m_jointCount, m_contactManager.ContactListener);
+            island.Init(m_bodyCount, m_contactManager.ContactCount, m_jointCount, m_contactManager.ContactListener);
 
             // Clear all the island flags.
             for (Body b = m_bodyList; b != null; b = b.Next)
@@ -1120,7 +1120,7 @@ namespace Box2D.Dynamics
                 }
 
                 // Reset island and stack.
-                island.clear();
+                island.Clear();
                 int stackCount = 0;
                 stack[stackCount++] = seed;
                 seed.Flags |= Body.TypeFlags.Island;
@@ -1131,7 +1131,7 @@ namespace Box2D.Dynamics
                     // Grab the next body off the stack and add it to the island.
                     Body b = stack[--stackCount];
                     Debug.Assert(b.Active == true);
-                    island.add(b);
+                    island.Add(b);
 
                     // Make sure the body is awake.
                     b.Awake = true;
@@ -1168,7 +1168,7 @@ namespace Box2D.Dynamics
                             continue;
                         }
 
-                        island.add(contact);
+                        island.Add(contact);
                         contact.m_flags |= Contact.ISLAND_FLAG;
 
                         Body other = ce.other;
@@ -1200,7 +1200,7 @@ namespace Box2D.Dynamics
                             continue;
                         }
 
-                        island.add(je.joint);
+                        island.Add(je.joint);
                         je.joint.m_islandFlag = true;
 
                         if ((other.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
@@ -1213,16 +1213,16 @@ namespace Box2D.Dynamics
                         other.Flags |= Body.TypeFlags.Island;
                     }
                 }
-                island.solve(islandProfile, step, m_gravity, m_allowSleep);
+                island.Solve(islandProfile, step, m_gravity, m_allowSleep);
                 m_profile.solveInit += islandProfile.solveInit;
                 m_profile.solveVelocity += islandProfile.solveVelocity;
                 m_profile.solvePosition += islandProfile.solvePosition;
 
                 // Post solve cleanup.
-                for (int i = 0; i < island.m_bodyCount; ++i)
+                for (int i = 0; i < island.BodyCount; ++i)
                 {
                     // Allow static bodies to participate in other islands.
-                    Body b = island.m_bodies[i];
+                    Body b = island.Bodies[i];
                     if (b.Type == BodyType.Static)
                     {
                         b.Flags &= ~Body.TypeFlags.Island;
@@ -1265,7 +1265,7 @@ namespace Box2D.Dynamics
         private void solveTOI(TimeStep step)
         {
             Island island = toiIsland;
-            island.init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, m_contactManager.ContactListener);
+            island.Init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, m_contactManager.ContactListener);
             if (m_stepComplete)
             {
                 for (Body b = m_bodyList; b != null; b = b.Next)
@@ -1439,10 +1439,10 @@ namespace Box2D.Dynamics
                 bB2.Awake = true;
 
                 // Build the island
-                island.clear();
-                island.add(bA2);
-                island.add(bB2);
-                island.add(minContact);
+                island.Clear();
+                island.Add(bA2);
+                island.Add(bB2);
+                island.Add(minContact);
 
                 bA2.Flags |= Body.TypeFlags.Island;
                 bB2.Flags |= Body.TypeFlags.Island;
@@ -1458,12 +1458,12 @@ namespace Box2D.Dynamics
                     {
                         for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                         {
-                            if (island.m_bodyCount == island.m_bodyCapacity)
+                            if (island.BodyCount == island.BodyCapacity)
                             {
                                 break;
                             }
 
-                            if (island.m_contactCount == island.m_contactCapacity)
+                            if (island.ContactCount == island.ContactCapacity)
                             {
                                 break;
                             }
@@ -1519,7 +1519,7 @@ namespace Box2D.Dynamics
 
                             // Add the contact to the island
                             contact.m_flags |= Contact.ISLAND_FLAG;
-                            island.add(contact);
+                            island.Add(contact);
 
                             // Has the other body already been added to the island?
                             if ((other.Flags & Body.TypeFlags.Island) != 0)
@@ -1535,7 +1535,7 @@ namespace Box2D.Dynamics
                                 other.Awake = true;
                             }
 
-                            island.add(other);
+                            island.Add(other);
                         }
                     }
                 }
@@ -1546,12 +1546,12 @@ namespace Box2D.Dynamics
                 subStep.positionIterations = 20;
                 subStep.velocityIterations = step.velocityIterations;
                 subStep.warmStarting = false;
-                island.solveTOI(subStep, bA2.IslandIndex, bB2.IslandIndex);
+                island.SolveToi(subStep, bA2.IslandIndex, bB2.IslandIndex);
 
                 // Reset island flags and synchronize broad-phase proxies.
-                for (int i = 0; i < island.m_bodyCount; ++i)
+                for (int i = 0; i < island.BodyCount; ++i)
                 {
-                    Body body = island.m_bodies[i];
+                    Body body = island.Bodies[i];
                     body.Flags &= ~Body.TypeFlags.Island;
 
                     if (body.m_type != BodyType.Dynamic)
