@@ -282,17 +282,17 @@ namespace Box2D.Dynamics.Contacts
                 Rot.mulToOutUnsafe(xfB.q, localCenterB, temp);
                 xfB.p.set_Renamed(cB).subLocal(temp);
 
-                worldManifold.initialize(manifold, xfA, radiusA, xfB, radiusB);
+                worldManifold.Initialize(manifold, xfA, radiusA, xfB, radiusB);
 
-                vc.normal.set_Renamed(worldManifold.normal);
+                vc.normal.set_Renamed(worldManifold.Normal);
 
                 int pointCount = vc.pointCount;
                 for (int j = 0; j < pointCount; ++j)
                 {
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
 
-                    vcp.rA.set_Renamed(worldManifold.points[j]).subLocal(cA);
-                    vcp.rB.set_Renamed(worldManifold.points[j]).subLocal(cB);
+                    vcp.rA.set_Renamed(worldManifold.Points[j]).subLocal(cA);
+                    vcp.rB.set_Renamed(worldManifold.Points[j]).subLocal(cB);
 
                     float rnA = Vec2.cross(vcp.rA, vc.normal);
                     float rnB = Vec2.cross(vcp.rB, vc.normal);
