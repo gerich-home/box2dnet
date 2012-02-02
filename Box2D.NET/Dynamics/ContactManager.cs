@@ -115,7 +115,7 @@ namespace Box2D.Dynamics
             }
 
             // Check user filtering.
-            if (m_contactFilter != null && m_contactFilter.shouldCollide(fixtureA, fixtureB) == false)
+            if (m_contactFilter != null && m_contactFilter.ShouldCollide(fixtureA, fixtureB) == false)
             {
                 return;
             }
@@ -277,7 +277,7 @@ namespace Box2D.Dynamics
                     }
 
                     // Check user filtering.
-                    if (m_contactFilter != null && m_contactFilter.shouldCollide(fixtureA, fixtureB) == false)
+                    if (m_contactFilter != null && m_contactFilter.ShouldCollide(fixtureA, fixtureB) == false)
                     {
                         Contact cNuke = c;
                         c = cNuke.Next;
