@@ -129,7 +129,7 @@ namespace Box2D.Collision
 
             float tMax = input.tMax;
 
-            float totalRadius = proxyA.m_radius + proxyB.m_radius;
+            float totalRadius = proxyA.Radius + proxyB.Radius;
             // djm: whats with all these constants?
             float target = MathUtils.max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
             float tolerance = 0.25f * Settings.linearSlop;
@@ -139,7 +139,7 @@ namespace Box2D.Collision
             float t1 = 0f;
             int iter = 0;
 
-            cache.count = 0;
+            cache.Count = 0;
             distanceInput.proxyA = input.proxyA;
             distanceInput.proxyB = input.proxyB;
             distanceInput.useRadii = false;
@@ -156,7 +156,7 @@ namespace Box2D.Collision
                 // to get a separating axis
                 distanceInput.transformA = xfA;
                 distanceInput.transformB = xfB;
-                pool.GetDistance().distance(distanceOutput, cache, distanceInput);
+                pool.GetDistance().GetDistance(distanceOutput, cache, distanceInput);
 
                 // System.out.printf("Dist: %f at points %f, %f and %f, %f.  %d iterations\n",
                 // distanceOutput.distance, distanceOutput.pointA.x, distanceOutput.pointA.y,
@@ -366,7 +366,7 @@ namespace Box2D.Collision
         {
             m_proxyA = proxyA;
             m_proxyB = proxyB;
-            int count = cache.count;
+            int count = cache.Count;
             Debug.Assert(0 < count && count < 3);
 
             m_sweepA = sweepA;
@@ -387,21 +387,21 @@ namespace Box2D.Collision
                 * m_proxyB.GetVertex(cache.indexB[0]); Vec2 pointA = Mul(transformA, localPointA); Vec2
                 * pointB = Mul(transformB, localPointB); m_axis = pointB - pointA; m_axis.Normalize();
                 */
-                localPointA.set_Renamed(m_proxyA.getVertex(cache.indexA[0]));
-                localPointB.set_Renamed(m_proxyB.getVertex(cache.indexB[0]));
+                localPointA.set_Renamed(m_proxyA.GetVertex(cache.IndexA[0]));
+                localPointB.set_Renamed(m_proxyB.GetVertex(cache.IndexB[0]));
                 Transform.mulToOutUnsafe(xfa, localPointA, pointA);
                 Transform.mulToOutUnsafe(xfb, localPointB, pointB);
                 m_axis.set_Renamed(pointB).subLocal(pointA);
                 float s = m_axis.normalize();
                 return s;
             }
-            else if (cache.indexA[0] == cache.indexA[1])
+            else if (cache.IndexA[0] == cache.IndexA[1])
             {
                 // Two points on B and one on A.
                 m_type = Type.FACE_B;
 
-                localPointB1.set_Renamed(m_proxyB.getVertex(cache.indexB[0]));
-                localPointB2.set_Renamed(m_proxyB.getVertex(cache.indexB[1]));
+                localPointB1.set_Renamed(m_proxyB.GetVertex(cache.IndexB[0]));
+                localPointB2.set_Renamed(m_proxyB.GetVertex(cache.IndexB[1]));
 
                 temp.set_Renamed(localPointB2).subLocal(localPointB1);
                 Vec2.crossToOutUnsafe(temp, 1f, m_axis);
@@ -412,7 +412,7 @@ namespace Box2D.Collision
                 m_localPoint.set_Renamed(localPointB1).addLocal(localPointB2).mulLocal(.5f);
                 Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
 
-                localPointA.set_Renamed(proxyA.getVertex(cache.indexA[0]));
+                localPointA.set_Renamed(proxyA.GetVertex(cache.IndexA[0]));
                 Transform.mulToOutUnsafe(xfa, localPointA, pointA);
 
                 temp.set_Renamed(pointA).subLocal(pointB);
@@ -429,8 +429,8 @@ namespace Box2D.Collision
                 // Two points on A and one or two points on B.
                 m_type = Type.FACE_A;
 
-                localPointA1.set_Renamed(m_proxyA.getVertex(cache.indexA[0]));
-                localPointA2.set_Renamed(m_proxyA.getVertex(cache.indexA[1]));
+                localPointA1.set_Renamed(m_proxyA.GetVertex(cache.IndexA[0]));
+                localPointA2.set_Renamed(m_proxyA.GetVertex(cache.IndexA[1]));
 
                 temp.set_Renamed(localPointA2).subLocal(localPointA1);
                 Vec2.crossToOutUnsafe(temp, 1.0f, m_axis);
@@ -441,7 +441,7 @@ namespace Box2D.Collision
                 m_localPoint.set_Renamed(localPointA1).addLocal(localPointA2).mulLocal(.5f);
                 Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
 
-                localPointB.set_Renamed(m_proxyB.getVertex(cache.indexB[0]));
+                localPointB.set_Renamed(m_proxyB.GetVertex(cache.IndexB[0]));
                 Transform.mulToOutUnsafe(xfb, localPointB, pointB);
 
                 temp.set_Renamed(pointB).subLocal(pointA);
@@ -474,11 +474,11 @@ namespace Box2D.Collision
                         Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
                         m_axis.negateLocal();
 
-                        indexes[0] = m_proxyA.getSupport(axisA);
-                        indexes[1] = m_proxyB.getSupport(axisB);
+                        indexes[0] = m_proxyA.GetSupport(axisA);
+                        indexes[1] = m_proxyB.GetSupport(axisB);
 
-                        localPointA.set_Renamed(m_proxyA.getVertex(indexes[0]));
-                        localPointB.set_Renamed(m_proxyB.getVertex(indexes[1]));
+                        localPointA.set_Renamed(m_proxyA.GetVertex(indexes[0]));
+                        localPointB.set_Renamed(m_proxyB.GetVertex(indexes[1]));
 
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
@@ -496,9 +496,9 @@ namespace Box2D.Collision
                         normal.negateLocal();
 
                         indexes[0] = -1;
-                        indexes[1] = m_proxyB.getSupport(axisB);
+                        indexes[1] = m_proxyB.GetSupport(axisB);
 
-                        localPointB.set_Renamed(m_proxyB.getVertex(indexes[1]));
+                        localPointB.set_Renamed(m_proxyB.GetVertex(indexes[1]));
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
 
                         float separation = Vec2.dot(pointB.subLocal(pointA), normal);
@@ -514,9 +514,9 @@ namespace Box2D.Collision
                         normal.negateLocal();
 
                         indexes[1] = -1;
-                        indexes[0] = m_proxyA.getSupport(axisA);
+                        indexes[0] = m_proxyA.GetSupport(axisA);
 
-                        localPointA.set_Renamed(m_proxyA.getVertex(indexes[0]));
+                        localPointA.set_Renamed(m_proxyA.GetVertex(indexes[0]));
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
 
                         float separation = Vec2.dot(pointA.subLocal(pointB), normal);
@@ -546,8 +546,8 @@ namespace Box2D.Collision
                         Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
                         m_axis.negateLocal();
 
-                        localPointA.set_Renamed(m_proxyA.getVertex(indexA));
-                        localPointB.set_Renamed(m_proxyB.getVertex(indexB));
+                        localPointA.set_Renamed(m_proxyA.GetVertex(indexA));
+                        localPointB.set_Renamed(m_proxyB.GetVertex(indexB));
 
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
@@ -565,7 +565,7 @@ namespace Box2D.Collision
                         Rot.mulTransUnsafe(xfb.q, normal.negateLocal(), axisB);
                         normal.negateLocal();
 
-                        localPointB.set_Renamed(m_proxyB.getVertex(indexB));
+                        localPointB.set_Renamed(m_proxyB.GetVertex(indexB));
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
                         float separation = Vec2.dot(pointB.subLocal(pointA), normal);
                         return separation;
@@ -580,7 +580,7 @@ namespace Box2D.Collision
                         Rot.mulTransUnsafe(xfa.q, normal.negateLocal(), axisA);
                         normal.negateLocal();
 
-                        localPointA.set_Renamed(m_proxyA.getVertex(indexA));
+                        localPointA.set_Renamed(m_proxyA.GetVertex(indexA));
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
 
                         float separation = Vec2.dot(pointA.subLocal(pointB), normal);

@@ -1368,8 +1368,8 @@ namespace Box2D.Dynamics
 
                         // Compute the time of impact in interval [0, minTOI]
                         TimeOfImpact.TOIInput input = toiInput;
-                        input.proxyA.set_Renamed(fA.Shape, indexA);
-                        input.proxyB.set_Renamed(fB.Shape, indexB);
+                        input.proxyA.Set(fA.Shape, indexA);
+                        input.proxyB.Set(fB.Shape, indexB);
                         input.sweepA.set_Renamed(bA.m_sweep);
                         input.sweepB.set_Renamed(bB.m_sweep);
                         input.tMax = 1.0f;

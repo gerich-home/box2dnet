@@ -42,25 +42,27 @@ namespace Box2D.Collision
         public static int GJK_ITERS = 0;
         public static int GJK_MAX_ITERS = 20;
 
-        /// <summary> GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.</summary>
+        /// <summary> 
+        /// GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
+        /// </summary>
         //UPGRADE_NOTE: The access modifier for this class or class field has been changed in order to prevent compilation errors due to the visibility level. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1296'"
-        public class SimplexVertex
+        private sealed class SimplexVertex
         {
-            public readonly Vec2 wA = new Vec2(); // support point in shapeA
-            public readonly Vec2 wB = new Vec2(); // support point in shapeB
-            public readonly Vec2 w = new Vec2(); // wB - wA
-            public float a; // barycentric coordinate for closest point
-            public int indexA; // wA index
-            public int indexB; // wB index
+            public readonly Vec2 WA = new Vec2(); // support point in shapeA
+            public readonly Vec2 WB = new Vec2(); // support point in shapeB
+            public readonly Vec2 W = new Vec2(); // wB - wA
+            public float A; // barycentric coordinate for closest point
+            public int IndexA; // wA index
+            public int IndexB; // wB index
 
-            public virtual void set_Renamed(SimplexVertex sv)
+            public void Set(SimplexVertex sv)
             {
-                wA.set_Renamed(sv.wA);
-                wB.set_Renamed(sv.wB);
-                w.set_Renamed(sv.w);
-                a = sv.a;
-                indexA = sv.indexA;
-                indexB = sv.indexB;
+                WA.set_Renamed(sv.WA);
+                WB.set_Renamed(sv.WB);
+                W.set_Renamed(sv.W);
+                A = sv.A;
+                IndexA = sv.IndexA;
+                IndexB = sv.IndexB;
             }
         }
 
@@ -68,59 +70,65 @@ namespace Box2D.Collision
         /// Used to warm start Distance. Set count to zero on first call.
         /// </summary>
         /// <author>daniel</author>
-        public class SimplexCache
+        public sealed class SimplexCache
         {
-            /// <summary>length or area</summary>
-            public float metric;
-            public int count;
+            /// <summary>
+            /// length or area
+            /// </summary>
+            public float Metric;
+            public int Count;
 
-            /// <summary>vertices on shape A</summary>
-            public readonly int[] indexA = new int[3];
+            /// <summary>
+            /// vertices on shape A
+            /// </summary>
+            public readonly int[] IndexA = new int[3];
 
-            /// <summary>vertices on shape B</summary>
-            public readonly int[] indexB = new int[3];
+            /// <summary>
+            /// vertices on shape B
+            /// </summary>
+            public readonly int[] IndexB = new int[3];
 
             public SimplexCache()
             {
-                metric = 0;
-                count = 0;
-                indexA[0] = Int32.MaxValue;
-                indexA[1] = Int32.MaxValue;
-                indexA[2] = Int32.MaxValue;
-                indexB[0] = Int32.MaxValue;
-                indexB[1] = Int32.MaxValue;
-                indexB[2] = Int32.MaxValue;
+                Metric = 0;
+                Count = 0;
+                IndexA[0] = Int32.MaxValue;
+                IndexA[1] = Int32.MaxValue;
+                IndexA[2] = Int32.MaxValue;
+                IndexB[0] = Int32.MaxValue;
+                IndexB[1] = Int32.MaxValue;
+                IndexB[2] = Int32.MaxValue;
             }
 
-            public virtual void set_Renamed(SimplexCache sc)
+            public void Set(SimplexCache sc)
             {
-                Array.Copy(sc.indexA, 0, indexA, 0, indexA.Length);
-                Array.Copy(sc.indexB, 0, indexB, 0, indexB.Length);
-                metric = sc.metric;
-                count = sc.count;
+                Array.Copy(sc.IndexA, 0, IndexA, 0, IndexA.Length);
+                Array.Copy(sc.IndexB, 0, IndexB, 0, IndexB.Length);
+                Metric = sc.Metric;
+                Count = sc.Count;
             }
         }
 
-        private class Simplex
+        private sealed class Simplex
         {
-            public readonly SimplexVertex m_v1 = new SimplexVertex();
-            public readonly SimplexVertex m_v2 = new SimplexVertex();
-            public readonly SimplexVertex m_v3 = new SimplexVertex();
-            public SimplexVertex[] vertices;
-            public int m_count;
+            private readonly SimplexVertex m_v1 = new SimplexVertex();
+            private readonly SimplexVertex m_v2 = new SimplexVertex();
+            private readonly SimplexVertex m_v3 = new SimplexVertex();
+            public readonly SimplexVertex[] Vertices;
+            public int Count;
 
             public Simplex()
             {
-                vertices = new SimplexVertex[] { m_v1, m_v2, m_v3 };
+                Vertices = new[] { m_v1, m_v2, m_v3 };
             }
 
-            virtual public float Metric
+            private float Metric
             {
                 // djm pooled, from above
 
                 get
                 {
-                    switch (m_count)
+                    switch (Count)
                     {
 
                         case 0:
@@ -133,12 +141,12 @@ namespace Box2D.Collision
 
 
                         case 2:
-                            return MathUtils.distance(m_v1.w, m_v2.w);
+                            return MathUtils.distance(m_v1.W, m_v2.W);
 
 
                         case 3:
-                            case3.set_Renamed(m_v2.w).subLocal(m_v1.w);
-                            case33.set_Renamed(m_v3.w).subLocal(m_v1.w);
+                            case3.set_Renamed(m_v2.W).subLocal(m_v1.W);
+                            case33.set_Renamed(m_v3.W).subLocal(m_v1.W);
                             // return Vec2.cross(m_v2.w - m_v1.w, m_v3.w - m_v1.w);
                             return Vec2.cross(case3, case33);
 
@@ -152,102 +160,99 @@ namespace Box2D.Collision
 
             }
 
-            public virtual void readCache(SimplexCache cache, DistanceProxy proxyA, Transform transformA, DistanceProxy proxyB, Transform transformB)
+            public void ReadCache(SimplexCache cache, DistanceProxy proxyA, Transform transformA, DistanceProxy proxyB, Transform transformB)
             {
-                Debug.Assert(cache.count <= 3);
+                Debug.Assert(cache.Count <= 3);
 
                 // Copy data from cache.
-                m_count = cache.count;
+                Count = cache.Count;
 
-                for (int i = 0; i < m_count; ++i)
+                for (int i = 0; i < Count; ++i)
                 {
-                    SimplexVertex v = vertices[i];
-                    v.indexA = cache.indexA[i];
-                    v.indexB = cache.indexB[i];
-                    Vec2 wALocal = proxyA.getVertex(v.indexA);
-                    Vec2 wBLocal = proxyB.getVertex(v.indexB);
-                    Transform.mulToOutUnsafe(transformA, wALocal, v.wA);
-                    Transform.mulToOutUnsafe(transformB, wBLocal, v.wB);
-                    v.w.set_Renamed(v.wB).subLocal(v.wA);
-                    v.a = 0.0f;
+                    SimplexVertex v = Vertices[i];
+                    v.IndexA = cache.IndexA[i];
+                    v.IndexB = cache.IndexB[i];
+                    Vec2 wALocal = proxyA.GetVertex(v.IndexA);
+                    Vec2 wBLocal = proxyB.GetVertex(v.IndexB);
+                    Transform.mulToOutUnsafe(transformA, wALocal, v.WA);
+                    Transform.mulToOutUnsafe(transformB, wBLocal, v.WB);
+                    v.W.set_Renamed(v.WB).subLocal(v.WA);
+                    v.A = 0.0f;
                 }
 
                 // Compute the new simplex metric, if it is substantially different than
                 // old metric then flush the simplex.
-                if (m_count > 1)
+                if (Count > 1)
                 {
-                    float metric1 = cache.metric;
+                    float metric1 = cache.Metric;
                     float metric2 = Metric;
                     if (metric2 < 0.5f * metric1 || 2.0f * metric1 < metric2 || metric2 < Settings.EPSILON)
                     {
                         // Reset the simplex.
-                        m_count = 0;
+                        Count = 0;
                     }
                 }
 
                 // If the cache is empty or invalid ...
-                if (m_count == 0)
+                if (Count == 0)
                 {
-                    SimplexVertex v = vertices[0];
-                    v.indexA = 0;
-                    v.indexB = 0;
-                    Vec2 wALocal = proxyA.getVertex(0);
-                    Vec2 wBLocal = proxyB.getVertex(0);
-                    Transform.mulToOutUnsafe(transformA, wALocal, v.wA);
-                    Transform.mulToOutUnsafe(transformB, wBLocal, v.wB);
-                    v.w.set_Renamed(v.wB).subLocal(v.wA);
-                    m_count = 1;
+                    SimplexVertex v = Vertices[0];
+                    v.IndexA = 0;
+                    v.IndexB = 0;
+                    Vec2 wALocal = proxyA.GetVertex(0);
+                    Vec2 wBLocal = proxyB.GetVertex(0);
+                    Transform.mulToOutUnsafe(transformA, wALocal, v.WA);
+                    Transform.mulToOutUnsafe(transformB, wBLocal, v.WB);
+                    v.W.set_Renamed(v.WB).subLocal(v.WA);
+                    Count = 1;
                 }
             }
 
-            public virtual void writeCache(SimplexCache cache)
+            public void WriteCache(SimplexCache cache)
             {
-                cache.metric = Metric;
-                cache.count = m_count;
+                cache.Metric = Metric;
+                cache.Count = Count;
 
-                for (int i = 0; i < m_count; ++i)
+                for (int i = 0; i < Count; ++i)
                 {
-                    cache.indexA[i] = (vertices[i].indexA);
-                    cache.indexB[i] = (vertices[i].indexB);
+                    cache.IndexA[i] = (Vertices[i].IndexA);
+                    cache.IndexB[i] = (Vertices[i].IndexB);
                 }
             }
 
             private readonly Vec2 e12 = new Vec2();
 
-            public void getSearchDirection(Vec2 out_Renamed)
+            public void GetSearchDirection(Vec2 result)
             {
-                switch (m_count)
+                switch (Count)
                 {
 
                     case 1:
-                        out_Renamed.set_Renamed(m_v1.w).negateLocal();
+                        result.set_Renamed(m_v1.W).negateLocal();
                         return;
 
                     case 2:
-                        e12.set_Renamed(m_v2.w).subLocal(m_v1.w);
+                        e12.set_Renamed(m_v2.W).subLocal(m_v1.W);
                         // use out for a temp variable real quick
-                        out_Renamed.set_Renamed(m_v1.w).negateLocal();
-                        float sgn = Vec2.cross(e12, out_Renamed);
+                        result.set_Renamed(m_v1.W).negateLocal();
+                        float sgn = Vec2.cross(e12, result);
 
                         if (sgn > 0f)
                         {
                             // Origin is left of e12.
-                            Vec2.crossToOutUnsafe(1f, e12, out_Renamed);
+                            Vec2.crossToOutUnsafe(1f, e12, result);
                             return;
                         }
                         else
                         {
                             // Origin is right of e12.
-                            Vec2.crossToOutUnsafe(e12, 1f, out_Renamed);
+                            Vec2.crossToOutUnsafe(e12, 1f, result);
                             return;
                         }
-                        goto default;
-
                     default:
                         Debug.Assert(false);
-                        out_Renamed.setZero();
+                        result.setZero();
                         return;
-
                 }
             }
 
@@ -255,38 +260,37 @@ namespace Box2D.Collision
             private readonly Vec2 case2 = new Vec2();
             private readonly Vec2 case22 = new Vec2();
 
-            /// <summary> this returns pooled objects. don't keep or modify them
-            /// 
+            /// <summary> 
+            /// this returns pooled objects. don't keep or modify them
             /// </summary>
-            /// <returns>
-            /// </returns>
-            public virtual void getClosestPoint(Vec2 out_Renamed)
+            /// <returns></returns>
+            public void GetClosestPoint(Vec2 result)
             {
-                switch (m_count)
+                switch (Count)
                 {
 
                     case 0:
                         Debug.Assert(false);
-                        out_Renamed.setZero();
+                        result.setZero();
                         return;
 
                     case 1:
-                        out_Renamed.set_Renamed(m_v1.w);
+                        result.set_Renamed(m_v1.W);
                         return;
 
                     case 2:
-                        case22.set_Renamed(m_v2.w).mulLocal(m_v2.a);
-                        case2.set_Renamed(m_v1.w).mulLocal(m_v1.a).addLocal(case22);
-                        out_Renamed.set_Renamed(case2);
+                        case22.set_Renamed(m_v2.W).mulLocal(m_v2.A);
+                        case2.set_Renamed(m_v1.W).mulLocal(m_v1.A).addLocal(case22);
+                        result.set_Renamed(case2);
                         return;
 
                     case 3:
-                        out_Renamed.setZero();
+                        result.setZero();
                         return;
 
                     default:
                         Debug.Assert(false);
-                        out_Renamed.setZero();
+                        result.setZero();
                         return;
 
                 }
@@ -296,9 +300,9 @@ namespace Box2D.Collision
             private readonly Vec2 case3 = new Vec2();
             private readonly Vec2 case33 = new Vec2();
 
-            public virtual void getWitnessPoints(Vec2 pA, Vec2 pB)
+            public void GetWitnessPoints(Vec2 pA, Vec2 pB)
             {
-                switch (m_count)
+                switch (Count)
                 {
 
                     case 0:
@@ -307,26 +311,26 @@ namespace Box2D.Collision
 
 
                     case 1:
-                        pA.set_Renamed(m_v1.wA);
-                        pB.set_Renamed(m_v1.wB);
+                        pA.set_Renamed(m_v1.WA);
+                        pB.set_Renamed(m_v1.WB);
                         break;
 
 
                     case 2:
-                        case2.set_Renamed(m_v1.wA).mulLocal(m_v1.a);
-                        pA.set_Renamed(m_v2.wA).mulLocal(m_v2.a).addLocal(case2);
+                        case2.set_Renamed(m_v1.WA).mulLocal(m_v1.A);
+                        pA.set_Renamed(m_v2.WA).mulLocal(m_v2.A).addLocal(case2);
                         // m_v1.a * m_v1.wA + m_v2.a * m_v2.wA;
                         // *pB = m_v1.a * m_v1.wB + m_v2.a * m_v2.wB;
-                        case2.set_Renamed(m_v1.wB).mulLocal(m_v1.a);
-                        pB.set_Renamed(m_v2.wB).mulLocal(m_v2.a).addLocal(case2);
+                        case2.set_Renamed(m_v1.WB).mulLocal(m_v1.A);
+                        pB.set_Renamed(m_v2.WB).mulLocal(m_v2.A).addLocal(case2);
 
                         break;
 
 
                     case 3:
-                        pA.set_Renamed(m_v1.wA).mulLocal(m_v1.a);
-                        case3.set_Renamed(m_v2.wA).mulLocal(m_v2.a);
-                        case33.set_Renamed(m_v3.wA).mulLocal(m_v3.a);
+                        pA.set_Renamed(m_v1.WA).mulLocal(m_v1.A);
+                        case3.set_Renamed(m_v2.WA).mulLocal(m_v2.A);
+                        case33.set_Renamed(m_v3.WA).mulLocal(m_v3.A);
                         pA.addLocal(case3).addLocal(case33);
                         pB.set_Renamed(pA);
                         // *pA = m_v1.a * m_v1.wA + m_v2.a * m_v2.wA + m_v3.a * m_v3.wA;
@@ -342,8 +346,10 @@ namespace Box2D.Collision
             }
 
             // djm pooled from above
-            /// <summary> Solve a line segment using barycentric coordinates.</summary>
-            public virtual void solve2()
+            /// <summary>
+            ///  Solve a line segment using barycentric coordinates.
+            /// </summary>
+            public void Solve2()
             {
                 // Solve a line segment using barycentric coordinates.
                 //
@@ -368,8 +374,8 @@ namespace Box2D.Collision
                 // Solution
                 // a1 = d12_1 / d12
                 // a2 = d12_2 / d12
-                Vec2 w1 = m_v1.w;
-                Vec2 w2 = m_v2.w;
+                Vec2 w1 = m_v1.W;
+                Vec2 w2 = m_v2.W;
                 e12.set_Renamed(w2).subLocal(w1);
 
                 // w1 region
@@ -377,8 +383,8 @@ namespace Box2D.Collision
                 if (d12_2 <= 0.0f)
                 {
                     // a2 <= 0, so we clamp it to 0
-                    m_v1.a = 1.0f;
-                    m_count = 1;
+                    m_v1.A = 1.0f;
+                    Count = 1;
                     return;
                 }
 
@@ -387,17 +393,17 @@ namespace Box2D.Collision
                 if (d12_1 <= 0.0f)
                 {
                     // a1 <= 0, so we clamp it to 0
-                    m_v2.a = 1.0f;
-                    m_count = 1;
-                    m_v1.set_Renamed(m_v2);
+                    m_v2.A = 1.0f;
+                    Count = 1;
+                    m_v1.Set(m_v2);
                     return;
                 }
 
                 // Must be in e12 region.
                 float inv_d12 = 1.0f / (d12_1 + d12_2);
-                m_v1.a = d12_1 * inv_d12;
-                m_v2.a = d12_2 * inv_d12;
-                m_count = 2;
+                m_v1.A = d12_1 * inv_d12;
+                m_v2.A = d12_2 * inv_d12;
+                Count = 2;
             }
 
             // djm pooled, and from above
@@ -407,18 +413,19 @@ namespace Box2D.Collision
             private readonly Vec2 w2 = new Vec2();
             private readonly Vec2 w3 = new Vec2();
 
-            /// <summary> Solve a line segment using barycentric coordinates.<br/>
-            /// Possible regions:<br/>
-            /// - points[2]<br/>
-            /// - edge points[0]-points[2]<br/>
-            /// - edge points[1]-points[2]<br/>
-            /// - inside the triangle
+            /// <summary>
+            ///  Solve a line segment using barycentric coordinates.<br/>
+            ///  Possible regions:<br/>
+            ///  - points[2]<br/>
+            ///  - edge points[0]-points[2]<br/>
+            ///  - edge points[1]-points[2]<br/>
+            ///  - inside the triangle
             /// </summary>
-            public virtual void solve3()
+            public void Solve3()
             {
-                w1.set_Renamed(m_v1.w);
-                w2.set_Renamed(m_v2.w);
-                w3.set_Renamed(m_v3.w);
+                w1.set_Renamed(m_v1.W);
+                w2.set_Renamed(m_v2.W);
+                w3.set_Renamed(m_v3.W);
 
                 // Edge12
                 // [1 1 ][a1] = [1]
@@ -460,8 +467,8 @@ namespace Box2D.Collision
                 // w1 region
                 if (d12_2 <= 0.0f && d13_2 <= 0.0f)
                 {
-                    m_v1.a = 1.0f;
-                    m_count = 1;
+                    m_v1.A = 1.0f;
+                    Count = 1;
                     return;
                 }
 
@@ -469,9 +476,9 @@ namespace Box2D.Collision
                 if (d12_1 > 0.0f && d12_2 > 0.0f && d123_3 <= 0.0f)
                 {
                     float inv_d12 = 1.0f / (d12_1 + d12_2);
-                    m_v1.a = d12_1 * inv_d12;
-                    m_v2.a = d12_2 * inv_d12;
-                    m_count = 2;
+                    m_v1.A = d12_1 * inv_d12;
+                    m_v2.A = d12_2 * inv_d12;
+                    Count = 2;
                     return;
                 }
 
@@ -479,28 +486,28 @@ namespace Box2D.Collision
                 if (d13_1 > 0.0f && d13_2 > 0.0f && d123_2 <= 0.0f)
                 {
                     float inv_d13 = 1.0f / (d13_1 + d13_2);
-                    m_v1.a = d13_1 * inv_d13;
-                    m_v3.a = d13_2 * inv_d13;
-                    m_count = 2;
-                    m_v2.set_Renamed(m_v3);
+                    m_v1.A = d13_1 * inv_d13;
+                    m_v3.A = d13_2 * inv_d13;
+                    Count = 2;
+                    m_v2.Set(m_v3);
                     return;
                 }
 
                 // w2 region
                 if (d12_1 <= 0.0f && d23_2 <= 0.0f)
                 {
-                    m_v2.a = 1.0f;
-                    m_count = 1;
-                    m_v1.set_Renamed(m_v2);
+                    m_v2.A = 1.0f;
+                    Count = 1;
+                    m_v1.Set(m_v2);
                     return;
                 }
 
                 // w3 region
                 if (d13_1 <= 0.0f && d23_1 <= 0.0f)
                 {
-                    m_v3.a = 1.0f;
-                    m_count = 1;
-                    m_v1.set_Renamed(m_v3);
+                    m_v3.A = 1.0f;
+                    Count = 1;
+                    m_v1.Set(m_v3);
                     return;
                 }
 
@@ -508,83 +515,74 @@ namespace Box2D.Collision
                 if (d23_1 > 0.0f && d23_2 > 0.0f && d123_1 <= 0.0f)
                 {
                     float inv_d23 = 1.0f / (d23_1 + d23_2);
-                    m_v2.a = d23_1 * inv_d23;
-                    m_v3.a = d23_2 * inv_d23;
-                    m_count = 2;
-                    m_v1.set_Renamed(m_v3);
+                    m_v2.A = d23_1 * inv_d23;
+                    m_v3.A = d23_2 * inv_d23;
+                    Count = 2;
+                    m_v1.Set(m_v3);
                     return;
                 }
 
                 // Must be in triangle123
                 float inv_d123 = 1.0f / (d123_1 + d123_2 + d123_3);
-                m_v1.a = d123_1 * inv_d123;
-                m_v2.a = d123_2 * inv_d123;
-                m_v3.a = d123_3 * inv_d123;
-                m_count = 3;
+                m_v1.A = d123_1 * inv_d123;
+                m_v2.A = d123_2 * inv_d123;
+                m_v3.A = d123_3 * inv_d123;
+                Count = 3;
             }
         }
 
-        /// <summary> A distance proxy is used by the GJK algorithm. It encapsulates any shape. TODO: see if we can
+        /// <summary> 
+        /// A distance proxy is used by the GJK algorithm. It encapsulates any shape. TODO: see if we can
         /// just do assignments with m_vertices, instead of copying stuff over
-        /// 
         /// </summary>
-        /// <author>  daniel
-        /// </author>
-        public class DistanceProxy
+        /// <author>daniel</author>
+        public sealed class DistanceProxy
         {
-            /// <summary> Get the vertex count.
-            /// 
+            /// <summary>
+            ///  Get the vertex count.
             /// </summary>
-            /// <returns>
-            /// </returns>
-            virtual public int VertexCount
-            {
-                get
-                {
-                    return m_count;
-                }
+            /// <returns></returns>
+            public int VertexCount { get; set; }
 
-            }
-            public readonly Vec2[] m_vertices;
-            public int m_count;
-            public float m_radius;
-            public readonly Vec2[] m_buffer;
+            public readonly Vec2[] Vertices;
+            public float Radius;
+            public readonly Vec2[] Buffer;
 
             public DistanceProxy()
             {
-                m_vertices = new Vec2[Settings.maxPolygonVertices];
-                for (int i = 0; i < m_vertices.Length; i++)
+                Vertices = new Vec2[Settings.maxPolygonVertices];
+                for (int i = 0; i < Vertices.Length; i++)
                 {
-                    m_vertices[i] = new Vec2();
+                    Vertices[i] = new Vec2();
                 }
-                m_buffer = new Vec2[2];
-                m_count = 0;
-                m_radius = 0f;
+                Buffer = new Vec2[2];
+                VertexCount = 0;
+                Radius = 0f;
             }
 
-            /// <summary> Initialize the proxy using the given shape. The shape must remain in scope while the proxy is
-            /// in use.
+            /// <summary>
+            ///  Initialize the proxy using the given shape. The shape must remain in scope while the proxy is in use.
             /// </summary>
-            public void set_Renamed(Shape shape, int index)
+            public void Set(Shape shape, int index)
             {
                 switch (shape.Type)
                 {
 
                     case ShapeType.Circle:
                         CircleShape circle = (CircleShape)shape;
-                        m_vertices[0].set_Renamed(circle.P);
-                        m_count = 1;
-                        m_radius = circle.Radius;
+                        Vertices[0].set_Renamed(circle.P);
+                        VertexCount = 1;
+                        Radius = circle.Radius;
 
                         break;
 
                     case ShapeType.Polygon:
                         PolygonShape poly = (PolygonShape)shape;
-                        m_count = poly.VertexCount;
-                        m_radius = poly.Radius;
-                        for (int i = 0; i < m_count; i++)
+                        VertexCount = poly.VertexCount;
+                        Radius = poly.Radius;
+                        for (int i = 0; i < VertexCount; i++)
                         {
-                            m_vertices[i].set_Renamed(poly.Vertices[i]);
+                            Vertices[i].set_Renamed(poly.Vertices[i]);
                         }
                         break;
 
@@ -592,28 +590,28 @@ namespace Box2D.Collision
                         ChainShape chain = (ChainShape)shape;
                         Debug.Assert(0 <= index && index < chain.Count);
 
-                        m_buffer[0] = chain.Vertices[index];
+                        Buffer[0] = chain.Vertices[index];
                         if (index + 1 < chain.Count)
                         {
-                            m_buffer[1] = chain.Vertices[index + 1];
+                            Buffer[1] = chain.Vertices[index + 1];
                         }
                         else
                         {
-                            m_buffer[1] = chain.Vertices[0];
+                            Buffer[1] = chain.Vertices[0];
                         }
 
-                        m_vertices[0].set_Renamed(m_buffer[0]);
-                        m_vertices[1].set_Renamed(m_buffer[1]);
-                        m_count = 2;
-                        m_radius = chain.Radius;
+                        Vertices[0].set_Renamed(Buffer[0]);
+                        Vertices[1].set_Renamed(Buffer[1]);
+                        VertexCount = 2;
+                        Radius = chain.Radius;
                         break;
 
                     case ShapeType.Edge:
                         EdgeShape edge = (EdgeShape)shape;
-                        m_vertices[0].set_Renamed(edge.Vertex1);
-                        m_vertices[1].set_Renamed(edge.Vertex2);
-                        m_count = 2;
-                        m_radius = edge.Radius;
+                        Vertices[0].set_Renamed(edge.Vertex1);
+                        Vertices[1].set_Renamed(edge.Vertex2);
+                        VertexCount = 2;
+                        Radius = edge.Radius;
                         break;
 
                     default:
@@ -628,17 +626,17 @@ namespace Box2D.Collision
             /// </summary>
             /// <param name="d"></param>
             /// <returns></returns>
-            public int getSupport(Vec2 d)
+            public int GetSupport(Vec2 d)
             {
                 int bestIndex = 0;
-                float bestValue = Vec2.dot(m_vertices[0], d);
-                for (int i = 1; i < m_count; i++)
+                float bestValue = Vec2.dot(Vertices[0], d);
+                for (int i = 1; i < VertexCount; i++)
                 {
-                    float value_Renamed = Vec2.dot(m_vertices[i], d);
-                    if (value_Renamed > bestValue)
+                    float value = Vec2.dot(Vertices[i], d);
+                    if (value > bestValue)
                     {
                         bestIndex = i;
-                        bestValue = value_Renamed;
+                        bestValue = value;
                     }
                 }
 
@@ -650,21 +648,21 @@ namespace Box2D.Collision
             /// </summary>
             /// <param name="d"></param>
             /// <returns></returns>
-            public Vec2 getSupportVertex(Vec2 d)
+            public Vec2 GetSupportVertex(Vec2 d)
             {
                 int bestIndex = 0;
-                float bestValue = Vec2.dot(m_vertices[0], d);
-                for (int i = 1; i < m_count; i++)
+                float bestValue = Vec2.dot(Vertices[0], d);
+                for (int i = 1; i < VertexCount; i++)
                 {
-                    float value_Renamed = Vec2.dot(m_vertices[i], d);
-                    if (value_Renamed > bestValue)
+                    float value = Vec2.dot(Vertices[i], d);
+                    if (value > bestValue)
                     {
                         bestIndex = i;
-                        bestValue = value_Renamed;
+                        bestValue = value;
                     }
                 }
 
-                return m_vertices[bestIndex];
+                return Vertices[bestIndex];
             }
 
             /// <summary>
@@ -672,20 +670,20 @@ namespace Box2D.Collision
             /// </summary>
             /// <param name="index"></param>
             /// <returns></returns>
-            public Vec2 getVertex(int index)
+            public Vec2 GetVertex(int index)
             {
-                Debug.Assert(0 <= index && index < m_count);
-                return m_vertices[index];
+                Debug.Assert(0 <= index && index < VertexCount);
+                return Vertices[index];
             }
         }
 
-        private Simplex simplex = new Simplex();
-        private int[] saveA = new int[3];
-        private int[] saveB = new int[3];
-        private Vec2 closestPoint = new Vec2();
-        private Vec2 d = new Vec2();
-        private Vec2 temp = new Vec2();
-        private Vec2 normal = new Vec2();
+        private readonly Simplex simplex = new Simplex();
+        private readonly int[] saveA = new int[3];
+        private readonly int[] saveB = new int[3];
+        private readonly Vec2 closestPoint = new Vec2();
+        private readonly Vec2 d = new Vec2();
+        private readonly Vec2 temp = new Vec2();
+        private readonly Vec2 normal = new Vec2();
 
         /// <summary>
         /// Compute the closest points between two shapes. Supports any combination of: CircleShape and
@@ -695,7 +693,7 @@ namespace Box2D.Collision
         /// <param name="output"></param>
         /// <param name="cache"></param>
         /// <param name="input"></param>
-        public void distance(DistanceOutput output, SimplexCache cache, DistanceInput input)
+        public void GetDistance(DistanceOutput output, SimplexCache cache, DistanceInput input)
         {
             GJK_CALLS++;
 
@@ -706,19 +704,19 @@ namespace Box2D.Collision
             Transform transformB = input.transformB;
 
             // Initialize the simplex.
-            simplex.readCache(cache, proxyA, transformA, proxyB, transformB);
+            simplex.ReadCache(cache, proxyA, transformA, proxyB, transformB);
 
             // Get simplex vertices as an array.
-            SimplexVertex[] vertices = simplex.vertices;
+            SimplexVertex[] vertices = simplex.Vertices;
 
             // These store the vertices of the last simplex so that we
             // can check for duplicates and prevent cycling.
             // (pooled above)
-            int saveCount = 0;
+            int saveCount;
 
-            simplex.getClosestPoint(closestPoint);
+            simplex.GetClosestPoint(closestPoint);
             float distanceSqr1 = closestPoint.lengthSquared();
-            float distanceSqr2 = distanceSqr1;
+            float distanceSqr2;
 
             // Main iteration loop
             int iter = 0;
@@ -726,25 +724,25 @@ namespace Box2D.Collision
             {
 
                 // Copy simplex so we can identify duplicates.
-                saveCount = simplex.m_count;
+                saveCount = simplex.Count;
                 for (int i = 0; i < saveCount; i++)
                 {
-                    saveA[i] = vertices[i].indexA;
-                    saveB[i] = vertices[i].indexB;
+                    saveA[i] = vertices[i].IndexA;
+                    saveB[i] = vertices[i].IndexB;
                 }
 
-                switch (simplex.m_count)
+                switch (simplex.Count)
                 {
 
                     case 1:
                         break;
 
                     case 2:
-                        simplex.solve2();
+                        simplex.Solve2();
                         break;
 
                     case 3:
-                        simplex.solve3();
+                        simplex.Solve3();
                         break;
 
                     default:
@@ -754,13 +752,13 @@ namespace Box2D.Collision
                 }
 
                 // If we have 3 points, then the origin is in the corresponding triangle.
-                if (simplex.m_count == 3)
+                if (simplex.Count == 3)
                 {
                     break;
                 }
 
                 // Compute closest point.
-                simplex.getClosestPoint(closestPoint);
+                simplex.GetClosestPoint(closestPoint);
                 distanceSqr2 = closestPoint.lengthSquared();
 
                 // ensure progress
@@ -771,7 +769,7 @@ namespace Box2D.Collision
                 distanceSqr1 = distanceSqr2;
 
                 // get search direction;
-                simplex.getSearchDirection(d);
+                simplex.GetSearchDirection(d);
 
                 // Ensure the search direction is numerically fit.
                 if (d.lengthSquared() < Settings.EPSILON * Settings.EPSILON)
@@ -793,16 +791,16 @@ namespace Box2D.Collision
                 */
 
                 // Compute a tentative new simplex vertex using support points.
-                SimplexVertex vertex = vertices[simplex.m_count];
+                SimplexVertex vertex = vertices[simplex.Count];
 
                 Rot.mulTransUnsafe(transformA.q, d.negateLocal(), temp);
-                vertex.indexA = proxyA.getSupport(temp);
-                Transform.mulToOutUnsafe(transformA, proxyA.getVertex(vertex.indexA), vertex.wA);
+                vertex.IndexA = proxyA.GetSupport(temp);
+                Transform.mulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.WA);
                 // Vec2 wBLocal;
                 Rot.mulTransUnsafe(transformB.q, d.negateLocal(), temp);
-                vertex.indexB = proxyB.getSupport(temp);
-                Transform.mulToOutUnsafe(transformB, proxyB.getVertex(vertex.indexB), vertex.wB);
-                vertex.w.set_Renamed(vertex.wB).subLocal(vertex.wA);
+                vertex.IndexB = proxyB.GetSupport(temp);
+                Transform.mulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.WB);
+                vertex.W.set_Renamed(vertex.WB).subLocal(vertex.WA);
 
                 // Iteration count is equated to the number of support point calls.
                 ++iter;
@@ -812,7 +810,7 @@ namespace Box2D.Collision
                 bool duplicate = false;
                 for (int i = 0; i < saveCount; ++i)
                 {
-                    if (vertex.indexA == saveA[i] && vertex.indexB == saveB[i])
+                    if (vertex.IndexA == saveA[i] && vertex.IndexB == saveB[i])
                     {
                         duplicate = true;
                         break;
@@ -826,24 +824,24 @@ namespace Box2D.Collision
                 }
 
                 // New vertex is ok and needed.
-                ++simplex.m_count;
+                ++simplex.Count;
             }
 
             GJK_MAX_ITERS = MathUtils.max(GJK_MAX_ITERS, iter);
 
             // Prepare output.
-            simplex.getWitnessPoints(output.pointA, output.pointB);
+            simplex.GetWitnessPoints(output.pointA, output.pointB);
             output.distance = MathUtils.distance(output.pointA, output.pointB);
             output.iterations = iter;
 
             // Cache the simplex.
-            simplex.writeCache(cache);
+            simplex.WriteCache(cache);
 
             // Apply radii if requested.
             if (input.useRadii)
             {
-                float rA = proxyA.m_radius;
-                float rB = proxyB.m_radius;
+                float rA = proxyA.Radius;
+                float rB = proxyB.Radius;
 
                 if (output.distance > rA + rB && output.distance > Settings.EPSILON)
                 {

@@ -70,15 +70,15 @@ namespace Box2D.Collision
         /// <returns></returns>
         public bool TestOverlap(Shape shapeA, int indexA, Shape shapeB, int indexB, Transform xfA, Transform xfB)
         {
-            input.proxyA.set_Renamed(shapeA, indexA);
-            input.proxyB.set_Renamed(shapeB, indexB);
+            input.proxyA.Set(shapeA, indexA);
+            input.proxyB.Set(shapeB, indexB);
             input.transformA.set_Renamed(xfA);
             input.transformB.set_Renamed(xfB);
             input.useRadii = true;
 
-            cache.count = 0;
+            cache.Count = 0;
 
-            pool.GetDistance().distance(output, cache, input);
+            pool.GetDistance().GetDistance(output, cache, input);
             // djm note: anything significant about 10.0f?
             return output.distance < 10.0f * Settings.EPSILON;
         }
