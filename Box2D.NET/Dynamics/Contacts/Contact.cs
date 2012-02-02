@@ -104,7 +104,7 @@ namespace Box2D.Dynamics.Contacts
             m_indexA = indexA;
             m_indexB = indexB;
 
-            m_manifold.pointCount = 0;
+            m_manifold.PointCount = 0;
 
             m_prev = null;
             m_next = null;
@@ -300,7 +300,7 @@ namespace Box2D.Dynamics.Contacts
         public virtual void update(ContactListener listener)
         {
 
-            oldManifold.set_Renamed(m_manifold);
+            oldManifold.Set(m_manifold);
 
             // Re-enable this contact.
             m_flags |= ENABLED_FLAG;
@@ -326,25 +326,25 @@ namespace Box2D.Dynamics.Contacts
                 touching = pool.GetCollision().TestOverlap(shapeA, m_indexA, shapeB, m_indexB, xfA, xfB);
 
                 // Sensors don't generate manifolds.
-                m_manifold.pointCount = 0;
+                m_manifold.PointCount = 0;
             }
             else
             {
                 evaluate(m_manifold, xfA, xfB);
-                touching = m_manifold.pointCount > 0;
+                touching = m_manifold.PointCount > 0;
 
                 // Match old contact ids to new contact ids and copy the
                 // stored impulses to warm start the solver.
-                for (int i = 0; i < m_manifold.pointCount; ++i)
+                for (int i = 0; i < m_manifold.PointCount; ++i)
                 {
-                    ManifoldPoint mp2 = m_manifold.points[i];
+                    ManifoldPoint mp2 = m_manifold.Points[i];
                     mp2.normalImpulse = 0.0f;
                     mp2.tangentImpulse = 0.0f;
                     ContactID id2 = mp2.id;
 
-                    for (int j = 0; j < oldManifold.pointCount; ++j)
+                    for (int j = 0; j < oldManifold.PointCount; ++j)
                     {
-                        ManifoldPoint mp1 = oldManifold.points[j];
+                        ManifoldPoint mp1 = oldManifold.Points[j];
 
                         if (mp1.id.IsEqual(id2))
                         {

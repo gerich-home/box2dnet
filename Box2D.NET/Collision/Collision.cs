@@ -102,15 +102,15 @@ namespace Box2D.Collision
             }
 
             // Detect persists and removes.
-            for (int i = 0; i < manifold1.pointCount; i++)
+            for (int i = 0; i < manifold1.PointCount; i++)
             {
-                ContactID id = manifold1.points[i].id;
+                ContactID id = manifold1.Points[i].id;
 
                 state1[i] = PointState.RemoveState;
 
-                for (int j = 0; j < manifold2.pointCount; j++)
+                for (int j = 0; j < manifold2.PointCount; j++)
                 {
-                    if (manifold2.points[j].id.IsEqual(id))
+                    if (manifold2.Points[j].id.IsEqual(id))
                     {
                         state1[i] = PointState.PersistState;
                         break;
@@ -119,15 +119,15 @@ namespace Box2D.Collision
             }
 
             // Detect persists and adds
-            for (int i = 0; i < manifold2.pointCount; i++)
+            for (int i = 0; i < manifold2.PointCount; i++)
             {
-                ContactID id = manifold2.points[i].id;
+                ContactID id = manifold2.Points[i].id;
 
                 state2[i] = PointState.AddState;
 
-                for (int j = 0; j < manifold1.pointCount; j++)
+                for (int j = 0; j < manifold1.PointCount; j++)
                 {
-                    if (manifold1.points[j].id.IsEqual(id))
+                    if (manifold1.Points[j].id.IsEqual(id))
                     {
                         state2[i] = PointState.PersistState;
                         break;
@@ -201,7 +201,7 @@ namespace Box2D.Collision
         /// <param name="xfB"></param>
         public void CollideCircles(Manifold manifold, CircleShape circle1, Transform xfA, CircleShape circle2, Transform xfB)
         {
-            manifold.pointCount = 0;
+            manifold.PointCount = 0;
 
             // before inline:
             Transform.mulToOut(xfA, circle1.P, pA);
@@ -230,13 +230,13 @@ namespace Box2D.Collision
                 return;
             }
 
-            manifold.type = Manifold.ManifoldType.CIRCLES;
-            manifold.localPoint.set_Renamed(circle1.P);
-            manifold.localNormal.setZero();
-            manifold.pointCount = 1;
+            manifold.Type = Manifold.ManifoldType.Circles;
+            manifold.LocalPoint.set_Renamed(circle1.P);
+            manifold.LocalNormal.setZero();
+            manifold.PointCount = 1;
 
-            manifold.points[0].localPoint.set_Renamed(circle2.P);
-            manifold.points[0].id.Zero();
+            manifold.Points[0].localPoint.set_Renamed(circle2.P);
+            manifold.Points[0].id.Zero();
         }
 
         // djm pooling, and from above
@@ -253,7 +253,7 @@ namespace Box2D.Collision
         /// <param name="xfB"></param>
         public void CollidePolygonAndCircle(Manifold manifold, PolygonShape polygon, Transform xfA, CircleShape circle, Transform xfB)
         {
-            manifold.pointCount = 0;
+            manifold.PointCount = 0;
             //Vec2 v = circle.m_p;
 
             // Compute circle position in the frame of the polygon.
@@ -319,8 +319,8 @@ namespace Box2D.Collision
             // If the center is inside the polygon ...
             if (separation < Settings.EPSILON)
             {
-                manifold.pointCount = 1;
-                manifold.type = Manifold.ManifoldType.FACE_A;
+                manifold.PointCount = 1;
+                manifold.Type = Manifold.ManifoldType.FaceA;
 
                 // before inline:
                 // manifold.localNormal.set(normals[normalIndex]);
@@ -328,11 +328,11 @@ namespace Box2D.Collision
                 // manifold.points[0].localPoint.set(circle.m_p);
                 // after inline:
                 Vec2 normal = normals[normalIndex];
-                manifold.localNormal.x = normal.x;
-                manifold.localNormal.y = normal.y;
-                manifold.localPoint.x = (v1.x + v2.x) * .5f;
-                manifold.localPoint.y = (v1.y + v2.y) * .5f;
-                ManifoldPoint mpoint = manifold.points[0];
+                manifold.LocalNormal.x = normal.x;
+                manifold.LocalNormal.y = normal.y;
+                manifold.LocalPoint.x = (v1.x + v2.x) * .5f;
+                manifold.LocalPoint.y = (v1.y + v2.y) * .5f;
+                ManifoldPoint mpoint = manifold.Points[0];
                 mpoint.localPoint.x = circle.P.x;
                 mpoint.localPoint.y = circle.P.y;
                 mpoint.id.Zero();
@@ -372,18 +372,18 @@ namespace Box2D.Collision
                     return;
                 }
 
-                manifold.pointCount = 1;
-                manifold.type = Manifold.ManifoldType.FACE_A;
+                manifold.PointCount = 1;
+                manifold.Type = Manifold.ManifoldType.FaceA;
                 // before inline:
                 // manifold.localNormal.set(cLocal).subLocal(v1);
                 // after inline:
-                manifold.localNormal.x = cLocalx - v1.x;
-                manifold.localNormal.y = cLocaly - v1.y;
+                manifold.LocalNormal.x = cLocalx - v1.x;
+                manifold.LocalNormal.y = cLocaly - v1.y;
                 // end inline
-                manifold.localNormal.normalize();
-                manifold.localPoint.set_Renamed(v1);
-                manifold.points[0].localPoint.set_Renamed(circle.P);
-                manifold.points[0].id.Zero();
+                manifold.LocalNormal.normalize();
+                manifold.LocalPoint.set_Renamed(v1);
+                manifold.Points[0].localPoint.set_Renamed(circle.P);
+                manifold.Points[0].id.Zero();
             }
             else if (u2 <= 0.0f)
             {
@@ -395,18 +395,18 @@ namespace Box2D.Collision
                     return;
                 }
 
-                manifold.pointCount = 1;
-                manifold.type = Manifold.ManifoldType.FACE_A;
+                manifold.PointCount = 1;
+                manifold.Type = Manifold.ManifoldType.FaceA;
                 // before inline:
                 // manifold.localNormal.set(cLocal).subLocal(v2);
                 // after inline:
-                manifold.localNormal.x = cLocalx - v2.x;
-                manifold.localNormal.y = cLocaly - v2.y;
+                manifold.LocalNormal.x = cLocalx - v2.x;
+                manifold.LocalNormal.y = cLocaly - v2.y;
                 // end inline
-                manifold.localNormal.normalize();
-                manifold.localPoint.set_Renamed(v2);
-                manifold.points[0].localPoint.set_Renamed(circle.P);
-                manifold.points[0].id.Zero();
+                manifold.LocalNormal.normalize();
+                manifold.LocalPoint.set_Renamed(v2);
+                manifold.Points[0].localPoint.set_Renamed(circle.P);
+                manifold.Points[0].id.Zero();
             }
             else
             {
@@ -434,13 +434,13 @@ namespace Box2D.Collision
                 }
                 // end inline
 
-                manifold.pointCount = 1;
-                manifold.type = Manifold.ManifoldType.FACE_A;
-                manifold.localNormal.set_Renamed(normals[vertIndex1]);
-                manifold.localPoint.x = fcx; // (faceCenter)
-                manifold.localPoint.y = fcy;
-                manifold.points[0].localPoint.set_Renamed(circle.P);
-                manifold.points[0].id.Zero();
+                manifold.PointCount = 1;
+                manifold.Type = Manifold.ManifoldType.FaceA;
+                manifold.LocalNormal.set_Renamed(normals[vertIndex1]);
+                manifold.LocalPoint.x = fcx; // (faceCenter)
+                manifold.LocalPoint.y = fcy;
+                manifold.Points[0].localPoint.set_Renamed(circle.P);
+                manifold.Points[0].id.Zero();
             }
         }
 
@@ -727,7 +727,7 @@ namespace Box2D.Collision
 
             // The normal points from 1 to 2
 
-            manifold.pointCount = 0;
+            manifold.PointCount = 0;
             float totalRadius = polyA.Radius + polyB.Radius;
 
             FindMaxSeparation(results1, polyA, xfA, polyB, xfB);
@@ -757,7 +757,7 @@ namespace Box2D.Collision
                 xf1 = xfB;
                 xf2 = xfA;
                 edge1 = results2.EdgeIndex;
-                manifold.type = Manifold.ManifoldType.FACE_B;
+                manifold.Type = Manifold.ManifoldType.FaceB;
                 flip = true;
             }
             else
@@ -767,7 +767,7 @@ namespace Box2D.Collision
                 xf1 = xfA;
                 xf2 = xfB;
                 edge1 = results1.EdgeIndex;
-                manifold.type = Manifold.ManifoldType.FACE_A;
+                manifold.Type = Manifold.ManifoldType.FaceA;
                 flip = false;
             }
 
@@ -831,8 +831,8 @@ namespace Box2D.Collision
             }
 
             // Now clipPoints2 contains the clipped points.
-            manifold.localNormal.set_Renamed(localNormal);
-            manifold.localPoint.set_Renamed(planePoint);
+            manifold.LocalNormal.set_Renamed(localNormal);
+            manifold.LocalPoint.set_Renamed(planePoint);
 
             int pointCount = 0;
             for (int i = 0; i < Settings.maxManifoldPoints; ++i)
@@ -841,7 +841,7 @@ namespace Box2D.Collision
 
                 if (separation <= totalRadius)
                 {
-                    ManifoldPoint cp = manifold.points[pointCount];
+                    ManifoldPoint cp = manifold.Points[pointCount];
                     Transform.mulTransToOut(xf2, clipPoints2[i].v, cp.localPoint);
                     // cp.m_localPoint = MulT(xf2, clipPoints2[i].v);
                     cp.id.Set(clipPoints2[i].id);
@@ -854,7 +854,7 @@ namespace Box2D.Collision
                 }
             }
 
-            manifold.pointCount = pointCount;
+            manifold.PointCount = pointCount;
         }
 
 
@@ -869,7 +869,7 @@ namespace Box2D.Collision
         // This accounts for edge connectivity.
         public virtual void CollideEdgeAndCircle(Manifold manifold, EdgeShape edgeA, Transform xfA, CircleShape circleB, Transform xfB)
         {
-            manifold.pointCount = 0;
+            manifold.PointCount = 0;
 
 
             // Compute circle in frame of edge
@@ -919,13 +919,13 @@ namespace Box2D.Collision
 
                 cf.IndexA = 0;
                 cf.TypeA = (sbyte)ContactID.Type.Vertex;
-                manifold.pointCount = 1;
-                manifold.type = Manifold.ManifoldType.CIRCLES;
-                manifold.localNormal.setZero();
-                manifold.localPoint.set_Renamed(_P);
+                manifold.PointCount = 1;
+                manifold.Type = Manifold.ManifoldType.Circles;
+                manifold.LocalNormal.setZero();
+                manifold.LocalPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
-                manifold.points[0].id.Set(cf);
-                manifold.points[0].localPoint.set_Renamed(circleB.P);
+                manifold.Points[0].id.Set(cf);
+                manifold.Points[0].localPoint.set_Renamed(circleB.P);
                 return;
             }
 
@@ -958,13 +958,13 @@ namespace Box2D.Collision
 
                 cf.IndexA = 1;
                 cf.TypeA = (sbyte)ContactID.Type.Vertex;
-                manifold.pointCount = 1;
-                manifold.type = Manifold.ManifoldType.CIRCLES;
-                manifold.localNormal.setZero();
-                manifold.localPoint.set_Renamed(_P);
+                manifold.PointCount = 1;
+                manifold.Type = Manifold.ManifoldType.Circles;
+                manifold.LocalNormal.setZero();
+                manifold.LocalPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
-                manifold.points[0].id.Set(cf);
-                manifold.points[0].localPoint.set_Renamed(circleB.P);
+                manifold.Points[0].id.Set(cf);
+                manifold.Points[0].localPoint.set_Renamed(circleB.P);
                 return;
             }
 
@@ -992,13 +992,13 @@ namespace Box2D.Collision
 
             cf.IndexA = 0;
             cf.TypeA = (sbyte)ContactID.Type.Face;
-            manifold.pointCount = 1;
-            manifold.type = Manifold.ManifoldType.FACE_A;
-            manifold.localNormal.set_Renamed(n);
-            manifold.localPoint.set_Renamed(A);
+            manifold.PointCount = 1;
+            manifold.Type = Manifold.ManifoldType.FaceA;
+            manifold.LocalNormal.set_Renamed(n);
+            manifold.LocalPoint.set_Renamed(A);
             // manifold.points[0].id.key = 0;
-            manifold.points[0].id.Set(cf);
-            manifold.points[0].localPoint.set_Renamed(circleB.P);
+            manifold.Points[0].id.Set(cf);
+            manifold.Points[0].localPoint.set_Renamed(circleB.P);
         }
 
         private readonly EPCollider collider = new EPCollider();
@@ -1372,7 +1372,7 @@ namespace Box2D.Collision
 
                 Radius = 2.0f * Settings.polygonRadius;
 
-                manifold.pointCount = 0;
+                manifold.PointCount = 0;
 
                 ComputeEdgeSeparation(edgeAxis);
 
@@ -1414,7 +1414,7 @@ namespace Box2D.Collision
                 // ClipVertex[] ie = new ClipVertex[2];
                 if (primaryAxis.type == EPAxis.Type.EdgeA)
                 {
-                    manifold.type = Manifold.ManifoldType.FACE_A;
+                    manifold.Type = Manifold.ManifoldType.FaceA;
 
                     // Search for the polygon normal that is most anti-parallel to the edge normal.
                     int bestIndex = 0;
@@ -1463,7 +1463,7 @@ namespace Box2D.Collision
                 }
                 else
                 {
-                    manifold.type = Manifold.ManifoldType.FACE_B;
+                    manifold.Type = Manifold.ManifoldType.FaceB;
 
                     ie[0].v.set_Renamed(V1);
                     ie[0].id.IndexA = 0;
@@ -1511,13 +1511,13 @@ namespace Box2D.Collision
                 // Now clipPoints2 contains the clipped points.
                 if (primaryAxis.type == EPAxis.Type.EdgeA)
                 {
-                    manifold.localNormal.set_Renamed(rf.Normal);
-                    manifold.localPoint.set_Renamed(rf.V1);
+                    manifold.LocalNormal.set_Renamed(rf.Normal);
+                    manifold.LocalPoint.set_Renamed(rf.V1);
                 }
                 else
                 {
-                    manifold.localNormal.set_Renamed(polygonB.Normals[rf.I1]);
-                    manifold.localPoint.set_Renamed(polygonB.Vertices[rf.I1]);
+                    manifold.LocalNormal.set_Renamed(polygonB.Normals[rf.I1]);
+                    manifold.LocalPoint.set_Renamed(polygonB.Vertices[rf.I1]);
                 }
 
                 int pointCount = 0;
@@ -1529,7 +1529,7 @@ namespace Box2D.Collision
 
                     if (separation <= Radius)
                     {
-                        ManifoldPoint cp = manifold.points[pointCount];
+                        ManifoldPoint cp = manifold.Points[pointCount];
 
                         if (primaryAxis.type == EPAxis.Type.EdgeA)
                         {
@@ -1550,7 +1550,7 @@ namespace Box2D.Collision
                     }
                 }
 
-                manifold.pointCount = pointCount;
+                manifold.PointCount = pointCount;
             }
 
 

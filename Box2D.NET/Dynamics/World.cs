@@ -224,7 +224,7 @@ namespace Box2D.Dynamics
         public virtual void pushContact(Contact contact)
         {
 
-            if (contact.m_manifold.pointCount > 0)
+            if (contact.m_manifold.PointCount > 0)
             {
                 contact.FixtureA.Body.Awake = true;
                 contact.FixtureB.Body.Awake = true;

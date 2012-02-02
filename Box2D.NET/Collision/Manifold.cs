@@ -53,36 +53,46 @@ namespace Box2D.Collision
     {
         public enum ManifoldType
         {
-            CIRCLES,
-            FACE_A,
-            FACE_B
+            Circles,
+            FaceA,
+            FaceB
         }
 
-        /// <summary>The points of contact. </summary>
-        public readonly ManifoldPoint[] points;
+        /// <summary>
+        /// The points of contact. 
+        /// </summary>
+        public readonly ManifoldPoint[] Points;
 
-        /// <summary>not use for Type::e_points </summary>
-        public readonly Vec2 localNormal;
+        /// <summary>
+        /// not use for Type::e_points
+        ///  </summary>
+        public readonly Vec2 LocalNormal;
 
-        /// <summary>usage depends on manifold type </summary>
-        public readonly Vec2 localPoint;
+        /// <summary>
+        /// usage depends on manifold type 
+        /// </summary>
+        public readonly Vec2 LocalPoint;
 
-        public ManifoldType type;
+        public ManifoldType Type;
 
-        /// <summary>The number of manifold points. </summary>
-        public int pointCount;
+        /// <summary>
+        /// The number of manifold points. 
+        /// </summary>
+        public int PointCount;
 
-        /// <summary> creates a manifold with 0 points, with it's points array full of instantiated ManifoldPoints.</summary>
+        /// <summary> 
+        /// creates a manifold with 0 points, with it's points array full of instantiated ManifoldPoints.
+        /// </summary>
         public Manifold()
         {
-            points = new ManifoldPoint[Settings.maxManifoldPoints];
+            Points = new ManifoldPoint[Settings.maxManifoldPoints];
             for (int i = 0; i < Settings.maxManifoldPoints; i++)
             {
-                points[i] = new ManifoldPoint();
+                Points[i] = new ManifoldPoint();
             }
-            localNormal = new Vec2();
-            localPoint = new Vec2();
-            pointCount = 0;
+            LocalNormal = new Vec2();
+            LocalPoint = new Vec2();
+            PointCount = 0;
         }
 
         /// <summary>
@@ -91,34 +101,33 @@ namespace Box2D.Collision
         /// <param name="other"></param>
         public Manifold(Manifold other)
         {
-            points = new ManifoldPoint[Settings.maxManifoldPoints];
-            localNormal = other.localNormal.Clone();
-            localPoint = other.localPoint.Clone();
-            pointCount = other.pointCount;
-            type = other.type;
+            Points = new ManifoldPoint[Settings.maxManifoldPoints];
+            LocalNormal = other.LocalNormal.Clone();
+            LocalPoint = other.LocalPoint.Clone();
+            PointCount = other.PointCount;
+            Type = other.Type;
             // djm: this is correct now
             for (int i = 0; i < Settings.maxManifoldPoints; i++)
             {
-                points[i] = new ManifoldPoint(other.points[i]);
+                Points[i] = new ManifoldPoint(other.Points[i]);
             }
         }
 
         /// <summary>
         /// copies this manifold from the given one
         /// </summary>
-        /// <param name="cp">manifold to copy from
-        /// </param>
-        public virtual void set_Renamed(Manifold cp)
+        /// <param name="cp">manifold to copy from</param>
+        public virtual void Set(Manifold cp)
         {
-            for (int i = 0; i < cp.pointCount; i++)
+            for (int i = 0; i < cp.PointCount; i++)
             {
-                points[i].set_Renamed(cp.points[i]);
+                Points[i].set_Renamed(cp.Points[i]);
             }
 
-            type = cp.type;
-            localNormal.set_Renamed(cp.localNormal);
-            localPoint.set_Renamed(cp.localPoint);
-            pointCount = cp.pointCount;
+            Type = cp.Type;
+            LocalNormal.set_Renamed(cp.LocalNormal);
+            LocalPoint.set_Renamed(cp.LocalPoint);
+            PointCount = cp.PointCount;
         }
     }
 }

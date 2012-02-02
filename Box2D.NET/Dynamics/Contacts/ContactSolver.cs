@@ -120,7 +120,7 @@ namespace Box2D.Dynamics.Contacts
                 Body bodyB = fixtureB.Body;
                 Manifold manifold = contact.Manifold;
 
-                int pointCount = manifold.pointCount;
+                int pointCount = manifold.PointCount;
                 Debug.Assert(pointCount > 0);
 
                 ContactVelocityConstraint vc = m_velocityConstraints[i];
@@ -147,17 +147,17 @@ namespace Box2D.Dynamics.Contacts
                 pc.localCenterB.set_Renamed(bodyB.m_sweep.localCenter);
                 pc.invIA = bodyA.m_invI;
                 pc.invIB = bodyB.m_invI;
-                pc.localNormal.set_Renamed(manifold.localNormal);
-                pc.localPoint.set_Renamed(manifold.localPoint);
+                pc.localNormal.set_Renamed(manifold.LocalNormal);
+                pc.localPoint.set_Renamed(manifold.LocalPoint);
                 pc.pointCount = pointCount;
                 pc.radiusA = radiusA;
                 pc.radiusB = radiusB;
-                pc.type = manifold.type;
+                pc.type = manifold.Type;
 
                 //Console.WriteLine("contact point count: " + pointCount);
                 for (int j = 0; j < pointCount; j++)
                 {
-                    ManifoldPoint cp = manifold.points[j];
+                    ManifoldPoint cp = manifold.Points[j];
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
 
                     if (m_step.warmStarting)
@@ -273,7 +273,7 @@ namespace Box2D.Dynamics.Contacts
                 Vec2 vB = m_velocities[indexB].v;
                 float wB = m_velocities[indexB].w;
 
-                Debug.Assert(manifold.pointCount > 0);
+                Debug.Assert(manifold.PointCount > 0);
 
                 xfA.q.set_Renamed(aA);
                 xfB.q.set_Renamed(aB);
@@ -828,8 +828,8 @@ namespace Box2D.Dynamics.Contacts
 
                 for (int j = 0; j < vc.pointCount; j++)
                 {
-                    manifold.points[j].normalImpulse = vc.points[j].normalImpulse;
-                    manifold.points[j].tangentImpulse = vc.points[j].tangentImpulse;
+                    manifold.Points[j].normalImpulse = vc.points[j].normalImpulse;
+                    manifold.Points[j].tangentImpulse = vc.points[j].tangentImpulse;
                 }
             }
         }
@@ -1091,7 +1091,7 @@ namespace Box2D.Dynamics.Contacts
             switch (pc.type)
             {
 
-                case Manifold.ManifoldType.CIRCLES:
+                case Manifold.ManifoldType.Circles:
                     {
                         Transform.mulToOutUnsafe(xfA, pc.localPoint, pointA);
                         Transform.mulToOutUnsafe(xfB, pc.localPoints[0], pointB);
@@ -1105,7 +1105,7 @@ namespace Box2D.Dynamics.Contacts
                     }
 
 
-                case Manifold.ManifoldType.FACE_A:
+                case Manifold.ManifoldType.FaceA:
                     {
                         Rot.mulToOutUnsafe(xfA.q, pc.localNormal, normal);
                         Transform.mulToOutUnsafe(xfA, pc.localPoint, planePoint);
@@ -1118,7 +1118,7 @@ namespace Box2D.Dynamics.Contacts
                     }
 
 
-                case Manifold.ManifoldType.FACE_B:
+                case Manifold.ManifoldType.FaceB:
                     {
                         Rot.mulToOutUnsafe(xfB.q, pc.localNormal, normal);
                         Transform.mulToOutUnsafe(xfB, pc.localPoint, planePoint);

@@ -54,15 +54,15 @@ namespace Box2D.Collision
 
         public void initialize(Manifold manifold, Transform xfA, float radiusA, Transform xfB, float radiusB)
         {
-            if (manifold.pointCount == 0)
+            if (manifold.PointCount == 0)
             {
                 return;
             }
 
-            switch (manifold.type)
+            switch (manifold.Type)
             {
 
-                case Manifold.ManifoldType.CIRCLES:
+                case Manifold.ManifoldType.Circles:
                     {
                         // final Vec2 pointA = pool3;
                         // final Vec2 pointB = pool4;
@@ -92,8 +92,8 @@ namespace Box2D.Collision
                         // manifold.points[0].localPoint.y;
                         // pointB.y = xfB.p.y + xfB.q.ex.y * manifold.points[0].localPoint.x + xfB.q.ey.y *
                         // manifold.points[0].localPoint.y;
-                        Transform.mulToOut(xfA, manifold.localPoint, pointA);
-                        Transform.mulToOut(xfB, manifold.points[0].localPoint, pointB);
+                        Transform.mulToOut(xfA, manifold.LocalPoint, pointA);
+                        Transform.mulToOut(xfB, manifold.Points[0].localPoint, pointB);
 
                         if (MathUtils.distanceSquared(pointA, pointB) > Settings.EPSILON * Settings.EPSILON)
                         {
@@ -113,23 +113,23 @@ namespace Box2D.Collision
                     }
                     break;
 
-                case Manifold.ManifoldType.FACE_A:
+                case Manifold.ManifoldType.FaceA:
                     {
                         Vec2 planePoint = pool3;
 
-                        Rot.mulToOutUnsafe(xfA.q, manifold.localNormal, normal);
-                        Transform.mulToOut(xfA, manifold.localPoint, planePoint);
+                        Rot.mulToOutUnsafe(xfA.q, manifold.LocalNormal, normal);
+                        Transform.mulToOut(xfA, manifold.LocalPoint, planePoint);
 
                         Vec2 clipPoint = pool4;
 
-                        for (int i = 0; i < manifold.pointCount; i++)
+                        for (int i = 0; i < manifold.PointCount; i++)
                         {
                             // b2Vec2 clipPoint = b2Mul(xfB, manifold->points[i].localPoint);
                             // b2Vec2 cA = clipPoint + (radiusA - b2Dot(clipPoint - planePoint,
                             // normal)) * normal;
                             // b2Vec2 cB = clipPoint - radiusB * normal;
                             // points[i] = 0.5f * (cA + cB);
-                            Transform.mulToOut(xfB, manifold.points[i].localPoint, clipPoint);
+                            Transform.mulToOut(xfB, manifold.Points[i].localPoint, clipPoint);
                             // use cA as temporary for now
                             // cA.set(clipPoint).subLocal(planePoint);
                             // float scalar = radiusA - Vec2.dot(cA, normal);
@@ -151,10 +151,10 @@ namespace Box2D.Collision
                     }
                     break;
 
-                case Manifold.ManifoldType.FACE_B:
+                case Manifold.ManifoldType.FaceB:
                     Vec2 planePoint2 = pool3;
-                    Rot.mulToOutUnsafe(xfB.q, manifold.localNormal, normal);
-                    Transform.mulToOut(xfB, manifold.localPoint, planePoint2);
+                    Rot.mulToOutUnsafe(xfB.q, manifold.LocalNormal, normal);
+                    Transform.mulToOut(xfB, manifold.LocalPoint, planePoint2);
 
                     // final Mat22 R = xfB.q;
                     // normal.x = R.ex.x * manifold.localNormal.x + R.ey.x * manifold.localNormal.y;
@@ -165,7 +165,7 @@ namespace Box2D.Collision
 
                     Vec2 clipPoint2 = pool4;
 
-                    for (int i = 0; i < manifold.pointCount; i++)
+                    for (int i = 0; i < manifold.PointCount; i++)
                     {
                         // b2Vec2 clipPoint = b2Mul(xfA, manifold->points[i].localPoint);
                         // b2Vec2 cB = clipPoint + (radiusB - b2Dot(clipPoint - planePoint,
@@ -173,7 +173,7 @@ namespace Box2D.Collision
                         // b2Vec2 cA = clipPoint - radiusA * normal;
                         // points[i] = 0.5f * (cA + cB);
 
-                        Transform.mulToOut(xfA, manifold.points[i].localPoint, clipPoint2);
+                        Transform.mulToOut(xfA, manifold.Points[i].localPoint, clipPoint2);
                         // cB.set(clipPoint).subLocal(planePoint);
                         // float scalar = radiusB - Vec2.dot(cB, normal);
                         // cB.set(normal).mulLocal(scalar).addLocal(clipPoint);
