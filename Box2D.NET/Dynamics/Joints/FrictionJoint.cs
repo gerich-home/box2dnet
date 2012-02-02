@@ -145,13 +145,13 @@ namespace Box2D.Dynamics.Joints
             m_invIA = m_bodyA.InvI;
             m_invIB = m_bodyB.InvI;
 
-            float aA = data.positions[m_indexA].a;
-            Vec2 vA = data.velocities[m_indexA].v;
-            float wA = data.velocities[m_indexA].w;
+            float aA = data.Positions[m_indexA].a;
+            Vec2 vA = data.Velocities[m_indexA].v;
+            float wA = data.Velocities[m_indexA].w;
 
-            float aB = data.positions[m_indexB].a;
-            Vec2 vB = data.velocities[m_indexB].v;
-            float wB = data.velocities[m_indexB].w;
+            float aB = data.Positions[m_indexB].a;
+            Vec2 vB = data.Velocities[m_indexB].v;
+            float wB = data.Velocities[m_indexB].w;
 
 
             Vec2 temp = pool.PopVec2();
@@ -191,11 +191,11 @@ namespace Box2D.Dynamics.Joints
                 m_angularMass = 1.0f / m_angularMass;
             }
 
-            if (data.step.warmStarting)
+            if (data.Step.warmStarting)
             {
                 // Scale impulses to support a variable time step.
-                m_linearImpulse.mulLocal(data.step.dtRatio);
-                m_angularImpulse *= data.step.dtRatio;
+                m_linearImpulse.mulLocal(data.Step.dtRatio);
+                m_angularImpulse *= data.Step.dtRatio;
 
                 Vec2 P = pool.PopVec2();
                 P.set_Renamed(m_linearImpulse);
@@ -215,14 +215,14 @@ namespace Box2D.Dynamics.Joints
                 m_linearImpulse.setZero();
                 m_angularImpulse = 0.0f;
             }
-            data.velocities[m_indexA].v.set_Renamed(vA);
-            if (data.velocities[m_indexA].w != wA)
+            data.Velocities[m_indexA].v.set_Renamed(vA);
+            if (data.Velocities[m_indexA].w != wA)
             {
-                Debug.Assert(data.velocities[m_indexA].w != wA);
+                Debug.Assert(data.Velocities[m_indexA].w != wA);
             }
-            data.velocities[m_indexA].w = wA;
-            data.velocities[m_indexB].v.set_Renamed(vB);
-            data.velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].w = wA;
+            data.Velocities[m_indexB].v.set_Renamed(vB);
+            data.Velocities[m_indexB].w = wB;
 
             pool.PushRot(2);
             pool.PushVec2(1);
@@ -231,15 +231,15 @@ namespace Box2D.Dynamics.Joints
 
         public override void solveVelocityConstraints(SolverData data)
         {
-            Vec2 vA = data.velocities[m_indexA].v;
-            float wA = data.velocities[m_indexA].w;
-            Vec2 vB = data.velocities[m_indexB].v;
-            float wB = data.velocities[m_indexB].w;
+            Vec2 vA = data.Velocities[m_indexA].v;
+            float wA = data.Velocities[m_indexA].w;
+            Vec2 vB = data.Velocities[m_indexB].v;
+            float wB = data.Velocities[m_indexB].w;
 
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
 
-            float h = data.step.dt;
+            float h = data.Step.dt;
 
             // Solve angular friction
             {
@@ -292,14 +292,14 @@ namespace Box2D.Dynamics.Joints
                 wB += iB * Vec2.cross(m_rB, impulse);
             }
 
-            data.velocities[m_indexA].v.set_Renamed(vA);
-            if (data.velocities[m_indexA].w != wA)
+            data.Velocities[m_indexA].v.set_Renamed(vA);
+            if (data.Velocities[m_indexA].w != wA)
             {
-                Debug.Assert(data.velocities[m_indexA].w != wA);
+                Debug.Assert(data.Velocities[m_indexA].w != wA);
             }
-            data.velocities[m_indexA].w = wA;
-            data.velocities[m_indexB].v.set_Renamed(vB);
-            data.velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].w = wA;
+            data.Velocities[m_indexB].v.set_Renamed(vB);
+            data.Velocities[m_indexB].w = wB;
 
             pool.PushVec2(4);
         }

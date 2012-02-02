@@ -286,9 +286,9 @@ namespace Box2D.Dynamics
 			timer.reset();
 
 			// Solver data
-			solverData.step = step;
-			solverData.positions = Positions;
-			solverData.velocities = Velocities;
+			solverData.Step = step;
+			solverData.Positions = Positions;
+			solverData.Velocities = Velocities;
 
 			// Initialize velocity constraints.
 			solverDef.step = step;

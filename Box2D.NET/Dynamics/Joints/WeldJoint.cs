@@ -167,14 +167,14 @@ namespace Box2D.Dynamics.Joints
             m_invIB = m_bodyB.InvI;
 
             //    Vec2 cA = data.positions[m_indexA].c;
-            float aA = data.positions[m_indexA].a;
-            Vec2 vA = data.velocities[m_indexA].v;
-            float wA = data.velocities[m_indexA].w;
+            float aA = data.Positions[m_indexA].a;
+            Vec2 vA = data.Velocities[m_indexA].v;
+            float wA = data.Velocities[m_indexA].w;
 
             //    Vec2 cB = data.positions[m_indexB].c;
-            float aB = data.positions[m_indexB].a;
-            Vec2 vB = data.velocities[m_indexB].v;
-            float wB = data.velocities[m_indexB].w;
+            float aB = data.Positions[m_indexB].a;
+            Vec2 vB = data.Velocities[m_indexB].v;
+            float wB = data.Velocities[m_indexB].w;
 
             Rot qA = pool.PopRot();
             Rot qB = pool.PopRot();
@@ -230,7 +230,7 @@ namespace Box2D.Dynamics.Joints
                 float k = m * omega * omega;
 
                 // magic formulas
-                float h = data.step.dt;
+                float h = data.Step.dt;
                 m_gamma = h * (d + h * k);
                 m_gamma = m_gamma != 0.0f ? 1.0f / m_gamma : 0.0f;
                 m_bias = C * h * k * m_gamma;
@@ -245,11 +245,11 @@ namespace Box2D.Dynamics.Joints
                 m_bias = 0.0f;
             }
 
-            if (data.step.warmStarting)
+            if (data.Step.warmStarting)
             {
                 Vec2 P = pool.PopVec2();
                 // Scale impulses to support a variable time step.
-                m_impulse.mulLocal(data.step.dtRatio);
+                m_impulse.mulLocal(data.Step.dtRatio);
 
                 P.set_Renamed(m_impulse.x, m_impulse.y);
 
@@ -267,10 +267,10 @@ namespace Box2D.Dynamics.Joints
                 m_impulse.setZero();
             }
 
-            data.velocities[m_indexA].v.set_Renamed(vA);
-            data.velocities[m_indexA].w = wA;
-            data.velocities[m_indexB].v.set_Renamed(vB);
-            data.velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].v.set_Renamed(vA);
+            data.Velocities[m_indexA].w = wA;
+            data.Velocities[m_indexB].v.set_Renamed(vB);
+            data.Velocities[m_indexB].w = wB;
 
             pool.PushVec2(1);
             pool.PushRot(2);
@@ -280,10 +280,10 @@ namespace Box2D.Dynamics.Joints
         /// <seealso cref="Joint.solveVelocityConstraints(TimeStep)"></seealso>
         public override void solveVelocityConstraints(SolverData data)
         {
-            Vec2 vA = data.velocities[m_indexA].v;
-            float wA = data.velocities[m_indexA].w;
-            Vec2 vB = data.velocities[m_indexB].v;
-            float wB = data.velocities[m_indexB].w;
+            Vec2 vA = data.Velocities[m_indexA].v;
+            float wA = data.Velocities[m_indexA].w;
+            Vec2 vB = data.Velocities[m_indexB].v;
+            float wB = data.Velocities[m_indexB].w;
 
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
@@ -349,10 +349,10 @@ namespace Box2D.Dynamics.Joints
                 pool.PushVec3(2);
             }
 
-            data.velocities[m_indexA].v.set_Renamed(vA);
-            data.velocities[m_indexA].w = wA;
-            data.velocities[m_indexB].v.set_Renamed(vB);
-            data.velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].v.set_Renamed(vA);
+            data.Velocities[m_indexA].w = wA;
+            data.Velocities[m_indexB].v.set_Renamed(vB);
+            data.Velocities[m_indexB].w = wB;
 
             pool.PushVec2(3);
         }
@@ -360,10 +360,10 @@ namespace Box2D.Dynamics.Joints
         /// <seealso cref="Joint.solvePositionConstraints(float)"></seealso>
         public override bool solvePositionConstraints(SolverData data)
         {
-            Vec2 cA = data.positions[m_indexA].c;
-            float aA = data.positions[m_indexA].a;
-            Vec2 cB = data.positions[m_indexB].c;
-            float aB = data.positions[m_indexB].a;
+            Vec2 cA = data.Positions[m_indexA].c;
+            float aA = data.Positions[m_indexA].a;
+            Vec2 cB = data.Positions[m_indexB].c;
+            float aB = data.Positions[m_indexB].a;
             Rot qA = pool.PopRot();
             Rot qB = pool.PopRot();
             Vec2 temp = pool.PopVec2();
@@ -437,10 +437,10 @@ namespace Box2D.Dynamics.Joints
                 aB += iB * (Vec2.cross(rB, P) + impulse.z);
             }
 
-            data.positions[m_indexA].c.set_Renamed(cA);
-            data.positions[m_indexA].a = aA;
-            data.positions[m_indexB].c.set_Renamed(cB);
-            data.positions[m_indexB].a = aB;
+            data.Positions[m_indexA].c.set_Renamed(cA);
+            data.Positions[m_indexA].a = aA;
+            data.Positions[m_indexB].c.set_Renamed(cB);
+            data.Positions[m_indexB].a = aB;
 
             pool.PushVec2(5);
             pool.PushRot(2);

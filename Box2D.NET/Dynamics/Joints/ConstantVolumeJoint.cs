@@ -215,9 +215,9 @@ namespace Box2D.Dynamics.Joints
                 d[i].subLocal(bodies[prev].WorldCenter);
             }
 
-            if (data.step.warmStarting)
+            if (data.Step.warmStarting)
             {
-                m_impulse *= data.step.dtRatio;
+                m_impulse *= data.Step.dtRatio;
                 // float lambda = -2.0f * crossMassSum / dotMassSum;
                 // System.out.println(crossMassSum + " " +dotMassSum);
                 // lambda = MathUtils.clamp(lambda, -Settings.maxLinearCorrection,
@@ -237,7 +237,7 @@ namespace Box2D.Dynamics.Joints
 
         public override bool solvePositionConstraints(SolverData data)
         {
-            return constrainEdges(data.step);
+            return constrainEdges(data.Step);
         }
 
         public override void solveVelocityConstraints(SolverData data)

@@ -29,8 +29,8 @@ namespace Box2D.Dynamics
 
     public class SolverData
     {
-        public TimeStep step;
-        public Position[] positions;
-        public Velocity[] velocities;
+        public TimeStep Step;
+        public Position[] Positions;
+        public Velocity[] Velocities;
     }
 }
