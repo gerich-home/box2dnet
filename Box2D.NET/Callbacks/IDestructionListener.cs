@@ -37,7 +37,7 @@ namespace Box2D.Callbacks
     /// may nullify references to these joints and shapes.
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public interface DestructionListener
+    public interface IDestructionListener
     {
 
         /// <summary>
@@ -45,13 +45,13 @@ namespace Box2D.Callbacks
         /// to the destruction of one of its attached bodies.
         /// </summary>
         /// <param name="joint"></param>
-        void sayGoodbye(Joint joint);
+        void SayGoodbye(Joint joint);
 
         /// <summary>
         /// Called when any fixture is about to be destroyed due
         /// to the destruction of its parent body.
         /// </summary>
         /// <param name="fixture"></param>
-        void sayGoodbye(Fixture fixture);
+        void SayGoodbye(Fixture fixture);
     }
 }

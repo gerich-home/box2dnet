@@ -110,7 +110,7 @@
     <Compile Include="Callbacks\ContactImpulse.cs" />
     <Compile Include="Callbacks\ContactListener.cs" />
     <Compile Include="Callbacks\DebugDraw.cs" />
-    <Compile Include="Callbacks\DestructionListener.cs" />
+    <Compile Include="Callbacks\IDestructionListener.cs" />
     <Compile Include="Callbacks\PairCallback.cs" />
     <Compile Include="Callbacks\QueryCallback.cs" />
     <Compile Include="Callbacks\RayCastCallback.cs" />

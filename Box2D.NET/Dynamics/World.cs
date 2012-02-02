@@ -72,7 +72,7 @@ namespace Box2D.Dynamics
 
         // private Body m_groundBody;
 
-        private DestructionListener m_destructionListener;
+        private IDestructionListener m_destructionListener;
         private DebugDraw m_debugDraw;
 
         private readonly IWorldPool pool;
@@ -290,7 +290,7 @@ namespace Box2D.Dynamics
                 je = je.next;
                 if (m_destructionListener != null)
                 {
-                    m_destructionListener.sayGoodbye(je0.joint);
+                    m_destructionListener.SayGoodbye(je0.joint);
                 }
 
                 destroyJoint(je0.joint);
@@ -317,7 +317,7 @@ namespace Box2D.Dynamics
 
                 if (m_destructionListener != null)
                 {
-                    m_destructionListener.sayGoodbye(f0);
+                    m_destructionListener.SayGoodbye(f0);
                 }
 
                 f0.destroyProxies(m_contactManager.m_broadPhase);
@@ -785,7 +785,7 @@ namespace Box2D.Dynamics
         /// Register a destruction listener. The listener is owned by you and must remain in scope.
         /// </summary>
         /// <param name="listener"></param>
-        virtual public DestructionListener DestructionListener
+        virtual public IDestructionListener DestructionListener
         {
             set
             {
