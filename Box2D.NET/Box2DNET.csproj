@@ -115,7 +115,7 @@
     <Compile Include="Callbacks\IQueryCallback.cs" />
     <Compile Include="Callbacks\IRayCastCallback.cs" />
     <Compile Include="Callbacks\ITreeCallback.cs" />
-    <Compile Include="Callbacks\TreeRayCastCallback.cs" />
+    <Compile Include="Callbacks\ITreeRayCastCallback.cs" />
     <Compile Include="Collision\AABB.cs" />
     <Compile Include="Collision\Broadphase\BroadPhase.cs" />
     <Compile Include="Collision\Broadphase\DynamicTree.cs" />

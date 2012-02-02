@@ -33,12 +33,12 @@ namespace Box2D.Callbacks
     /// callback for {@link DynamicTree}
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public interface TreeRayCastCallback
+    public interface ITreeRayCastCallback
     {
         /// <summary></summary>
         /// <param name="input"></param>
         /// <param name="nodeId"></param>
         /// <returns>the fraction to the node</returns>
-        float raycastCallback(RayCastInput input, int nodeId);
+        float RaycastCallback(RayCastInput input, int nodeId);
     }
 }

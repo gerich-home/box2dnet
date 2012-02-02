@@ -279,7 +279,7 @@ namespace Box2D.Collision.Broadphase
 		/// </summary>
 		/// <param name="input">the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</param>
 		/// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
-		public void raycast(TreeRayCastCallback callback, RayCastInput input)
+		public void raycast(ITreeRayCastCallback callback, RayCastInput input)
 		{
 			m_tree.raycast(callback, input);
 		}

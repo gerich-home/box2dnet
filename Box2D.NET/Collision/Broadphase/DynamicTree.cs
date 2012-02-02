@@ -334,7 +334,7 @@ namespace Box2D.Collision.Broadphase
         /// </summary>
         /// <param name="input">the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</param>
         /// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
-        public virtual void raycast(TreeRayCastCallback callback, RayCastInput input)
+        public virtual void raycast(ITreeRayCastCallback callback, RayCastInput input)
         {
             Vec2 p1 = input.p1;
             Vec2 p2 = input.p2;
@@ -391,7 +391,7 @@ namespace Box2D.Collision.Broadphase
                     subInput.p2.set_Renamed(input.p2);
                     subInput.maxFraction = maxFraction;
 
-                    float value_Renamed = callback.raycastCallback(subInput, nodeId);
+                    float value_Renamed = callback.RaycastCallback(subInput, nodeId);
 
                     if (value_Renamed == 0.0f)
                     {

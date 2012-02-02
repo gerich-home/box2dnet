@@ -1750,7 +1750,7 @@ namespace Box2D.Dynamics
 
 
 
-    class WorldRayCastWrapper : TreeRayCastCallback
+    class WorldRayCastWrapper : ITreeRayCastCallback
     {
 
         // djm pooling
@@ -1758,7 +1758,7 @@ namespace Box2D.Dynamics
         private readonly Vec2 temp = new Vec2();
         private readonly Vec2 point = new Vec2();
 
-        public virtual float raycastCallback(RayCastInput input, int nodeId)
+        public virtual float RaycastCallback(RayCastInput input, int nodeId)
         {
             Object userData = broadPhase.getUserData(nodeId);
             FixtureProxy proxy = (FixtureProxy)userData;
