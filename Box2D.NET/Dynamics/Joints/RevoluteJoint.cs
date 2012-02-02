@@ -449,12 +449,12 @@ namespace Box2D.Dynamics.Joints
                 float iA = m_invIA, iB = m_invIB;
 
                 Mat22 K = pool.PopMat22();
-                K.ex.X = mA + mB + iA * rA.Y * rA.Y + iB * rB.Y * rB.Y;
-                K.ex.Y = (-iA) * rA.X * rA.Y - iB * rB.X * rB.Y;
-                K.ey.X = K.ex.Y;
-                K.ey.Y = mA + mB + iA * rA.X * rA.X + iB * rB.X * rB.X;
+                K.Ex.X = mA + mB + iA * rA.Y * rA.Y + iB * rB.Y * rB.Y;
+                K.Ex.Y = (-iA) * rA.X * rA.Y - iB * rB.X * rB.Y;
+                K.Ey.X = K.Ex.Y;
+                K.Ey.Y = mA + mB + iA * rA.X * rA.X + iB * rB.X * rB.X;
 
-                K.solveToOut(C, impulse);
+                K.SolveToOut(C, impulse);
                 impulse.NegateLocal();
 
                 cA.X -= mA * impulse.X;

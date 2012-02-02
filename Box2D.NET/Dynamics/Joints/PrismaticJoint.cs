@@ -834,11 +834,11 @@ namespace Box2D.Dynamics.Joints
                 }
 
                 Mat22 K = pool.PopMat22();
-                K.ex.Set(k11, k12);
-                K.ey.Set(k12, k22);
+                K.Ex.Set(k11, k12);
+                K.Ey.Set(k12, k22);
 
                 // temp is impulse1
-                K.solveToOut(C1.NegateLocal(), temp);
+                K.SolveToOut(C1.NegateLocal(), temp);
                 C1.NegateLocal();
 
                 impulse.x = temp.X;

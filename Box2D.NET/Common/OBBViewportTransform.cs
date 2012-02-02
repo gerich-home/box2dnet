@@ -42,7 +42,7 @@ namespace Box2D.Common
             }
             set
             {
-                box.R.set_Renamed(value);
+                box.R.Set(value);
             }
         }
 
@@ -77,15 +77,15 @@ namespace Box2D.Common
 
         public OBBViewportTransform()
         {
-            yFlipMatInv = yFlipMat.invert();
-            box.R.setIdentity();
+            yFlipMatInv = yFlipMat.Invert();
+            box.R.SetIdentity();
         }
 
         public virtual void set_Renamed(OBBViewportTransform vpt)
         {
             box.center.Set(vpt.box.center);
             box.extents.Set(vpt.box.extents);
-            box.R.set_Renamed(vpt.box.R);
+            box.R.Set(vpt.box.R);
             yFlip = vpt.yFlip;
         }
 
@@ -94,7 +94,7 @@ namespace Box2D.Common
         public virtual void setCamera(float x, float y, float scale)
         {
             box.center.Set(x, y);
-            Mat22.createScaleTransform(scale, box.R);
+            Mat22.CreateScaleTransform(scale, box.R);
         }
 
         /// <seealso cref="IViewportTransform.getExtents()">
@@ -145,7 +145,7 @@ namespace Box2D.Common
         /// <param name="argTransform"></param>
         public virtual void mulByTransform(Mat22 argTransform)
         {
-            box.R.mulLocal(argTransform);
+            box.R.MulLocal(argTransform);
         }
 
         // djm pooling
@@ -155,12 +155,12 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void getScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld)
         {
-            inv.set_Renamed(box.R);
-            inv.invertLocal();
-            inv.mulToOut(argScreen, argWorld);
+            inv.Set(box.R);
+            inv.InvertLocal();
+            inv.MulToOut(argScreen, argWorld);
             if (yFlip)
             {
-                yFlipMatInv.mulToOut(argWorld, argWorld);
+                yFlipMatInv.MulToOut(argWorld, argWorld);
             }
         }
 
@@ -168,10 +168,10 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void getWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen)
         {
-            box.R.mulToOut(argWorld, argScreen);
+            box.R.MulToOut(argWorld, argScreen);
             if (yFlip)
             {
-                yFlipMatInv.mulToOut(argScreen, argScreen);
+                yFlipMatInv.MulToOut(argScreen, argScreen);
             }
         }
 
@@ -181,10 +181,10 @@ namespace Box2D.Common
         {
             argScreen.Set(argWorld);
             argScreen.SubLocal(box.center);
-            box.R.mulToOut(argScreen, argScreen);
+            box.R.MulToOut(argScreen, argScreen);
             if (yFlip)
             {
-                yFlipMat.mulToOut(argScreen, argScreen);
+                yFlipMat.MulToOut(argScreen, argScreen);
             }
             argScreen.AddLocal(box.extents);
         }
@@ -197,11 +197,11 @@ namespace Box2D.Common
         {
             argWorld.Set(argScreen);
             argWorld.SubLocal(box.extents);
-            box.R.invertToOut(inv2);
-            inv2.mulToOut(argWorld, argWorld);
+            box.R.InvertToOut(inv2);
+            inv2.MulToOut(argWorld, argWorld);
             if (yFlip)
             {
-                yFlipMatInv.mulToOut(argWorld, argWorld);
+                yFlipMatInv.MulToOut(argWorld, argWorld);
             }
             argWorld.AddLocal(box.center);
         }

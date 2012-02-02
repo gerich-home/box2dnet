@@ -211,12 +211,12 @@ namespace Box2D.Dynamics.Joints
             // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
             // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
             Mat22 K = pool.PopMat22();
-            K.ex.X = m_invMassB + m_invIB * m_rB.Y * m_rB.Y + m_gamma;
-            K.ex.Y = (-m_invIB) * m_rB.X * m_rB.Y;
-            K.ey.X = K.ex.Y;
-            K.ey.Y = m_invMassB + m_invIB * m_rB.X * m_rB.X + m_gamma;
+            K.Ex.X = m_invMassB + m_invIB * m_rB.Y * m_rB.Y + m_gamma;
+            K.Ex.Y = (-m_invIB) * m_rB.X * m_rB.Y;
+            K.Ey.X = K.Ex.Y;
+            K.Ey.Y = m_invMassB + m_invIB * m_rB.X * m_rB.X + m_gamma;
 
-            K.invertToOut(m_mass);
+            K.InvertToOut(m_mass);
 
             m_C.Set(cB).AddLocal(m_rB).SubLocal(m_targetA);
             m_C.MulLocal(m_beta);
@@ -264,7 +264,7 @@ namespace Box2D.Dynamics.Joints
             Vec2 temp = pool.PopVec2();
 
             temp.Set(m_impulse).MulLocal(m_gamma).AddLocal(m_C).AddLocal(Cdot).NegateLocal();
-            Mat22.mulToOutUnsafe(m_mass, temp, impulse);
+            Mat22.MulToOutUnsafe(m_mass, temp, impulse);
 
             Vec2 oldImpulse = temp;
             oldImpulse.Set(m_impulse);

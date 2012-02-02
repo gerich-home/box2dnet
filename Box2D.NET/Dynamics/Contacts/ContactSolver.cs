@@ -135,8 +135,8 @@ namespace Box2D.Dynamics.Contacts
                 vc.invIB = bodyB.InvI;
                 vc.contactIndex = i;
                 vc.pointCount = pointCount;
-                vc.K.setZero();
-                vc.normalMass.setZero();
+                vc.K.SetZero();
+                vc.normalMass.SetZero();
 
                 ContactPositionConstraint pc = m_positionConstraints[i];
                 pc.indexA = bodyA.IslandIndex;
@@ -339,9 +339,9 @@ namespace Box2D.Dynamics.Contacts
                     if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12))
                     {
                         // K is safe to invert.
-                        vc.K.ex.Set(k11, k12);
-                        vc.K.ey.Set(k12, k22);
-                        vc.K.invertToOut(vc.normalMass);
+                        vc.K.Ex.Set(k11, k12);
+                        vc.K.Ey.Set(k12, k22);
+                        vc.K.InvertToOut(vc.normalMass);
                     }
                     else
                     {
@@ -545,8 +545,8 @@ namespace Box2D.Dynamics.Contacts
 
                     // Compute b'
                     Mat22 R = vc.K;
-                    b.X -= (R.ex.X * a.X + R.ey.X * a.Y);
-                    b.Y -= (R.ex.Y * a.X + R.ey.Y * a.Y);
+                    b.X -= (R.Ex.X * a.X + R.Ey.X * a.Y);
+                    b.Y -= (R.Ex.Y * a.X + R.Ey.Y * a.Y);
                     //Console.WriteLine("b' is " + b.x + "," + b.y);
 
                     // final float k_errorTol = 1e-3f;
@@ -563,7 +563,7 @@ namespace Box2D.Dynamics.Contacts
                         // x' = - inv(A) * b'
                         //
                         // Vec2 x = - Mul(c.normalMass, b);
-                        Mat22.mulToOutUnsafe(vc.normalMass, b, x);
+                        Mat22.MulToOutUnsafe(vc.normalMass, b, x);
                         x.MulLocal(-1);
 
                         if (x.X >= 0.0f && x.Y >= 0.0f)
@@ -633,7 +633,7 @@ namespace Box2D.Dynamics.Contacts
                         x.X = (-cp1.normalMass) * b.X;
                         x.Y = 0.0f;
                         vn1 = 0.0f;
-                        vn2 = vc.K.ex.Y * x.X + b.Y;
+                        vn2 = vc.K.Ex.Y * x.X + b.Y;
 
                         if (x.X >= 0.0f && vn2 >= 0.0f)
                         {
@@ -700,7 +700,7 @@ namespace Box2D.Dynamics.Contacts
                         //
                         x.X = 0.0f;
                         x.Y = (-cp2.normalMass) * b.Y;
-                        vn1 = vc.K.ey.X * x.Y + b.X;
+                        vn1 = vc.K.Ey.X * x.Y + b.X;
                         vn2 = 0.0f;
 
                         if (x.Y >= 0.0f && vn1 >= 0.0f)
