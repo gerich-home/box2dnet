@@ -33,8 +33,8 @@ using System.Diagnostics;
 namespace Box2D.Pooling.Normal
 {
 
-    public class CircleStack<E> : IOrderedStack<E>
-        where E : new()
+    public class CircleStack<T> : IOrderedStack<T>
+        where T : new()
     {
         //UPGRADE_TODO: there is no logger class
         //private static readonly Logger log;
@@ -43,23 +43,23 @@ namespace Box2D.Pooling.Normal
         //	log = LoggerFactory.getLogger(typeof(CircleStack));
         //}
 
-        private readonly E[] pool;
+        private readonly T[] pool;
         private int index;
         private readonly int size;
-        private readonly E[] container;
+        private readonly T[] container;
 
         public CircleStack(int argStackSize, int argContainerSize)
         {
             size = argStackSize;
-            pool = new E[argStackSize];
+            pool = new T[argStackSize];
 
             for (int i = 0; i < argStackSize; i++)
             {
                 try
                 {
-                    pool[i] = new E();
+                    pool[i] = new T();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //log.error("Error creating pooled object " + argClass.getSimpleName(), e);
                     //UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
@@ -73,10 +73,10 @@ namespace Box2D.Pooling.Normal
                 }*/
             }
             index = 0;
-            container = new E[argContainerSize];
+            container = new T[argContainerSize];
         }
 
-        public E Pop()
+        public T Pop()
         {
             index++;
             if (index >= size)
@@ -86,7 +86,7 @@ namespace Box2D.Pooling.Normal
             return pool[index];
         }
 
-        public E[] Pop(int argNum)
+        public T[] Pop(int argNum)
         {
             Debug.Assert(argNum <= container.Length); //Container array is too small
             if (index + argNum < size)
