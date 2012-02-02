@@ -41,18 +41,18 @@ namespace Box2D.Pooling.Stacks
             size = initialSize;
         }
 
-        public virtual void reset()
+        public virtual void Reset()
         {
             position = 0;
         }
 
-        public virtual int pop()
+        public virtual int Pop()
         {
             Debug.Assert(position > 0);
             return stack[--position];
         }
 
-        public virtual void push(int i)
+        public virtual void Push(int i)
         {
             if (position == size)
             {

@@ -284,12 +284,12 @@ namespace Box2D.Collision.Broadphase
         /// <param name="araabbgAABB"></param>
         public void query(TreeCallback callback, AABB aabb)
         {
-            intStack.reset();
-            intStack.push(m_root);
+            intStack.Reset();
+            intStack.Push(m_root);
 
             while (intStack.Count > 0)
             {
-                int nodeId = intStack.pop();
+                int nodeId = intStack.Pop();
                 if (nodeId == TreeNode.NULL_NODE)
                 {
                     continue;
@@ -309,8 +309,8 @@ namespace Box2D.Collision.Broadphase
                     }
                     else
                     {
-                        intStack.push(node.child1);
-                        intStack.push(node.child2);
+                        intStack.Push(node.child1);
+                        intStack.Push(node.child2);
                     }
                 }
             }
@@ -358,10 +358,10 @@ namespace Box2D.Collision.Broadphase
             Vec2.minToOut(p1, temp, segAABB.lowerBound);
             Vec2.maxToOut(p1, temp, segAABB.upperBound);
 
-            intStack.push(m_root);
+            intStack.Push(m_root);
             while (intStack.Count > 0)
             {
-                int nodeId = intStack.pop();
+                int nodeId = intStack.Pop();
                 if (nodeId == TreeNode.NULL_NODE)
                 {
                     continue;
@@ -410,8 +410,8 @@ namespace Box2D.Collision.Broadphase
                 }
                 else
                 {
-                    intStack.push(node.child1);
-                    intStack.push(node.child2);
+                    intStack.Push(node.child1);
+                    intStack.Push(node.child2);
                 }
             }
         }
