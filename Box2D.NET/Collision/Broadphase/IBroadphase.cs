@@ -49,22 +49,22 @@ namespace Box2D.Collision.Broadphase
             get;
         }
 
-        int createProxy(AABB aabb, object userData);
+        int CreateProxy(AABB aabb, object userData);
 
-        void destroyProxy(int proxyId);
+        void DestroyProxy(int proxyId);
 
-        void moveProxy(int proxyIdA, int proxyIdB);
+        void MoveProxy(int proxyIdA, int proxyIdB);
 
-        void touchProxy(int proxyId);
+        void TouchProxy(int proxyId);
 
-        AABB getFatAABB(int proxyId);
+        AABB GetFatAABB(int proxyId);
 
-        object getUserData(int proxyId);
+        object GetUserData(int proxyId);
 
-        bool testOverlap(int proxyIdA, int proxyIdB);
+        bool TestOverlap(int proxyIdA, int proxyIdB);
 
-        void query(IQueryCallback callback, AABB aabb);
+        void Query(IQueryCallback callback, AABB aabb);
 
-        void raycast(IRayCastCallback callback, RayCastInput input);
+        void Raycast(IRayCastCallback callback, RayCastInput input);
     }
 }
