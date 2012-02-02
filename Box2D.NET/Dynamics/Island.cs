@@ -312,7 +312,7 @@ namespace Box2D.Dynamics
 				Joints[i].initVelocityConstraints(solverData);
 			}
 
-			profile.solveInit = timer.Milliseconds;
+			profile.SolveInit = timer.Milliseconds;
 
 			// Solve velocity constraints
 			timer.reset();
@@ -329,7 +329,7 @@ namespace Box2D.Dynamics
 
 			// Store impulses for warm starting
 			contactSolver.storeImpulses();
-			profile.solveVelocity = timer.Milliseconds;
+			profile.SolveVelocity = timer.Milliseconds;
 
 			// Integrate positions
 			for (int i = 0; i < BodyCount; ++i)
@@ -399,7 +399,7 @@ namespace Box2D.Dynamics
 				body.SynchronizeTransform();
 			}
 
-			profile.solvePosition = timer.Milliseconds;
+			profile.SolvePosition = timer.Milliseconds;
 
 			Report(contactSolver.m_velocityConstraints);
 

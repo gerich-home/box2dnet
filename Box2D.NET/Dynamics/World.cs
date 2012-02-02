@@ -566,14 +566,14 @@ namespace Box2D.Dynamics
             // Update contacts. This is where some contacts are destroyed.
             tempTimer.reset();
             m_contactManager.Collide();
-            m_profile.collide = tempTimer.Milliseconds;
+            m_profile.Collide = tempTimer.Milliseconds;
 
             // Integrate velocities, solve velocity constraints, and integrate positions.
             if (m_stepComplete && step_Renamed_Field.dt > 0.0f)
             {
                 tempTimer.reset();
                 solve(step_Renamed_Field);
-                m_profile.solve = tempTimer.Milliseconds;
+                m_profile.Solve = tempTimer.Milliseconds;
             }
 
             // Handle TOI events.
@@ -581,7 +581,7 @@ namespace Box2D.Dynamics
             {
                 tempTimer.reset();
                 solveTOI(step_Renamed_Field);
-                m_profile.solveTOI = tempTimer.Milliseconds;
+                m_profile.SolveToi = tempTimer.Milliseconds;
             }
 
             if (step_Renamed_Field.dt > 0.0f)
@@ -597,7 +597,7 @@ namespace Box2D.Dynamics
             m_flags &= ~LOCKED;
             // log.debug("ending step");
 
-            m_profile.step = stepTimer.Milliseconds;
+            m_profile.Step = stepTimer.Milliseconds;
         }
 
         /// <summary>
@@ -1074,9 +1074,9 @@ namespace Box2D.Dynamics
 
         private void solve(TimeStep step)
         {
-            m_profile.solveInit = 0;
-            m_profile.solveVelocity = 0;
-            m_profile.solvePosition = 0;
+            m_profile.SolveInit = 0;
+            m_profile.SolveVelocity = 0;
+            m_profile.SolvePosition = 0;
 
             // Size the island for the worst case.
             island.Init(m_bodyCount, m_contactManager.ContactCount, m_jointCount, m_contactManager.ContactListener);
@@ -1214,9 +1214,9 @@ namespace Box2D.Dynamics
                     }
                 }
                 island.Solve(islandProfile, step, m_gravity, m_allowSleep);
-                m_profile.solveInit += islandProfile.solveInit;
-                m_profile.solveVelocity += islandProfile.solveVelocity;
-                m_profile.solvePosition += islandProfile.solvePosition;
+                m_profile.SolveInit += islandProfile.SolveInit;
+                m_profile.SolveVelocity += islandProfile.SolveVelocity;
+                m_profile.SolvePosition += islandProfile.SolvePosition;
 
                 // Post solve cleanup.
                 for (int i = 0; i < island.BodyCount; ++i)
@@ -1251,7 +1251,7 @@ namespace Box2D.Dynamics
 
             // Look for new contacts.
             m_contactManager.FindNewContacts();
-            m_profile.broadphase = broadphaseTimer.Milliseconds;
+            m_profile.Broadphase = broadphaseTimer.Milliseconds;
         }
 
         private readonly Island toiIsland = new Island();

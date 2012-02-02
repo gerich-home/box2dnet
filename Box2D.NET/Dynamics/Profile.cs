@@ -30,26 +30,26 @@ namespace Box2D.Dynamics
 
     public class Profile
     {
-        public float step;
-        public float collide;
-        public float solve;
-        public float solveInit;
-        public float solveVelocity;
-        public float solvePosition;
-        public float broadphase;
-        public float solveTOI;
+        public float Step;
+        public float Collide;
+        public float Solve;
+        public float SolveInit;
+        public float SolveVelocity;
+        public float SolvePosition;
+        public float Broadphase;
+        public float SolveToi;
 
-        public void toDebugStrings(List<String> strings)
+        public void ToDebugStrings(List<String> strings)
         {
             strings.Add("Profile:");
-            strings.Add(" step: " + step);
-            strings.Add("  collide: " + collide);
-            strings.Add("  solve: " + solve);
-            strings.Add("   solveInit: " + solveInit);
-            strings.Add("   solveVelocity: " + solveVelocity);
-            strings.Add("   solvePosition: " + solvePosition);
-            strings.Add("   broadphase: " + broadphase);
-            strings.Add("  solveTOI: " + solveTOI);
+            strings.Add(string.Format(" step: {0}", Step));
+            strings.Add(string.Format("  collide: {0}", Collide));
+            strings.Add(string.Format("  solve: {0}", Solve));
+            strings.Add(string.Format("   solveInit: {0}", SolveInit));
+            strings.Add(string.Format("   solveVelocity: {0}", SolveVelocity));
+            strings.Add(string.Format("   solvePosition: {0}", SolvePosition));
+            strings.Add(string.Format("   broadphase: {0}", Broadphase));
+            strings.Add(string.Format("  solveTOI: {0}", SolveToi));
         }
     }
 }
