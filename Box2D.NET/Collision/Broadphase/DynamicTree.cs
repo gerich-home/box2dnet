@@ -28,8 +28,6 @@ using Box2D.Callbacks;
 using Box2D.Common;
 using Box2D.Pooling.Stacks;
 
-//UPGRADE_ISSUE: The following fragment of code could not be parsed and was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1156'"
-
 namespace Box2D.Collision.Broadphase
 {
     // updated to rev 100
@@ -56,7 +54,6 @@ namespace Box2D.Collision.Broadphase
                 }
                 return m_nodes[m_root].height;
             }
-
         }
 
         /// <summary>
@@ -71,7 +68,6 @@ namespace Box2D.Collision.Broadphase
                 int maxBalance = 0;
                 for (int i = 0; i < m_nodeCapacity; ++i)
                 {
-                    //UPGRADE_NOTE: Final was removed from the declaration of 'node '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
                     TreeNode node = m_nodes[i];
                     if (node.height <= 1)
                     {
@@ -88,7 +84,6 @@ namespace Box2D.Collision.Broadphase
 
                 return maxBalance;
             }
-
         }
 
         /// <summary>
@@ -124,13 +119,7 @@ namespace Box2D.Collision.Broadphase
             }
         }
 
-        virtual public int InsertionCount
-        {
-            get
-            {
-                return m_insertionCount;
-            }
-        }
+        public virtual int InsertionCount { get; private set; }
 
         public const int MAX_STACK_SIZE = 64;
 
@@ -140,8 +129,6 @@ namespace Box2D.Collision.Broadphase
         private int m_nodeCapacity;
 
         private int m_freeList;
-
-        private int m_insertionCount;
 
         private readonly Vec2[] drawVecs = new Vec2[4];
         private readonly DynamicIntStack intStack = new DynamicIntStack(10);
@@ -156,14 +143,12 @@ namespace Box2D.Collision.Broadphase
             // Build a linked list for the free list.
             for (int i = 0; i < m_nodeCapacity; i++)
             {
-                m_nodes[i] = new TreeNode();
-                m_nodes[i].parent = i + 1;
-                m_nodes[i].height = -1;
+                m_nodes[i] = new TreeNode {parent = i + 1, height = -1};
             }
             m_nodes[m_nodeCapacity - 1].parent = TreeNode.NULL_NODE;
             m_freeList = 0;
 
-            m_insertionCount = 0;
+            InsertionCount = 0;
 
             for (int i = 0; i < drawVecs.Length; i++)
             {
@@ -177,9 +162,9 @@ namespace Box2D.Collision.Broadphase
         /// <param name="aabb"></param>
         /// <param name="userData"></param>
         /// <returns></returns>
-        public int createProxy(AABB aabb, Object userData)
+        public int CreateProxy(AABB aabb, Object userData)
         {
-            int proxyId = allocateNode();
+            int proxyId = AllocateNode();
 
             // Fatten the aabb
             TreeNode node = m_nodes[proxyId];
@@ -189,7 +174,7 @@ namespace Box2D.Collision.Broadphase
             node.aabb.upperBound.y = aabb.upperBound.y + Settings.aabbExtension;
             node.userData = userData;
 
-            insertLeaf(proxyId);
+            InsertLeaf(proxyId);
 
             return proxyId;
         }
@@ -198,13 +183,13 @@ namespace Box2D.Collision.Broadphase
         /// Destroy a proxy
         /// </summary>
         /// <param name="proxyId"></param>
-        public void destroyProxy(int proxyId)
+        public void DestroyProxy(int proxyId)
         {
             Debug.Assert(0 <= proxyId && proxyId < m_nodeCapacity);
             Debug.Assert(m_nodes[proxyId].Leaf);
 
-            removeLeaf(proxyId);
-            freeNode(proxyId);
+            RemoveLeaf(proxyId);
+            FreeNode(proxyId);
         }
 
         // djm pooling
@@ -213,7 +198,7 @@ namespace Box2D.Collision.Broadphase
         /// proxy is removed from the tree and re-inserted. Otherwise the function returns immediately.
         /// </summary>
         /// <returns>true if the proxy was re-inserted.</returns>
-        public bool moveProxy(int proxyId, AABB aabb, Vec2 displacement)
+        public bool MoveProxy(int proxyId, AABB aabb, Vec2 displacement)
         {
             Debug.Assert(0 <= proxyId && proxyId < m_nodeCapacity);
             TreeNode node = m_nodes[proxyId];
@@ -224,7 +209,7 @@ namespace Box2D.Collision.Broadphase
                 return false;
             }
 
-            removeLeaf(proxyId);
+            RemoveLeaf(proxyId);
 
             // Extend AABB
             Vec2 lowerBound = aabb.lowerBound;
@@ -260,17 +245,17 @@ namespace Box2D.Collision.Broadphase
             node.aabb.upperBound.x = upperBound.x;
             node.aabb.upperBound.y = upperBound.y;
 
-            insertLeaf(proxyId);
+            InsertLeaf(proxyId);
             return true;
         }
 
-        public object getUserData(int proxyId)
+        public object GetUserData(int proxyId)
         {
             Debug.Assert(0 <= proxyId && proxyId < m_nodeCapacity);
             return m_nodes[proxyId].userData;
         }
 
-        public AABB getFatAABB(int proxyId)
+        public AABB GetFatAABB(int proxyId)
         {
             Debug.Assert(0 <= proxyId && proxyId < m_nodeCapacity);
             return m_nodes[proxyId].aabb;
@@ -281,8 +266,8 @@ namespace Box2D.Collision.Broadphase
         /// overlaps the supplied AABB.
         /// </summary>
         /// <param name="callback"></param>
-        /// <param name="araabbgAABB"></param>
-        public void query(ITreeCallback callback, AABB aabb)
+        /// <param name="aabb"></param>
+        public void Query(ITreeCallback callback, AABB aabb)
         {
             intStack.Reset();
             intStack.Push(m_root);
@@ -334,7 +319,7 @@ namespace Box2D.Collision.Broadphase
         /// </summary>
         /// <param name="input">the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</param>
         /// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
-        public virtual void raycast(ITreeRayCastCallback callback, RayCastInput input)
+        public virtual void Raycast(ITreeRayCastCallback callback, RayCastInput input)
         {
             Vec2 p1 = input.p1;
             Vec2 p2 = input.p2;
@@ -391,18 +376,18 @@ namespace Box2D.Collision.Broadphase
                     subInput.p2.set_Renamed(input.p2);
                     subInput.maxFraction = maxFraction;
 
-                    float value_Renamed = callback.RaycastCallback(subInput, nodeId);
+                    float value = callback.RaycastCallback(subInput, nodeId);
 
-                    if (value_Renamed == 0.0f)
+                    if (value == 0.0f)
                     {
                         // The client has terminated the ray cast.
                         return;
                     }
 
-                    if (value_Renamed > 0.0f)
+                    if (value > 0.0f)
                     {
                         // Update segment bounding box.
-                        maxFraction = value_Renamed;
+                        maxFraction = value;
                         t.set_Renamed(p2).subLocal(p1).mulLocal(maxFraction).addLocal(p1);
                         Vec2.minToOut(p1, t, segAABB.lowerBound);
                         Vec2.maxToOut(p1, t, segAABB.upperBound);
@@ -419,12 +404,12 @@ namespace Box2D.Collision.Broadphase
         /// <summary>
         /// Compute the height of the tree.
         /// </summary>
-        public int computeHeight()
+        public int ComputeHeight()
         {
-            return computeHeight(m_root);
+            return ComputeHeight(m_root);
         }
 
-        private int computeHeight(int nodeId)
+        private int ComputeHeight(int nodeId)
         {
             Debug.Assert(0 <= nodeId && nodeId < m_nodeCapacity);
 
@@ -434,18 +419,18 @@ namespace Box2D.Collision.Broadphase
             {
                 return 0;
             }
-            int height1 = computeHeight(node.child1);
-            int height2 = computeHeight(node.child2);
+            int height1 = ComputeHeight(node.child1);
+            int height2 = ComputeHeight(node.child2);
             return 1 + MathUtils.max(height1, height2);
         }
 
         /// <summary>
         /// Validate this tree. For testing.
         /// </summary>
-        public virtual void validate()
+        public virtual void Validate()
         {
-            validateStructure(m_root);
-            validateMetrics(m_root);
+            ValidateStructure(m_root);
+            ValidateMetrics(m_root);
 
             int freeCount = 0;
             int freeIndex = m_freeList;
@@ -456,7 +441,7 @@ namespace Box2D.Collision.Broadphase
                 ++freeCount;
             }
 
-            Debug.Assert(Height == computeHeight());
+            Debug.Assert(Height == ComputeHeight());
 
             Debug.Assert(m_nodeCount + freeCount == m_nodeCapacity);
         }
@@ -464,9 +449,9 @@ namespace Box2D.Collision.Broadphase
         /// <summary>
         /// Build an optimal tree. Very expensive. For testing.
         /// </summary>
-        public virtual void rebuildBottomUp()
+        public virtual void RebuildBottomUp()
         {
-            int[] nodes = new int[m_nodeCount];
+            var nodes = new int[m_nodeCount];
             int count = 0;
 
             // Build array of leaves. Free the rest.
@@ -486,11 +471,11 @@ namespace Box2D.Collision.Broadphase
                 }
                 else
                 {
-                    freeNode(i);
+                    FreeNode(i);
                 }
             }
 
-            AABB b = new AABB();
+            var b = new AABB();
             while (count > 1)
             {
                 float minCost = Single.MaxValue;
@@ -518,7 +503,7 @@ namespace Box2D.Collision.Broadphase
                 TreeNode child1 = m_nodes[index1];
                 TreeNode child2 = m_nodes[index2];
 
-                int parentIndex = allocateNode();
+                int parentIndex = AllocateNode();
                 TreeNode parent = m_nodes[parentIndex];
                 parent.child1 = index1;
                 parent.child2 = index2;
@@ -536,10 +521,10 @@ namespace Box2D.Collision.Broadphase
 
             m_root = nodes[0];
 
-            validate();
+            Validate();
         }
 
-        private int allocateNode()
+        private int AllocateNode()
         {
             if (m_freeList == TreeNode.NULL_NODE)
             {
@@ -553,9 +538,7 @@ namespace Box2D.Collision.Broadphase
                 // Build a linked list for the free list.
                 for (int i = m_nodeCount; i < m_nodeCapacity; i++)
                 {
-                    m_nodes[i] = new TreeNode();
-                    m_nodes[i].parent = i + 1;
-                    m_nodes[i].height = -1;
+                    m_nodes[i] = new TreeNode {parent = i + 1, height = -1};
                 }
                 m_nodes[m_nodeCapacity - 1].parent = TreeNode.NULL_NODE;
                 m_freeList = m_nodeCount;
@@ -575,8 +558,8 @@ namespace Box2D.Collision.Broadphase
         /// <summary>
         /// returns a node to the pool
         /// </summary>
-        /// <param name="argNode"></param>
-        private void freeNode(int nodeId)
+        /// <param name="nodeId"></param>
+        private void FreeNode(int nodeId)
         {
             Debug.Assert(nodeId != TreeNode.NULL_NODE);
             Debug.Assert(0 < m_nodeCount);
@@ -591,9 +574,9 @@ namespace Box2D.Collision.Broadphase
         private readonly Vec2 delta2 = new Vec2();
         private readonly AABB combinedAABB = new AABB();
 
-        private void insertLeaf(int leaf)
+        private void InsertLeaf(int leaf)
         {
-            m_insertionCount++;
+            InsertionCount++;
 
             if (m_root == TreeNode.NULL_NODE)
             {
@@ -659,19 +642,12 @@ namespace Box2D.Collision.Broadphase
                 }
 
                 // Descend
-                if (cost1 < cost2)
-                {
-                    index = child1;
-                }
-                else
-                {
-                    index = child2;
-                }
+                index = cost1 < cost2 ? child1 : child2;
             }
 
             int sibling = index;
             int oldParent = m_nodes[sibling].parent;
-            int newParentId = allocateNode();
+            int newParentId = AllocateNode();
             TreeNode newParent = m_nodes[newParentId];
             newParent.parent = oldParent;
             newParent.userData = null;
@@ -709,7 +685,7 @@ namespace Box2D.Collision.Broadphase
             index = m_nodes[leaf].parent;
             while (index != TreeNode.NULL_NODE)
             {
-                index = balance(index);
+                index = Balance(index);
 
                 int child1 = m_nodes[index].child1;
                 int child2 = m_nodes[index].child2;
@@ -726,7 +702,7 @@ namespace Box2D.Collision.Broadphase
             // validate();
         }
 
-        private void removeLeaf(int leaf)
+        private void RemoveLeaf(int leaf)
         {
             if (leaf == m_root)
             {
@@ -758,13 +734,13 @@ namespace Box2D.Collision.Broadphase
                     m_nodes[grandParent].child2 = sibling;
                 }
                 m_nodes[sibling].parent = grandParent;
-                freeNode(parent);
+                FreeNode(parent);
 
                 // Adjust ancestor bounds.
                 int index = grandParent;
                 while (index != TreeNode.NULL_NODE)
                 {
-                    index = balance(index);
+                    index = Balance(index);
 
                     int child1 = m_nodes[index].child1;
                     int child2 = m_nodes[index].child2;
@@ -779,7 +755,7 @@ namespace Box2D.Collision.Broadphase
             {
                 m_root = sibling;
                 m_nodes[sibling].parent = TreeNode.NULL_NODE;
-                freeNode(parent);
+                FreeNode(parent);
             }
 
             // validate();
@@ -787,7 +763,7 @@ namespace Box2D.Collision.Broadphase
 
         // Perform a left or right rotation if node A is imbalanced.
         // Returns the new root index.
-        private int balance(int iA)
+        private int Balance(int iA)
         {
             Debug.Assert(iA != TreeNode.NULL_NODE);
 
@@ -930,7 +906,7 @@ namespace Box2D.Collision.Broadphase
             return iA;
         }
 
-        private void validateStructure(int index)
+        private void ValidateStructure(int index)
         {
             if (index == TreeNode.NULL_NODE)
             {
@@ -961,11 +937,11 @@ namespace Box2D.Collision.Broadphase
             Debug.Assert(m_nodes[child1].parent == index);
             Debug.Assert(m_nodes[child2].parent == index);
 
-            validateStructure(child1);
-            validateStructure(child2);
+            ValidateStructure(child1);
+            ValidateStructure(child2);
         }
 
-        private void validateMetrics(int index)
+        private void ValidateMetrics(int index)
         {
             if (index == TreeNode.NULL_NODE)
             {
@@ -990,34 +966,33 @@ namespace Box2D.Collision.Broadphase
 
             int height1 = m_nodes[child1].height;
             int height2 = m_nodes[child2].height;
-            int height;
-            height = 1 + MathUtils.max(height1, height2);
+            int height = 1 + MathUtils.max(height1, height2);
             Debug.Assert(node.height == height);
 
-            AABB aabb = new AABB();
+            var aabb = new AABB();
             aabb.combine(m_nodes[child1].aabb, m_nodes[child2].aabb);
 
             Debug.Assert(aabb.lowerBound.Equals(node.aabb.lowerBound));
             Debug.Assert(aabb.upperBound.Equals(node.aabb.upperBound));
 
-            validateMetrics(child1);
-            validateMetrics(child2);
+            ValidateMetrics(child1);
+            ValidateMetrics(child2);
         }
 
-        public virtual void drawTree(DebugDraw argDraw)
+        public virtual void DrawTree(DebugDraw argDraw)
         {
             if (m_root == TreeNode.NULL_NODE)
             {
                 return;
             }
-            int height = computeHeight();
-            drawTree(argDraw, m_root, 0, height);
+            int height = ComputeHeight();
+            DrawTree(argDraw, m_root, 0, height);
         }
 
         private readonly Color3f color = new Color3f();
         private readonly Vec2 textVec = new Vec2();
 
-        public virtual void drawTree(DebugDraw argDraw, int nodeId, int spot, int height)
+        public virtual void DrawTree(DebugDraw argDraw, int nodeId, int spot, int height)
         {
             TreeNode node = m_nodes[nodeId];
             node.aabb.getVertices(drawVecs);
@@ -1030,11 +1005,11 @@ namespace Box2D.Collision.Broadphase
 
             if (node.child1 != TreeNode.NULL_NODE)
             {
-                drawTree(argDraw, node.child1, spot + 1, height);
+                DrawTree(argDraw, node.child1, spot + 1, height);
             }
             if (node.child2 != TreeNode.NULL_NODE)
             {
-                drawTree(argDraw, node.child2, spot + 1, height);
+                DrawTree(argDraw, node.child2, spot + 1, height);
             }
         }
     }

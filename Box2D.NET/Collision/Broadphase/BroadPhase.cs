@@ -56,7 +56,7 @@ namespace Box2D.Collision.Broadphase
 		{
 			get
 			{
-				return m_tree.computeHeight();
+				return m_tree.ComputeHeight();
 			}
 		}
 
@@ -120,7 +120,7 @@ namespace Box2D.Collision.Broadphase
 		/// <returns></returns>
 		public int CreateProxy(AABB aabb, object userData)
 		{
-			int proxyId = m_tree.createProxy(aabb, userData);
+			int proxyId = m_tree.CreateProxy(aabb, userData);
 			++ProxyCount;
 			BufferMove(proxyId);
 			return proxyId;
@@ -134,7 +134,7 @@ namespace Box2D.Collision.Broadphase
 		{
 			UnbufferMove(proxyId);
 			--ProxyCount;
-			m_tree.destroyProxy(proxyId);
+			m_tree.DestroyProxy(proxyId);
 		}
 
 		/// <summary>
@@ -143,7 +143,7 @@ namespace Box2D.Collision.Broadphase
 		/// </summary>
 		public void MoveProxy(int proxyId, AABB aabb, Vec2 displacement)
 		{
-			bool buffer = m_tree.moveProxy(proxyId, aabb, displacement);
+			bool buffer = m_tree.MoveProxy(proxyId, aabb, displacement);
 			if (buffer)
 			{
 				BufferMove(proxyId);
@@ -157,19 +157,19 @@ namespace Box2D.Collision.Broadphase
 
 		public virtual object GetUserData(int proxyId)
 		{
-			return m_tree.getUserData(proxyId);
+			return m_tree.GetUserData(proxyId);
 		}
 
 		public virtual AABB GetFatAABB(int proxyId)
 		{
-			return m_tree.getFatAABB(proxyId);
+			return m_tree.GetFatAABB(proxyId);
 		}
 
 		public virtual bool TestOverlap(int proxyIdA, int proxyIdB)
 		{
 			// return AABB.testOverlap(proxyA.aabb, proxyB.aabb);
-			var a = m_tree.getFatAABB(proxyIdA);
-			var b = m_tree.getFatAABB(proxyIdB);
+			var a = m_tree.GetFatAABB(proxyIdA);
+			var b = m_tree.GetFatAABB(proxyIdB);
 			if (b.lowerBound.x - a.upperBound.x > 0.0f || b.lowerBound.y - a.upperBound.y > 0.0f)
 			{
 				return false;
@@ -185,7 +185,7 @@ namespace Box2D.Collision.Broadphase
 
 		public virtual void DrawTree(DebugDraw argDraw)
 		{
-			m_tree.drawTree(argDraw);
+			m_tree.DrawTree(argDraw);
 		}
 
 		/// <summary>
@@ -209,11 +209,11 @@ namespace Box2D.Collision.Broadphase
 
 				// We have to query the tree with the fat AABB so that
 				// we don't fail to create a pair that may touch later.
-				var fatAABB = m_tree.getFatAABB(m_queryProxyId);
+				var fatAABB = m_tree.GetFatAABB(m_queryProxyId);
 
 				// Query tree, create pairs and add them pair buffer.
 				// log.debug("quering aabb: "+m_queryProxy.aabb);
-				m_tree.query(this, fatAABB);
+				m_tree.Query(this, fatAABB);
 			}
 			// log.debug("Number of pairs found: "+m_pairCount);
 
@@ -228,8 +228,8 @@ namespace Box2D.Collision.Broadphase
 			while (i2 < m_pairCount)
 			{
 				var primaryPair = m_pairBuffer[i2];
-				var userDataA = m_tree.getUserData(primaryPair.proxyIdA);
-				var userDataB = m_tree.getUserData(primaryPair.proxyIdB);
+				var userDataA = m_tree.GetUserData(primaryPair.proxyIdA);
+				var userDataB = m_tree.GetUserData(primaryPair.proxyIdB);
 
 				// log.debug("returning pair: "+userDataA+", "+userDataB);
 				callback.AddPair(userDataA, userDataB);
@@ -260,7 +260,7 @@ namespace Box2D.Collision.Broadphase
 		/// <param name="aabb"></param>
 		public void Query(ITreeCallback callback, AABB aabb)
 		{
-			m_tree.query(callback, aabb);
+			m_tree.Query(callback, aabb);
 		}
 
 		/// <summary>
@@ -273,7 +273,7 @@ namespace Box2D.Collision.Broadphase
 		/// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
 		public void Raycast(ITreeRayCastCallback callback, RayCastInput input)
 		{
-			m_tree.raycast(callback, input);
+			m_tree.Raycast(callback, input);
 		}
 
 		protected internal void BufferMove(int proxyId)
