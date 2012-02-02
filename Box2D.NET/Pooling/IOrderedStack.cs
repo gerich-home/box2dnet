@@ -30,26 +30,26 @@ namespace Box2D.Pooling
 	/// you're pushing back the last 'n' items popped.
 	/// </summary>
 	/// <author>Daniel</author>
-	/// <typeparam name="E"></typeparam>
-	public interface IOrderedStack<E>
+	/// <typeparam name="T"></typeparam>
+	public interface IOrderedStack<out T>
 	{
 		/// <summary>
 		/// Returns the next object in the pool
 		/// </summary>
 		/// <returns></returns>
-		E pop();
+		T Pop();
 
 		/// <summary>
 		/// Returns the next 'argNum' objects in the pool in an array
 		/// </summary>
 		/// <param name="argNum"></param>
 		/// <returns>an array containing the next pool objects in items 0-argNum. Array length and uniqueness not guaranteed.</returns>
-		E[] pop(int argNum);
+		T[] Pop(int argNum);
 
 		/// <summary>
 		/// Tells the stack to take back the last 'argNum' items
 		/// </summary>
 		/// <param name="argNum"></param>
-		void push(int argNum);
+		void Push(int argNum);
 	}
 }

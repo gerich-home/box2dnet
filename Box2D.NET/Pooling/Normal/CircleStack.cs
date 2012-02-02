@@ -76,7 +76,7 @@ namespace Box2D.Pooling.Normal
             container = new E[argContainerSize];
         }
 
-        public E pop()
+        public E Pop()
         {
             index++;
             if (index >= size)
@@ -86,7 +86,7 @@ namespace Box2D.Pooling.Normal
             return pool[index];
         }
 
-        public E[] pop(int argNum)
+        public E[] Pop(int argNum)
         {
             Debug.Assert(argNum <= container.Length); //Container array is too small
             if (index + argNum < size)
@@ -104,7 +104,7 @@ namespace Box2D.Pooling.Normal
             return container;
         }
 
-        public virtual void push(int argNum)
+        public virtual void Push(int argNum)
         {
         }
     }
