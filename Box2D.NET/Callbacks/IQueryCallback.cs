@@ -35,12 +35,11 @@ namespace Box2D.Callbacks
     /// See World.query
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public interface QueryCallback
+    public interface IQueryCallback
     {
-
         /// <summary>Called for each fixture found in the query AABB.</summary>
         /// <param name="fixture"></param>
         /// <returns>false to terminate the query.</returns>
-        bool reportFixture(Fixture fixture);
+        bool ReportFixture(Fixture fixture);
     }
 }

@@ -745,7 +745,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="callback">a user implemented callback class.</param>
         /// <param name="aabb">the query box.</param>
-        public virtual void queryAABB(QueryCallback callback, AABB aabb)
+        public virtual void queryAABB(IQueryCallback callback, AABB aabb)
         {
             wqwrapper.broadPhase = m_contactManager.m_broadPhase;
             wqwrapper.callback = callback;
@@ -1741,11 +1741,11 @@ namespace Box2D.Dynamics
         public virtual bool treeCallback(int nodeId)
         {
             FixtureProxy proxy = (FixtureProxy)broadPhase.getUserData(nodeId);
-            return callback.reportFixture(proxy.fixture);
+            return callback.ReportFixture(proxy.fixture);
         }
 
         internal BroadPhase broadPhase;
-        internal QueryCallback callback;
+        internal IQueryCallback callback;
     }
 
 

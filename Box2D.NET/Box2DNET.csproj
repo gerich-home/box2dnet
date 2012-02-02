@@ -112,7 +112,7 @@
     <Compile Include="Callbacks\DebugDraw.cs" />
     <Compile Include="Callbacks\IDestructionListener.cs" />
     <Compile Include="Callbacks\IPairCallback.cs" />
-    <Compile Include="Callbacks\QueryCallback.cs" />
+    <Compile Include="Callbacks\IQueryCallback.cs" />
     <Compile Include="Callbacks\RayCastCallback.cs" />
     <Compile Include="Callbacks\TreeCallback.cs" />
     <Compile Include="Callbacks\TreeRayCastCallback.cs" />

@@ -63,7 +63,7 @@ namespace Box2D.Collision.Broadphase
 
         bool testOverlap(int proxyIdA, int proxyIdB);
 
-        void query(QueryCallback callback, AABB aabb);
+        void query(IQueryCallback callback, AABB aabb);
 
         void raycast(RayCastCallback callback, RayCastInput input);
     }
