@@ -200,7 +200,7 @@ namespace Box2D.Collision.Broadphase
 		/// Update the pairs. This results in pair callbacks. This can only add pairs.
 		/// </summary>
 		/// <param name="callback"></param>
-		public void updatePairs(PairCallback callback)
+		public void updatePairs(IPairCallback callback)
 		{
 			// log.debug("beginning to update pairs");
 			// Reset pair buffer
@@ -240,7 +240,7 @@ namespace Box2D.Collision.Broadphase
 				Object userDataB = m_tree.getUserData(primaryPair.proxyIdB);
 
 				// log.debug("returning pair: "+userDataA+", "+userDataB);
-				callback.addPair(userDataA, userDataB);
+				callback.AddPair(userDataA, userDataB);
 				++i2;
 
 				// Skip any duplicate pairs.

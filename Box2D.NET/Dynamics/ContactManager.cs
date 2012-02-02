@@ -33,7 +33,7 @@ namespace Box2D.Dynamics
     /// Delegate of World.
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public class ContactManager : PairCallback
+    public class ContactManager : IPairCallback
     {
 
         public BroadPhase m_broadPhase;
@@ -59,7 +59,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="proxyUserDataA"></param>
         /// <param name="proxyUserDataB"></param>
-        public virtual void addPair(object proxyUserDataA, object proxyUserDataB)
+        public virtual void AddPair(object proxyUserDataA, object proxyUserDataB)
         {
             FixtureProxy proxyA = (FixtureProxy)proxyUserDataA;
             FixtureProxy proxyB = (FixtureProxy)proxyUserDataB;

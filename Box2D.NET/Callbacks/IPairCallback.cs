@@ -26,8 +26,8 @@ namespace Box2D.Callbacks
 {
 
     // updated to rev 100
-    public interface PairCallback
+    public interface IPairCallback
     {
-        void addPair(object userDataA, object userDataB);
+        void AddPair(object userDataA, object userDataB);
     }
 }
