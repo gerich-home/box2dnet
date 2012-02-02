@@ -121,7 +121,7 @@ namespace Box2D.Dynamics
             }
 
             // Call the factory.
-            Contact c = pool.popContact(fixtureA, indexA, fixtureB, indexB);
+            Contact c = pool.PopContact(fixtureA, indexA, fixtureB, indexB);
             if (c == null)
             {
                 return;
@@ -241,7 +241,7 @@ namespace Box2D.Dynamics
             }
 
             // Call the factory.
-            pool.pushContact(c);
+            pool.PushContact(c);
             --ContactCount;
         }
 

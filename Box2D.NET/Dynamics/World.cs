@@ -54,46 +54,28 @@ namespace Box2D.Dynamics
 
 
         // statistics gathering
-        public int activeContacts = 0;
-        public int contactPoolCount = 0;
+        public int ActiveContacts = 0;
+        public int ContactPoolCount = 0;
 
-        protected internal int m_flags;
-
-        protected internal ContactManager m_contactManager;
-
-        private Body m_bodyList;
-        private Joint m_jointList;
-
-        private int m_bodyCount;
-        private int m_jointCount;
+        protected internal int Flags;
 
         private readonly Vec2 m_gravity = new Vec2();
-        private bool m_allowSleep;
 
         // private Body m_groundBody;
-
-        private IDestructionListener m_destructionListener;
-        private DebugDraw m_debugDraw;
-
-        private readonly IWorldPool pool;
 
         /// <summary>
         /// This is used to compute the time step ratio to support a variable time step.
         /// </summary>
-        private float m_inv_dt0;
+        private float invDt0;
 
         // these are for debugging the solver
-        private bool m_warmStarting;
-        private bool m_continuousPhysics;
-        private bool m_subStepping;
+        private readonly bool m_subStepping;
 
         private bool m_stepComplete;
 
-        private Profile m_profile;
-
         private static readonly int ShapeTypesCount = Enum.GetValues(typeof(ShapeType)).Length;
 
-        private ContactRegister[][] contactStacks;
+        private readonly ContactRegister[][] contactStacks;
 
         public World(Vec2 gravity) :
             this(gravity, new DefaultWorldPool(WORLD_POOL_SIZE, WORLD_POOL_CONTAINER_SIZE))
@@ -104,7 +86,7 @@ namespace Box2D.Dynamics
         /// Construct a world object.
         /// </summary>
         /// <param name="gravity">the world gravity vector.</param>
-        /// <param name="doSleep">improve performance by not simulating inactive bodies.</param>
+        /// <param name="argPool"> </param>
         public World(Vec2 gravity, IWorldPool argPool)
         {
             contactStacks = new ContactRegister[ShapeTypesCount][];
@@ -113,51 +95,51 @@ namespace Box2D.Dynamics
                 contactStacks[i] = new ContactRegister[ShapeTypesCount];
             }
 
-            pool = argPool;
-            m_destructionListener = null;
-            m_debugDraw = null;
+            Pool = argPool;
+            DestructionListener = null;
+            DebugDraw = null;
 
-            m_bodyList = null;
-            m_jointList = null;
+            BodyList = null;
+            JointList = null;
 
-            m_bodyCount = 0;
-            m_jointCount = 0;
+            BodyCount = 0;
+            JointCount = 0;
 
-            m_warmStarting = true;
-            m_continuousPhysics = true;
+            WarmStarting = true;
+            ContinuousPhysics = true;
             m_subStepping = false;
             m_stepComplete = true;
 
-            m_allowSleep = true;
+            SleepingAllowed = true;
             m_gravity.set_Renamed(gravity);
 
-            m_flags = CLEAR_FORCES;
+            Flags = CLEAR_FORCES;
 
-            m_inv_dt0 = 0f;
+            invDt0 = 0f;
 
-            m_contactManager = new ContactManager(this);
-            m_profile = new Profile();
+            ContactManager = new ContactManager(this);
+            Profile = new Profile();
 
-            initializeRegisters();
+            InitializeRegisters();
         }
 
         virtual public bool AllowSleep
         {
             get
             {
-                return m_allowSleep;
+                return SleepingAllowed;
             }
             set
             {
-                if (value == m_allowSleep)
+                if (value == SleepingAllowed)
                 {
                     return;
                 }
 
-                m_allowSleep = value;
-                if (m_allowSleep == false)
+                SleepingAllowed = value;
+                if (SleepingAllowed == false)
                 {
-                    for (Body b = m_bodyList; b != null; b = b.Next)
+                    for (Body b = BodyList; b != null; b = b.Next)
                     {
                         b.Awake = true;
                     }
@@ -165,34 +147,30 @@ namespace Box2D.Dynamics
             }
         }
 
-        private void addType(IDynamicStack<Contact> creator, ShapeType type1, ShapeType type2)
+        private void AddType(IDynamicStack<Contact> creator, ShapeType type1, ShapeType type2)
         {
-            ContactRegister register = new ContactRegister();
-            register.creator = creator;
-            register.primary = true;
+            ContactRegister register = new ContactRegister {creator = creator, primary = true};
             contactStacks[(int)type1][(int)type2] = register;
 
             if (type1 != type2)
             {
-                ContactRegister register2 = new ContactRegister();
-                register2.creator = creator;
-                register2.primary = false;
+                ContactRegister register2 = new ContactRegister {creator = creator, primary = false};
                 contactStacks[(int)type2][(int)type1] = register2;
             }
         }
 
-        private void initializeRegisters()
+        private void InitializeRegisters()
         {
-            addType(pool.GetCircleContactStack(), ShapeType.Circle, ShapeType.Circle);
-            addType(pool.GetPolyCircleContactStack(), ShapeType.Polygon, ShapeType.Circle);
-            addType(pool.GetPolyContactStack(), ShapeType.Polygon, ShapeType.Polygon);
-            addType(pool.GetEdgeCircleContactStack(), ShapeType.Edge, ShapeType.Circle);
-            addType(pool.GetEdgePolyContactStack(), ShapeType.Edge, ShapeType.Polygon);
-            addType(pool.GetChainCircleContactStack(), ShapeType.Chain, ShapeType.Circle);
-            addType(pool.GetChainPolyContactStack(), ShapeType.Chain, ShapeType.Polygon);
+            AddType(Pool.GetCircleContactStack(), ShapeType.Circle, ShapeType.Circle);
+            AddType(Pool.GetPolyCircleContactStack(), ShapeType.Polygon, ShapeType.Circle);
+            AddType(Pool.GetPolyContactStack(), ShapeType.Polygon, ShapeType.Polygon);
+            AddType(Pool.GetEdgeCircleContactStack(), ShapeType.Edge, ShapeType.Circle);
+            AddType(Pool.GetEdgePolyContactStack(), ShapeType.Edge, ShapeType.Polygon);
+            AddType(Pool.GetChainCircleContactStack(), ShapeType.Chain, ShapeType.Circle);
+            AddType(Pool.GetChainPolyContactStack(), ShapeType.Chain, ShapeType.Polygon);
         }
 
-        public virtual Contact popContact(Fixture fixtureA, int indexA, Fixture fixtureB, int indexB)
+        public virtual Contact PopContact(Fixture fixtureA, int indexA, Fixture fixtureB, int indexB)
         {
             ShapeType type1 = fixtureA.Type;
             ShapeType type2 = fixtureB.Type;
@@ -221,7 +199,7 @@ namespace Box2D.Dynamics
             }
         }
 
-        public virtual void pushContact(Contact contact)
+        public virtual void PushContact(Contact contact)
         {
 
             if (contact.m_manifold.PointCount > 0)
@@ -243,7 +221,7 @@ namespace Box2D.Dynamics
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="def"></param>
         /// <returns></returns>
-        public virtual Body createBody(BodyDef def)
+        public virtual Body CreateBody(BodyDef def)
         {
             Debug.Assert(Locked == false);
             if (Locked)
@@ -255,13 +233,13 @@ namespace Box2D.Dynamics
 
             // add to world doubly linked list
             b.Prev = null;
-            b.Next = m_bodyList;
-            if (m_bodyList != null)
+            b.Next = BodyList;
+            if (BodyList != null)
             {
-                m_bodyList.Prev = b;
+                BodyList.Prev = b;
             }
-            m_bodyList = b;
-            ++m_bodyCount;
+            BodyList = b;
+            ++BodyCount;
 
             return b;
         }
@@ -273,9 +251,9 @@ namespace Box2D.Dynamics
         /// <warning>This automatically deletes all associated shapes and joints.</warning>
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="body"></param>
-        public virtual void destroyBody(Body body)
+        public virtual void DestroyBody(Body body)
         {
-            Debug.Assert(m_bodyCount > 0);
+            Debug.Assert(BodyCount > 0);
             Debug.Assert(Locked == false);
             if (Locked)
             {
@@ -288,12 +266,12 @@ namespace Box2D.Dynamics
             {
                 JointEdge je0 = je;
                 je = je.next;
-                if (m_destructionListener != null)
+                if (DestructionListener != null)
                 {
-                    m_destructionListener.SayGoodbye(je0.joint);
+                    DestructionListener.SayGoodbye(je0.joint);
                 }
 
-                destroyJoint(je0.joint);
+                DestroyJoint(je0.joint);
 
                 body.JointList = je;
             }
@@ -305,7 +283,7 @@ namespace Box2D.Dynamics
             {
                 ContactEdge ce0 = ce;
                 ce = ce.next;
-                m_contactManager.Destroy(ce0.contact);
+                ContactManager.Destroy(ce0.contact);
             }
             body.ContactList = null;
 
@@ -315,12 +293,12 @@ namespace Box2D.Dynamics
                 Fixture f0 = f;
                 f = f.Next;
 
-                if (m_destructionListener != null)
+                if (DestructionListener != null)
                 {
-                    m_destructionListener.SayGoodbye(f0);
+                    DestructionListener.SayGoodbye(f0);
                 }
 
-                f0.DestroyProxies(m_contactManager.BroadPhase);
+                f0.DestroyProxies(ContactManager.BroadPhase);
                 f0.Destroy();
                 // TODO djm recycle fixtures (here or in that destroy method)
                 body.FixtureList = f;
@@ -340,12 +318,12 @@ namespace Box2D.Dynamics
                 body.Next.Prev = body.Prev;
             }
 
-            if (body == m_bodyList)
+            if (body == BodyList)
             {
-                m_bodyList = body.Next;
+                BodyList = body.Next;
             }
 
-            --m_bodyCount;
+            --BodyCount;
             // TODO djm recycle body
         }
 
@@ -356,7 +334,7 @@ namespace Box2D.Dynamics
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="def"></param>
         /// <returns></returns>
-        public virtual Joint createJoint(JointDef def)
+        public virtual Joint CreateJoint(JointDef def)
         {
             Debug.Assert(Locked == false);
             if (Locked)
@@ -368,13 +346,13 @@ namespace Box2D.Dynamics
 
             // Connect to the world list.
             j.m_prev = null;
-            j.m_next = m_jointList;
-            if (m_jointList != null)
+            j.m_next = JointList;
+            if (JointList != null)
             {
-                m_jointList.m_prev = j;
+                JointList.m_prev = j;
             }
-            m_jointList = j;
-            ++m_jointCount;
+            JointList = j;
+            ++JointCount;
 
             // Connect to the bodies' doubly linked lists.
             j.m_edgeA.joint = j;
@@ -427,7 +405,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="joint"></param>
-        public virtual void destroyJoint(Joint j)
+        public virtual void DestroyJoint(Joint j)
         {
             Debug.Assert(Locked == false);
             if (Locked)
@@ -448,9 +426,9 @@ namespace Box2D.Dynamics
                 j.m_next.m_prev = j.m_prev;
             }
 
-            if (j == m_jointList)
+            if (j == JointList)
             {
-                m_jointList = j.m_next;
+                JointList = j.m_next;
             }
 
             // Disconnect from island graph.
@@ -501,8 +479,8 @@ namespace Box2D.Dynamics
 
             Joint.destroy(j);
 
-            Debug.Assert(m_jointCount > 0);
-            --m_jointCount;
+            Debug.Assert(JointCount > 0);
+            --JointCount;
 
             // If the joint prevents collisions, then flag any contacts for filtering.
             if (collideConnected == false)
@@ -523,81 +501,81 @@ namespace Box2D.Dynamics
         }
 
         // djm pooling
-        private readonly TimeStep step_Renamed_Field = new TimeStep();
+        private readonly TimeStep step = new TimeStep();
         private readonly Timer stepTimer = new Timer();
         private readonly Timer tempTimer = new Timer();
 
         /// <summary>
         /// Take a time step. This performs collision detection, integration, and constraint solution.
         /// </summary>
-        /// <param name="timeStep">the amount of time to simulate, this should not vary.</param>
+        /// <param name="dt">the amount of time to simulate, this should not vary.</param>
         /// <param name="velocityIterations">for the velocity constraint solver.</param>
         /// <param name="positionIterations">for the position constraint solver.</param>
-        public virtual void step(float dt, int velocityIterations, int positionIterations)
+        public virtual void Step(float dt, int velocityIterations, int positionIterations)
         {
             stepTimer.reset();
             // log.debug("Starting step");
             // If new fixtures were added, we need to find the new contacts.
-            if ((m_flags & NEW_FIXTURE) == NEW_FIXTURE)
+            if ((Flags & NEW_FIXTURE) == NEW_FIXTURE)
             {
                 // log.debug("There's a new fixture, lets look for new contacts");
-                m_contactManager.FindNewContacts();
-                m_flags &= ~NEW_FIXTURE;
+                ContactManager.FindNewContacts();
+                Flags &= ~NEW_FIXTURE;
             }
 
-            m_flags |= LOCKED;
+            Flags |= LOCKED;
 
-            step_Renamed_Field.Dt = dt;
-            step_Renamed_Field.VelocityIterations = velocityIterations;
-            step_Renamed_Field.PositionIterations = positionIterations;
+            step.Dt = dt;
+            step.VelocityIterations = velocityIterations;
+            step.PositionIterations = positionIterations;
             if (dt > 0.0f)
             {
-                step_Renamed_Field.InvDt = 1.0f / dt;
+                step.InvDt = 1.0f / dt;
             }
             else
             {
-                step_Renamed_Field.InvDt = 0.0f;
+                step.InvDt = 0.0f;
             }
 
-            step_Renamed_Field.DtRatio = m_inv_dt0 * dt;
+            step.DtRatio = invDt0 * dt;
 
-            step_Renamed_Field.WarmStarting = m_warmStarting;
+            step.WarmStarting = WarmStarting;
 
             // Update contacts. This is where some contacts are destroyed.
             tempTimer.reset();
-            m_contactManager.Collide();
-            m_profile.Collide = tempTimer.Milliseconds;
+            ContactManager.Collide();
+            Profile.Collide = tempTimer.Milliseconds;
 
             // Integrate velocities, solve velocity constraints, and integrate positions.
-            if (m_stepComplete && step_Renamed_Field.Dt > 0.0f)
+            if (m_stepComplete && step.Dt > 0.0f)
             {
                 tempTimer.reset();
-                solve(step_Renamed_Field);
-                m_profile.Solve = tempTimer.Milliseconds;
+                Solve(step);
+                Profile.Solve = tempTimer.Milliseconds;
             }
 
             // Handle TOI events.
-            if (m_continuousPhysics && step_Renamed_Field.Dt > 0.0f)
+            if (ContinuousPhysics && step.Dt > 0.0f)
             {
                 tempTimer.reset();
-                solveTOI(step_Renamed_Field);
-                m_profile.SolveToi = tempTimer.Milliseconds;
+                SolveToi(step);
+                Profile.SolveToi = tempTimer.Milliseconds;
             }
 
-            if (step_Renamed_Field.Dt > 0.0f)
+            if (step.Dt > 0.0f)
             {
-                m_inv_dt0 = step_Renamed_Field.InvDt;
+                invDt0 = step.InvDt;
             }
 
-            if ((m_flags & CLEAR_FORCES) == CLEAR_FORCES)
+            if ((Flags & CLEAR_FORCES) == CLEAR_FORCES)
             {
-                clearForces();
+                ClearForces();
             }
 
-            m_flags &= ~LOCKED;
+            Flags &= ~LOCKED;
             // log.debug("ending step");
 
-            m_profile.Step = stepTimer.Milliseconds;
+            Profile.Step = stepTimer.Milliseconds;
         }
 
         /// <summary>
@@ -605,10 +583,12 @@ namespace Box2D.Dynamics
         /// each call to Step, unless you are performing sub-steps. By default, forces will be
         /// automatically cleared, so you don't need to call this function.
         /// </summary>
-        /// <seealso cref="setAutoClearForces"></seealso>
-        public virtual void clearForces()
+        /// <seealso>
+        ///   <cref>setAutoClearForces</cref>
+        /// </seealso>
+        public virtual void ClearForces()
         {
-            for (Body body = m_bodyList; body != null; body = body.Next)
+            for (Body body = BodyList; body != null; body = body.Next)
             {
                 body.Force.setZero();
                 body.Torque = 0.0f;
@@ -617,25 +597,23 @@ namespace Box2D.Dynamics
 
         private readonly Color3f color = new Color3f();
         private readonly Transform xf = new Transform();
-        private readonly Vec2 cA = new Vec2();
-        private readonly Vec2 cB = new Vec2();
         private readonly Vec2Array avs = new Vec2Array();
 
         /// <summary>
         /// Call this to draw shapes and other debug draw data.
         /// </summary>
-        public virtual void drawDebugData()
+        public virtual void DrawDebugData()
         {
-            if (m_debugDraw == null)
+            if (DebugDraw == null)
             {
                 return;
             }
 
-            DebugDraw.DrawFlags flags = m_debugDraw.Flags;
+            DebugDraw.DrawFlags flags = DebugDraw.Flags;
 
             if ((flags & DebugDraw.DrawFlags.Shape) == DebugDraw.DrawFlags.Shape)
             {
-                for (Body b = m_bodyList; b != null; b = b.Next)
+                for (Body b = BodyList; b != null; b = b.Next)
                 {
                     xf.set_Renamed(b.GetTransform());
                     for (Fixture f = b.FixtureList; f != null; f = f.Next)
@@ -643,27 +621,27 @@ namespace Box2D.Dynamics
                         if (b.Active == false)
                         {
                             color.set_Renamed(0.5f, 0.5f, 0.3f);
-                            drawShape(f, xf, color);
+                            DrawShape(f, xf, color);
                         }
                         else if (b.Type == BodyType.Static)
                         {
                             color.set_Renamed(0.5f, 0.9f, 0.3f);
-                            drawShape(f, xf, color);
+                            DrawShape(f, xf, color);
                         }
                         else if (b.Type == BodyType.Kinematic)
                         {
                             color.set_Renamed(0.5f, 0.5f, 0.9f);
-                            drawShape(f, xf, color);
+                            DrawShape(f, xf, color);
                         }
                         else if (b.Awake == false)
                         {
                             color.set_Renamed(0.5f, 0.5f, 0.5f);
-                            drawShape(f, xf, color);
+                            DrawShape(f, xf, color);
                         }
                         else
                         {
                             color.set_Renamed(0.9f, 0.7f, 0.7f);
-                            drawShape(f, xf, color);
+                            DrawShape(f, xf, color);
                         }
                     }
                 }
@@ -671,16 +649,16 @@ namespace Box2D.Dynamics
 
             if ((flags & DebugDraw.DrawFlags.Joint) == DebugDraw.DrawFlags.Joint)
             {
-                for (Joint j = m_jointList; j != null; j = j.Next)
+                for (Joint j = JointList; j != null; j = j.Next)
                 {
-                    drawJoint(j);
+                    DrawJoint(j);
                 }
             }
 
             if ((flags & DebugDraw.DrawFlags.Pair) == DebugDraw.DrawFlags.Pair)
             {
                 color.set_Renamed(0.3f, 0.9f, 0.9f);
-                for (Contact c = m_contactManager.ContactList; c != null; c = c.Next)
+                for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
                 {
                     // Fixture fixtureA = c.getFixtureA();
                     // Fixture fixtureB = c.getFixtureB();
@@ -696,7 +674,7 @@ namespace Box2D.Dynamics
             {
                 color.set_Renamed(0.9f, 0.3f, 0.9f);
 
-                for (Body b = m_bodyList; b != null; b = b.Next)
+                for (Body b = BodyList; b != null; b = b.Next)
                 {
                     if (b.Active == false)
                     {
@@ -709,14 +687,14 @@ namespace Box2D.Dynamics
                         for (int i = 0; i < f.ProxyCount; ++i)
                         {
                             FixtureProxy proxy = f.Proxies[i];
-                            AABB aabb = m_contactManager.BroadPhase.GetFatAABB(proxy.ProxyId);
+                            AABB aabb = ContactManager.BroadPhase.GetFatAABB(proxy.ProxyId);
                             Vec2[] vs = avs.Get(4);
                             vs[0].set_Renamed(aabb.LowerBound.x, aabb.LowerBound.y);
                             vs[1].set_Renamed(aabb.UpperBound.x, aabb.LowerBound.y);
                             vs[2].set_Renamed(aabb.UpperBound.x, aabb.UpperBound.y);
                             vs[3].set_Renamed(aabb.LowerBound.x, aabb.UpperBound.y);
 
-                            m_debugDraw.DrawPolygon(vs, 4, color);
+                            DebugDraw.DrawPolygon(vs, 4, color);
                         }
                     }
                 }
@@ -724,17 +702,17 @@ namespace Box2D.Dynamics
 
             if ((flags & DebugDraw.DrawFlags.CenterOfMass) == DebugDraw.DrawFlags.CenterOfMass)
             {
-                for (Body b = m_bodyList; b != null; b = b.Next)
+                for (Body b = BodyList; b != null; b = b.Next)
                 {
                     xf.set_Renamed(b.GetTransform());
                     xf.p.set_Renamed(b.WorldCenter);
-                    m_debugDraw.DrawTransform(xf);
+                    DebugDraw.DrawTransform(xf);
                 }
             }
 
             if ((flags & DebugDraw.DrawFlags.DynamicTree) == DebugDraw.DrawFlags.DynamicTree)
             {
-                m_contactManager.BroadPhase.DrawTree(m_debugDraw);
+                ContactManager.BroadPhase.DrawTree(DebugDraw);
             }
         }
 
@@ -745,11 +723,11 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="callback">a user implemented callback class.</param>
         /// <param name="aabb">the query box.</param>
-        public virtual void queryAABB(IQueryCallback callback, AABB aabb)
+        public virtual void QueryAABB(IQueryCallback callback, AABB aabb)
         {
-            wqwrapper.broadPhase = m_contactManager.BroadPhase;
-            wqwrapper.callback = callback;
-            m_contactManager.BroadPhase.Query(wqwrapper, aabb);
+            wqwrapper.BroadPhase = ContactManager.BroadPhase;
+            wqwrapper.Callback = callback;
+            ContactManager.BroadPhase.Query(wqwrapper, aabb);
         }
 
         private readonly WorldRayCastWrapper wrcwrapper = new WorldRayCastWrapper();
@@ -763,58 +741,43 @@ namespace Box2D.Dynamics
         /// <param name="callback">a user implemented callback class.</param>
         /// <param name="point1">the ray starting point</param>
         /// <param name="point2">the ray ending point</param>
-        public virtual void raycast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
+        public virtual void Raycast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
         {
-            wrcwrapper.broadPhase = m_contactManager.BroadPhase;
-            wrcwrapper.callback = callback;
+            wrcwrapper.BroadPhase = ContactManager.BroadPhase;
+            wrcwrapper.Callback = callback;
             input.MaxFraction = 1.0f;
             input.P1.set_Renamed(point1);
             input.P2.set_Renamed(point2);
-            m_contactManager.BroadPhase.Raycast(wrcwrapper, input);
+            ContactManager.BroadPhase.Raycast(wrcwrapper, input);
         }
 
-        virtual public IWorldPool Pool
-        {
-            get
-            {
-                return pool;
-            }
-        }
+        public virtual IWorldPool Pool { get; private set; }
 
         /// <summary>
         /// Register a destruction listener. The listener is owned by you and must remain in scope.
         /// </summary>
-        /// <param name="listener"></param>
-        virtual public IDestructionListener DestructionListener
-        {
-            set
-            {
-                m_destructionListener = value;
-            }
-        }
+        public virtual IDestructionListener DestructionListener { private get; set; }
 
         /// <summary>
         /// Register a contact filter to provide specific control over collision. Otherwise the default
         /// filter is used (_defaultFilter). The listener is owned by you and must remain in scope.
         /// </summary>
-        /// <param name="filter"></param>
         virtual public ContactFilter ContactFilter
         {
             set
             {
-                m_contactManager.ContactFilter = value;
+                ContactManager.ContactFilter = value;
             }
         }
 
         /// <summary>
         /// Register a contact event listener. The listener is owned by you and must remain in scope.
         /// </summary>
-        /// <param name="listener"></param>
         virtual public ContactListener ContactListener
         {
             set
             {
-                m_contactManager.ContactListener = value;
+                ContactManager.ContactListener = value;
             }
         }
 
@@ -822,40 +785,21 @@ namespace Box2D.Dynamics
         /// Register a routine for debug drawing. The debug draw functions are called inside with
         /// World.DrawDebugData method. The debug draw object is owned by you and must remain in scope.
         /// </summary>
-        /// <param name="debugDraw"></param>
-        virtual public DebugDraw DebugDraw
-        {
-            set
-            {
-                m_debugDraw = value;
-            }
-        }
+        public virtual DebugDraw DebugDraw { private get; set; }
 
         /// <summary>
         /// Get the world body list. With the returned body, use Body.getNext to get the next body in the
         /// world list. A null body indicates the end of the list.
         /// </summary>
         /// <returns>the head of the world body list.</returns>
-        virtual public Body BodyList
-        {
-            get
-            {
-                return m_bodyList;
-            }
-        }
+        public virtual Body BodyList { get; private set; }
 
         /// <summary>
         /// Get the world joint list. With the returned joint, use Joint.getNext to get the next joint in
         /// the world list. A null joint indicates the end of the list.
         /// </summary>
         /// <returns>the head of the world joint list.</returns>
-        virtual public Joint JointList
-        {
-            get
-            {
-                return m_jointList;
-            }
-        }
+        public virtual Joint JointList { get; private set; }
 
         /// <summary>
         /// Get the world contact list. With the returned contact, use Contact.getNext to get the next
@@ -867,52 +811,21 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.ContactList;
+                return ContactManager.ContactList;
             }
         }
 
-        virtual public bool SleepingAllowed
-        {
-            get
-            {
-                return m_allowSleep;
-            }
-            set
-            {
-                m_allowSleep = value;
-            }
-        }
+        public virtual bool SleepingAllowed { get; set; }
 
         /// <summary>
         /// Enable/disable warm starting. For testing.
         /// </summary>
-        virtual public bool WarmStarting
-        {
-            get
-            {
-                return m_warmStarting;
-            }
-            set
-            {
-                m_warmStarting = value;
-            }
-        }
+        public virtual bool WarmStarting { get; set; }
 
         /// <summary>
         /// Enable/disable continuous physics. For testing.
         /// </summary>
-        virtual public bool ContinuousPhysics
-        {
-            get
-            {
-                return m_continuousPhysics;
-            }
-
-            set
-            {
-                m_continuousPhysics = value;
-            }
-        }
+        public virtual bool ContinuousPhysics { get; set; }
 
         /// <summary>
         /// Get the number of broad-phase proxies.
@@ -922,7 +835,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.BroadPhase.ProxyCount;
+                return ContactManager.BroadPhase.ProxyCount;
             }
         }
 
@@ -930,25 +843,13 @@ namespace Box2D.Dynamics
         /// Get the number of bodies.
         /// </summary>
         /// <returns></returns>
-        virtual public int BodyCount
-        {
-            get
-            {
-                return m_bodyCount;
-            }
-        }
+        public virtual int BodyCount { get; private set; }
 
         /// <summary>
         /// Get the number of joints.
         /// </summary>
         /// <returns></returns>
-        virtual public int JointCount
-        {
-            get
-            {
-                return m_jointCount;
-            }
-        }
+        public virtual int JointCount { get; private set; }
 
         /// <summary>
         /// Get the number of contacts (each may have 0 or more contact points).
@@ -958,7 +859,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.ContactCount;
+                return ContactManager.ContactCount;
             }
         }
 
@@ -970,7 +871,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.BroadPhase.TreeHeight;
+                return ContactManager.BroadPhase.TreeHeight;
             }
         }
 
@@ -982,7 +883,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.BroadPhase.TreeBalance;
+                return ContactManager.BroadPhase.TreeBalance;
             }
         }
 
@@ -994,7 +895,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.BroadPhase.TreeQuality;
+                return ContactManager.BroadPhase.TreeQuality;
             }
         }
 
@@ -1021,7 +922,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return (m_flags & LOCKED) == LOCKED;
+                return (Flags & LOCKED) == LOCKED;
             }
         }
 
@@ -1032,17 +933,17 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return (m_flags & CLEAR_FORCES) == CLEAR_FORCES;
+                return (Flags & CLEAR_FORCES) == CLEAR_FORCES;
             }
             set
             {
                 if (value)
                 {
-                    m_flags |= CLEAR_FORCES;
+                    Flags |= CLEAR_FORCES;
                 }
                 else
                 {
-                    m_flags &= ~CLEAR_FORCES;
+                    Flags &= ~CLEAR_FORCES;
                 }
             }
         }
@@ -1051,57 +952,45 @@ namespace Box2D.Dynamics
         /// Get the contact manager for testing purposes
         /// </summary>
         /// <returns></returns>
-        virtual public ContactManager ContactManager
-        {
-            get
-            {
-                return m_contactManager;
-            }
-        }
+        public virtual ContactManager ContactManager { get; protected internal set; }
 
-        virtual public Profile Profile
-        {
-            get
-            {
-                return m_profile;
-            }
-        }
+        public virtual Profile Profile { get; private set; }
 
         private readonly Island island = new Island();
         private Body[] stack = new Body[10]; // TODO djm find a good initial stack number;
         private readonly Profile islandProfile = new Profile();
         private readonly Timer broadphaseTimer = new Timer();
 
-        private void solve(TimeStep step)
+        private void Solve(TimeStep step)
         {
-            m_profile.SolveInit = 0;
-            m_profile.SolveVelocity = 0;
-            m_profile.SolvePosition = 0;
+            Profile.SolveInit = 0;
+            Profile.SolveVelocity = 0;
+            Profile.SolvePosition = 0;
 
             // Size the island for the worst case.
-            island.Init(m_bodyCount, m_contactManager.ContactCount, m_jointCount, m_contactManager.ContactListener);
+            island.Init(BodyCount, ContactManager.ContactCount, JointCount, ContactManager.ContactListener);
 
             // Clear all the island flags.
-            for (Body b = m_bodyList; b != null; b = b.Next)
+            for (Body b = BodyList; b != null; b = b.Next)
             {
                 b.Flags &= ~Body.TypeFlags.Island;
             }
-            for (Contact c = m_contactManager.ContactList; c != null; c = c.m_next)
+            for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
             {
                 c.m_flags &= ~Contact.ISLAND_FLAG;
             }
-            for (Joint j = m_jointList; j != null; j = j.m_next)
+            for (Joint j = JointList; j != null; j = j.m_next)
             {
                 j.m_islandFlag = false;
             }
 
             // Build and simulate all awake islands.
-            int stackSize = m_bodyCount;
+            int stackSize = BodyCount;
             if (stack.Length < stackSize)
             {
                 stack = new Body[stackSize];
             }
-            for (Body seed = m_bodyList; seed != null; seed = seed.Next)
+            for (Body seed = BodyList; seed != null; seed = seed.Next)
             {
                 if ((seed.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
                 {
@@ -1213,10 +1102,10 @@ namespace Box2D.Dynamics
                         other.Flags |= Body.TypeFlags.Island;
                     }
                 }
-                island.Solve(islandProfile, step, m_gravity, m_allowSleep);
-                m_profile.SolveInit += islandProfile.SolveInit;
-                m_profile.SolveVelocity += islandProfile.SolveVelocity;
-                m_profile.SolvePosition += islandProfile.SolvePosition;
+                island.Solve(islandProfile, step, m_gravity, SleepingAllowed);
+                Profile.SolveInit += islandProfile.SolveInit;
+                Profile.SolveVelocity += islandProfile.SolveVelocity;
+                Profile.SolvePosition += islandProfile.SolvePosition;
 
                 // Post solve cleanup.
                 for (int i = 0; i < island.BodyCount; ++i)
@@ -1232,7 +1121,7 @@ namespace Box2D.Dynamics
 
             broadphaseTimer.reset();
             // Synchronize fixtures, check for out of range bodies.
-            for (Body b = m_bodyList; b != null; b = b.Next)
+            for (Body b = BodyList; b != null; b = b.Next)
             {
                 // If a body was not in an island then it did not move.
                 if ((b.Flags & Body.TypeFlags.Island) == 0)
@@ -1250,8 +1139,8 @@ namespace Box2D.Dynamics
             }
 
             // Look for new contacts.
-            m_contactManager.FindNewContacts();
-            m_profile.Broadphase = broadphaseTimer.Milliseconds;
+            ContactManager.FindNewContacts();
+            Profile.Broadphase = broadphaseTimer.Milliseconds;
         }
 
         private readonly Island toiIsland = new Island();
@@ -1262,19 +1151,19 @@ namespace Box2D.Dynamics
         private readonly Sweep backup1 = new Sweep();
         private readonly Sweep backup2 = new Sweep();
 
-        private void solveTOI(TimeStep step)
+        private void SolveToi(TimeStep step)
         {
             Island island = toiIsland;
-            island.Init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, m_contactManager.ContactListener);
+            island.Init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, ContactManager.ContactListener);
             if (m_stepComplete)
             {
-                for (Body b = m_bodyList; b != null; b = b.Next)
+                for (Body b = BodyList; b != null; b = b.Next)
                 {
                     b.Flags &= ~Body.TypeFlags.Island;
                     b.Sweep.alpha0 = 0.0f;
                 }
 
-                for (Contact c = m_contactManager.ContactList; c != null; c = c.m_next)
+                for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
                 {
                     // Invalidate TOI
                     c.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
@@ -1290,7 +1179,7 @@ namespace Box2D.Dynamics
                 Contact minContact = null;
                 float minAlpha = 1.0f;
 
-                for (Contact c = m_contactManager.ContactList; c != null; c = c.m_next)
+                for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
                 {
                     // Is this contact disabled?
                     if (c.Enabled == false)
@@ -1374,7 +1263,7 @@ namespace Box2D.Dynamics
                         input.SweepB.set_Renamed(bB.Sweep);
                         input.TMax = 1.0f;
 
-                        pool.GetTimeOfImpact().GetTimeOfImpact(toiOutput, input);
+                        Pool.GetTimeOfImpact().GetTimeOfImpact(toiOutput, input);
 
                         // Beta is the fraction of the remaining portion of the .
                         float beta = toiOutput.T;
@@ -1419,7 +1308,7 @@ namespace Box2D.Dynamics
                 bB2.Advance(minAlpha);
 
                 // The TOI contact likely has some new contact points.
-                minContact.update(m_contactManager.ContactListener);
+                minContact.update(ContactManager.ContactListener);
                 minContact.m_flags &= ~Contact.TOI_FLAG;
                 ++minContact.m_toiCount;
 
@@ -1499,7 +1388,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Update the contact points
-                            contact.update(m_contactManager.ContactListener);
+                            contact.update(ContactManager.ContactListener);
 
                             // Was the contact disabled by the user?
                             if (contact.Enabled == false)
@@ -1570,7 +1459,7 @@ namespace Box2D.Dynamics
 
                 // Commit fixture proxy movements to the broad-phase so that new contacts are created.
                 // Also, some contacts can be destroyed.
-                m_contactManager.FindNewContacts();
+                ContactManager.FindNewContacts();
 
                 if (m_subStepping)
                 {
@@ -1580,7 +1469,7 @@ namespace Box2D.Dynamics
             }
         }
 
-        private void drawJoint(Joint joint)
+        private void DrawJoint(Joint joint)
         {
             Body bodyA = joint.BodyA;
             Body bodyB = joint.BodyB;
@@ -1588,8 +1477,8 @@ namespace Box2D.Dynamics
             Transform xf2 = bodyB.GetTransform();
             Vec2 x1 = xf1.p;
             Vec2 x2 = xf2.p;
-            Vec2 p1 = pool.PopVec2();
-            Vec2 p2 = pool.PopVec2();
+            Vec2 p1 = Pool.PopVec2();
+            Vec2 p2 = Pool.PopVec2();
             joint.getAnchorA(p1);
             joint.getAnchorB(p2);
 
@@ -1600,7 +1489,7 @@ namespace Box2D.Dynamics
 
                 // TODO djm write after writing joints
                 case JointType.DISTANCE:
-                    m_debugDraw.DrawSegment(p1, p2, color);
+                    DebugDraw.DrawSegment(p1, p2, color);
                     break;
 
 
@@ -1609,9 +1498,9 @@ namespace Box2D.Dynamics
                         PulleyJoint pulley = (PulleyJoint)joint;
                         Vec2 s1 = pulley.GroundAnchorA;
                         Vec2 s2 = pulley.GroundAnchorB;
-                        m_debugDraw.DrawSegment(s1, p1, color);
-                        m_debugDraw.DrawSegment(s2, p2, color);
-                        m_debugDraw.DrawSegment(s1, s2, color);
+                        DebugDraw.DrawSegment(s1, p1, color);
+                        DebugDraw.DrawSegment(s2, p2, color);
+                        DebugDraw.DrawSegment(s1, s2, color);
                     }
                     break;
 
@@ -1621,19 +1510,19 @@ namespace Box2D.Dynamics
                     break;
 
                 default:
-                    m_debugDraw.DrawSegment(x1, p1, color);
-                    m_debugDraw.DrawSegment(p1, p2, color);
-                    m_debugDraw.DrawSegment(x2, p2, color);
+                    DebugDraw.DrawSegment(x1, p1, color);
+                    DebugDraw.DrawSegment(p1, p2, color);
+                    DebugDraw.DrawSegment(x2, p2, color);
                     break;
 
             }
-            pool.PushVec2(2);
+            Pool.PushVec2(2);
         }
 
         // NOTE this corresponds to the liquid test, so the debugdraw can draw
         // the liquid particles correctly. They should be the same.
-        private static Int32 LIQUID_INT = 1234598372;
-        private float liquidLength = .12f;
+        private const int LIQUID_INT = 1234598372;
+        private const float liquidLength = .12f;
         private float averageLinearVel = -1;
         private readonly Vec2 liquidOffset = new Vec2();
         private readonly Vec2 circCenterMoved = new Vec2();
@@ -1645,7 +1534,7 @@ namespace Box2D.Dynamics
         private readonly Vec2 v2 = new Vec2();
         private readonly Vec2Array tlvertices = new Vec2Array();
 
-        private void drawShape(Fixture fixture, Transform xf, Color3f color)
+        private void DrawShape(Fixture fixture, Transform xf, Color3f color)
         {
             switch (fixture.Type)
             {
@@ -1675,11 +1564,11 @@ namespace Box2D.Dynamics
                             liquidOffset.mulLocal(liquidLength / averageLinearVel / 2);
                             circCenterMoved.set_Renamed(center).addLocal(liquidOffset);
                             center.subLocal(liquidOffset);
-                            m_debugDraw.DrawSegment(center, circCenterMoved, liquidColor);
+                            DebugDraw.DrawSegment(center, circCenterMoved, liquidColor);
                             return;
                         }
 
-                        m_debugDraw.DrawSolidCircle(center, radius, axis, color);
+                        DebugDraw.DrawSolidCircle(center, radius, axis, color);
                     }
                     break;
 
@@ -1697,7 +1586,7 @@ namespace Box2D.Dynamics
                             Transform.mulToOutUnsafe(xf, poly.Vertices[i], vertices[i]);
                         }
 
-                        m_debugDraw.DrawSolidPolygon(vertices, vertexCount, color);
+                        DebugDraw.DrawSolidPolygon(vertices, vertexCount, color);
                     }
                     break;
 
@@ -1706,7 +1595,7 @@ namespace Box2D.Dynamics
                         EdgeShape edge = (EdgeShape)fixture.Shape;
                         Transform.mulToOutUnsafe(xf, edge.Vertex1, v1);
                         Transform.mulToOutUnsafe(xf, edge.Vertex2, v2);
-                        m_debugDraw.DrawSegment(v1, v2, color);
+                        DebugDraw.DrawSegment(v1, v2, color);
                     }
                     break;
 
@@ -1721,8 +1610,8 @@ namespace Box2D.Dynamics
                         for (int i = 1; i < count; ++i)
                         {
                             Transform.mulToOutUnsafe(xf, vertices[i], v2);
-                            m_debugDraw.DrawSegment(v1, v2, color);
-                            m_debugDraw.DrawCircle(v1, 0.05f, color);
+                            DebugDraw.DrawSegment(v1, v2, color);
+                            DebugDraw.DrawCircle(v1, 0.05f, color);
                             v1.set_Renamed(v2);
                         }
                     }
@@ -1740,12 +1629,12 @@ namespace Box2D.Dynamics
     {
         public virtual bool TreeCallback(int nodeId)
         {
-            FixtureProxy proxy = (FixtureProxy)broadPhase.GetUserData(nodeId);
-            return callback.ReportFixture(proxy.Fixture);
+            FixtureProxy proxy = (FixtureProxy)BroadPhase.GetUserData(nodeId);
+            return Callback.ReportFixture(proxy.Fixture);
         }
 
-        internal BroadPhase broadPhase;
-        internal IQueryCallback callback;
+        internal BroadPhase BroadPhase;
+        internal IQueryCallback Callback;
     }
 
 
@@ -1760,7 +1649,7 @@ namespace Box2D.Dynamics
 
         public virtual float RaycastCallback(RayCastInput input, int nodeId)
         {
-            Object userData = broadPhase.GetUserData(nodeId);
+            Object userData = BroadPhase.GetUserData(nodeId);
             FixtureProxy proxy = (FixtureProxy)userData;
             Fixture fixture = proxy.Fixture;
             int index = proxy.ChildIndex;
@@ -1772,14 +1661,14 @@ namespace Box2D.Dynamics
                 // Vec2 point = (1.0f - fraction) * input.p1 + fraction * input.p2;
                 temp.set_Renamed(input.P2).mulLocal(fraction);
                 point.set_Renamed(input.P1).mulLocal(1 - fraction).addLocal(temp);
-                return callback.ReportFixture(fixture, point, output.Normal, fraction);
+                return Callback.ReportFixture(fixture, point, output.Normal, fraction);
             }
 
             return input.MaxFraction;
         }
 
-        internal BroadPhase broadPhase;
-        internal IRayCastCallback callback;
+        internal BroadPhase BroadPhase;
+        internal IRayCastCallback Callback;
     }
 
 }

@@ -187,7 +187,7 @@ namespace Box2D.Dynamics
 
             if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
-                BroadPhase broadPhase = World.m_contactManager.BroadPhase;
+                BroadPhase broadPhase = World.ContactManager.BroadPhase;
                 fixture.CreateProxies(broadPhase, Xf);
             }
 
@@ -205,7 +205,7 @@ namespace Box2D.Dynamics
 
             // Let the world know we have a new fixture. This will cause new contacts
             // to be created at the beginning of the next time step.
-            World.m_flags |= World.NEW_FIXTURE;
+            World.Flags |= World.NEW_FIXTURE;
 
             return fixture;
         }
@@ -290,13 +290,13 @@ namespace Box2D.Dynamics
                 {
                     // This destroys the contact and removes it from
                     // this body's contact list.
-                    World.m_contactManager.Destroy(c);
+                    World.ContactManager.Destroy(c);
                 }
             }
 
             if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
-                BroadPhase broadPhase = World.m_contactManager.BroadPhase;
+                BroadPhase broadPhase = World.ContactManager.BroadPhase;
                 fixture.DestroyProxies(broadPhase);
             }
 
@@ -334,13 +334,13 @@ namespace Box2D.Dynamics
             Sweep.c0.set_Renamed(Sweep.c);
             Sweep.a0 = Sweep.a;
 
-            BroadPhase broadPhase = World.m_contactManager.BroadPhase;
+            BroadPhase broadPhase = World.ContactManager.BroadPhase;
             for (Fixture f = FixtureList; f != null; f = f.Next)
             {
                 f.Synchronize(broadPhase, Xf, Xf);
             }
 
-            World.m_contactManager.FindNewContacts();
+            World.ContactManager.FindNewContacts();
         }
 
         /// <summary>
@@ -529,12 +529,12 @@ namespace Box2D.Dynamics
                 {
                     ContactEdge ce0 = ce;
                     ce = ce.next;
-                    World.m_contactManager.Destroy(ce0.contact);
+                    World.ContactManager.Destroy(ce0.contact);
                 }
                 ContactList = null;
 
                 // Touch the proxies so that new contacts will be created (when appropriate)
-                BroadPhase broadPhase = World.m_contactManager.BroadPhase;
+                BroadPhase broadPhase = World.ContactManager.BroadPhase;
                 for (Fixture f = FixtureList; f != null; f = f.Next)
                 {
                     int proxyCount = f.ProxyCount;
@@ -656,7 +656,7 @@ namespace Box2D.Dynamics
                     Flags |= TypeFlags.Active;
 
                     // Create all proxies.
-                    BroadPhase broadPhase = World.m_contactManager.BroadPhase;
+                    BroadPhase broadPhase = World.ContactManager.BroadPhase;
                     for (Fixture f = FixtureList; f != null; f = f.Next)
                     {
                         f.CreateProxies(broadPhase, Xf);
@@ -669,7 +669,7 @@ namespace Box2D.Dynamics
                     Flags &= ~TypeFlags.Active;
 
                     // Destroy all proxies.
-                    BroadPhase broadPhase = World.m_contactManager.BroadPhase;
+                    BroadPhase broadPhase = World.ContactManager.BroadPhase;
                     for (Fixture f = FixtureList; f != null; f = f.Next)
                     {
                         f.DestroyProxies(broadPhase);
@@ -681,7 +681,7 @@ namespace Box2D.Dynamics
                     {
                         ContactEdge ce0 = ce;
                         ce = ce.next;
-                        World.m_contactManager.Destroy(ce0.contact);
+                        World.ContactManager.Destroy(ce0.contact);
                     }
                     ContactList = null;
                 }
@@ -1159,7 +1159,7 @@ namespace Box2D.Dynamics
 
             for (Fixture f = FixtureList; f != null; f = f.Next)
             {
-                f.Synchronize(World.m_contactManager.BroadPhase, xf1, Xf);
+                f.Synchronize(World.ContactManager.BroadPhase, xf1, Xf);
             }
         }
 

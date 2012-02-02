@@ -118,7 +118,7 @@ namespace Box2D.Dynamics.Joints
                     djd.frequencyHz = def.frequencyHz; // 20.0f;
                     djd.dampingRatio = def.dampingRatio; // 50.0f;
                     djd.initialize(bodies[i], bodies[next], bodies[i].WorldCenter, bodies[next].WorldCenter);
-                    distanceJoints[i] = (DistanceJoint)world.createJoint(djd);
+                    distanceJoints[i] = (DistanceJoint)world.CreateJoint(djd);
                 }
             }
             else
@@ -145,7 +145,7 @@ namespace Box2D.Dynamics.Joints
         {
             for (int i = 0; i < distanceJoints.Length; ++i)
             {
-                world.destroyJoint(distanceJoints[i]);
+                world.DestroyJoint(distanceJoints[i]);
             }
         }
 
