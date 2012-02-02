@@ -168,13 +168,13 @@ namespace Box2D.Collision.Shapes
             Transform.mulToOutUnsafe(xf, Vertex1, v1);
             Transform.mulToOutUnsafe(xf, Vertex2, v2);
 
-            Vec2.minToOut(v1, v2, aabb.lowerBound);
-            Vec2.maxToOut(v1, v2, aabb.upperBound);
+            Vec2.minToOut(v1, v2, aabb.LowerBound);
+            Vec2.maxToOut(v1, v2, aabb.UpperBound);
 
-            aabb.lowerBound.x -= Radius;
-            aabb.lowerBound.y -= Radius;
-            aabb.upperBound.x += Radius;
-            aabb.upperBound.y += Radius;
+            aabb.LowerBound.x -= Radius;
+            aabb.LowerBound.y -= Radius;
+            aabb.UpperBound.x += Radius;
+            aabb.UpperBound.y += Radius;
         }
 
         public override void ComputeMass(MassData massData, float density)

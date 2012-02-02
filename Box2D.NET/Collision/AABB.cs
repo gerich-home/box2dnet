@@ -38,20 +38,19 @@ namespace Box2D.Collision
         {
             get
             {
-                float dx = upperBound.x - lowerBound.x;
+                float dx = UpperBound.x - LowerBound.x;
                 if (dx < 0f)
                 {
                     return false;
                 }
 
-                float dy = upperBound.y - lowerBound.y;
+                float dy = UpperBound.y - LowerBound.y;
                 if (dy < 0)
                 {
                     return false;
                 }
-                return lowerBound.Valid && upperBound.Valid;
+                return LowerBound.Valid && UpperBound.Valid;
             }
-
         }
 
         /// <summary>
@@ -62,12 +61,11 @@ namespace Box2D.Collision
         {
             get
             {
-                Vec2 center = new Vec2(lowerBound);
-                center.addLocal(upperBound);
+                Vec2 center = new Vec2(LowerBound);
+                center.addLocal(UpperBound);
                 center.mulLocal(.5f);
                 return center;
             }
-
         }
 
         /// <summary>
@@ -78,12 +76,11 @@ namespace Box2D.Collision
         {
             get
             {
-                Vec2 center = new Vec2(upperBound);
-                center.subLocal(lowerBound);
+                Vec2 center = new Vec2(UpperBound);
+                center.subLocal(LowerBound);
                 center.mulLocal(.5f);
                 return center;
             }
-
         }
 
         /// <summary>
@@ -94,21 +91,20 @@ namespace Box2D.Collision
         {
             get
             {
-                return 2.0f * (upperBound.x - lowerBound.x + upperBound.y - lowerBound.y);
+                return 2.0f * (UpperBound.x - LowerBound.x + UpperBound.y - LowerBound.y);
             }
-
         }
 
         /// <summary>Bottom left vertex of bounding box. </summary>
-        public readonly Vec2 lowerBound;
+        public readonly Vec2 LowerBound;
         /// <summary>Top right vertex of bounding box. </summary>
-        public readonly Vec2 upperBound;
+        public readonly Vec2 UpperBound;
 
         /// <summary> Creates the default object, with vertices at 0,0 and 0,0.</summary>
         public AABB()
         {
-            lowerBound = new Vec2();
-            upperBound = new Vec2();
+            LowerBound = new Vec2();
+            UpperBound = new Vec2();
         }
 
         /// <summary>
@@ -116,7 +112,7 @@ namespace Box2D.Collision
         /// </summary>
         /// <param name="copy">the object to copy from</param>
         public AABB(AABB copy) :
-            this(copy.lowerBound, copy.upperBound)
+            this(copy.LowerBound, copy.UpperBound)
         {
         }
 
@@ -124,47 +120,47 @@ namespace Box2D.Collision
         /// Creates an AABB object using the given bounding vertices.
         /// </summary>
         /// <param name="lowerVertex">the bottom left vertex of the bounding box</param>
-        /// <param name="maxVertex">the top right vertex of the bounding box</param>
+        /// <param name="upperVertex">the top right vertex of the bounding box</param>
         public AABB(Vec2 lowerVertex, Vec2 upperVertex)
         {
-            this.lowerBound = lowerVertex.Clone(); // clone to be safe
-            this.upperBound = upperVertex.Clone();
+            LowerBound = lowerVertex.Clone(); // clone to be safe
+            UpperBound = upperVertex.Clone();
         }
 
         /// <summary>
         /// Sets this object from the given object
         /// </summary>
         /// <param name="aabb">the object to copy from</param>
-        public void set_Renamed(AABB aabb)
+        public void Set(AABB aabb)
         {
-            Vec2 v = aabb.lowerBound;
-            lowerBound.x = v.x;
-            lowerBound.y = v.y;
-            Vec2 v1 = aabb.upperBound;
-            upperBound.x = v1.x;
-            upperBound.y = v1.y;
+            Vec2 v = aabb.LowerBound;
+            LowerBound.x = v.x;
+            LowerBound.y = v.y;
+            Vec2 v1 = aabb.UpperBound;
+            UpperBound.x = v1.x;
+            UpperBound.y = v1.y;
         }
 
-        public void getCenterToOut(Vec2 out_Renamed)
+        public void GetCenterToOut(Vec2 result)
         {
-            out_Renamed.x = (lowerBound.x + upperBound.x) * .5f;
-            out_Renamed.y = (lowerBound.y + upperBound.y) * .5f;
+            result.x = (LowerBound.x + UpperBound.x) * .5f;
+            result.y = (LowerBound.y + UpperBound.y) * .5f;
         }
 
-        public void getExtentsToOut(Vec2 out_Renamed)
+        public void GetExtentsToOut(Vec2 result)
         {
-            out_Renamed.x = (upperBound.x - lowerBound.x) * .5f;
-            out_Renamed.y = (upperBound.y - lowerBound.y) * .5f; // thanks FDN1
+            result.x = (UpperBound.x - LowerBound.x) * .5f;
+            result.y = (UpperBound.y - LowerBound.y) * .5f; // thanks FDN1
         }
 
-        public void getVertices(Vec2[] argRay)
+        public void GetVertices(Vec2[] argRay)
         {
-            argRay[0].set_Renamed(lowerBound);
-            argRay[1].set_Renamed(lowerBound);
-            argRay[1].x += upperBound.x - lowerBound.x;
-            argRay[2].set_Renamed(upperBound);
-            argRay[3].set_Renamed(upperBound);
-            argRay[3].x -= (upperBound.x - lowerBound.x);
+            argRay[0].set_Renamed(LowerBound);
+            argRay[1].set_Renamed(LowerBound);
+            argRay[1].x += UpperBound.x - LowerBound.x;
+            argRay[2].set_Renamed(UpperBound);
+            argRay[3].set_Renamed(UpperBound);
+            argRay[3].x -= (UpperBound.x - LowerBound.x);
         }
 
         /// <summary>
@@ -172,31 +168,31 @@ namespace Box2D.Collision
         /// </summary>
         /// <param name="aabb1"></param>
         /// <param name="aab"></param>
-        public void combine(AABB aabb1, AABB aab)
+        public void Combine(AABB aabb1, AABB aab)
         {
-            lowerBound.x = aabb1.lowerBound.x < aab.lowerBound.x ? aabb1.lowerBound.x : aab.lowerBound.x;
-            lowerBound.y = aabb1.lowerBound.y < aab.lowerBound.y ? aabb1.lowerBound.y : aab.lowerBound.y;
-            upperBound.x = aabb1.upperBound.x > aab.upperBound.x ? aabb1.upperBound.x : aab.upperBound.x;
-            upperBound.y = aabb1.upperBound.y > aab.upperBound.y ? aabb1.upperBound.y : aab.upperBound.y;
+            LowerBound.x = aabb1.LowerBound.x < aab.LowerBound.x ? aabb1.LowerBound.x : aab.LowerBound.x;
+            LowerBound.y = aabb1.LowerBound.y < aab.LowerBound.y ? aabb1.LowerBound.y : aab.LowerBound.y;
+            UpperBound.x = aabb1.UpperBound.x > aab.UpperBound.x ? aabb1.UpperBound.x : aab.UpperBound.x;
+            UpperBound.y = aabb1.UpperBound.y > aab.UpperBound.y ? aabb1.UpperBound.y : aab.UpperBound.y;
         }
 
         /// <summary>
         /// Combines another aabb with this one
         /// </summary>
         /// <param name="aabb"></param>
-        public void combine(AABB aabb)
+        public void Combine(AABB aabb)
         {
-            lowerBound.x = lowerBound.x < aabb.lowerBound.x ? lowerBound.x : aabb.lowerBound.x;
-            lowerBound.y = lowerBound.y < aabb.lowerBound.y ? lowerBound.y : aabb.lowerBound.y;
-            upperBound.x = upperBound.x > aabb.upperBound.x ? upperBound.x : aabb.upperBound.x;
-            upperBound.y = upperBound.y > aabb.upperBound.y ? upperBound.y : aabb.upperBound.y;
+            LowerBound.x = LowerBound.x < aabb.LowerBound.x ? LowerBound.x : aabb.LowerBound.x;
+            LowerBound.y = LowerBound.y < aabb.LowerBound.y ? LowerBound.y : aabb.LowerBound.y;
+            UpperBound.x = UpperBound.x > aabb.UpperBound.x ? UpperBound.x : aabb.UpperBound.x;
+            UpperBound.y = UpperBound.y > aabb.UpperBound.y ? UpperBound.y : aabb.UpperBound.y;
         }
 
         /// <summary>
         /// Does this aabb contain the provided AABB.
         /// </summary>
         /// <returns></returns>
-        public bool contains(AABB aabb)
+        public bool Contains(AABB aabb)
         {
             /*
             * boolean result = true; result = result && lowerBound.x <= aabb.lowerBound.x; result = result
@@ -205,7 +201,7 @@ namespace Box2D.Collision
             */
             // djm: faster putting all of them together, as if one is false we leave the logic
             // early
-            return lowerBound.x > aabb.lowerBound.x && lowerBound.y > aabb.lowerBound.y && aabb.upperBound.x > upperBound.x && aabb.upperBound.y > upperBound.y;
+            return LowerBound.x > aabb.LowerBound.x && LowerBound.y > aabb.LowerBound.y && aabb.UpperBound.x > UpperBound.x && aabb.UpperBound.y > UpperBound.y;
         }
 
         /// <deprecated> please use {@link #raycast(RayCastOutput, RayCastInput, IWorldPool)} for better performance
@@ -213,9 +209,9 @@ namespace Box2D.Collision
         /// <param name="output"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public bool raycast(RayCastOutput output, RayCastInput input)
+        public bool Raycast(RayCastOutput output, RayCastInput input)
         {
-            return raycast(output, input, new DefaultWorldPool(4, 4));
+            return Raycast(output, input, new DefaultWorldPool(4, 4));
         }
 
         /// <summary>
@@ -223,7 +219,8 @@ namespace Box2D.Collision
         /// </summary>
         /// <param name="output"></param>
         /// <param name="input"></param>
-        public bool raycast(RayCastOutput output, RayCastInput input, IWorldPool argPool)
+        /// <param name="argPool"></param>
+        public bool Raycast(RayCastOutput output, RayCastInput input, IWorldPool argPool)
         {
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             float tmin = Single.Epsilon;
@@ -242,7 +239,7 @@ namespace Box2D.Collision
             if (absD.x < Settings.EPSILON)
             {
                 // Parallel.
-                if (p.x < lowerBound.x || upperBound.x < p.x)
+                if (p.x < LowerBound.x || UpperBound.x < p.x)
                 {
                     argPool.PushVec2(4);
                     return false;
@@ -251,8 +248,8 @@ namespace Box2D.Collision
             else
             {
                 float inv_d = 1.0f / d.x;
-                float t1 = (lowerBound.x - p.x) * inv_d;
-                float t2 = (upperBound.x - p.x) * inv_d;
+                float t1 = (LowerBound.x - p.x) * inv_d;
+                float t2 = (UpperBound.x - p.x) * inv_d;
 
                 // Sign of the normal vector.
                 float s = -1.0f;
@@ -286,7 +283,7 @@ namespace Box2D.Collision
             if (absD.y < Settings.EPSILON)
             {
                 // Parallel.
-                if (p.y < lowerBound.y || upperBound.y < p.y)
+                if (p.y < LowerBound.y || UpperBound.y < p.y)
                 {
                     argPool.PushVec2(4);
                     return false;
@@ -295,8 +292,8 @@ namespace Box2D.Collision
             else
             {
                 float inv_d = 1.0f / d.y;
-                float t1 = (lowerBound.y - p.y) * inv_d;
-                float t2 = (upperBound.y - p.y) * inv_d;
+                float t1 = (LowerBound.y - p.y) * inv_d;
+                float t2 = (UpperBound.y - p.y) * inv_d;
 
                 // Sign of the normal vector.
                 float s = -1.0f;
@@ -343,14 +340,14 @@ namespace Box2D.Collision
             return true;
         }
 
-        public static bool testOverlap(AABB a, AABB b)
+        public static bool TestOverlap(AABB a, AABB b)
         {
-            if (b.lowerBound.x - a.upperBound.x > 0.0f || b.lowerBound.y - a.upperBound.y > 0.0f)
+            if (b.LowerBound.x - a.UpperBound.x > 0.0f || b.LowerBound.y - a.UpperBound.y > 0.0f)
             {
                 return false;
             }
 
-            if (a.lowerBound.x - b.upperBound.x > 0.0f || a.lowerBound.y - b.upperBound.y > 0.0f)
+            if (a.LowerBound.x - b.UpperBound.x > 0.0f || a.LowerBound.y - b.UpperBound.y > 0.0f)
             {
                 return false;
             }
@@ -360,7 +357,7 @@ namespace Box2D.Collision
 
         public override String ToString()
         {
-            return "AABB[" + lowerBound + " . " + upperBound + "]";
+            return string.Format("AABB[{0} . {1}]", LowerBound, UpperBound);
         }
     }
 }

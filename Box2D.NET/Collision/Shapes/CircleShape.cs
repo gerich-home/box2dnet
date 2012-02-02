@@ -175,10 +175,10 @@ namespace Box2D.Collision.Shapes
             Rot.mulToOutUnsafe(transform.q, P, p);
             p.addLocal(transform.p);
 
-            aabb.lowerBound.x = p.x - Radius;
-            aabb.lowerBound.y = p.y - Radius;
-            aabb.upperBound.x = p.x + Radius;
-            aabb.upperBound.y = p.y + Radius;
+            aabb.LowerBound.x = p.x - Radius;
+            aabb.LowerBound.y = p.y - Radius;
+            aabb.UpperBound.x = p.x + Radius;
+            aabb.UpperBound.y = p.y + Radius;
         }
 
         public override void ComputeMass(MassData massData, float density)

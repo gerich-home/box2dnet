@@ -711,10 +711,10 @@ namespace Box2D.Dynamics
                             FixtureProxy proxy = f.m_proxies[i];
                             AABB aabb = m_contactManager.m_broadPhase.GetFatAABB(proxy.proxyId);
                             Vec2[] vs = avs.Get(4);
-                            vs[0].set_Renamed(aabb.lowerBound.x, aabb.lowerBound.y);
-                            vs[1].set_Renamed(aabb.upperBound.x, aabb.lowerBound.y);
-                            vs[2].set_Renamed(aabb.upperBound.x, aabb.upperBound.y);
-                            vs[3].set_Renamed(aabb.lowerBound.x, aabb.upperBound.y);
+                            vs[0].set_Renamed(aabb.LowerBound.x, aabb.LowerBound.y);
+                            vs[1].set_Renamed(aabb.UpperBound.x, aabb.LowerBound.y);
+                            vs[2].set_Renamed(aabb.UpperBound.x, aabb.UpperBound.y);
+                            vs[3].set_Renamed(aabb.LowerBound.x, aabb.UpperBound.y);
 
                             m_debugDraw.DrawPolygon(vs, 4, color);
                         }

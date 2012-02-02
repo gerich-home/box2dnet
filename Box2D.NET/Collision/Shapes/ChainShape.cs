@@ -138,8 +138,8 @@ namespace Box2D.Collision.Shapes
             Transform.mulToOutUnsafe(xf, Vertices[i1], v1);
             Transform.mulToOutUnsafe(xf, Vertices[i2], v2);
 
-            Vec2.minToOut(v1, v2, aabb.lowerBound);
-            Vec2.maxToOut(v1, v2, aabb.upperBound);
+            Vec2.minToOut(v1, v2, aabb.LowerBound);
+            Vec2.maxToOut(v1, v2, aabb.UpperBound);
         }
 
         public override void ComputeMass(MassData massData, float density)

@@ -325,8 +325,8 @@ namespace Box2D.Collision.Shapes
         public override void ComputeAABB(AABB aabb, Transform xf, int childIndex)
         {
             Vec2 v = pool1;
-            Vec2 lower = aabb.lowerBound;
-            Vec2 upper = aabb.upperBound;
+            Vec2 lower = aabb.LowerBound;
+            Vec2 upper = aabb.UpperBound;
             Vec2 v1 = Vertices[0];
             lower.x = (xf.q.c * v1.x - xf.q.s * v1.y) + xf.p.x;
             lower.y = (xf.q.s * v1.x + xf.q.c * v1.y) + xf.p.y;
@@ -346,10 +346,10 @@ namespace Box2D.Collision.Shapes
             // aabb.lowerBound = lower - r;
             // aabb.upperBound = upper + r;
 
-            aabb.lowerBound.x -= Radius;
-            aabb.lowerBound.y -= Radius;
-            aabb.upperBound.x += Radius;
-            aabb.upperBound.y += Radius;
+            aabb.LowerBound.x -= Radius;
+            aabb.LowerBound.y -= Radius;
+            aabb.UpperBound.x += Radius;
+            aabb.UpperBound.y += Radius;
         }
 
         // djm pooling, and from above

@@ -168,10 +168,10 @@ namespace Box2D.Collision.Broadphase
 
             // Fatten the aabb
             TreeNode node = m_nodes[proxyId];
-            node.AABB.lowerBound.x = aabb.lowerBound.x - Settings.aabbExtension;
-            node.AABB.lowerBound.y = aabb.lowerBound.y - Settings.aabbExtension;
-            node.AABB.upperBound.x = aabb.upperBound.x + Settings.aabbExtension;
-            node.AABB.upperBound.y = aabb.upperBound.y + Settings.aabbExtension;
+            node.AABB.LowerBound.x = aabb.LowerBound.x - Settings.aabbExtension;
+            node.AABB.LowerBound.y = aabb.LowerBound.y - Settings.aabbExtension;
+            node.AABB.UpperBound.x = aabb.UpperBound.x + Settings.aabbExtension;
+            node.AABB.UpperBound.y = aabb.UpperBound.y + Settings.aabbExtension;
             node.UserData = userData;
 
             InsertLeaf(proxyId);
@@ -204,7 +204,7 @@ namespace Box2D.Collision.Broadphase
             TreeNode node = m_nodes[proxyId];
             Debug.Assert(node.Leaf);
 
-            if (node.AABB.contains(aabb))
+            if (node.AABB.Contains(aabb))
             {
                 return false;
             }
@@ -212,8 +212,8 @@ namespace Box2D.Collision.Broadphase
             RemoveLeaf(proxyId);
 
             // Extend AABB
-            Vec2 lowerBound = aabb.lowerBound;
-            Vec2 upperBound = aabb.upperBound;
+            Vec2 lowerBound = aabb.LowerBound;
+            Vec2 upperBound = aabb.UpperBound;
             lowerBound.x -= Settings.aabbExtension;
             lowerBound.y -= Settings.aabbExtension;
             upperBound.x += Settings.aabbExtension;
@@ -240,10 +240,10 @@ namespace Box2D.Collision.Broadphase
             {
                 upperBound.y += dy;
             }
-            node.AABB.lowerBound.x = lowerBound.x;
-            node.AABB.lowerBound.y = lowerBound.y;
-            node.AABB.upperBound.x = upperBound.x;
-            node.AABB.upperBound.y = upperBound.y;
+            node.AABB.LowerBound.x = lowerBound.x;
+            node.AABB.LowerBound.y = lowerBound.y;
+            node.AABB.UpperBound.x = upperBound.x;
+            node.AABB.UpperBound.y = upperBound.y;
 
             InsertLeaf(proxyId);
             return true;
@@ -282,7 +282,7 @@ namespace Box2D.Collision.Broadphase
 
                 TreeNode node = m_nodes[nodeId];
 
-                if (AABB.testOverlap(node.AABB, aabb))
+                if (AABB.TestOverlap(node.AABB, aabb))
                 {
                     if (node.Leaf)
                     {
@@ -340,8 +340,8 @@ namespace Box2D.Collision.Broadphase
             AABB segAABB = aabb;
             // Vec2 t = p1 + maxFraction * (p2 - p1);
             temp.set_Renamed(p2).subLocal(p1).mulLocal(maxFraction).addLocal(p1);
-            Vec2.minToOut(p1, temp, segAABB.lowerBound);
-            Vec2.maxToOut(p1, temp, segAABB.upperBound);
+            Vec2.minToOut(p1, temp, segAABB.LowerBound);
+            Vec2.maxToOut(p1, temp, segAABB.UpperBound);
 
             intStack.Push(m_root);
             while (intStack.Count > 0)
@@ -354,15 +354,15 @@ namespace Box2D.Collision.Broadphase
 
                 TreeNode node = m_nodes[nodeId];
 
-                if (!AABB.testOverlap(node.AABB, segAABB))
+                if (!AABB.TestOverlap(node.AABB, segAABB))
                 {
                     continue;
                 }
 
                 // Separating axis for segment (Gino, p80).
                 // |dot(v, p1 - c)| > dot(|v|, h)
-                node.AABB.getCenterToOut(c);
-                node.AABB.getExtentsToOut(h);
+                node.AABB.GetCenterToOut(c);
+                node.AABB.GetExtentsToOut(h);
                 temp.set_Renamed(p1).subLocal(c);
                 float separation = MathUtils.abs(Vec2.dot(v, temp)) - Vec2.dot(absV, h);
                 if (separation > 0.0f)
@@ -389,8 +389,8 @@ namespace Box2D.Collision.Broadphase
                         // Update segment bounding box.
                         maxFraction = value;
                         t.set_Renamed(p2).subLocal(p1).mulLocal(maxFraction).addLocal(p1);
-                        Vec2.minToOut(p1, t, segAABB.lowerBound);
-                        Vec2.maxToOut(p1, t, segAABB.upperBound);
+                        Vec2.minToOut(p1, t, segAABB.LowerBound);
+                        Vec2.maxToOut(p1, t, segAABB.UpperBound);
                     }
                 }
                 else
@@ -487,7 +487,7 @@ namespace Box2D.Collision.Broadphase
                     for (int j = i + 1; j < count; ++j)
                     {
                         AABB aabbj = m_nodes[nodes[j]].AABB;
-                        b.combine(aabbi, aabbj);
+                        b.Combine(aabbi, aabbj);
                         float cost = b.Perimeter;
                         if (cost < minCost)
                         {
@@ -508,7 +508,7 @@ namespace Box2D.Collision.Broadphase
                 parent.Child1 = index1;
                 parent.Child2 = index2;
                 parent.Height = 1 + MathUtils.max(child1.Height, child2.Height);
-                parent.AABB.combine(child1.AABB, child2.AABB);
+                parent.AABB.Combine(child1.AABB, child2.AABB);
                 parent.Parent = TreeNode.NULL_NODE;
 
                 child1.Parent = parentIndex;
@@ -596,7 +596,7 @@ namespace Box2D.Collision.Broadphase
 
                 float area = node.AABB.Perimeter;
 
-                combinedAABB.combine(node.AABB, leafAABB);
+                combinedAABB.Combine(node.AABB, leafAABB);
                 float combinedArea = combinedAABB.Perimeter;
 
                 // Cost of creating a new parent for this node and the new leaf
@@ -609,12 +609,12 @@ namespace Box2D.Collision.Broadphase
                 float cost1;
                 if (m_nodes[child1].Leaf)
                 {
-                    combinedAABB.combine(leafAABB, m_nodes[child1].AABB);
+                    combinedAABB.Combine(leafAABB, m_nodes[child1].AABB);
                     cost1 = combinedAABB.Perimeter + inheritanceCost;
                 }
                 else
                 {
-                    combinedAABB.combine(leafAABB, m_nodes[child1].AABB);
+                    combinedAABB.Combine(leafAABB, m_nodes[child1].AABB);
                     float oldArea = m_nodes[child1].AABB.Perimeter;
                     float newArea = combinedAABB.Perimeter;
                     cost1 = (newArea - oldArea) + inheritanceCost;
@@ -624,12 +624,12 @@ namespace Box2D.Collision.Broadphase
                 float cost2;
                 if (m_nodes[child2].Leaf)
                 {
-                    combinedAABB.combine(leafAABB, m_nodes[child2].AABB);
+                    combinedAABB.Combine(leafAABB, m_nodes[child2].AABB);
                     cost2 = combinedAABB.Perimeter + inheritanceCost;
                 }
                 else
                 {
-                    combinedAABB.combine(leafAABB, m_nodes[child2].AABB);
+                    combinedAABB.Combine(leafAABB, m_nodes[child2].AABB);
                     float oldArea = m_nodes[child2].AABB.Perimeter;
                     float newArea = combinedAABB.Perimeter;
                     cost2 = newArea - oldArea + inheritanceCost;
@@ -651,7 +651,7 @@ namespace Box2D.Collision.Broadphase
             TreeNode newParent = m_nodes[newParentId];
             newParent.Parent = oldParent;
             newParent.UserData = null;
-            newParent.AABB.combine(leafAABB, m_nodes[sibling].AABB);
+            newParent.AABB.Combine(leafAABB, m_nodes[sibling].AABB);
             newParent.Height = m_nodes[sibling].Height + 1;
 
             if (oldParent != TreeNode.NULL_NODE)
@@ -694,7 +694,7 @@ namespace Box2D.Collision.Broadphase
                 Debug.Assert(child2 != TreeNode.NULL_NODE);
 
                 m_nodes[index].Height = 1 + MathUtils.max(m_nodes[child1].Height, m_nodes[child2].Height);
-                m_nodes[index].AABB.combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
+                m_nodes[index].AABB.Combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
 
                 index = m_nodes[index].Parent;
             }
@@ -745,7 +745,7 @@ namespace Box2D.Collision.Broadphase
                     int child1 = m_nodes[index].Child1;
                     int child2 = m_nodes[index].Child2;
 
-                    m_nodes[index].AABB.combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
+                    m_nodes[index].AABB.Combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
                     m_nodes[index].Height = 1 + MathUtils.max(m_nodes[child1].Height, m_nodes[child2].Height);
 
                     index = m_nodes[index].Parent;
@@ -822,8 +822,8 @@ namespace Box2D.Collision.Broadphase
                     C.Child2 = iF;
                     A.Child2 = iG;
                     G.Parent = iA;
-                    A.AABB.combine(B.AABB, G.AABB);
-                    C.AABB.combine(A.AABB, F.AABB);
+                    A.AABB.Combine(B.AABB, G.AABB);
+                    C.AABB.Combine(A.AABB, F.AABB);
 
                     A.Height = 1 + MathUtils.max(B.Height, G.Height);
                     C.Height = 1 + MathUtils.max(A.Height, F.Height);
@@ -833,8 +833,8 @@ namespace Box2D.Collision.Broadphase
                     C.Child2 = iG;
                     A.Child2 = iF;
                     F.Parent = iA;
-                    A.AABB.combine(B.AABB, F.AABB);
-                    C.AABB.combine(A.AABB, G.AABB);
+                    A.AABB.Combine(B.AABB, F.AABB);
+                    C.AABB.Combine(A.AABB, G.AABB);
 
                     A.Height = 1 + MathUtils.max(B.Height, F.Height);
                     C.Height = 1 + MathUtils.max(A.Height, G.Height);
@@ -882,8 +882,8 @@ namespace Box2D.Collision.Broadphase
                     B.Child2 = iD;
                     A.Child1 = iE;
                     E.Parent = iA;
-                    A.AABB.combine(C.AABB, E.AABB);
-                    B.AABB.combine(A.AABB, D.AABB);
+                    A.AABB.Combine(C.AABB, E.AABB);
+                    B.AABB.Combine(A.AABB, D.AABB);
 
                     A.Height = 1 + MathUtils.max(C.Height, E.Height);
                     B.Height = 1 + MathUtils.max(A.Height, D.Height);
@@ -893,8 +893,8 @@ namespace Box2D.Collision.Broadphase
                     B.Child2 = iE;
                     A.Child1 = iD;
                     D.Parent = iA;
-                    A.AABB.combine(C.AABB, D.AABB);
-                    B.AABB.combine(A.AABB, E.AABB);
+                    A.AABB.Combine(C.AABB, D.AABB);
+                    B.AABB.Combine(A.AABB, E.AABB);
 
                     A.Height = 1 + MathUtils.max(C.Height, D.Height);
                     B.Height = 1 + MathUtils.max(A.Height, E.Height);
@@ -970,10 +970,10 @@ namespace Box2D.Collision.Broadphase
             Debug.Assert(node.Height == height);
 
             var aabb = new AABB();
-            aabb.combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
+            aabb.Combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
 
-            Debug.Assert(aabb.lowerBound.Equals(node.AABB.lowerBound));
-            Debug.Assert(aabb.upperBound.Equals(node.AABB.upperBound));
+            Debug.Assert(aabb.LowerBound.Equals(node.AABB.LowerBound));
+            Debug.Assert(aabb.UpperBound.Equals(node.AABB.UpperBound));
 
             ValidateMetrics(child1);
             ValidateMetrics(child2);
@@ -995,12 +995,12 @@ namespace Box2D.Collision.Broadphase
         public virtual void DrawTree(DebugDraw argDraw, int nodeId, int spot, int height)
         {
             TreeNode node = m_nodes[nodeId];
-            node.AABB.getVertices(drawVecs);
+            node.AABB.GetVertices(drawVecs);
 
             color.set_Renamed(1, (height - spot) * 1f / height, (height - spot) * 1f / height);
             argDraw.DrawPolygon(drawVecs, 4, color);
 
-            argDraw.ViewportTranform.getWorldToScreen(node.AABB.upperBound, textVec);
+            argDraw.ViewportTranform.getWorldToScreen(node.AABB.UpperBound, textVec);
             argDraw.DrawString(textVec.x, textVec.y, nodeId + "-" + (spot + 1) + "/" + height, color);
 
             if (node.Child1 != TreeNode.NULL_NODE)
