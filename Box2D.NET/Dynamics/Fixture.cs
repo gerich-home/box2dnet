@@ -131,7 +131,7 @@ namespace Box2D.Dynamics
             }
             set
             {
-                m_filter.set_Renamed(value);
+                m_filter.Set(value);
 
                 refilter();
             }
@@ -329,7 +329,7 @@ namespace Box2D.Dynamics
             m_next = null;
 
 
-            m_filter.set_Renamed(def.filter);
+            m_filter.Set(def.filter);
 
             m_isSensor = def.isSensor;
 

@@ -35,33 +35,33 @@ namespace Box2D.Dynamics
         /// <summary>
         /// The collision category bits. Normally you would just set one bit.
         /// </summary>
-        public int categoryBits;
+        public int CategoryBits;
 
         /// <summary>
         /// The collision mask bits. This states the categories that this
         /// shape would accept for collision.
         /// </summary>
-        public int maskBits;
+        public int MaskBits;
 
         /// <summary>
         /// Collision groups allow a certain group of objects to never collide (negative)
         /// or always collide (positive). Zero means no collision group. Non-zero group
         /// filtering always wins against the mask bits.
         /// </summary>
-        public int groupIndex;
+        public int GroupIndex;
 
         public Filter()
         {
-            categoryBits = 0x0001;
-            maskBits = 0xFFFF;
-            groupIndex = 0;
+            CategoryBits = 0x0001;
+            MaskBits = 0xFFFF;
+            GroupIndex = 0;
         }
 
-        public virtual void set_Renamed(Filter argOther)
+        public virtual void Set(Filter argOther)
         {
-            categoryBits = argOther.categoryBits;
-            maskBits = argOther.maskBits;
-            groupIndex = argOther.groupIndex;
+            CategoryBits = argOther.CategoryBits;
+            MaskBits = argOther.MaskBits;
+            GroupIndex = argOther.GroupIndex;
         }
     }
 }
