@@ -39,7 +39,7 @@ namespace Box2D.Collision
     /// <author>Daniel Murphy</author>
     public class Collision
     {
-        public static readonly int NULL_FEATURE = Int32.MaxValue;
+        public static readonly int NullFeature = Int32.MaxValue;
 
         private readonly IWorldPool pool;
 
@@ -62,11 +62,13 @@ namespace Box2D.Collision
         /// Determine if two generic shapes overlap.
         /// </summary>
         /// <param name="shapeA"></param>
+        /// <param name="indexA"></param>
         /// <param name="shapeB"></param>
+        /// <param name="indexB"></param>
         /// <param name="xfA"></param>
         /// <param name="xfB"></param>
         /// <returns></returns>
-        public bool testOverlap(Shape shapeA, int indexA, Shape shapeB, int indexB, Transform xfA, Transform xfB)
+        public bool TestOverlap(Shape shapeA, int indexA, Shape shapeB, int indexB, Transform xfA, Transform xfB)
         {
             input.proxyA.set_Renamed(shapeA, indexA);
             input.proxyB.set_Renamed(shapeB, indexB);
@@ -90,13 +92,13 @@ namespace Box2D.Collision
         /// <param name="state2"></param>
         /// <param name="manifold1"></param>
         /// <param name="manifold2"></param>
-        public static void getPointStates(PointState[] state1, PointState[] state2, Manifold manifold1, Manifold manifold2)
+        public static void GetPointStates(PointState[] state1, PointState[] state2, Manifold manifold1, Manifold manifold2)
         {
 
             for (int i = 0; i < Settings.maxManifoldPoints; i++)
             {
-                state1[i] = PointState.NULL_STATE;
-                state2[i] = PointState.NULL_STATE;
+                state1[i] = PointState.NullState;
+                state2[i] = PointState.NullState;
             }
 
             // Detect persists and removes.
@@ -104,13 +106,13 @@ namespace Box2D.Collision
             {
                 ContactID id = manifold1.points[i].id;
 
-                state1[i] = PointState.REMOVE_STATE;
+                state1[i] = PointState.RemoveState;
 
                 for (int j = 0; j < manifold2.pointCount; j++)
                 {
                     if (manifold2.points[j].id.isEqual(id))
                     {
-                        state1[i] = PointState.PERSIST_STATE;
+                        state1[i] = PointState.PersistState;
                         break;
                     }
                 }
@@ -121,13 +123,13 @@ namespace Box2D.Collision
             {
                 ContactID id = manifold2.points[i].id;
 
-                state2[i] = PointState.ADD_STATE;
+                state2[i] = PointState.AddState;
 
                 for (int j = 0; j < manifold1.pointCount; j++)
                 {
                     if (manifold1.points[j].id.isEqual(id))
                     {
-                        state2[i] = PointState.PERSIST_STATE;
+                        state2[i] = PointState.PersistState;
                         break;
                     }
                 }
@@ -141,8 +143,9 @@ namespace Box2D.Collision
         /// <param name="vIn"></param>
         /// <param name="normal"></param>
         /// <param name="offset"></param>
+        /// <param name="vertexIndexA"></param>
         /// <returns></returns>
-        public static int clipSegmentToLine(ClipVertex[] vOut, ClipVertex[] vIn, Vec2 normal, float offset, int vertexIndexA)
+        public static int ClipSegmentToLine(ClipVertex[] vOut, ClipVertex[] vIn, Vec2 normal, float offset, int vertexIndexA)
         {
 
             // Start with no output points
@@ -155,11 +158,11 @@ namespace Box2D.Collision
             // If the points are behind the plane
             if (distance0 <= 0.0f)
             {
-                vOut[numOut++].set_Renamed(vIn[0]);
+                vOut[numOut++].Set(vIn[0]);
             }
             if (distance1 <= 0.0f)
             {
-                vOut[numOut++].set_Renamed(vIn[1]);
+                vOut[numOut++].Set(vIn[1]);
             }
 
             // If the points are on different sides of the plane
@@ -184,9 +187,9 @@ namespace Box2D.Collision
         // #### COLLISION STUFF (not from collision.h or collision.cpp) ####
 
         // djm pooling
-        private static Vec2 pA = new Vec2();
-        private static Vec2 pB = new Vec2();
-        private static Vec2 d = new Vec2();
+        private static readonly Vec2 pA = new Vec2();
+        private static readonly Vec2 pB = new Vec2();
+        private static readonly Vec2 d = new Vec2();
 
         /// <summary>
         /// Compute the collision manifold between two circles.
@@ -196,7 +199,7 @@ namespace Box2D.Collision
         /// <param name="xfA"></param>
         /// <param name="circle2"></param>
         /// <param name="xfB"></param>
-        public void collideCircles(Manifold manifold, CircleShape circle1, Transform xfA, CircleShape circle2, Transform xfB)
+        public void CollideCircles(Manifold manifold, CircleShape circle1, Transform xfA, CircleShape circle2, Transform xfB)
         {
             manifold.pointCount = 0;
 
@@ -248,7 +251,7 @@ namespace Box2D.Collision
         /// <param name="xfA"></param>
         /// <param name="circle"></param>
         /// <param name="xfB"></param>
-        public void collidePolygonAndCircle(Manifold manifold, PolygonShape polygon, Transform xfA, CircleShape circle, Transform xfB)
+        public void CollidePolygonAndCircle(Manifold manifold, PolygonShape polygon, Transform xfA, CircleShape circle, Transform xfB)
         {
             manifold.pointCount = 0;
             //Vec2 v = circle.m_p;
@@ -460,9 +463,9 @@ namespace Box2D.Collision
         /// </param>
         /// <param name="xf2">
         /// </param>
-        public float edgeSeparation(PolygonShape poly1, Transform xf1, int edge1, PolygonShape poly2, Transform xf2)
+        public float EdgeSeparation(PolygonShape poly1, Transform xf1, int edge1, PolygonShape poly2, Transform xf2)
         {
-            int count1 = poly1.VertexCount;
+            int count1;
             Vec2[] vertices1 = poly1.Vertices;
             Vec2[] normals1 = poly1.Normals;
 
@@ -478,8 +481,6 @@ namespace Box2D.Collision
             Rot.mulTransUnsafe(xf2.q, normal1World, normal1);
             float normal1x = normal1.x;
             float normal1y = normal1.y;
-            float normal1Worldx = normal1World.x;
-            float normal1Worldy = normal1World.y;
             // after inline:
             // R.mulToOut(v,out);
             // final Mat22 R = xf1.q;
@@ -534,13 +535,13 @@ namespace Box2D.Collision
         /// <summary>
         /// Find the max separation between poly1 and poly2 using edge normals from poly1.
         /// </summary>
-        /// <param name="edgeIndex"></param>
+        /// <param name="results"></param>
         /// <param name="poly1"></param>
         /// <param name="xf1"></param>
         /// <param name="poly2"></param>
         /// <param name="xf2"></param>
         /// <returns></returns>
-        public void findMaxSeparation(EdgeResults results, PolygonShape poly1, Transform xf1, PolygonShape poly2, Transform xf2)
+        public void FindMaxSeparation(EdgeResults results, PolygonShape poly1, Transform xf1, PolygonShape poly2, Transform xf2)
         {
             int count1 = poly1.VertexCount;
             Vec2[] normals1 = poly1.Normals;
@@ -586,15 +587,15 @@ namespace Box2D.Collision
             }
 
             // Get the separation for the edge normal.
-            float s = edgeSeparation(poly1, xf1, edge, poly2, xf2);
+            float s = EdgeSeparation(poly1, xf1, edge, poly2, xf2);
 
             // Check the separation for the previous edge normal.
             int prevEdge = edge - 1 >= 0 ? edge - 1 : count1 - 1;
-            float sPrev = edgeSeparation(poly1, xf1, prevEdge, poly2, xf2);
+            float sPrev = EdgeSeparation(poly1, xf1, prevEdge, poly2, xf2);
 
             // Check the separation for the next edge normal.
             int nextEdge = edge + 1 < count1 ? edge + 1 : 0;
-            float sNext = edgeSeparation(poly1, xf1, nextEdge, poly2, xf2);
+            float sNext = EdgeSeparation(poly1, xf1, nextEdge, poly2, xf2);
 
             // Find the best edge and the search direction.
             int bestEdge;
@@ -614,8 +615,8 @@ namespace Box2D.Collision
             }
             else
             {
-                results.edgeIndex = edge;
-                results.separation = s;
+                results.EdgeIndex = edge;
+                results.Separation = s;
                 return;
             }
 
@@ -631,7 +632,7 @@ namespace Box2D.Collision
                     edge = bestEdge + 1 < count1 ? bestEdge + 1 : 0;
                 }
 
-                s = edgeSeparation(poly1, xf1, edge, poly2, xf2);
+                s = EdgeSeparation(poly1, xf1, edge, poly2, xf2);
 
                 if (s > bestSeparation)
                 {
@@ -644,14 +645,14 @@ namespace Box2D.Collision
                 }
             }
 
-            results.edgeIndex = bestEdge;
-            results.separation = bestSeparation;
+            results.EdgeIndex = bestEdge;
+            results.Separation = bestSeparation;
         }
 
         // djm pooling from above
-        public void findIncidentEdge(ClipVertex[] c, PolygonShape poly1, Transform xf1, int edge1, PolygonShape poly2, Transform xf2)
+        public void FindIncidentEdge(ClipVertex[] c, PolygonShape poly1, Transform xf1, int edge1, PolygonShape poly2, Transform xf2)
         {
-            int count1 = poly1.VertexCount;
+            int count1;
             Vec2[] normals1 = poly1.Normals;
 
             int count2 = poly2.VertexCount;
@@ -712,11 +713,11 @@ namespace Box2D.Collision
         /// Compute the collision manifold between two polygons.
         /// </summary>
         /// <param name="manifold"></param>
-        /// <param name="polygon1"></param>
-        /// <param name="xf1"></param>
-        /// <param name="polygon2"></param>
-        /// <param name="xf2"></param>
-        public void collidePolygons(Manifold manifold, PolygonShape polyA, Transform xfA, PolygonShape polyB, Transform xfB)
+        /// <param name="polyA"></param>
+        /// <param name="xfA"></param>
+        /// <param name="polyB"></param>
+        /// <param name="xfB"></param>
+        public void CollidePolygons(Manifold manifold, PolygonShape polyA, Transform xfA, PolygonShape polyB, Transform xfB)
         {
             // Find edge normal of max separation on A - return if separating axis is found
             // Find edge normal of max separation on B - return if separation axis is found
@@ -729,14 +730,14 @@ namespace Box2D.Collision
             manifold.pointCount = 0;
             float totalRadius = polyA.Radius + polyB.Radius;
 
-            findMaxSeparation(results1, polyA, xfA, polyB, xfB);
-            if (results1.separation > totalRadius)
+            FindMaxSeparation(results1, polyA, xfA, polyB, xfB);
+            if (results1.Separation > totalRadius)
             {
                 return;
             }
 
-            findMaxSeparation(results2, polyB, xfB, polyA, xfA);
-            if (results2.separation > totalRadius)
+            FindMaxSeparation(results2, polyB, xfB, polyA, xfA);
+            if (results2.Separation > totalRadius)
             {
                 return;
             }
@@ -746,16 +747,16 @@ namespace Box2D.Collision
             Transform xf1, xf2;
             int edge1; // reference edge
             bool flip;
-            float k_relativeTol = 0.98f;
-            float k_absoluteTol = 0.001f;
+            const float k_relativeTol = 0.98f;
+            const float k_absoluteTol = 0.001f;
 
-            if (results2.separation > k_relativeTol * results1.separation + k_absoluteTol)
+            if (results2.Separation > k_relativeTol * results1.Separation + k_absoluteTol)
             {
                 poly1 = polyB;
                 poly2 = polyA;
                 xf1 = xfB;
                 xf2 = xfA;
-                edge1 = results2.edgeIndex;
+                edge1 = results2.EdgeIndex;
                 manifold.type = Manifold.ManifoldType.FACE_B;
                 flip = true;
             }
@@ -765,12 +766,12 @@ namespace Box2D.Collision
                 poly2 = polyB;
                 xf1 = xfA;
                 xf2 = xfB;
-                edge1 = results1.edgeIndex;
+                edge1 = results1.EdgeIndex;
                 manifold.type = Manifold.ManifoldType.FACE_A;
                 flip = false;
             }
 
-            findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
+            FindIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
 
             int count1 = poly1.VertexCount;
             Vec2[] vertices1 = poly1.Vertices;
@@ -813,7 +814,7 @@ namespace Box2D.Collision
             // Clip to box side 1
             // np = ClipSegmentToLine(clipPoints1, incidentEdge, -sideNormal, sideOffset1);
             tangent.negateLocal();
-            np = clipSegmentToLine(clipPoints1, incidentEdge, tangent, sideOffset1, iv1);
+            np = ClipSegmentToLine(clipPoints1, incidentEdge, tangent, sideOffset1, iv1);
             tangent.negateLocal();
 
             if (np < 2)
@@ -822,7 +823,7 @@ namespace Box2D.Collision
             }
 
             // Clip to negative box side 1
-            np = clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
+            np = ClipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
 
             if (np < 2)
             {
@@ -866,7 +867,7 @@ namespace Box2D.Collision
 
         // Compute contact points for edge versus circle.
         // This accounts for edge connectivity.
-        public virtual void collideEdgeAndCircle(Manifold manifold, EdgeShape edgeA, Transform xfA, CircleShape circleB, Transform xfB)
+        public virtual void CollideEdgeAndCircle(Manifold manifold, EdgeShape edgeA, Transform xfA, CircleShape circleB, Transform xfB)
         {
             manifold.pointCount = 0;
 
@@ -1002,9 +1003,9 @@ namespace Box2D.Collision
 
         private readonly EPCollider collider = new EPCollider();
 
-        public virtual void collideEdgeAndPolygon(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
+        public virtual void CollideEdgeAndPolygon(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
         {
-            collider.collide(manifold, edgeA, xfA, polygonB, xfB);
+            collider.Collide(manifold, edgeA, xfA, polygonB, xfB);
         }
 
         /// <summary>
@@ -1012,8 +1013,8 @@ namespace Box2D.Collision
         /// </summary>
         public class EdgeResults
         {
-            public float separation;
-            public int edgeIndex;
+            public float Separation;
+            public int EdgeIndex;
         }
 
         /// <summary>
@@ -1030,7 +1031,7 @@ namespace Box2D.Collision
                 id = new ContactID();
             }
 
-            public virtual void set_Renamed(ClipVertex cv)
+            public virtual void Set(ClipVertex cv)
             {
                 v.set_Renamed(cv.v);
                 id.set_Renamed(cv.id);
@@ -1044,13 +1045,16 @@ namespace Box2D.Collision
         public enum PointState
         {
             /// <summary> point does not exist</summary>
-            NULL_STATE,
+            NullState,
+
             /// <summary> point was added in the update</summary>
-            ADD_STATE,
+            AddState,
+
             /// <summary> point persisted across the update</summary>
-            PERSIST_STATE,
+            PersistState,
+
             /// <summary> point was removed in the update</summary>
-            REMOVE_STATE
+            RemoveState
         }
 
         /// <summary>
@@ -1061,14 +1065,14 @@ namespace Box2D.Collision
         {
             internal enum Type
             {
-                UNKNOWN,
-                EDGE_A,
-                EDGE_B
+                Unknown,
+                EdgeA,
+                EdgeB
             }
 
             internal Type type;
-            internal int index;
-            internal float separation;
+            internal int Index;
+            internal float Separation;
         }
 
         /// <summary>
@@ -1076,16 +1080,16 @@ namespace Box2D.Collision
         /// </summary>
         internal class TempPolygon
         {
-            internal Vec2[] vertices = new Vec2[Settings.maxPolygonVertices];
-            internal Vec2[] normals = new Vec2[Settings.maxPolygonVertices];
+            internal Vec2[] Vertices = new Vec2[Settings.maxPolygonVertices];
+            internal Vec2[] Normals = new Vec2[Settings.maxPolygonVertices];
             internal int count;
 
             public TempPolygon()
             {
-                for (int i = 0; i < vertices.Length; i++)
+                for (int i = 0; i < Vertices.Length; i++)
                 {
-                    vertices[i] = new Vec2();
-                    normals[i] = new Vec2();
+                    Vertices[i] = new Vec2();
+                    Normals[i] = new Vec2();
                 }
             }
         }
@@ -1095,16 +1099,17 @@ namespace Box2D.Collision
         /// </summary>
         internal class ReferenceFace
         {
-            internal int i1, i2;
-            internal readonly Vec2 v1 = new Vec2();
-            internal readonly Vec2 v2 = new Vec2();
-            internal readonly Vec2 normal = new Vec2();
+            internal int I1;
+            internal int I2;
+            internal readonly Vec2 V1 = new Vec2();
+            internal readonly Vec2 V2 = new Vec2();
+            internal readonly Vec2 Normal = new Vec2();
 
-            internal readonly Vec2 sideNormal1 = new Vec2();
-            internal float sideOffset1;
+            internal readonly Vec2 SideNormal1 = new Vec2();
+            internal float SideOffset1;
 
-            internal readonly Vec2 sideNormal2 = new Vec2();
-            internal float sideOffset2;
+            internal readonly Vec2 SideNormal2 = new Vec2();
+            internal float SideOffset2;
         }
 
         /// <summary> 
@@ -1114,30 +1119,31 @@ namespace Box2D.Collision
         {
             internal enum VertexType
             {
-                ISOLATED,
-                CONCAVE,
-                CONVEX
+                Isolated,
+                Concave,
+                Convex
             }
 
-            internal readonly TempPolygon m_polygonB = new TempPolygon();
+            internal readonly TempPolygon PolygonB = new TempPolygon();
 
-            internal readonly Transform m_xf = new Transform();
-            internal readonly Vec2 m_centroidB = new Vec2();
-            internal Vec2 m_v0 = new Vec2();
-            internal Vec2 m_v1 = new Vec2();
-            internal Vec2 m_v2 = new Vec2();
-            internal Vec2 m_v3 = new Vec2();
-            internal readonly Vec2 m_normal0 = new Vec2();
-            internal readonly Vec2 m_normal1 = new Vec2();
-            internal readonly Vec2 m_normal2 = new Vec2();
-            internal readonly Vec2 m_normal = new Vec2();
+            internal readonly Transform Xf = new Transform();
+            internal readonly Vec2 CentroidB = new Vec2();
+            internal Vec2 V0 = new Vec2();
+            internal Vec2 V1 = new Vec2();
+            internal Vec2 V2 = new Vec2();
+            internal Vec2 V3 = new Vec2();
+            internal readonly Vec2 Normal0 = new Vec2();
+            internal readonly Vec2 Normal1 = new Vec2();
+            internal readonly Vec2 Normal2 = new Vec2();
+            internal readonly Vec2 Normal = new Vec2();
 
-            internal VertexType m_type1, m_type2;
+            internal VertexType Type1;
+            internal VertexType Type2;
 
-            internal readonly Vec2 m_lowerLimit = new Vec2();
-            internal readonly Vec2 m_upperLimit = new Vec2();
-            internal float m_radius;
-            internal bool m_front;
+            internal readonly Vec2 LowerLimit = new Vec2();
+            internal readonly Vec2 UpperLimit = new Vec2();
+            internal float Radius;
+            internal bool Front;
 
             public EPCollider()
             {
@@ -1160,45 +1166,45 @@ namespace Box2D.Collision
             private readonly EPAxis edgeAxis = new EPAxis();
             private readonly EPAxis polygonAxis = new EPAxis();
 
-            public virtual void collide(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
+            public virtual void Collide(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
             {
 
-                Transform.mulTransToOutUnsafe(xfA, xfB, m_xf);
-                Transform.mulToOutUnsafe(m_xf, polygonB.Centroid, m_centroidB);
+                Transform.mulTransToOutUnsafe(xfA, xfB, Xf);
+                Transform.mulToOutUnsafe(Xf, polygonB.Centroid, CentroidB);
 
-                m_v0 = edgeA.Vertex0;
-                m_v1 = edgeA.Vertex1;
-                m_v2 = edgeA.Vertex2;
-                m_v3 = edgeA.Vertex3;
+                V0 = edgeA.Vertex0;
+                V1 = edgeA.Vertex1;
+                V2 = edgeA.Vertex2;
+                V3 = edgeA.Vertex3;
 
                 bool hasVertex0 = edgeA.HasVertex0;
                 bool hasVertex3 = edgeA.HasVertex3;
 
-                edge1.set_Renamed(m_v2).subLocal(m_v1);
+                edge1.set_Renamed(V2).subLocal(V1);
                 edge1.normalize();
-                m_normal1.set_Renamed(edge1.y, -edge1.x);
-                float offset1 = Vec2.dot(m_normal1, temp.set_Renamed(m_centroidB).subLocal(m_v1));
+                Normal1.set_Renamed(edge1.y, -edge1.x);
+                float offset1 = Vec2.dot(Normal1, temp.set_Renamed(CentroidB).subLocal(V1));
                 float offset0 = 0.0f, offset2 = 0.0f;
                 bool convex1 = false, convex2 = false;
 
                 // Is there a preceding edge?
                 if (hasVertex0)
                 {
-                    edge0.set_Renamed(m_v1).subLocal(m_v0);
+                    edge0.set_Renamed(V1).subLocal(V0);
                     edge0.normalize();
-                    m_normal0.set_Renamed(edge0.y, -edge0.x);
+                    Normal0.set_Renamed(edge0.y, -edge0.x);
                     convex1 = Vec2.cross(edge0, edge1) >= 0.0f;
-                    offset0 = Vec2.dot(m_normal0, temp.set_Renamed(m_centroidB).subLocal(m_v0));
+                    offset0 = Vec2.dot(Normal0, temp.set_Renamed(CentroidB).subLocal(V0));
                 }
 
                 // Is there a following edge?
                 if (hasVertex3)
                 {
-                    edge2.set_Renamed(m_v3).subLocal(m_v2);
+                    edge2.set_Renamed(V3).subLocal(V2);
                     edge2.normalize();
-                    m_normal2.set_Renamed(edge2.y, -edge2.x);
+                    Normal2.set_Renamed(edge2.y, -edge2.x);
                     convex2 = Vec2.cross(edge1, edge2) > 0.0f;
-                    offset2 = Vec2.dot(m_normal2, temp.set_Renamed(m_centroidB).subLocal(m_v2));
+                    offset2 = Vec2.dot(Normal2, temp.set_Renamed(CentroidB).subLocal(V2));
                 }
 
                 // Determine front or back collision. Determine collision normal limits.
@@ -1206,66 +1212,66 @@ namespace Box2D.Collision
                 {
                     if (convex1 && convex2)
                     {
-                        m_front = offset0 >= 0.0f || offset1 >= 0.0f || offset2 >= 0.0f;
-                        if (m_front)
+                        Front = offset0 >= 0.0f || offset1 >= 0.0f || offset2 >= 0.0f;
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal0);
-                            m_upperLimit.set_Renamed(m_normal2);
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal0);
+                            UpperLimit.set_Renamed(Normal2);
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal1).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal1).negateLocal();
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal1).negateLocal();
+                            UpperLimit.set_Renamed(Normal1).negateLocal();
                         }
                     }
                     else if (convex1)
                     {
-                        m_front = offset0 >= 0.0f || (offset1 >= 0.0f && offset2 >= 0.0f);
-                        if (m_front)
+                        Front = offset0 >= 0.0f || (offset1 >= 0.0f && offset2 >= 0.0f);
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal0);
-                            m_upperLimit.set_Renamed(m_normal1);
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal0);
+                            UpperLimit.set_Renamed(Normal1);
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal2).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal1).negateLocal();
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal2).negateLocal();
+                            UpperLimit.set_Renamed(Normal1).negateLocal();
                         }
                     }
                     else if (convex2)
                     {
-                        m_front = offset2 >= 0.0f || (offset0 >= 0.0f && offset1 >= 0.0f);
-                        if (m_front)
+                        Front = offset2 >= 0.0f || (offset0 >= 0.0f && offset1 >= 0.0f);
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal1);
-                            m_upperLimit.set_Renamed(m_normal2);
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal1);
+                            UpperLimit.set_Renamed(Normal2);
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal1).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal0).negateLocal();
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal1).negateLocal();
+                            UpperLimit.set_Renamed(Normal0).negateLocal();
                         }
                     }
                     else
                     {
-                        m_front = offset0 >= 0.0f && offset1 >= 0.0f && offset2 >= 0.0f;
-                        if (m_front)
+                        Front = offset0 >= 0.0f && offset1 >= 0.0f && offset2 >= 0.0f;
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal1);
-                            m_upperLimit.set_Renamed(m_normal1);
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal1);
+                            UpperLimit.set_Renamed(Normal1);
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal2).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal0).negateLocal();
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal2).negateLocal();
+                            UpperLimit.set_Renamed(Normal0).negateLocal();
                         }
                     }
                 }
@@ -1273,34 +1279,34 @@ namespace Box2D.Collision
                 {
                     if (convex1)
                     {
-                        m_front = offset0 >= 0.0f || offset1 >= 0.0f;
-                        if (m_front)
+                        Front = offset0 >= 0.0f || offset1 >= 0.0f;
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal0);
-                            m_upperLimit.set_Renamed(m_normal1).negateLocal();
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal0);
+                            UpperLimit.set_Renamed(Normal1).negateLocal();
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal1);
-                            m_upperLimit.set_Renamed(m_normal1).negateLocal();
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal1);
+                            UpperLimit.set_Renamed(Normal1).negateLocal();
                         }
                     }
                     else
                     {
-                        m_front = offset0 >= 0.0f && offset1 >= 0.0f;
-                        if (m_front)
+                        Front = offset0 >= 0.0f && offset1 >= 0.0f;
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal1);
-                            m_upperLimit.set_Renamed(m_normal1).negateLocal();
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal1);
+                            UpperLimit.set_Renamed(Normal1).negateLocal();
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal1);
-                            m_upperLimit.set_Renamed(m_normal0).negateLocal();
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal1);
+                            UpperLimit.set_Renamed(Normal0).negateLocal();
                         }
                     }
                 }
@@ -1308,95 +1314,95 @@ namespace Box2D.Collision
                 {
                     if (convex2)
                     {
-                        m_front = offset1 >= 0.0f || offset2 >= 0.0f;
-                        if (m_front)
+                        Front = offset1 >= 0.0f || offset2 >= 0.0f;
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal1).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal2);
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal1).negateLocal();
+                            UpperLimit.set_Renamed(Normal2);
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal1).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal1);
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal1).negateLocal();
+                            UpperLimit.set_Renamed(Normal1);
                         }
                     }
                     else
                     {
-                        m_front = offset1 >= 0.0f && offset2 >= 0.0f;
-                        if (m_front)
+                        Front = offset1 >= 0.0f && offset2 >= 0.0f;
+                        if (Front)
                         {
-                            m_normal.set_Renamed(m_normal1);
-                            m_lowerLimit.set_Renamed(m_normal1).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal1);
+                            Normal.set_Renamed(Normal1);
+                            LowerLimit.set_Renamed(Normal1).negateLocal();
+                            UpperLimit.set_Renamed(Normal1);
                         }
                         else
                         {
-                            m_normal.set_Renamed(m_normal1).negateLocal();
-                            m_lowerLimit.set_Renamed(m_normal2).negateLocal();
-                            m_upperLimit.set_Renamed(m_normal1);
+                            Normal.set_Renamed(Normal1).negateLocal();
+                            LowerLimit.set_Renamed(Normal2).negateLocal();
+                            UpperLimit.set_Renamed(Normal1);
                         }
                     }
                 }
                 else
                 {
-                    m_front = offset1 >= 0.0f;
-                    if (m_front)
+                    Front = offset1 >= 0.0f;
+                    if (Front)
                     {
-                        m_normal.set_Renamed(m_normal1);
-                        m_lowerLimit.set_Renamed(m_normal1).negateLocal();
-                        m_upperLimit.set_Renamed(m_normal1).negateLocal();
+                        Normal.set_Renamed(Normal1);
+                        LowerLimit.set_Renamed(Normal1).negateLocal();
+                        UpperLimit.set_Renamed(Normal1).negateLocal();
                     }
                     else
                     {
-                        m_normal.set_Renamed(m_normal1).negateLocal();
-                        m_lowerLimit.set_Renamed(m_normal1);
-                        m_upperLimit.set_Renamed(m_normal1);
+                        Normal.set_Renamed(Normal1).negateLocal();
+                        LowerLimit.set_Renamed(Normal1);
+                        UpperLimit.set_Renamed(Normal1);
                     }
                 }
 
                 // Get polygonB in frameA
-                m_polygonB.count = polygonB.VertexCount;
+                PolygonB.count = polygonB.VertexCount;
                 for (int i = 0; i < polygonB.VertexCount; ++i)
                 {
-                    Transform.mulToOutUnsafe(m_xf, polygonB.Vertices[i], m_polygonB.vertices[i]);
-                    Rot.mulToOutUnsafe(m_xf.q, polygonB.Normals[i], m_polygonB.normals[i]);
+                    Transform.mulToOutUnsafe(Xf, polygonB.Vertices[i], PolygonB.Vertices[i]);
+                    Rot.mulToOutUnsafe(Xf.q, polygonB.Normals[i], PolygonB.Normals[i]);
                 }
 
-                m_radius = 2.0f * Settings.polygonRadius;
+                Radius = 2.0f * Settings.polygonRadius;
 
                 manifold.pointCount = 0;
 
-                computeEdgeSeparation(edgeAxis);
+                ComputeEdgeSeparation(edgeAxis);
 
                 // If no valid normal can be found than this edge should not collide.
-                if (edgeAxis.type == EPAxis.Type.UNKNOWN)
+                if (edgeAxis.type == EPAxis.Type.Unknown)
                 {
                     return;
                 }
 
-                if (edgeAxis.separation > m_radius)
+                if (edgeAxis.Separation > Radius)
                 {
                     return;
                 }
 
-                computePolygonSeparation(polygonAxis);
-                if (polygonAxis.type != EPAxis.Type.UNKNOWN && polygonAxis.separation > m_radius)
+                ComputePolygonSeparation(polygonAxis);
+                if (polygonAxis.type != EPAxis.Type.Unknown && polygonAxis.Separation > Radius)
                 {
                     return;
                 }
 
                 // Use hysteresis for jitter reduction.
-                float k_relativeTol = 0.98f;
-                float k_absoluteTol = 0.001f;
+                const float k_relativeTol = 0.98f;
+                const float k_absoluteTol = 0.001f;
 
                 EPAxis primaryAxis;
-                if (polygonAxis.type == EPAxis.Type.UNKNOWN)
+                if (polygonAxis.type == EPAxis.Type.Unknown)
                 {
                     primaryAxis = edgeAxis;
                 }
-                else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol)
+                else if (polygonAxis.Separation > k_relativeTol * edgeAxis.Separation + k_absoluteTol)
                 {
                     primaryAxis = polygonAxis;
                 }
@@ -1406,88 +1412,88 @@ namespace Box2D.Collision
                 }
 
                 // ClipVertex[] ie = new ClipVertex[2];
-                if (primaryAxis.type == EPAxis.Type.EDGE_A)
+                if (primaryAxis.type == EPAxis.Type.EdgeA)
                 {
                     manifold.type = Manifold.ManifoldType.FACE_A;
 
                     // Search for the polygon normal that is most anti-parallel to the edge normal.
                     int bestIndex = 0;
-                    float bestValue = Vec2.dot(m_normal, m_polygonB.normals[0]);
-                    for (int i = 1; i < m_polygonB.count; ++i)
+                    float bestValue = Vec2.dot(Normal, PolygonB.Normals[0]);
+                    for (int i = 1; i < PolygonB.count; ++i)
                     {
-                        float value_Renamed = Vec2.dot(m_normal, m_polygonB.normals[i]);
-                        if (value_Renamed < bestValue)
+                        float value = Vec2.dot(Normal, PolygonB.Normals[i]);
+                        if (value < bestValue)
                         {
-                            bestValue = value_Renamed;
+                            bestValue = value;
                             bestIndex = i;
                         }
                     }
 
                     int i1 = bestIndex;
-                    int i2 = i1 + 1 < m_polygonB.count ? i1 + 1 : 0;
+                    int i2 = i1 + 1 < PolygonB.count ? i1 + 1 : 0;
 
-                    ie[0].v.set_Renamed(m_polygonB.vertices[i1]);
+                    ie[0].v.set_Renamed(PolygonB.Vertices[i1]);
                     ie[0].id.indexA = 0;
                     ie[0].id.indexB = (sbyte)i1;
                     ie[0].id.typeA = (sbyte)ContactID.Type.FACE;
                     ie[0].id.typeB = (sbyte)ContactID.Type.VERTEX;
 
-                    ie[1].v.set_Renamed(m_polygonB.vertices[i2]);
+                    ie[1].v.set_Renamed(PolygonB.Vertices[i2]);
                     ie[1].id.indexA = 0;
                     ie[1].id.indexB = (sbyte)i2;
                     ie[1].id.typeA = (sbyte)ContactID.Type.FACE;
                     ie[1].id.typeB = (sbyte)ContactID.Type.VERTEX;
 
-                    if (m_front)
+                    if (Front)
                     {
-                        rf.i1 = 0;
-                        rf.i2 = 1;
-                        rf.v1.set_Renamed(m_v1);
-                        rf.v2.set_Renamed(m_v2);
-                        rf.normal.set_Renamed(m_normal1);
+                        rf.I1 = 0;
+                        rf.I2 = 1;
+                        rf.V1.set_Renamed(V1);
+                        rf.V2.set_Renamed(V2);
+                        rf.Normal.set_Renamed(Normal1);
                     }
                     else
                     {
-                        rf.i1 = 1;
-                        rf.i2 = 0;
-                        rf.v1.set_Renamed(m_v2);
-                        rf.v2.set_Renamed(m_v1);
-                        rf.normal.set_Renamed(m_normal1).negateLocal();
+                        rf.I1 = 1;
+                        rf.I2 = 0;
+                        rf.V1.set_Renamed(V2);
+                        rf.V2.set_Renamed(V1);
+                        rf.Normal.set_Renamed(Normal1).negateLocal();
                     }
                 }
                 else
                 {
                     manifold.type = Manifold.ManifoldType.FACE_B;
 
-                    ie[0].v.set_Renamed(m_v1);
+                    ie[0].v.set_Renamed(V1);
                     ie[0].id.indexA = 0;
-                    ie[0].id.indexB = (sbyte)primaryAxis.index;
+                    ie[0].id.indexB = (sbyte)primaryAxis.Index;
                     ie[0].id.typeA = (sbyte)ContactID.Type.VERTEX;
                     ie[0].id.typeB = (sbyte)ContactID.Type.FACE;
 
-                    ie[1].v.set_Renamed(m_v2);
+                    ie[1].v.set_Renamed(V2);
                     ie[1].id.indexA = 0;
-                    ie[1].id.indexB = (sbyte)primaryAxis.index;
+                    ie[1].id.indexB = (sbyte)primaryAxis.Index;
                     ie[1].id.typeA = (sbyte)ContactID.Type.VERTEX;
                     ie[1].id.typeB = (sbyte)ContactID.Type.FACE;
 
-                    rf.i1 = primaryAxis.index;
-                    rf.i2 = rf.i1 + 1 < m_polygonB.count ? rf.i1 + 1 : 0;
-                    rf.v1.set_Renamed(m_polygonB.vertices[rf.i1]);
-                    rf.v2.set_Renamed(m_polygonB.vertices[rf.i2]);
-                    rf.normal.set_Renamed(m_polygonB.normals[rf.i1]);
+                    rf.I1 = primaryAxis.Index;
+                    rf.I2 = rf.I1 + 1 < PolygonB.count ? rf.I1 + 1 : 0;
+                    rf.V1.set_Renamed(PolygonB.Vertices[rf.I1]);
+                    rf.V2.set_Renamed(PolygonB.Vertices[rf.I2]);
+                    rf.Normal.set_Renamed(PolygonB.Normals[rf.I1]);
                 }
 
-                rf.sideNormal1.set_Renamed(rf.normal.y, -rf.normal.x);
-                rf.sideNormal2.set_Renamed(rf.sideNormal1).negateLocal();
-                rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
-                rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
+                rf.SideNormal1.set_Renamed(rf.Normal.y, -rf.Normal.x);
+                rf.SideNormal2.set_Renamed(rf.SideNormal1).negateLocal();
+                rf.SideOffset1 = Vec2.dot(rf.SideNormal1, rf.V1);
+                rf.SideOffset2 = Vec2.dot(rf.SideNormal2, rf.V2);
 
                 // Clip incident edge against extruded edge1 side edges.
                 int np;
 
                 // Clip to box side 1
-                np = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
+                np = ClipSegmentToLine(clipPoints1, ie, rf.SideNormal1, rf.SideOffset1, rf.I1);
 
                 if (np < Settings.maxManifoldPoints)
                 {
@@ -1495,7 +1501,7 @@ namespace Box2D.Collision
                 }
 
                 // Clip to negative box side 1
-                np = clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
+                np = ClipSegmentToLine(clipPoints2, clipPoints1, rf.SideNormal2, rf.SideOffset2, rf.I2);
 
                 if (np < Settings.maxManifoldPoints)
                 {
@@ -1503,15 +1509,15 @@ namespace Box2D.Collision
                 }
 
                 // Now clipPoints2 contains the clipped points.
-                if (primaryAxis.type == EPAxis.Type.EDGE_A)
+                if (primaryAxis.type == EPAxis.Type.EdgeA)
                 {
-                    manifold.localNormal.set_Renamed(rf.normal);
-                    manifold.localPoint.set_Renamed(rf.v1);
+                    manifold.localNormal.set_Renamed(rf.Normal);
+                    manifold.localPoint.set_Renamed(rf.V1);
                 }
                 else
                 {
-                    manifold.localNormal.set_Renamed(polygonB.Normals[rf.i1]);
-                    manifold.localPoint.set_Renamed(polygonB.Vertices[rf.i1]);
+                    manifold.localNormal.set_Renamed(polygonB.Normals[rf.I1]);
+                    manifold.localPoint.set_Renamed(polygonB.Vertices[rf.I1]);
                 }
 
                 int pointCount = 0;
@@ -1519,16 +1525,16 @@ namespace Box2D.Collision
                 {
                     float separation;
 
-                    separation = Vec2.dot(rf.normal, temp.set_Renamed(clipPoints2[i].v).subLocal(rf.v1));
+                    separation = Vec2.dot(rf.Normal, temp.set_Renamed(clipPoints2[i].v).subLocal(rf.V1));
 
-                    if (separation <= m_radius)
+                    if (separation <= Radius)
                     {
                         ManifoldPoint cp = manifold.points[pointCount];
 
-                        if (primaryAxis.type == EPAxis.Type.EDGE_A)
+                        if (primaryAxis.type == EPAxis.Type.EdgeA)
                         {
                             // cp.localPoint = MulT(m_xf, clipPoints2[i].v);
-                            Transform.mulTransToOutUnsafe(m_xf, clipPoints2[i].v, cp.localPoint);
+                            Transform.mulTransToOutUnsafe(Xf, clipPoints2[i].v, cp.localPoint);
                             cp.id.set_Renamed(clipPoints2[i].id);
                         }
                         else
@@ -1548,18 +1554,18 @@ namespace Box2D.Collision
             }
 
 
-            public virtual void computeEdgeSeparation(EPAxis axis)
+            public virtual void ComputeEdgeSeparation(EPAxis axis)
             {
-                axis.type = EPAxis.Type.EDGE_A;
-                axis.index = m_front ? 0 : 1;
-                axis.separation = System.Single.MaxValue;
+                axis.type = EPAxis.Type.EdgeA;
+                axis.Index = Front ? 0 : 1;
+                axis.Separation = System.Single.MaxValue;
 
-                for (int i = 0; i < m_polygonB.count; ++i)
+                for (int i = 0; i < PolygonB.count; ++i)
                 {
-                    float s = Vec2.dot(m_normal, temp.set_Renamed(m_polygonB.vertices[i]).subLocal(m_v1));
-                    if (s < axis.separation)
+                    float s = Vec2.dot(Normal, temp.set_Renamed(PolygonB.Vertices[i]).subLocal(V1));
+                    if (s < axis.Separation)
                     {
-                        axis.separation = s;
+                        axis.Separation = s;
                     }
                 }
             }
@@ -1567,53 +1573,53 @@ namespace Box2D.Collision
             private readonly Vec2 perp = new Vec2();
             private readonly Vec2 n = new Vec2();
 
-            public virtual void computePolygonSeparation(EPAxis axis)
+            public virtual void ComputePolygonSeparation(EPAxis axis)
             {
-                axis.type = EPAxis.Type.UNKNOWN;
-                axis.index = -1;
+                axis.type = EPAxis.Type.Unknown;
+                axis.Index = -1;
                 //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-                axis.separation = Single.Epsilon;
+                axis.Separation = Single.Epsilon;
 
-                perp.set_Renamed(-m_normal.y, m_normal.x);
+                perp.set_Renamed(-Normal.y, Normal.x);
 
-                for (int i = 0; i < m_polygonB.count; ++i)
+                for (int i = 0; i < PolygonB.count; ++i)
                 {
-                    n.set_Renamed(m_polygonB.normals[i]).negateLocal();
+                    n.set_Renamed(PolygonB.Normals[i]).negateLocal();
 
-                    float s1 = Vec2.dot(n, temp.set_Renamed(m_polygonB.vertices[i]).subLocal(m_v1));
-                    float s2 = Vec2.dot(n, temp.set_Renamed(m_polygonB.vertices[i]).subLocal(m_v2));
+                    float s1 = Vec2.dot(n, temp.set_Renamed(PolygonB.Vertices[i]).subLocal(V1));
+                    float s2 = Vec2.dot(n, temp.set_Renamed(PolygonB.Vertices[i]).subLocal(V2));
                     float s = MathUtils.min(s1, s2);
 
-                    if (s > m_radius)
+                    if (s > Radius)
                     {
                         // No collision
-                        axis.type = EPAxis.Type.EDGE_B;
-                        axis.index = i;
-                        axis.separation = s;
+                        axis.type = EPAxis.Type.EdgeB;
+                        axis.Index = i;
+                        axis.Separation = s;
                         return;
                     }
 
                     // Adjacency
                     if (Vec2.dot(n, perp) >= 0.0f)
                     {
-                        if (Vec2.dot(temp.set_Renamed(n).subLocal(m_upperLimit), m_normal) < -Settings.angularSlop)
+                        if (Vec2.dot(temp.set_Renamed(n).subLocal(UpperLimit), Normal) < -Settings.angularSlop)
                         {
                             continue;
                         }
                     }
                     else
                     {
-                        if (Vec2.dot(temp.set_Renamed(n).subLocal(m_lowerLimit), m_normal) < -Settings.angularSlop)
+                        if (Vec2.dot(temp.set_Renamed(n).subLocal(LowerLimit), Normal) < -Settings.angularSlop)
                         {
                             continue;
                         }
                     }
 
-                    if (s > axis.separation)
+                    if (s > axis.Separation)
                     {
-                        axis.type = EPAxis.Type.EDGE_B;
-                        axis.index = i;
-                        axis.separation = s;
+                        axis.type = EPAxis.Type.EdgeB;
+                        axis.Index = i;
+                        axis.Separation = s;
                     }
                 }
             }

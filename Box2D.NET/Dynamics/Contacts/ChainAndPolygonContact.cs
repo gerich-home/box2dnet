@@ -51,7 +51,7 @@ namespace Box2D.Dynamics.Contacts
         {
             ChainShape chain = (ChainShape)m_fixtureA.Shape;
             chain.GetChildEdge(edge, m_indexA);
-            pool.GetCollision().collideEdgeAndPolygon(manifold, edge, xfA, (PolygonShape)m_fixtureB.Shape, xfB);
+            pool.GetCollision().CollideEdgeAndPolygon(manifold, edge, xfA, (PolygonShape)m_fixtureB.Shape, xfB);
         }
     }
 }
