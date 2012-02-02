@@ -49,7 +49,7 @@ namespace Box2D.Collision.Shapes
         private readonly Vec2 pool2 = new Vec2();
 
         public ChainShape() :
-            base(ShapeType.CHAIN)
+            base(ShapeType.Chain)
         {
             m_vertices = null;
             m_radius = Settings.polygonRadius;

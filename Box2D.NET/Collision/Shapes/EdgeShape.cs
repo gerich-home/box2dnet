@@ -60,7 +60,7 @@ namespace Box2D.Collision.Shapes
         private readonly Vec2 pool5 = new Vec2();
 
         public EdgeShape() :
-            base(ShapeType.EDGE)
+            base(ShapeType.Edge)
         {
             m_radius = Settings.polygonRadius;
         }

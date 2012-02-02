@@ -48,7 +48,7 @@ namespace Box2D.Collision.Shapes
         /// <seealso cref="CircleDef"></seealso>
         /// <param name="def"></param>
         public CircleShape() :
-            base(ShapeType.CIRCLE)
+            base(ShapeType.Circle)
         {
             m_p = new Vec2();
             m_radius = 0;

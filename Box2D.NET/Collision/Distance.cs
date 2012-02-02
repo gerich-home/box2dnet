@@ -570,7 +570,7 @@ namespace Box2D.Collision
                 switch (shape.Type)
                 {
 
-                    case ShapeType.CIRCLE:
+                    case ShapeType.Circle:
                         CircleShape circle = (CircleShape)shape;
                         m_vertices[0].set_Renamed(circle.m_p);
                         m_count = 1;
@@ -578,7 +578,7 @@ namespace Box2D.Collision
 
                         break;
 
-                    case ShapeType.POLYGON:
+                    case ShapeType.Polygon:
                         PolygonShape poly = (PolygonShape)shape;
                         m_count = poly.m_count;
                         m_radius = poly.m_radius;
@@ -588,7 +588,7 @@ namespace Box2D.Collision
                         }
                         break;
 
-                    case ShapeType.CHAIN:
+                    case ShapeType.Chain:
                         ChainShape chain = (ChainShape)shape;
                         Debug.Assert(0 <= index && index < chain.m_count);
 
@@ -608,7 +608,7 @@ namespace Box2D.Collision
                         m_radius = chain.m_radius;
                         break;
 
-                    case ShapeType.EDGE:
+                    case ShapeType.Edge:
                         EdgeShape edge = (EdgeShape)shape;
                         m_vertices[0].set_Renamed(edge.m_vertex1);
                         m_vertices[1].set_Renamed(edge.m_vertex2);

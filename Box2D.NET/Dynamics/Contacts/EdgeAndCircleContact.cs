@@ -41,8 +41,8 @@ namespace Box2D.Dynamics.Contacts
         public override void init(Fixture fA, int indexA, Fixture fB, int indexB)
         {
             base.init(fA, indexA, fB, indexB);
-            Debug.Assert(m_fixtureA.Type == ShapeType.EDGE);
-            Debug.Assert(m_fixtureB.Type == ShapeType.CIRCLE);
+            Debug.Assert(m_fixtureA.Type == ShapeType.Edge);
+            Debug.Assert(m_fixtureB.Type == ShapeType.Circle);
         }
 
         public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)

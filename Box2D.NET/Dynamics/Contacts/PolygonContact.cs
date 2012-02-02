@@ -41,8 +41,8 @@ namespace Box2D.Dynamics.Contacts
         public virtual void init(Fixture fixtureA, Fixture fixtureB)
         {
             base.init(fixtureA, 0, fixtureB, 0);
-            Debug.Assert(m_fixtureA.Type == ShapeType.POLYGON);
-            Debug.Assert(m_fixtureB.Type == ShapeType.POLYGON);
+            Debug.Assert(m_fixtureA.Type == ShapeType.Polygon);
+            Debug.Assert(m_fixtureB.Type == ShapeType.Polygon);
         }
 
         public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)

@@ -183,13 +183,13 @@ namespace Box2D.Dynamics
 
         private void initializeRegisters()
         {
-            addType(pool.GetCircleContactStack(), ShapeType.CIRCLE, ShapeType.CIRCLE);
-            addType(pool.GetPolyCircleContactStack(), ShapeType.POLYGON, ShapeType.CIRCLE);
-            addType(pool.GetPolyContactStack(), ShapeType.POLYGON, ShapeType.POLYGON);
-            addType(pool.GetEdgeCircleContactStack(), ShapeType.EDGE, ShapeType.CIRCLE);
-            addType(pool.GetEdgePolyContactStack(), ShapeType.EDGE, ShapeType.POLYGON);
-            addType(pool.GetChainCircleContactStack(), ShapeType.CHAIN, ShapeType.CIRCLE);
-            addType(pool.GetChainPolyContactStack(), ShapeType.CHAIN, ShapeType.POLYGON);
+            addType(pool.GetCircleContactStack(), ShapeType.Circle, ShapeType.Circle);
+            addType(pool.GetPolyCircleContactStack(), ShapeType.Polygon, ShapeType.Circle);
+            addType(pool.GetPolyContactStack(), ShapeType.Polygon, ShapeType.Polygon);
+            addType(pool.GetEdgeCircleContactStack(), ShapeType.Edge, ShapeType.Circle);
+            addType(pool.GetEdgePolyContactStack(), ShapeType.Edge, ShapeType.Polygon);
+            addType(pool.GetChainCircleContactStack(), ShapeType.Chain, ShapeType.Circle);
+            addType(pool.GetChainPolyContactStack(), ShapeType.Chain, ShapeType.Polygon);
         }
 
         public virtual Contact popContact(Fixture fixtureA, int indexA, Fixture fixtureB, int indexB)
@@ -1650,7 +1650,7 @@ namespace Box2D.Dynamics
             switch (fixture.Type)
             {
 
-                case ShapeType.CIRCLE:
+                case ShapeType.Circle:
                     {
                         CircleShape circle = (CircleShape)fixture.Shape;
 
@@ -1684,7 +1684,7 @@ namespace Box2D.Dynamics
                     break;
 
 
-                case ShapeType.POLYGON:
+                case ShapeType.Polygon:
                     {
                         PolygonShape poly = (PolygonShape)fixture.Shape;
                         int vertexCount = poly.m_count;
@@ -1701,7 +1701,7 @@ namespace Box2D.Dynamics
                     }
                     break;
 
-                case ShapeType.EDGE:
+                case ShapeType.Edge:
                     {
                         EdgeShape edge = (EdgeShape)fixture.Shape;
                         Transform.mulToOutUnsafe(xf, edge.m_vertex1, v1);
@@ -1711,7 +1711,7 @@ namespace Box2D.Dynamics
                     break;
 
 
-                case ShapeType.CHAIN:
+                case ShapeType.Chain:
                     {
                         ChainShape chain = (ChainShape)fixture.Shape;
                         int count = chain.m_count;

@@ -28,12 +28,11 @@ namespace Box2D.Collision.Shapes
     /// Types of shapes
     /// </summary>
     /// <author>Daniel</author>
-
     public enum ShapeType
     {
-        CIRCLE,
-        EDGE,
-        POLYGON,
-        CHAIN
+        Circle,
+        Edge,
+        Polygon,
+        Chain
     }
 }

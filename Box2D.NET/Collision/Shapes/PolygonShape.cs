@@ -71,7 +71,7 @@ namespace Box2D.Collision.Shapes
         private Transform poolt1 = new Transform();
 
         public PolygonShape() :
-            base(ShapeType.POLYGON)
+            base(ShapeType.Polygon)
         {
 
             m_count = 0;
