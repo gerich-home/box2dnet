@@ -297,8 +297,8 @@ namespace Box2D.Dynamics
                     continue;
                 }
 
-                int proxyIdA = fixtureA.m_proxies[indexA].proxyId;
-                int proxyIdB = fixtureB.m_proxies[indexB].proxyId;
+                int proxyIdA = fixtureA.Proxies[indexA].proxyId;
+                int proxyIdB = fixtureB.Proxies[indexB].proxyId;
                 bool overlap = BroadPhase.TestOverlap(proxyIdA, proxyIdB);
 
                 // Here we destroy contacts that cease to overlap in the broad-phase.

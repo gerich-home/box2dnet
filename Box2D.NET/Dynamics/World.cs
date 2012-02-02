@@ -313,15 +313,15 @@ namespace Box2D.Dynamics
             while (f != null)
             {
                 Fixture f0 = f;
-                f = f.m_next;
+                f = f.Next;
 
                 if (m_destructionListener != null)
                 {
                     m_destructionListener.SayGoodbye(f0);
                 }
 
-                f0.destroyProxies(m_contactManager.BroadPhase);
-                f0.destroy();
+                f0.DestroyProxies(m_contactManager.BroadPhase);
+                f0.Destroy();
                 // TODO djm recycle fixtures (here or in that destroy method)
                 body.FixtureList = f;
                 body.FixtureCount -= 1;
@@ -706,9 +706,9 @@ namespace Box2D.Dynamics
                     for (Fixture f = b.FixtureList; f != null; f = f.Next)
                     {
 
-                        for (int i = 0; i < f.m_proxyCount; ++i)
+                        for (int i = 0; i < f.ProxyCount; ++i)
                         {
-                            FixtureProxy proxy = f.m_proxies[i];
+                            FixtureProxy proxy = f.Proxies[i];
                             AABB aabb = m_contactManager.BroadPhase.GetFatAABB(proxy.proxyId);
                             Vec2[] vs = avs.Get(4);
                             vs[0].set_Renamed(aabb.LowerBound.x, aabb.LowerBound.y);
@@ -1161,8 +1161,8 @@ namespace Box2D.Dynamics
                         }
 
                         // Skip sensors.
-                        bool sensorA = contact.m_fixtureA.m_isSensor;
-                        bool sensorB = contact.m_fixtureB.m_isSensor;
+                        bool sensorA = contact.m_fixtureA.IsSensor;
+                        bool sensorB = contact.m_fixtureB.IsSensor;
                         if (sensorA || sensorB)
                         {
                             continue;
@@ -1484,8 +1484,8 @@ namespace Box2D.Dynamics
                             }
 
                             // Skip sensors.
-                            bool sensorA = contact.m_fixtureA.m_isSensor;
-                            bool sensorB = contact.m_fixtureB.m_isSensor;
+                            bool sensorA = contact.m_fixtureA.IsSensor;
+                            bool sensorB = contact.m_fixtureB.IsSensor;
                             if (sensorA || sensorB)
                             {
                                 continue;
@@ -1764,7 +1764,7 @@ namespace Box2D.Dynamics
             FixtureProxy proxy = (FixtureProxy)userData;
             Fixture fixture = proxy.fixture;
             int index = proxy.childIndex;
-            bool hit = fixture.raycast(output, input, index);
+            bool hit = fixture.Raycast(output, input, index);
 
             if (hit)
             {

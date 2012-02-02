@@ -183,19 +183,19 @@ namespace Box2D.Dynamics
 
             // djm TODO from pool?
             Fixture fixture = new Fixture();
-            fixture.create(this, def);
+            fixture.Create(this, def);
 
             if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
                 BroadPhase broadPhase = World.m_contactManager.BroadPhase;
-                fixture.createProxies(broadPhase, Xf);
+                fixture.CreateProxies(broadPhase, Xf);
             }
 
-            fixture.m_next = FixtureList;
+            fixture.Next = FixtureList;
             FixtureList = fixture;
             ++FixtureCount;
 
-            fixture.m_body = this;
+            fixture.Body = this;
 
             // Adjust mass properties if needed.
             if (fixture.m_density > 0.0f)
@@ -244,7 +244,7 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            Debug.Assert(fixture.m_body == this);
+            Debug.Assert(fixture.Body == this);
 
             // Remove the fixture from this body's singly linked list.
             Debug.Assert(FixtureCount > 0);
@@ -255,12 +255,12 @@ namespace Box2D.Dynamics
             {
                 if (node == fixture)
                 {
-                    node = fixture.m_next;
+                    node = fixture.Next;
                     found = true;
                     break;
                 }
                 last = node;
-                node = node.m_next;
+                node = node.Next;
             }
 
             // You tried to remove a shape that is not attached to this body.
@@ -269,11 +269,11 @@ namespace Box2D.Dynamics
             // java change, remove it from the list
             if (last == null)
             {
-                FixtureList = fixture.m_next;
+                FixtureList = fixture.Next;
             }
             else
             {
-                last.m_next = fixture.m_next;
+                last.Next = fixture.Next;
             }
 
             // Destroy any contacts associated with the fixture.
@@ -297,12 +297,12 @@ namespace Box2D.Dynamics
             if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
                 BroadPhase broadPhase = World.m_contactManager.BroadPhase;
-                fixture.destroyProxies(broadPhase);
+                fixture.DestroyProxies(broadPhase);
             }
 
-            fixture.destroy();
-            fixture.m_body = null;
-            fixture.m_next = null;
+            fixture.Destroy();
+            fixture.Body = null;
+            fixture.Next = null;
 
             --FixtureCount;
 
@@ -335,9 +335,9 @@ namespace Box2D.Dynamics
             Sweep.a0 = Sweep.a;
 
             BroadPhase broadPhase = World.m_contactManager.BroadPhase;
-            for (Fixture f = FixtureList; f != null; f = f.m_next)
+            for (Fixture f = FixtureList; f != null; f = f.Next)
             {
-                f.synchronize(broadPhase, Xf, Xf);
+                f.Synchronize(broadPhase, Xf, Xf);
             }
 
             World.m_contactManager.FindNewContacts();
@@ -535,12 +535,12 @@ namespace Box2D.Dynamics
 
                 // Touch the proxies so that new contacts will be created (when appropriate)
                 BroadPhase broadPhase = World.m_contactManager.BroadPhase;
-                for (Fixture f = FixtureList; f != null; f = f.m_next)
+                for (Fixture f = FixtureList; f != null; f = f.Next)
                 {
-                    int proxyCount = f.m_proxyCount;
+                    int proxyCount = f.ProxyCount;
                     for (int i = 0; i < proxyCount; ++i)
                     {
-                        broadPhase.TouchProxy(f.m_proxies[i].proxyId);
+                        broadPhase.TouchProxy(f.Proxies[i].proxyId);
                     }
                 }
             }
@@ -657,9 +657,9 @@ namespace Box2D.Dynamics
 
                     // Create all proxies.
                     BroadPhase broadPhase = World.m_contactManager.BroadPhase;
-                    for (Fixture f = FixtureList; f != null; f = f.m_next)
+                    for (Fixture f = FixtureList; f != null; f = f.Next)
                     {
-                        f.createProxies(broadPhase, Xf);
+                        f.CreateProxies(broadPhase, Xf);
                     }
 
                     // Contacts are created the next time step.
@@ -670,9 +670,9 @@ namespace Box2D.Dynamics
 
                     // Destroy all proxies.
                     BroadPhase broadPhase = World.m_contactManager.BroadPhase;
-                    for (Fixture f = FixtureList; f != null; f = f.m_next)
+                    for (Fixture f = FixtureList; f != null; f = f.Next)
                     {
-                        f.destroyProxies(broadPhase);
+                        f.DestroyProxies(broadPhase);
                     }
 
                     // Destroy the attached contacts.
@@ -965,13 +965,13 @@ namespace Box2D.Dynamics
             localCenter.setZero();
             Vec2 temp = World.Pool.PopVec2();
             MassData massData = pmd;
-            for (Fixture f = FixtureList; f != null; f = f.m_next)
+            for (Fixture f = FixtureList; f != null; f = f.Next)
             {
                 if (f.m_density == 0.0f)
                 {
                     continue;
                 }
-                f.getMassData(massData);
+                f.GetMassData(massData);
                 Mass += massData.Mass;
                 // center += massData.mass * massData.center;
                 temp.set_Renamed(massData.Center).mulLocal(massData.Mass);
@@ -1157,9 +1157,9 @@ namespace Box2D.Dynamics
             xf1.p.y = Sweep.c0.y - xf1.q.s * Sweep.localCenter.x - xf1.q.c * Sweep.localCenter.y;
             // end inline
 
-            for (Fixture f = FixtureList; f != null; f = f.m_next)
+            for (Fixture f = FixtureList; f != null; f = f.Next)
             {
-                f.synchronize(World.m_contactManager.BroadPhase, xf1, Xf);
+                f.Synchronize(World.m_contactManager.BroadPhase, xf1, Xf);
             }
         }
 

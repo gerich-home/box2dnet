@@ -44,32 +44,22 @@ namespace Box2D.Dynamics
     {
         public float m_density;
 
-        public Fixture m_next;
-        public Body m_body;
+        public FixtureProxy[] Proxies;
+        public int ProxyCount;
 
-        public Shape m_shape;
+        public readonly Filter Filter;
 
-        public float m_friction;
-        public float m_restitution;
-
-        public FixtureProxy[] m_proxies;
-        public int m_proxyCount;
-
-        public readonly Filter m_filter;
-
-        public bool m_isSensor;
-
-        public object m_userData;
+        public bool IsSensor;
 
         public Fixture()
         {
-            m_userData = null;
-            m_body = null;
-            m_next = null;
-            m_proxies = null;
-            m_proxyCount = 0;
-            m_shape = null;
-            m_filter = new Filter();
+            UserData = null;
+            Body = null;
+            Next = null;
+            Proxies = null;
+            ProxyCount = 0;
+            Shape = null;
+            Filter = new Filter();
         }
 
 
@@ -81,7 +71,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_shape.Type;
+                return Shape.Type;
             }
         }
 
@@ -90,13 +80,7 @@ namespace Box2D.Dynamics
         /// of vertices because this will crash some collision caching mechanisms.
         /// </summary>
         /// <returns></returns>
-        virtual public Shape Shape
-        {
-            get
-            {
-                return m_shape;
-            }
-        }
+        public virtual Shape Shape { get; set; }
 
         /// <summary>
         /// Is this fixture a sensor (non-solid)?
@@ -105,14 +89,14 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_isSensor;
+                return IsSensor;
             }
             set
             {
-                if (value != m_isSensor)
+                if (value != IsSensor)
                 {
-                    m_body.Awake = true;
-                    m_isSensor = value;
+                    Body.Awake = true;
+                    IsSensor = value;
                 }
             }
         }
@@ -127,13 +111,13 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_filter;
+                return Filter;
             }
             set
             {
-                m_filter.Set(value);
+                Filter.Set(value);
 
-                refilter();
+                Refilter();
             }
         }
 
@@ -141,25 +125,13 @@ namespace Box2D.Dynamics
         /// Get the parent body of this fixture. This is NULL if the fixture is not attached.
         /// </summary>
         /// <returns>the parent body.</returns>
-        virtual public Body Body
-        {
-            get
-            {
-                return m_body;
-            }
-        }
+        public virtual Body Body { get; set; }
 
         /// <summary>
         /// Get the next fixture in the parent body's fixture list.
         /// </summary>
         /// <returns>the next shape.</returns>
-        virtual public Fixture Next
-        {
-            get
-            {
-                return m_next;
-            }
-        }
+        public virtual Fixture Next { get; set; }
 
         virtual public float Density
         {
@@ -178,64 +150,34 @@ namespace Box2D.Dynamics
         /// Gets or sets the user data that was assigned in the fixture definition. Use this to store your
         /// application specific data.
         /// </summary>
-        virtual public object UserData
-        {
-            get
-            {
-                return m_userData;
-            }
-            set
-            {
-                m_userData = value;
-            }
-        }
+        public virtual object UserData { get; set; }
 
         /// <summary>
         /// Gets or sets the coefficient of friction.
         /// Setter will not change the friction of existing contacts.
         /// </summary>
-        virtual public float Friction
-        {
-            get
-            {
-                return m_friction;
-            }
-            set
-            {
-                m_friction = value;
-            }
-        }
+        public virtual float Friction { get; set; }
 
         /// <summary>
         /// Gets or sets the coefficient of restitution.
         /// Setter will not change the restitution of existing
         /// contacts.
         /// </summary>
-        virtual public float Restitution
-        {
-            get
-            {
-                return m_restitution;
-            }
-            set
-            {
-                m_restitution = value;
-            }
-        }
+        public virtual float Restitution { get; set; }
 
         /// <summary>
         /// Call this if you want to establish collision that was previously disabled by
         /// ContactFilter::ShouldCollide.
         /// </summary>
-        public virtual void refilter()
+        public virtual void Refilter()
         {
-            if (m_body == null)
+            if (Body == null)
             {
                 return;
             }
 
             // Flag associated contacts for filtering.
-            ContactEdge edge = m_body.ContactList;
+            ContactEdge edge = Body.ContactList;
             while (edge != null)
             {
                 Contact contact = edge.contact;
@@ -248,7 +190,7 @@ namespace Box2D.Dynamics
                 edge = edge.next;
             }
 
-            World world = m_body.World;
+            World world = Body.World;
 
             if (world == null)
             {
@@ -257,9 +199,9 @@ namespace Box2D.Dynamics
 
             // Touch each proxy so that new pairs may be created
             BroadPhase broadPhase = world.m_contactManager.BroadPhase;
-            for (int i = 0; i < m_proxyCount; ++i)
+            for (int i = 0; i < ProxyCount; ++i)
             {
-                broadPhase.TouchProxy(m_proxies[i].proxyId);
+                broadPhase.TouchProxy(Proxies[i].proxyId);
             }
         }
 
@@ -268,9 +210,9 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="p">a point in world coordinates.</param>
         /// <returns></returns>
-        public virtual bool testPoint(Vec2 p)
+        public virtual bool TestPoint(Vec2 p)
         {
-            return m_shape.TestPoint(m_body.Xf, p);
+            return Shape.TestPoint(Body.Xf, p);
         }
 
         /// <summary>
@@ -278,11 +220,10 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="output">the ray-cast results.</param>
         /// <param name="input">the ray-cast input parameters.</param>
-        /// <param name="output"></param>
-        /// <param name="input"></param>
-        public virtual bool raycast(RayCastOutput output, RayCastInput input, int childIndex)
+        /// <param name="childIndex"></param>
+        public virtual bool Raycast(RayCastOutput output, RayCastInput input, int childIndex)
         {
-            return m_shape.Raycast(output, input, m_body.Xf, childIndex);
+            return Shape.Raycast(output, input, Body.Xf, childIndex);
         }
 
         /// <summary>
@@ -290,9 +231,9 @@ namespace Box2D.Dynamics
         /// rotational inertia is about the shape's origin.
         /// </summary>
         /// <returns></returns>
-        public virtual void getMassData(MassData massData)
+        public virtual void GetMassData(MassData massData)
         {
-            m_shape.ComputeMass(massData, m_density);
+            Shape.ComputeMass(massData, m_density);
         }
 
         /// <summary>
@@ -300,17 +241,17 @@ namespace Box2D.Dynamics
         /// AABB, compute it using the shape and the body transform.
         /// </summary>
         /// <returns></returns>
-        public virtual AABB getAABB(int childIndex)
+        public virtual AABB GetAABB(int childIndex)
         {
-            Debug.Assert(childIndex >= 0 && childIndex < m_proxyCount);
-            return m_proxies[childIndex].aabb;
+            Debug.Assert(childIndex >= 0 && childIndex < ProxyCount);
+            return Proxies[childIndex].aabb;
         }
 
         /// <summary>
         /// Dump this fixture to the log file.
         /// </summary>
         /// <param name="bodyIndex"></param>
-        public virtual void dump(int bodyIndex)
+        public virtual void Dump(int bodyIndex)
         {
 
         }
@@ -319,82 +260,80 @@ namespace Box2D.Dynamics
         // We need separation create/destroy functions from the constructor/destructor because
         // the destructor cannot access the allocator (no destructor arguments allowed by C++).
 
-        public virtual void create(Body body, FixtureDef def)
+        public virtual void Create(Body body, FixtureDef def)
         {
-            m_userData = def.userData;
-            m_friction = def.friction;
-            m_restitution = def.restitution;
+            UserData = def.userData;
+            Friction = def.friction;
+            Restitution = def.restitution;
 
-            m_body = body;
-            m_next = null;
+            Body = body;
+            Next = null;
 
 
-            m_filter.Set(def.filter);
+            Filter.Set(def.filter);
 
-            m_isSensor = def.isSensor;
+            IsSensor = def.isSensor;
 
-            m_shape = def.shape.Clone();
+            Shape = def.shape.Clone();
 
             // Reserve proxy space
-            int childCount = m_shape.ChildCount;
-            if (m_proxies == null)
+            int childCount = Shape.ChildCount;
+            if (Proxies == null)
             {
-                m_proxies = new FixtureProxy[childCount];
+                Proxies = new FixtureProxy[childCount];
                 for (int i = 0; i < childCount; i++)
                 {
-                    m_proxies[i] = new FixtureProxy();
-                    m_proxies[i].fixture = null;
-                    m_proxies[i].proxyId = BroadPhase.NULL_PROXY;
+                    Proxies[i] = new FixtureProxy {fixture = null, proxyId = BroadPhase.NULL_PROXY};
                 }
             }
 
-            if (m_proxies.Length < childCount)
+            if (Proxies.Length < childCount)
             {
-                FixtureProxy[] old = m_proxies;
+                FixtureProxy[] old = Proxies;
                 int newLen = MathUtils.max(old.Length * 2, childCount);
-                m_proxies = new FixtureProxy[newLen];
-                Array.Copy(old, 0, m_proxies, 0, old.Length);
+                Proxies = new FixtureProxy[newLen];
+                Array.Copy(old, 0, Proxies, 0, old.Length);
                 for (int i = 0; i < newLen; i++)
                 {
                     if (i >= old.Length)
                     {
-                        m_proxies[i] = new FixtureProxy();
+                        Proxies[i] = new FixtureProxy();
                     }
-                    m_proxies[i].fixture = null;
-                    m_proxies[i].proxyId = BroadPhase.NULL_PROXY;
+                    Proxies[i].fixture = null;
+                    Proxies[i].proxyId = BroadPhase.NULL_PROXY;
                 }
             }
-            m_proxyCount = 0;
+            ProxyCount = 0;
 
             m_density = def.density;
         }
 
-        public virtual void destroy()
+        public virtual void Destroy()
         {
             // The proxies must be destroyed before calling this.
-            Debug.Assert(m_proxyCount == 0);
+            Debug.Assert(ProxyCount == 0);
 
             // Free the child shape.
-            m_shape = null;
-            m_proxies = null;
-            m_next = null;
+            Shape = null;
+            Proxies = null;
+            Next = null;
 
             // TODO pool shapes
             // TODO pool fixtures
         }
 
         // These support body activation/deactivation.
-        public virtual void createProxies(BroadPhase broadPhase, Transform xf)
+        public virtual void CreateProxies(BroadPhase broadPhase, Transform xf)
         {
-            Debug.Assert(m_proxyCount == 0);
+            Debug.Assert(ProxyCount == 0);
 
             // Create proxies in the broad-phase.
-            m_proxyCount = m_shape.ChildCount;
+            ProxyCount = Shape.ChildCount;
 
-            for (int i = 0; i < m_proxyCount; ++i)
+            for (int i = 0; i < ProxyCount; ++i)
             {
-                FixtureProxy proxy = m_proxies[i];
-                m_shape.ComputeAABB(proxy.aabb, xf, i);
+                FixtureProxy proxy = Proxies[i];
+                Shape.ComputeAABB(proxy.aabb, xf, i);
                 proxy.proxyId = broadPhase.CreateProxy(proxy.aabb, proxy);
                 proxy.fixture = this;
                 proxy.childIndex = i;
@@ -405,17 +344,17 @@ namespace Box2D.Dynamics
         /// Internal method
         /// </summary>
         /// <param name="broadPhase"></param>
-        public virtual void destroyProxies(BroadPhase broadPhase)
+        public virtual void DestroyProxies(BroadPhase broadPhase)
         {
             // Destroy proxies in the broad-phase.
-            for (int i = 0; i < m_proxyCount; ++i)
+            for (int i = 0; i < ProxyCount; ++i)
             {
-                FixtureProxy proxy = m_proxies[i];
+                FixtureProxy proxy = Proxies[i];
                 broadPhase.DestroyProxy(proxy.proxyId);
                 proxy.proxyId = BroadPhase.NULL_PROXY;
             }
 
-            m_proxyCount = 0;
+            ProxyCount = 0;
         }
 
         private readonly AABB pool1 = new AABB();
@@ -426,24 +365,24 @@ namespace Box2D.Dynamics
         /// Internal method
         /// </summary>
         /// <param name="broadPhase"></param>
-        /// <param name="xf1"></param>
-        /// <param name="xf2"></param>
-        protected internal virtual void synchronize(BroadPhase broadPhase, Transform transform1, Transform transform2)
+        /// <param name="transform1"></param>
+        /// <param name="transform2"></param>
+        protected internal virtual void Synchronize(BroadPhase broadPhase, Transform transform1, Transform transform2)
         {
-            if (m_proxyCount == 0)
+            if (ProxyCount == 0)
             {
                 return;
             }
 
-            for (int i = 0; i < m_proxyCount; ++i)
+            for (int i = 0; i < ProxyCount; ++i)
             {
-                FixtureProxy proxy = m_proxies[i];
+                FixtureProxy proxy = Proxies[i];
 
                 // Compute an AABB that covers the swept shape (may miss some rotation effect).
                 AABB aabb1 = pool1;
                 AABB aab = pool2;
-                m_shape.ComputeAABB(aabb1, transform1, proxy.childIndex);
-                m_shape.ComputeAABB(aab, transform2, proxy.childIndex);
+                Shape.ComputeAABB(aabb1, transform1, proxy.childIndex);
+                Shape.ComputeAABB(aab, transform2, proxy.childIndex);
 
                 proxy.aabb.LowerBound.x = aabb1.LowerBound.x < aab.LowerBound.x ? aabb1.LowerBound.x : aab.LowerBound.x;
                 proxy.aabb.LowerBound.y = aabb1.LowerBound.y < aab.LowerBound.y ? aabb1.LowerBound.y : aab.LowerBound.y;

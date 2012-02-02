@@ -120,8 +120,8 @@ namespace Box2D.Dynamics.Contacts
             m_nodeB.other = null;
 
             m_toiCount = 0;
-            m_friction = mixFriction(fA.m_friction, fB.m_friction);
-            m_restitution = mixRestitution(fA.m_restitution, fB.m_restitution);
+            m_friction = mixFriction(fA.Friction, fB.Friction);
+            m_restitution = mixRestitution(fA.Restitution, fB.Restitution);
 
             m_tangentSpeed = 0;
         }
@@ -276,12 +276,12 @@ namespace Box2D.Dynamics.Contacts
 
         public virtual void resetFriction()
         {
-            m_friction = mixFriction(m_fixtureA.m_friction, m_fixtureB.m_friction);
+            m_friction = mixFriction(m_fixtureA.Friction, m_fixtureB.Friction);
         }
 
         public virtual void resetRestitution()
         {
-            m_restitution = mixRestitution(m_fixtureA.m_restitution, m_fixtureB.m_restitution);
+            m_restitution = mixRestitution(m_fixtureA.Restitution, m_fixtureB.Restitution);
         }
 
         public abstract void evaluate(Manifold manifold, Transform xfA, Transform xfB);
