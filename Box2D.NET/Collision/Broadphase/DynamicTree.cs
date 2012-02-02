@@ -282,7 +282,7 @@ namespace Box2D.Collision.Broadphase
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="araabbgAABB"></param>
-        public void query(TreeCallback callback, AABB aabb)
+        public void query(ITreeCallback callback, AABB aabb)
         {
             intStack.Reset();
             intStack.Push(m_root);
@@ -301,7 +301,7 @@ namespace Box2D.Collision.Broadphase
                 {
                     if (node.Leaf)
                     {
-                        bool proceed = callback.treeCallback(nodeId);
+                        bool proceed = callback.TreeCallback(nodeId);
                         if (!proceed)
                         {
                             return;

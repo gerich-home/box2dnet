@@ -29,13 +29,13 @@ namespace Box2D.Callbacks
     /// callback for {@link DynamicTree}
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public interface TreeCallback
+    public interface ITreeCallback
     {
         /// <summary>
         /// Callback from a query request.
         /// </summary>
         /// <param name="proxyId">the id of the proxy</param>
         /// <returns>if the query should be continued</returns>
-        bool treeCallback(int proxyId);
+        bool TreeCallback(int proxyId);
     }
 }

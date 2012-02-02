@@ -40,7 +40,7 @@ namespace Box2D.Collision.Broadphase
 	/// client to consume the new pairs and to track subsequent overlap.
 	/// </summary>
 	/// <author>Daniel Murphy</author>
-	public class BroadPhase : TreeCallback
+	public class BroadPhase : ITreeCallback
 	{
 		/// <summary>
 		/// Get the number of proxies.
@@ -266,7 +266,7 @@ namespace Box2D.Collision.Broadphase
 		/// </summary>
 		/// <param name="callback"></param>
 		/// <param name="aabb"></param>
-		public void query(TreeCallback callback, AABB aabb)
+		public void query(ITreeCallback callback, AABB aabb)
 		{
 			m_tree.query(callback, aabb);
 		}
@@ -313,7 +313,7 @@ namespace Box2D.Collision.Broadphase
 		/// <summary>
 		/// This is called from DynamicTree::query when we are gathering pairs.
 		/// </summary>
-		public bool treeCallback(int proxyId)
+		public bool TreeCallback(int proxyId)
 		{
 
 			// log.debug("Got a proxy back: " + proxyId);

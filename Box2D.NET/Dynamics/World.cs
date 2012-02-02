@@ -1736,9 +1736,9 @@ namespace Box2D.Dynamics
     }
 
 
-    class WorldQueryWrapper : TreeCallback
+    class WorldQueryWrapper : ITreeCallback
     {
-        public virtual bool treeCallback(int nodeId)
+        public virtual bool TreeCallback(int nodeId)
         {
             FixtureProxy proxy = (FixtureProxy)broadPhase.getUserData(nodeId);
             return callback.ReportFixture(proxy.fixture);
