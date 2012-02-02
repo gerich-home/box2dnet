@@ -101,7 +101,7 @@ namespace Box2D.Collision
             localPoint.set_Renamed(cp.localPoint);
             normalImpulse = cp.normalImpulse;
             tangentImpulse = cp.tangentImpulse;
-            id.set_Renamed(cp.id);
+            id.Set(cp.id);
         }
     }
 }

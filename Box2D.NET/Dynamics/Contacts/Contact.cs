@@ -346,7 +346,7 @@ namespace Box2D.Dynamics.Contacts
                     {
                         ManifoldPoint mp1 = oldManifold.points[j];
 
-                        if (mp1.id.isEqual(id2))
+                        if (mp1.id.IsEqual(id2))
                         {
                             mp2.normalImpulse = mp1.normalImpulse;
                             mp2.tangentImpulse = mp1.tangentImpulse;

@@ -50,29 +50,32 @@ using System;
 namespace Box2D.Collision
 {
 
-    /// <summary> Contact ids to facilitate warm starting. Note: the ContactFeatures class is just embedded in here</summary>
+    /// <summary> 
+    /// Contact ids to facilitate warm starting. Note: the ContactFeatures class is just embedded in here
+    /// </summary>
     public class ContactID : IComparable<ContactID>
     {
         public enum Type
         {
-            VERTEX, FACE
+            Vertex,
+            Face
         }
 
-        public sbyte indexA;
-        public sbyte indexB;
-        public sbyte typeA;
-        public sbyte typeB;
+        public sbyte IndexA;
+        public sbyte IndexB;
+        public sbyte TypeA;
+        public sbyte TypeB;
 
         virtual public int Key
         {
             get
             {
                 //UPGRADE_ISSUE: check following line carefully!
-                return ((int)indexA) << 24 | ((int)indexB) << 16 | ((int)typeA) << 8 | ((int)typeB);
+                return IndexA << 24 | IndexB << 16 | TypeA << 8 | TypeB;
             }
         }
 
-        public virtual bool isEqual(ContactID cid)
+        public virtual bool IsEqual(ContactID cid)
         {
             return Key == cid.Key;
         }
@@ -83,34 +86,36 @@ namespace Box2D.Collision
 
         public ContactID(ContactID c)
         {
-            set_Renamed(c);
+            Set(c);
         }
 
-        public virtual void set_Renamed(ContactID c)
+        public virtual void Set(ContactID c)
         {
-            indexA = c.indexA;
-            indexB = c.indexA;
-            typeA = c.typeA;
-            typeB = c.typeB;
+            IndexA = c.IndexA;
+            IndexB = c.IndexA;
+            TypeA = c.TypeA;
+            TypeB = c.TypeB;
         }
 
-        public virtual void flip()
+        public virtual void Flip()
         {
-            sbyte tempA = indexA;
-            indexA = indexB;
-            indexB = tempA;
-            tempA = typeA;
-            typeA = typeB;
-            typeB = tempA;
+            sbyte tempA = IndexA;
+            IndexA = IndexB;
+            IndexB = tempA;
+            tempA = TypeA;
+            TypeA = TypeB;
+            TypeB = tempA;
         }
 
-        /// <summary> zeros out the data</summary>
-        public virtual void zero()
+        /// <summary>
+        ///  zeros out the data
+        /// </summary>
+        public virtual void Zero()
         {
-            indexA = 0;
-            indexB = 0;
-            typeA = 0;
-            typeB = 0;
+            IndexA = 0;
+            IndexB = 0;
+            TypeA = 0;
+            TypeB = 0;
         }
 
         public int CompareTo(ContactID o)

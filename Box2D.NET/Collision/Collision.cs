@@ -110,7 +110,7 @@ namespace Box2D.Collision
 
                 for (int j = 0; j < manifold2.pointCount; j++)
                 {
-                    if (manifold2.points[j].id.isEqual(id))
+                    if (manifold2.points[j].id.IsEqual(id))
                     {
                         state1[i] = PointState.PersistState;
                         break;
@@ -127,7 +127,7 @@ namespace Box2D.Collision
 
                 for (int j = 0; j < manifold1.pointCount; j++)
                 {
-                    if (manifold1.points[j].id.isEqual(id))
+                    if (manifold1.points[j].id.IsEqual(id))
                     {
                         state2[i] = PointState.PersistState;
                         break;
@@ -174,10 +174,10 @@ namespace Box2D.Collision
                 vOut[numOut].v.set_Renamed(vIn[1].v).subLocal(vIn[0].v).mulLocal(interp).addLocal(vIn[0].v);
 
                 // VertexA is hitting edgeB.
-                vOut[numOut].id.indexA = (sbyte)vertexIndexA;
-                vOut[numOut].id.indexB = vIn[0].id.indexB;
-                vOut[numOut].id.typeA = (sbyte)ContactID.Type.VERTEX;
-                vOut[numOut].id.typeB = (sbyte)ContactID.Type.FACE;
+                vOut[numOut].id.IndexA = (sbyte)vertexIndexA;
+                vOut[numOut].id.IndexB = vIn[0].id.IndexB;
+                vOut[numOut].id.TypeA = (sbyte)ContactID.Type.Vertex;
+                vOut[numOut].id.TypeB = (sbyte)ContactID.Type.Face;
                 ++numOut;
             }
 
@@ -236,7 +236,7 @@ namespace Box2D.Collision
             manifold.pointCount = 1;
 
             manifold.points[0].localPoint.set_Renamed(circle2.P);
-            manifold.points[0].id.zero();
+            manifold.points[0].id.Zero();
         }
 
         // djm pooling, and from above
@@ -335,7 +335,7 @@ namespace Box2D.Collision
                 ManifoldPoint mpoint = manifold.points[0];
                 mpoint.localPoint.x = circle.P.x;
                 mpoint.localPoint.y = circle.P.y;
-                mpoint.id.zero();
+                mpoint.id.Zero();
                 // end inline
                 return;
             }
@@ -383,7 +383,7 @@ namespace Box2D.Collision
                 manifold.localNormal.normalize();
                 manifold.localPoint.set_Renamed(v1);
                 manifold.points[0].localPoint.set_Renamed(circle.P);
-                manifold.points[0].id.zero();
+                manifold.points[0].id.Zero();
             }
             else if (u2 <= 0.0f)
             {
@@ -406,7 +406,7 @@ namespace Box2D.Collision
                 manifold.localNormal.normalize();
                 manifold.localPoint.set_Renamed(v2);
                 manifold.points[0].localPoint.set_Renamed(circle.P);
-                manifold.points[0].id.zero();
+                manifold.points[0].id.Zero();
             }
             else
             {
@@ -440,7 +440,7 @@ namespace Box2D.Collision
                 manifold.localPoint.x = fcx; // (faceCenter)
                 manifold.localPoint.y = fcy;
                 manifold.points[0].localPoint.set_Renamed(circle.P);
-                manifold.points[0].id.zero();
+                manifold.points[0].id.Zero();
             }
         }
 
@@ -684,16 +684,16 @@ namespace Box2D.Collision
             int i2 = i1 + 1 < count2 ? i1 + 1 : 0;
 
             Transform.mulToOutUnsafe(xf2, vertices2[i1], c[0].v); // = Mul(xf2, vertices2[i1]);
-            c[0].id.indexA = (sbyte)edge1;
-            c[0].id.indexB = (sbyte)i1;
-            c[0].id.typeA = (sbyte)ContactID.Type.FACE;
-            c[0].id.typeB = (sbyte)ContactID.Type.VERTEX;
+            c[0].id.IndexA = (sbyte)edge1;
+            c[0].id.IndexB = (sbyte)i1;
+            c[0].id.TypeA = (sbyte)ContactID.Type.Face;
+            c[0].id.TypeB = (sbyte)ContactID.Type.Vertex;
 
             Transform.mulToOutUnsafe(xf2, vertices2[i2], c[1].v); // = Mul(xf2, vertices2[i2]);
-            c[1].id.indexA = (sbyte)edge1;
-            c[1].id.indexB = (sbyte)i2;
-            c[1].id.typeA = (sbyte)ContactID.Type.FACE;
-            c[1].id.typeB = (sbyte)ContactID.Type.VERTEX;
+            c[1].id.IndexA = (sbyte)edge1;
+            c[1].id.IndexB = (sbyte)i2;
+            c[1].id.TypeA = (sbyte)ContactID.Type.Face;
+            c[1].id.TypeB = (sbyte)ContactID.Type.Vertex;
         }
 
         private readonly EdgeResults results1 = new EdgeResults();
@@ -844,11 +844,11 @@ namespace Box2D.Collision
                     ManifoldPoint cp = manifold.points[pointCount];
                     Transform.mulTransToOut(xf2, clipPoints2[i].v, cp.localPoint);
                     // cp.m_localPoint = MulT(xf2, clipPoints2[i].v);
-                    cp.id.set_Renamed(clipPoints2[i].id);
+                    cp.id.Set(clipPoints2[i].id);
                     if (flip)
                     {
                         // Swap features
-                        cp.id.flip();
+                        cp.id.Flip();
                     }
                     ++pointCount;
                 }
@@ -888,8 +888,8 @@ namespace Box2D.Collision
             float radius = edgeA.Radius + circleB.Radius;
 
             // ContactFeature cf;
-            cf.indexB = 0;
-            cf.typeB = (sbyte)ContactID.Type.VERTEX;
+            cf.IndexB = 0;
+            cf.TypeB = (sbyte)ContactID.Type.Vertex;
 
             // Region A
             if (v <= 0.0f)
@@ -917,14 +917,14 @@ namespace Box2D.Collision
                     }
                 }
 
-                cf.indexA = 0;
-                cf.typeA = (sbyte)ContactID.Type.VERTEX;
+                cf.IndexA = 0;
+                cf.TypeA = (sbyte)ContactID.Type.Vertex;
                 manifold.pointCount = 1;
                 manifold.type = Manifold.ManifoldType.CIRCLES;
                 manifold.localNormal.setZero();
                 manifold.localPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
-                manifold.points[0].id.set_Renamed(cf);
+                manifold.points[0].id.Set(cf);
                 manifold.points[0].localPoint.set_Renamed(circleB.P);
                 return;
             }
@@ -956,14 +956,14 @@ namespace Box2D.Collision
                     }
                 }
 
-                cf.indexA = 1;
-                cf.typeA = (sbyte)ContactID.Type.VERTEX;
+                cf.IndexA = 1;
+                cf.TypeA = (sbyte)ContactID.Type.Vertex;
                 manifold.pointCount = 1;
                 manifold.type = Manifold.ManifoldType.CIRCLES;
                 manifold.localNormal.setZero();
                 manifold.localPoint.set_Renamed(_P);
                 // manifold.points[0].id.key = 0;
-                manifold.points[0].id.set_Renamed(cf);
+                manifold.points[0].id.Set(cf);
                 manifold.points[0].localPoint.set_Renamed(circleB.P);
                 return;
             }
@@ -990,14 +990,14 @@ namespace Box2D.Collision
             }
             n.normalize();
 
-            cf.indexA = 0;
-            cf.typeA = (sbyte)ContactID.Type.FACE;
+            cf.IndexA = 0;
+            cf.TypeA = (sbyte)ContactID.Type.Face;
             manifold.pointCount = 1;
             manifold.type = Manifold.ManifoldType.FACE_A;
             manifold.localNormal.set_Renamed(n);
             manifold.localPoint.set_Renamed(A);
             // manifold.points[0].id.key = 0;
-            manifold.points[0].id.set_Renamed(cf);
+            manifold.points[0].id.Set(cf);
             manifold.points[0].localPoint.set_Renamed(circleB.P);
         }
 
@@ -1034,7 +1034,7 @@ namespace Box2D.Collision
             public virtual void Set(ClipVertex cv)
             {
                 v.set_Renamed(cv.v);
-                id.set_Renamed(cv.id);
+                id.Set(cv.id);
             }
         }
 
@@ -1433,16 +1433,16 @@ namespace Box2D.Collision
                     int i2 = i1 + 1 < PolygonB.count ? i1 + 1 : 0;
 
                     ie[0].v.set_Renamed(PolygonB.Vertices[i1]);
-                    ie[0].id.indexA = 0;
-                    ie[0].id.indexB = (sbyte)i1;
-                    ie[0].id.typeA = (sbyte)ContactID.Type.FACE;
-                    ie[0].id.typeB = (sbyte)ContactID.Type.VERTEX;
+                    ie[0].id.IndexA = 0;
+                    ie[0].id.IndexB = (sbyte)i1;
+                    ie[0].id.TypeA = (sbyte)ContactID.Type.Face;
+                    ie[0].id.TypeB = (sbyte)ContactID.Type.Vertex;
 
                     ie[1].v.set_Renamed(PolygonB.Vertices[i2]);
-                    ie[1].id.indexA = 0;
-                    ie[1].id.indexB = (sbyte)i2;
-                    ie[1].id.typeA = (sbyte)ContactID.Type.FACE;
-                    ie[1].id.typeB = (sbyte)ContactID.Type.VERTEX;
+                    ie[1].id.IndexA = 0;
+                    ie[1].id.IndexB = (sbyte)i2;
+                    ie[1].id.TypeA = (sbyte)ContactID.Type.Face;
+                    ie[1].id.TypeB = (sbyte)ContactID.Type.Vertex;
 
                     if (Front)
                     {
@@ -1466,16 +1466,16 @@ namespace Box2D.Collision
                     manifold.type = Manifold.ManifoldType.FACE_B;
 
                     ie[0].v.set_Renamed(V1);
-                    ie[0].id.indexA = 0;
-                    ie[0].id.indexB = (sbyte)primaryAxis.Index;
-                    ie[0].id.typeA = (sbyte)ContactID.Type.VERTEX;
-                    ie[0].id.typeB = (sbyte)ContactID.Type.FACE;
+                    ie[0].id.IndexA = 0;
+                    ie[0].id.IndexB = (sbyte)primaryAxis.Index;
+                    ie[0].id.TypeA = (sbyte)ContactID.Type.Vertex;
+                    ie[0].id.TypeB = (sbyte)ContactID.Type.Face;
 
                     ie[1].v.set_Renamed(V2);
-                    ie[1].id.indexA = 0;
-                    ie[1].id.indexB = (sbyte)primaryAxis.Index;
-                    ie[1].id.typeA = (sbyte)ContactID.Type.VERTEX;
-                    ie[1].id.typeB = (sbyte)ContactID.Type.FACE;
+                    ie[1].id.IndexA = 0;
+                    ie[1].id.IndexB = (sbyte)primaryAxis.Index;
+                    ie[1].id.TypeA = (sbyte)ContactID.Type.Vertex;
+                    ie[1].id.TypeB = (sbyte)ContactID.Type.Face;
 
                     rf.I1 = primaryAxis.Index;
                     rf.I2 = rf.I1 + 1 < PolygonB.count ? rf.I1 + 1 : 0;
@@ -1535,15 +1535,15 @@ namespace Box2D.Collision
                         {
                             // cp.localPoint = MulT(m_xf, clipPoints2[i].v);
                             Transform.mulTransToOutUnsafe(Xf, clipPoints2[i].v, cp.localPoint);
-                            cp.id.set_Renamed(clipPoints2[i].id);
+                            cp.id.Set(clipPoints2[i].id);
                         }
                         else
                         {
                             cp.localPoint.set_Renamed(clipPoints2[i].v);
-                            cp.id.typeA = clipPoints2[i].id.typeB;
-                            cp.id.typeB = clipPoints2[i].id.typeA;
-                            cp.id.indexA = clipPoints2[i].id.indexB;
-                            cp.id.indexB = clipPoints2[i].id.indexA;
+                            cp.id.TypeA = clipPoints2[i].id.TypeB;
+                            cp.id.TypeB = clipPoints2[i].id.TypeA;
+                            cp.id.IndexA = clipPoints2[i].id.IndexB;
+                            cp.id.IndexB = clipPoints2[i].id.IndexA;
                         }
 
                         ++pointCount;
