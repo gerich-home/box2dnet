@@ -36,21 +36,21 @@ namespace Box2D.Dynamics
     public class ContactManager : IPairCallback
     {
 
-        public BroadPhase m_broadPhase;
-        public Contact m_contactList;
-        public int m_contactCount;
-        public ContactFilter m_contactFilter;
-        public ContactListener m_contactListener;
+        public BroadPhase BroadPhase;
+        public Contact ContactList;
+        public int ContactCount;
+        public ContactFilter ContactFilter;
+        public ContactListener ContactListener;
 
         private readonly World pool;
 
         public ContactManager(World argPool)
         {
-            m_contactList = null;
-            m_contactCount = 0;
-            m_contactFilter = new ContactFilter();
-            m_contactListener = null;
-            m_broadPhase = new BroadPhase();
+            ContactList = null;
+            ContactCount = 0;
+            ContactFilter = new ContactFilter();
+            ContactListener = null;
+            BroadPhase = new BroadPhase();
             pool = argPool;
         }
 
@@ -115,7 +115,7 @@ namespace Box2D.Dynamics
             }
 
             // Check user filtering.
-            if (m_contactFilter != null && m_contactFilter.ShouldCollide(fixtureA, fixtureB) == false)
+            if (ContactFilter != null && ContactFilter.ShouldCollide(fixtureA, fixtureB) == false)
             {
                 return;
             }
@@ -130,19 +130,17 @@ namespace Box2D.Dynamics
             // Contact creation may swap fixtures.
             fixtureA = c.FixtureA;
             fixtureB = c.FixtureB;
-            indexA = c.ChildIndexA;
-            indexB = c.ChildIndexB;
             bodyA = fixtureA.Body;
             bodyB = fixtureB.Body;
 
             // Insert into the world.
             c.m_prev = null;
-            c.m_next = m_contactList;
-            if (m_contactList != null)
+            c.m_next = ContactList;
+            if (ContactList != null)
             {
-                m_contactList.m_prev = c;
+                ContactList.m_prev = c;
             }
-            m_contactList = c;
+            ContactList = c;
 
             // Connect to island graph.
 
@@ -174,24 +172,24 @@ namespace Box2D.Dynamics
             bodyA.Awake = true;
             bodyB.Awake = true;
 
-            ++m_contactCount;
+            ++ContactCount;
         }
 
-        public virtual void findNewContacts()
+        public virtual void FindNewContacts()
         {
-            m_broadPhase.UpdatePairs(this);
+            BroadPhase.UpdatePairs(this);
         }
 
-        public virtual void destroy(Contact c)
+        public virtual void Destroy(Contact c)
         {
             Fixture fixtureA = c.FixtureA;
             Fixture fixtureB = c.FixtureB;
             Body bodyA = fixtureA.Body;
             Body bodyB = fixtureB.Body;
 
-            if (m_contactListener != null && c.Touching)
+            if (ContactListener != null && c.Touching)
             {
-                m_contactListener.EndContact(c);
+                ContactListener.EndContact(c);
             }
 
             // Remove from the world.
@@ -205,9 +203,9 @@ namespace Box2D.Dynamics
                 c.m_next.m_prev = c.m_prev;
             }
 
-            if (c == m_contactList)
+            if (c == ContactList)
             {
-                m_contactList = c.m_next;
+                ContactList = c.m_next;
             }
 
             // Remove from body 1
@@ -244,17 +242,17 @@ namespace Box2D.Dynamics
 
             // Call the factory.
             pool.pushContact(c);
-            --m_contactCount;
+            --ContactCount;
         }
 
         /// <summary>
         /// This is the top level collision call for the time step. Here all the narrow phase collision is
         /// processed for the world contact list.
         /// </summary>
-        public virtual void collide()
+        public virtual void Collide()
         {
             // Update awake contacts.
-            Contact c = m_contactList;
+            Contact c = ContactList;
             while (c != null)
             {
                 Fixture fixtureA = c.FixtureA;
@@ -272,16 +270,16 @@ namespace Box2D.Dynamics
                     {
                         Contact cNuke = c;
                         c = cNuke.Next;
-                        destroy(cNuke);
+                        Destroy(cNuke);
                         continue;
                     }
 
                     // Check user filtering.
-                    if (m_contactFilter != null && m_contactFilter.ShouldCollide(fixtureA, fixtureB) == false)
+                    if (ContactFilter != null && ContactFilter.ShouldCollide(fixtureA, fixtureB) == false)
                     {
                         Contact cNuke = c;
                         c = cNuke.Next;
-                        destroy(cNuke);
+                        Destroy(cNuke);
                         continue;
                     }
 
@@ -301,19 +299,19 @@ namespace Box2D.Dynamics
 
                 int proxyIdA = fixtureA.m_proxies[indexA].proxyId;
                 int proxyIdB = fixtureB.m_proxies[indexB].proxyId;
-                bool overlap = m_broadPhase.TestOverlap(proxyIdA, proxyIdB);
+                bool overlap = BroadPhase.TestOverlap(proxyIdA, proxyIdB);
 
                 // Here we destroy contacts that cease to overlap in the broad-phase.
                 if (overlap == false)
                 {
                     Contact cNuke = c;
                     c = cNuke.Next;
-                    destroy(cNuke);
+                    Destroy(cNuke);
                     continue;
                 }
 
                 // The contact persists.
-                c.update(m_contactListener);
+                c.update(ContactListener);
                 c = c.Next;
             }
         }

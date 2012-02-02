@@ -305,7 +305,7 @@ namespace Box2D.Dynamics
             {
                 ContactEdge ce0 = ce;
                 ce = ce.next;
-                m_contactManager.destroy(ce0.contact);
+                m_contactManager.Destroy(ce0.contact);
             }
             body.ContactList = null;
 
@@ -320,7 +320,7 @@ namespace Box2D.Dynamics
                     m_destructionListener.SayGoodbye(f0);
                 }
 
-                f0.destroyProxies(m_contactManager.m_broadPhase);
+                f0.destroyProxies(m_contactManager.BroadPhase);
                 f0.destroy();
                 // TODO djm recycle fixtures (here or in that destroy method)
                 body.FixtureList = f;
@@ -541,7 +541,7 @@ namespace Box2D.Dynamics
             if ((m_flags & NEW_FIXTURE) == NEW_FIXTURE)
             {
                 // log.debug("There's a new fixture, lets look for new contacts");
-                m_contactManager.findNewContacts();
+                m_contactManager.FindNewContacts();
                 m_flags &= ~NEW_FIXTURE;
             }
 
@@ -565,7 +565,7 @@ namespace Box2D.Dynamics
 
             // Update contacts. This is where some contacts are destroyed.
             tempTimer.reset();
-            m_contactManager.collide();
+            m_contactManager.Collide();
             m_profile.collide = tempTimer.Milliseconds;
 
             // Integrate velocities, solve velocity constraints, and integrate positions.
@@ -680,7 +680,7 @@ namespace Box2D.Dynamics
             if ((flags & DebugDraw.DrawFlags.Pair) == DebugDraw.DrawFlags.Pair)
             {
                 color.set_Renamed(0.3f, 0.9f, 0.9f);
-                for (Contact c = m_contactManager.m_contactList; c != null; c = c.Next)
+                for (Contact c = m_contactManager.ContactList; c != null; c = c.Next)
                 {
                     // Fixture fixtureA = c.getFixtureA();
                     // Fixture fixtureB = c.getFixtureB();
@@ -709,7 +709,7 @@ namespace Box2D.Dynamics
                         for (int i = 0; i < f.m_proxyCount; ++i)
                         {
                             FixtureProxy proxy = f.m_proxies[i];
-                            AABB aabb = m_contactManager.m_broadPhase.GetFatAABB(proxy.proxyId);
+                            AABB aabb = m_contactManager.BroadPhase.GetFatAABB(proxy.proxyId);
                             Vec2[] vs = avs.Get(4);
                             vs[0].set_Renamed(aabb.LowerBound.x, aabb.LowerBound.y);
                             vs[1].set_Renamed(aabb.UpperBound.x, aabb.LowerBound.y);
@@ -734,7 +734,7 @@ namespace Box2D.Dynamics
 
             if ((flags & DebugDraw.DrawFlags.DynamicTree) == DebugDraw.DrawFlags.DynamicTree)
             {
-                m_contactManager.m_broadPhase.DrawTree(m_debugDraw);
+                m_contactManager.BroadPhase.DrawTree(m_debugDraw);
             }
         }
 
@@ -747,9 +747,9 @@ namespace Box2D.Dynamics
         /// <param name="aabb">the query box.</param>
         public virtual void queryAABB(IQueryCallback callback, AABB aabb)
         {
-            wqwrapper.broadPhase = m_contactManager.m_broadPhase;
+            wqwrapper.broadPhase = m_contactManager.BroadPhase;
             wqwrapper.callback = callback;
-            m_contactManager.m_broadPhase.Query(wqwrapper, aabb);
+            m_contactManager.BroadPhase.Query(wqwrapper, aabb);
         }
 
         private readonly WorldRayCastWrapper wrcwrapper = new WorldRayCastWrapper();
@@ -765,12 +765,12 @@ namespace Box2D.Dynamics
         /// <param name="point2">the ray ending point</param>
         public virtual void raycast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
         {
-            wrcwrapper.broadPhase = m_contactManager.m_broadPhase;
+            wrcwrapper.broadPhase = m_contactManager.BroadPhase;
             wrcwrapper.callback = callback;
             input.MaxFraction = 1.0f;
             input.P1.set_Renamed(point1);
             input.P2.set_Renamed(point2);
-            m_contactManager.m_broadPhase.Raycast(wrcwrapper, input);
+            m_contactManager.BroadPhase.Raycast(wrcwrapper, input);
         }
 
         virtual public IWorldPool Pool
@@ -802,7 +802,7 @@ namespace Box2D.Dynamics
         {
             set
             {
-                m_contactManager.m_contactFilter = value;
+                m_contactManager.ContactFilter = value;
             }
         }
 
@@ -814,7 +814,7 @@ namespace Box2D.Dynamics
         {
             set
             {
-                m_contactManager.m_contactListener = value;
+                m_contactManager.ContactListener = value;
             }
         }
 
@@ -867,7 +867,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.m_contactList;
+                return m_contactManager.ContactList;
             }
         }
 
@@ -922,7 +922,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.m_broadPhase.ProxyCount;
+                return m_contactManager.BroadPhase.ProxyCount;
             }
         }
 
@@ -958,7 +958,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.m_contactCount;
+                return m_contactManager.ContactCount;
             }
         }
 
@@ -970,7 +970,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.m_broadPhase.TreeHeight;
+                return m_contactManager.BroadPhase.TreeHeight;
             }
         }
 
@@ -982,7 +982,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.m_broadPhase.TreeBalance;
+                return m_contactManager.BroadPhase.TreeBalance;
             }
         }
 
@@ -994,7 +994,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return m_contactManager.m_broadPhase.TreeQuality;
+                return m_contactManager.BroadPhase.TreeQuality;
             }
         }
 
@@ -1079,14 +1079,14 @@ namespace Box2D.Dynamics
             m_profile.solvePosition = 0;
 
             // Size the island for the worst case.
-            island.init(m_bodyCount, m_contactManager.m_contactCount, m_jointCount, m_contactManager.m_contactListener);
+            island.init(m_bodyCount, m_contactManager.ContactCount, m_jointCount, m_contactManager.ContactListener);
 
             // Clear all the island flags.
             for (Body b = m_bodyList; b != null; b = b.Next)
             {
                 b.Flags &= ~Body.TypeFlags.Island;
             }
-            for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
+            for (Contact c = m_contactManager.ContactList; c != null; c = c.m_next)
             {
                 c.m_flags &= ~Contact.ISLAND_FLAG;
             }
@@ -1250,7 +1250,7 @@ namespace Box2D.Dynamics
             }
 
             // Look for new contacts.
-            m_contactManager.findNewContacts();
+            m_contactManager.FindNewContacts();
             m_profile.broadphase = broadphaseTimer.Milliseconds;
         }
 
@@ -1265,7 +1265,7 @@ namespace Box2D.Dynamics
         private void solveTOI(TimeStep step)
         {
             Island island = toiIsland;
-            island.init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, m_contactManager.m_contactListener);
+            island.init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, m_contactManager.ContactListener);
             if (m_stepComplete)
             {
                 for (Body b = m_bodyList; b != null; b = b.Next)
@@ -1274,7 +1274,7 @@ namespace Box2D.Dynamics
                     b.Sweep.alpha0 = 0.0f;
                 }
 
-                for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
+                for (Contact c = m_contactManager.ContactList; c != null; c = c.m_next)
                 {
                     // Invalidate TOI
                     c.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
@@ -1290,7 +1290,7 @@ namespace Box2D.Dynamics
                 Contact minContact = null;
                 float minAlpha = 1.0f;
 
-                for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
+                for (Contact c = m_contactManager.ContactList; c != null; c = c.m_next)
                 {
                     // Is this contact disabled?
                     if (c.Enabled == false)
@@ -1419,7 +1419,7 @@ namespace Box2D.Dynamics
                 bB2.Advance(minAlpha);
 
                 // The TOI contact likely has some new contact points.
-                minContact.update(m_contactManager.m_contactListener);
+                minContact.update(m_contactManager.ContactListener);
                 minContact.m_flags &= ~Contact.TOI_FLAG;
                 ++minContact.m_toiCount;
 
@@ -1499,7 +1499,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Update the contact points
-                            contact.update(m_contactManager.m_contactListener);
+                            contact.update(m_contactManager.ContactListener);
 
                             // Was the contact disabled by the user?
                             if (contact.Enabled == false)
@@ -1570,7 +1570,7 @@ namespace Box2D.Dynamics
 
                 // Commit fixture proxy movements to the broad-phase so that new contacts are created.
                 // Also, some contacts can be destroyed.
-                m_contactManager.findNewContacts();
+                m_contactManager.FindNewContacts();
 
                 if (m_subStepping)
                 {

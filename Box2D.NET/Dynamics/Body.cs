@@ -187,7 +187,7 @@ namespace Box2D.Dynamics
 
             if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
-                BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                BroadPhase broadPhase = World.m_contactManager.BroadPhase;
                 fixture.createProxies(broadPhase, Xf);
             }
 
@@ -290,13 +290,13 @@ namespace Box2D.Dynamics
                 {
                     // This destroys the contact and removes it from
                     // this body's contact list.
-                    World.m_contactManager.destroy(c);
+                    World.m_contactManager.Destroy(c);
                 }
             }
 
             if ((Flags & TypeFlags.Active) == TypeFlags.Active)
             {
-                BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                BroadPhase broadPhase = World.m_contactManager.BroadPhase;
                 fixture.destroyProxies(broadPhase);
             }
 
@@ -334,13 +334,13 @@ namespace Box2D.Dynamics
             Sweep.c0.set_Renamed(Sweep.c);
             Sweep.a0 = Sweep.a;
 
-            BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+            BroadPhase broadPhase = World.m_contactManager.BroadPhase;
             for (Fixture f = FixtureList; f != null; f = f.m_next)
             {
                 f.synchronize(broadPhase, Xf, Xf);
             }
 
-            World.m_contactManager.findNewContacts();
+            World.m_contactManager.FindNewContacts();
         }
 
         /// <summary>
@@ -529,12 +529,12 @@ namespace Box2D.Dynamics
                 {
                     ContactEdge ce0 = ce;
                     ce = ce.next;
-                    World.m_contactManager.destroy(ce0.contact);
+                    World.m_contactManager.Destroy(ce0.contact);
                 }
                 ContactList = null;
 
                 // Touch the proxies so that new contacts will be created (when appropriate)
-                BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                BroadPhase broadPhase = World.m_contactManager.BroadPhase;
                 for (Fixture f = FixtureList; f != null; f = f.m_next)
                 {
                     int proxyCount = f.m_proxyCount;
@@ -656,7 +656,7 @@ namespace Box2D.Dynamics
                     Flags |= TypeFlags.Active;
 
                     // Create all proxies.
-                    BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                    BroadPhase broadPhase = World.m_contactManager.BroadPhase;
                     for (Fixture f = FixtureList; f != null; f = f.m_next)
                     {
                         f.createProxies(broadPhase, Xf);
@@ -669,7 +669,7 @@ namespace Box2D.Dynamics
                     Flags &= ~TypeFlags.Active;
 
                     // Destroy all proxies.
-                    BroadPhase broadPhase = World.m_contactManager.m_broadPhase;
+                    BroadPhase broadPhase = World.m_contactManager.BroadPhase;
                     for (Fixture f = FixtureList; f != null; f = f.m_next)
                     {
                         f.destroyProxies(broadPhase);
@@ -681,7 +681,7 @@ namespace Box2D.Dynamics
                     {
                         ContactEdge ce0 = ce;
                         ce = ce.next;
-                        World.m_contactManager.destroy(ce0.contact);
+                        World.m_contactManager.Destroy(ce0.contact);
                     }
                     ContactList = null;
                 }
@@ -1159,7 +1159,7 @@ namespace Box2D.Dynamics
 
             for (Fixture f = FixtureList; f != null; f = f.m_next)
             {
-                f.synchronize(World.m_contactManager.m_broadPhase, xf1, Xf);
+                f.synchronize(World.m_contactManager.BroadPhase, xf1, Xf);
             }
         }
 
