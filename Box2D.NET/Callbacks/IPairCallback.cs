@@ -24,7 +24,6 @@
 
 namespace Box2D.Callbacks
 {
-
     // updated to rev 100
     public interface IPairCallback
     {

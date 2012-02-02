@@ -37,7 +37,6 @@ namespace Box2D.Callbacks
     /// <author>Daniel Murphy</author>
     public class ContactFilter
     {
-
         /// <summary>
         /// Return true if contact calculations should be performed between these two shapes.
         /// </summary>

@@ -39,7 +39,6 @@ namespace Box2D.Callbacks
     /// <author>Daniel Murphy</author>
     public interface IDestructionListener
     {
-
         /// <summary>
         /// Called when any joint is about to be destroyed due
         /// to the destruction of one of its attached bodies.
