@@ -48,7 +48,7 @@ namespace Box2D.Pooling.Normal
         private int size;
 
         private readonly Type[] _params;
-        private readonly Object[] args;
+        private readonly object[] args;
 
         public MutableStack(int argInitSize) :
             this(argInitSize, null, null)
@@ -56,7 +56,7 @@ namespace Box2D.Pooling.Normal
 
         }
 
-        public MutableStack(int argInitSize, Type[] argParam, Object[] argArgs)
+        public MutableStack(int argInitSize, Type[] argParam, object[] argArgs)
         {
             index = 0;
             _params = argParam;
@@ -64,12 +64,12 @@ namespace Box2D.Pooling.Normal
 
             stack = null;
             index = 0;
-            extendStack(argInitSize);
+            ExtendStack(argInitSize);
         }
 
-        private void extendStack(int argSize)
+        private void ExtendStack(int argSize)
         {
-            T[] newStack = new T[argSize];
+            var newStack = new T[argSize];
 
             if (stack != null)
             {
@@ -82,14 +82,14 @@ namespace Box2D.Pooling.Normal
                 {
                     if (_params != null)
                     {
-                        newStack[i] = (T)typeof(T).GetConstructor(_params).Invoke(args);
+                        newStack[i] = (T)(typeof(T).GetConstructor(_params).Invoke(args));
                     }
                     else
                     {
-                        newStack[i] = (T)typeof(T).GetConstructor(Type.EmptyTypes).Invoke(args);
+                        newStack[i] = (T)(typeof(T).GetConstructor(Type.EmptyTypes).Invoke(args));
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Debug.Assert(false); //"Error creating pooled object " + sClass.getCanonicalName();
                 }
@@ -103,7 +103,7 @@ namespace Box2D.Pooling.Normal
         {
             if (index >= size)
             {
-                extendStack(size * 2);
+                ExtendStack(size * 2);
             }
             return stack[index++];
         }
