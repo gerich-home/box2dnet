@@ -37,8 +37,8 @@ namespace Box2D.Callbacks
     /// <author>Daniel Murphy</author>
     public class ContactImpulse
     {
-        public float[] normalImpulses = new float[Settings.maxManifoldPoints];
-        public float[] tangentImpulses = new float[Settings.maxManifoldPoints];
-        public int count;
+        public float[] NormalImpulses = new float[Settings.maxManifoldPoints];
+        public float[] TangentImpulses = new float[Settings.maxManifoldPoints];
+        public int Count;
     }
 }

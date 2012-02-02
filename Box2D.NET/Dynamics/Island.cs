@@ -613,11 +613,11 @@ namespace Box2D.Dynamics
 				Contact c = m_contacts[i];
 
 				ContactVelocityConstraint vc = constraints[i];
-				impulse.count = vc.pointCount;
+				impulse.Count = vc.pointCount;
 				for (int j = 0; j < vc.pointCount; ++j)
 				{
-					impulse.normalImpulses[j] = vc.points[j].normalImpulse;
-					impulse.tangentImpulses[j] = vc.points[j].tangentImpulse;
+					impulse.NormalImpulses[j] = vc.points[j].normalImpulse;
+					impulse.TangentImpulses[j] = vc.points[j].tangentImpulse;
 				}
 
 				m_listener.postSolve(c, impulse);
