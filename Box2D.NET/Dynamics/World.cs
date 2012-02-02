@@ -1368,17 +1368,17 @@ namespace Box2D.Dynamics
 
                         // Compute the time of impact in interval [0, minTOI]
                         TimeOfImpact.TOIInput input = toiInput;
-                        input.proxyA.Set(fA.Shape, indexA);
-                        input.proxyB.Set(fB.Shape, indexB);
-                        input.sweepA.set_Renamed(bA.m_sweep);
-                        input.sweepB.set_Renamed(bB.m_sweep);
-                        input.tMax = 1.0f;
+                        input.ProxyA.Set(fA.Shape, indexA);
+                        input.ProxyB.Set(fB.Shape, indexB);
+                        input.SweepA.set_Renamed(bA.m_sweep);
+                        input.SweepB.set_Renamed(bB.m_sweep);
+                        input.TMax = 1.0f;
 
-                        pool.GetTimeOfImpact().timeOfImpact(toiOutput, input);
+                        pool.GetTimeOfImpact().GetTimeOfImpact(toiOutput, input);
 
                         // Beta is the fraction of the remaining portion of the .
-                        float beta = toiOutput.t;
-                        if (toiOutput.state == TimeOfImpact.TOIOutputState.TOUCHING)
+                        float beta = toiOutput.T;
+                        if (toiOutput.State == TimeOfImpact.TOIOutputState.Touching)
                         {
                             alpha = MathUtils.min(alpha0 + (1.0f - alpha0) * beta, 1.0f);
                         }

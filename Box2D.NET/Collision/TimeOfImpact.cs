@@ -38,20 +38,20 @@ namespace Box2D.Collision
     {
         public enum TOIOutputState
         {
-            UNKNOWN,
-            FAILED,
-            OVERLAPPED,
-            TOUCHING,
-            SEPARATED
+            Unknown,
+            Failed,
+            Overlapped,
+            Touching,
+            Separated
         }
 
         public const int MAX_ITERATIONS = 1000;
 
-        public static int toiCalls = 0;
-        public static int toiIters = 0;
-        public static int toiMaxIters = 0;
-        public static int toiRootIters = 0;
-        public static int toiMaxRootIters = 0;
+        public static int ToiCalls = 0;
+        public static int ToiIters = 0;
+        public static int ToiMaxIters = 0;
+        public static int ToiRootIters = 0;
+        public static int ToiMaxRootIters = 0;
 
         /// <summary>
         /// Input parameters for TOI
@@ -59,13 +59,15 @@ namespace Box2D.Collision
         /// <author>Daniel Murphy</author>
         public class TOIInput
         {
-            public readonly Distance.DistanceProxy proxyA = new Distance.DistanceProxy();
-            public readonly Distance.DistanceProxy proxyB = new Distance.DistanceProxy();
-            public readonly Sweep sweepA = new Sweep();
-            public readonly Sweep sweepB = new Sweep();
+            public readonly Distance.DistanceProxy ProxyA = new Distance.DistanceProxy();
+            public readonly Distance.DistanceProxy ProxyB = new Distance.DistanceProxy();
+            public readonly Sweep SweepA = new Sweep();
+            public readonly Sweep SweepB = new Sweep();
 
-            /// <summary>Defines sweep interval [0, tMax]</summary>
-            public float tMax;
+            /// <summary>
+            /// Defines sweep interval [0, tMax]
+            /// </summary>
+            public float TMax;
         }
 
         /// <summary>
@@ -74,8 +76,8 @@ namespace Box2D.Collision
         /// <author>daniel</author>
         public class TOIOutput
         {
-            public TOIOutputState state;
-            public float t;
+            public TOIOutputState State;
+            public float T;
         }
 
 
@@ -91,7 +93,7 @@ namespace Box2D.Collision
         private readonly Sweep sweepB = new Sweep();
 
 
-        private IWorldPool pool;
+        private readonly IWorldPool pool;
 
         public TimeOfImpact(IWorldPool argPool)
         {
@@ -106,33 +108,33 @@ namespace Box2D.Collision
         /// </summary>
         /// <param name="output"></param>
         /// <param name="input"></param>
-        public void timeOfImpact(TOIOutput output, TOIInput input)
+        public void GetTimeOfImpact(TOIOutput output, TOIInput input)
         {
             // CCD via the local separating axis method. This seeks progression
             // by computing the largest time at which separation is maintained.
 
-            ++toiCalls;
+            ++ToiCalls;
 
-            output.state = TOIOutputState.UNKNOWN;
-            output.t = input.tMax;
+            output.State = TOIOutputState.Unknown;
+            output.T = input.TMax;
 
-            Distance.DistanceProxy proxyA = input.proxyA;
-            Distance.DistanceProxy proxyB = input.proxyB;
+            Distance.DistanceProxy proxyA = input.ProxyA;
+            Distance.DistanceProxy proxyB = input.ProxyB;
 
-            sweepA.set_Renamed(input.sweepA);
-            sweepB.set_Renamed(input.sweepB);
+            sweepA.set_Renamed(input.SweepA);
+            sweepB.set_Renamed(input.SweepB);
 
             // Large rotations can make the root finder fail, so we normalize the
             // sweep angles.
             sweepA.normalize();
             sweepB.normalize();
 
-            float tMax = input.tMax;
+            float tMax = input.TMax;
 
             float totalRadius = proxyA.Radius + proxyB.Radius;
             // djm: whats with all these constants?
             float target = MathUtils.max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
-            float tolerance = 0.25f * Settings.linearSlop;
+            const float tolerance = 0.25f * Settings.linearSlop;
 
             Debug.Assert(target > tolerance);
 
@@ -140,8 +142,8 @@ namespace Box2D.Collision
             int iter = 0;
 
             cache.Count = 0;
-            distanceInput.ProxyA = input.proxyA;
-            distanceInput.ProxyB = input.proxyB;
+            distanceInput.ProxyA = input.ProxyA;
+            distanceInput.ProxyB = input.ProxyB;
             distanceInput.UseRadii = false;
 
             // The outer loop progressively attempts to compute new separating axes.
@@ -168,8 +170,8 @@ namespace Box2D.Collision
                 {
                     // System.out.println("failure, overlapped");
                     // Failure!
-                    output.state = TOIOutputState.OVERLAPPED;
-                    output.t = 0f;
+                    output.State = TOIOutputState.Overlapped;
+                    output.T = 0f;
                     break;
                 }
 
@@ -177,13 +179,13 @@ namespace Box2D.Collision
                 {
                     // System.out.println("touching, victory");
                     // Victory!
-                    output.state = TOIOutputState.TOUCHING;
-                    output.t = t1;
+                    output.State = TOIOutputState.Touching;
+                    output.T = t1;
                     break;
                 }
 
                 // Initialize the separating axis.
-                fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
+                fcn.Initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
 
                 // Compute the TOI on the separating axis. We do this by successively
                 // resolving the deepest point. This loop is bounded by the number of
@@ -195,15 +197,15 @@ namespace Box2D.Collision
                 {
 
                     // Find the deepest point at t2. Store the witness point indices.
-                    float s2 = fcn.findMinSeparation(indexes, t2);
+                    float s2 = fcn.FindMinSeparation(indexes, t2);
                     // System.out.printf("s2: %f\n", s2);
                     // Is the final configuration separated?
                     if (s2 > target + tolerance)
                     {
                         // Victory!
                         // System.out.println("separated");
-                        output.state = TOIOutputState.SEPARATED;
-                        output.t = tMax;
+                        output.State = TOIOutputState.Separated;
+                        output.T = tMax;
                         done = true;
                         break;
                     }
@@ -218,7 +220,7 @@ namespace Box2D.Collision
                     }
 
                     // Compute the initial separation of the witness points.
-                    float s1 = fcn.evaluate(indexes[0], indexes[1], t1);
+                    float s1 = fcn.Evaluate(indexes[0], indexes[1], t1);
                     // Check for initial overlap. This might happen if the root finder
                     // runs out of iterations.
                     // System.out.printf("s1: %f, target: %f, tolerance: %f\n", s1, target,
@@ -226,8 +228,8 @@ namespace Box2D.Collision
                     if (s1 < target - tolerance)
                     {
                         // System.out.println("failed?");
-                        output.state = TOIOutputState.FAILED;
-                        output.t = t1;
+                        output.State = TOIOutputState.Failed;
+                        output.T = t1;
                         done = true;
                         break;
                     }
@@ -237,8 +239,8 @@ namespace Box2D.Collision
                     {
                         // System.out.println("touching?");
                         // Victory! t1 should hold the TOI (could be 0.0).
-                        output.state = TOIOutputState.TOUCHING;
-                        output.t = t1;
+                        output.State = TOIOutputState.Touching;
+                        output.T = t1;
                         done = true;
                         break;
                     }
@@ -261,7 +263,7 @@ namespace Box2D.Collision
                             t = 0.5f * (a1 + a2);
                         }
 
-                        float s = fcn.evaluate(indexes[0], indexes[1], t);
+                        float s = fcn.Evaluate(indexes[0], indexes[1], t);
 
                         if (MathUtils.abs(s - target) < tolerance)
                         {
@@ -283,7 +285,7 @@ namespace Box2D.Collision
                         }
 
                         ++rootIterCount;
-                        ++toiRootIters;
+                        ++ToiRootIters;
 
                         // djm: whats with this? put in settings?
                         if (rootIterCount == 50)
@@ -292,7 +294,7 @@ namespace Box2D.Collision
                         }
                     }
 
-                    toiMaxRootIters = MathUtils.max(toiMaxRootIters, rootIterCount);
+                    ToiMaxRootIters = MathUtils.max(ToiMaxRootIters, rootIterCount);
 
                     ++pushBackIter;
 
@@ -303,7 +305,7 @@ namespace Box2D.Collision
                 }
 
                 ++iter;
-                ++toiIters;
+                ++ToiIters;
 
                 if (done)
                 {
@@ -315,36 +317,36 @@ namespace Box2D.Collision
                 {
                     // System.out.println("failed, root finder stuck");
                     // Root finder got stuck. Semi-victory.
-                    output.state = TOIOutputState.FAILED;
-                    output.t = t1;
+                    output.State = TOIOutputState.Failed;
+                    output.T = t1;
                     break;
                 }
             }
 
             // System.out.printf("final sweeps: %f, %f, %f; %f, %f, %f", input.s)
-            toiMaxIters = MathUtils.max(toiMaxIters, iter);
+            ToiMaxIters = MathUtils.max(ToiMaxIters, iter);
         }
     }
 
 
     enum Type
     {
-        POINTS,
-        FACE_A,
-        FACE_B
+        Points,
+        FaceA,
+        FaceB
     }
 
 
     class SeparationFunction
     {
 
-        public Distance.DistanceProxy m_proxyA;
-        public Distance.DistanceProxy m_proxyB;
-        public Type m_type;
-        public readonly Vec2 m_localPoint = new Vec2();
-        public readonly Vec2 m_axis = new Vec2();
-        public Sweep m_sweepA;
-        public Sweep m_sweepB;
+        public Distance.DistanceProxy ProxyA;
+        public Distance.DistanceProxy ProxyB;
+        public Type Type;
+        public readonly Vec2 LocalPoint = new Vec2();
+        public readonly Vec2 Axis = new Vec2();
+        public Sweep SweepA;
+        public Sweep SweepB;
 
         // djm pooling
         private readonly Vec2 localPointA = new Vec2();
@@ -362,18 +364,18 @@ namespace Box2D.Collision
 
         // TODO_ERIN might not need to return the separation
 
-        public virtual float initialize(Distance.SimplexCache cache, Distance.DistanceProxy proxyA, Sweep sweepA, Distance.DistanceProxy proxyB, Sweep sweepB, float t1)
+        public virtual float Initialize(Distance.SimplexCache cache, Distance.DistanceProxy proxyA, Sweep sweepA, Distance.DistanceProxy proxyB, Sweep sweepB, float t1)
         {
-            m_proxyA = proxyA;
-            m_proxyB = proxyB;
+            ProxyA = proxyA;
+            ProxyB = proxyB;
             int count = cache.Count;
             Debug.Assert(0 < count && count < 3);
 
-            m_sweepA = sweepA;
-            m_sweepB = sweepB;
+            SweepA = sweepA;
+            SweepB = sweepB;
 
-            m_sweepA.getTransform(xfa, t1);
-            m_sweepB.getTransform(xfb, t1);
+            SweepA.getTransform(xfa, t1);
+            SweepB.getTransform(xfb, t1);
 
             // log.debug("initializing separation.\n" +
             // "cache: "+cache.count+"-"+cache.metric+"-"+cache.indexA+"-"+cache.indexB+"\n"
@@ -381,36 +383,36 @@ namespace Box2D.Collision
 
             if (count == 1)
             {
-                m_type = Type.POINTS;
+                Type = Type.Points;
                 /*
                 * Vec2 localPointA = m_proxyA.GetVertex(cache.indexA[0]); Vec2 localPointB =
                 * m_proxyB.GetVertex(cache.indexB[0]); Vec2 pointA = Mul(transformA, localPointA); Vec2
                 * pointB = Mul(transformB, localPointB); m_axis = pointB - pointA; m_axis.Normalize();
                 */
-                localPointA.set_Renamed(m_proxyA.GetVertex(cache.IndexA[0]));
-                localPointB.set_Renamed(m_proxyB.GetVertex(cache.IndexB[0]));
+                localPointA.set_Renamed(ProxyA.GetVertex(cache.IndexA[0]));
+                localPointB.set_Renamed(ProxyB.GetVertex(cache.IndexB[0]));
                 Transform.mulToOutUnsafe(xfa, localPointA, pointA);
                 Transform.mulToOutUnsafe(xfb, localPointB, pointB);
-                m_axis.set_Renamed(pointB).subLocal(pointA);
-                float s = m_axis.normalize();
+                Axis.set_Renamed(pointB).subLocal(pointA);
+                float s = Axis.normalize();
                 return s;
             }
             else if (cache.IndexA[0] == cache.IndexA[1])
             {
                 // Two points on B and one on A.
-                m_type = Type.FACE_B;
+                Type = Type.FaceB;
 
-                localPointB1.set_Renamed(m_proxyB.GetVertex(cache.IndexB[0]));
-                localPointB2.set_Renamed(m_proxyB.GetVertex(cache.IndexB[1]));
+                localPointB1.set_Renamed(ProxyB.GetVertex(cache.IndexB[0]));
+                localPointB2.set_Renamed(ProxyB.GetVertex(cache.IndexB[1]));
 
                 temp.set_Renamed(localPointB2).subLocal(localPointB1);
-                Vec2.crossToOutUnsafe(temp, 1f, m_axis);
-                m_axis.normalize();
+                Vec2.crossToOutUnsafe(temp, 1f, Axis);
+                Axis.normalize();
 
-                Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
+                Rot.mulToOutUnsafe(xfb.q, Axis, normal);
 
-                m_localPoint.set_Renamed(localPointB1).addLocal(localPointB2).mulLocal(.5f);
-                Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
+                LocalPoint.set_Renamed(localPointB1).addLocal(localPointB2).mulLocal(.5f);
+                Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
 
                 localPointA.set_Renamed(proxyA.GetVertex(cache.IndexA[0]));
                 Transform.mulToOutUnsafe(xfa, localPointA, pointA);
@@ -419,7 +421,7 @@ namespace Box2D.Collision
                 float s = Vec2.dot(temp, normal);
                 if (s < 0.0f)
                 {
-                    m_axis.negateLocal();
+                    Axis.negateLocal();
                     s = -s;
                 }
                 return s;
@@ -427,96 +429,96 @@ namespace Box2D.Collision
             else
             {
                 // Two points on A and one or two points on B.
-                m_type = Type.FACE_A;
+                Type = Type.FaceA;
 
-                localPointA1.set_Renamed(m_proxyA.GetVertex(cache.IndexA[0]));
-                localPointA2.set_Renamed(m_proxyA.GetVertex(cache.IndexA[1]));
+                localPointA1.set_Renamed(ProxyA.GetVertex(cache.IndexA[0]));
+                localPointA2.set_Renamed(ProxyA.GetVertex(cache.IndexA[1]));
 
                 temp.set_Renamed(localPointA2).subLocal(localPointA1);
-                Vec2.crossToOutUnsafe(temp, 1.0f, m_axis);
-                m_axis.normalize();
+                Vec2.crossToOutUnsafe(temp, 1.0f, Axis);
+                Axis.normalize();
 
-                Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
+                Rot.mulToOutUnsafe(xfa.q, Axis, normal);
 
-                m_localPoint.set_Renamed(localPointA1).addLocal(localPointA2).mulLocal(.5f);
-                Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
+                LocalPoint.set_Renamed(localPointA1).addLocal(localPointA2).mulLocal(.5f);
+                Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
 
-                localPointB.set_Renamed(m_proxyB.GetVertex(cache.IndexB[0]));
+                localPointB.set_Renamed(ProxyB.GetVertex(cache.IndexB[0]));
                 Transform.mulToOutUnsafe(xfb, localPointB, pointB);
 
                 temp.set_Renamed(pointB).subLocal(pointA);
                 float s = Vec2.dot(temp, normal);
                 if (s < 0.0f)
                 {
-                    m_axis.negateLocal();
+                    Axis.negateLocal();
                     s = -s;
                 }
                 return s;
             }
         }
 
-        private Vec2 axisA = new Vec2();
-        private Vec2 axisB = new Vec2();
+        private readonly Vec2 axisA = new Vec2();
+        private readonly Vec2 axisB = new Vec2();
 
         // float FindMinSeparation(int* indexA, int* indexB, float t) const
-        public virtual float findMinSeparation(int[] indexes, float t)
+        public virtual float FindMinSeparation(int[] indexes, float t)
         {
 
-            m_sweepA.getTransform(xfa, t);
-            m_sweepB.getTransform(xfb, t);
+            SweepA.getTransform(xfa, t);
+            SweepB.getTransform(xfb, t);
 
-            switch (m_type)
+            switch (Type)
             {
 
-                case Type.POINTS:
+                case Type.Points:
                     {
-                        Rot.mulTransUnsafe(xfa.q, m_axis, axisA);
-                        Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
-                        m_axis.negateLocal();
+                        Rot.mulTransUnsafe(xfa.q, Axis, axisA);
+                        Rot.mulTransUnsafe(xfb.q, Axis.negateLocal(), axisB);
+                        Axis.negateLocal();
 
-                        indexes[0] = m_proxyA.GetSupport(axisA);
-                        indexes[1] = m_proxyB.GetSupport(axisB);
+                        indexes[0] = ProxyA.GetSupport(axisA);
+                        indexes[1] = ProxyB.GetSupport(axisB);
 
-                        localPointA.set_Renamed(m_proxyA.GetVertex(indexes[0]));
-                        localPointB.set_Renamed(m_proxyB.GetVertex(indexes[1]));
+                        localPointA.set_Renamed(ProxyA.GetVertex(indexes[0]));
+                        localPointB.set_Renamed(ProxyB.GetVertex(indexes[1]));
 
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
 
-                        float separation = Vec2.dot(pointB.subLocal(pointA), m_axis);
+                        float separation = Vec2.dot(pointB.subLocal(pointA), Axis);
                         return separation;
                     }
 
-                case Type.FACE_A:
+                case Type.FaceA:
                     {
-                        Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
-                        Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
+                        Rot.mulToOutUnsafe(xfa.q, Axis, normal);
+                        Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
 
                         Rot.mulTransUnsafe(xfb.q, normal.negateLocal(), axisB);
                         normal.negateLocal();
 
                         indexes[0] = -1;
-                        indexes[1] = m_proxyB.GetSupport(axisB);
+                        indexes[1] = ProxyB.GetSupport(axisB);
 
-                        localPointB.set_Renamed(m_proxyB.GetVertex(indexes[1]));
+                        localPointB.set_Renamed(ProxyB.GetVertex(indexes[1]));
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
 
                         float separation = Vec2.dot(pointB.subLocal(pointA), normal);
                         return separation;
                     }
 
-                case Type.FACE_B:
+                case Type.FaceB:
                     {
-                        Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
-                        Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
+                        Rot.mulToOutUnsafe(xfb.q, Axis, normal);
+                        Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
 
                         Rot.mulTransUnsafe(xfa.q, normal.negateLocal(), axisA);
                         normal.negateLocal();
 
                         indexes[1] = -1;
-                        indexes[0] = m_proxyA.GetSupport(axisA);
+                        indexes[0] = ProxyA.GetSupport(axisA);
 
-                        localPointA.set_Renamed(m_proxyA.GetVertex(indexes[0]));
+                        localPointA.set_Renamed(ProxyA.GetVertex(indexes[0]));
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
 
                         float separation = Vec2.dot(pointA.subLocal(pointB), normal);
@@ -532,55 +534,55 @@ namespace Box2D.Collision
             }
         }
 
-        public virtual float evaluate(int indexA, int indexB, float t)
+        public virtual float Evaluate(int indexA, int indexB, float t)
         {
-            m_sweepA.getTransform(xfa, t);
-            m_sweepB.getTransform(xfb, t);
+            SweepA.getTransform(xfa, t);
+            SweepB.getTransform(xfb, t);
 
-            switch (m_type)
+            switch (Type)
             {
 
-                case Type.POINTS:
+                case Type.Points:
                     {
-                        Rot.mulTransUnsafe(xfa.q, m_axis, axisA);
-                        Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
-                        m_axis.negateLocal();
+                        Rot.mulTransUnsafe(xfa.q, Axis, axisA);
+                        Rot.mulTransUnsafe(xfb.q, Axis.negateLocal(), axisB);
+                        Axis.negateLocal();
 
-                        localPointA.set_Renamed(m_proxyA.GetVertex(indexA));
-                        localPointB.set_Renamed(m_proxyB.GetVertex(indexB));
+                        localPointA.set_Renamed(ProxyA.GetVertex(indexA));
+                        localPointB.set_Renamed(ProxyB.GetVertex(indexB));
 
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
 
-                        float separation = Vec2.dot(pointB.subLocal(pointA), m_axis);
+                        float separation = Vec2.dot(pointB.subLocal(pointA), Axis);
                         return separation;
                     }
 
-                case Type.FACE_A:
+                case Type.FaceA:
                     {
                         // System.out.printf("We're faceA\n");
-                        Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
-                        Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
+                        Rot.mulToOutUnsafe(xfa.q, Axis, normal);
+                        Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
 
                         Rot.mulTransUnsafe(xfb.q, normal.negateLocal(), axisB);
                         normal.negateLocal();
 
-                        localPointB.set_Renamed(m_proxyB.GetVertex(indexB));
+                        localPointB.set_Renamed(ProxyB.GetVertex(indexB));
                         Transform.mulToOutUnsafe(xfb, localPointB, pointB);
                         float separation = Vec2.dot(pointB.subLocal(pointA), normal);
                         return separation;
                     }
 
-                case Type.FACE_B:
+                case Type.FaceB:
                     {
                         // System.out.printf("We're faceB\n");
-                        Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
-                        Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
+                        Rot.mulToOutUnsafe(xfb.q, Axis, normal);
+                        Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
 
                         Rot.mulTransUnsafe(xfa.q, normal.negateLocal(), axisA);
                         normal.negateLocal();
 
-                        localPointA.set_Renamed(m_proxyA.GetVertex(indexA));
+                        localPointA.set_Renamed(ProxyA.GetVertex(indexA));
                         Transform.mulToOutUnsafe(xfa, localPointA, pointA);
 
                         float separation = Vec2.dot(pointA.subLocal(pointB), normal);
