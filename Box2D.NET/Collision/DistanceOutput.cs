@@ -27,19 +27,27 @@ using Box2D.Common;
 namespace Box2D.Collision
 {
 
-    /// <summary>Output for Distance.</summary>
+    /// <summary>
+    /// Output for Distance.
+    /// </summary>
     /// <author>Daniel</author>
     public class DistanceOutput
     {
-        /// <summary>Closest point on shapeA </summary>
-        public readonly Vec2 pointA = new Vec2();
+        /// <summary>
+        /// Closest point on shapeA
+        ///  </summary>
+        public readonly Vec2 PointA = new Vec2();
 
-        /// <summary>Closest point on shapeB </summary>
-        public readonly Vec2 pointB = new Vec2();
+        /// <summary>
+        /// Closest point on shapeB
+        ///  </summary>
+        public readonly Vec2 PointB = new Vec2();
 
-        public float distance;
+        public float Distance;
 
-        /// <summary>number of gjk iterations used </summary>
-        public int iterations;
+        /// <summary>
+        /// number of gjk iterations used
+        ///  </summary>
+        public int Iterations;
     }
 }

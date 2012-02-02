@@ -80,7 +80,7 @@ namespace Box2D.Collision
 
             pool.GetDistance().GetDistance(output, cache, input);
             // djm note: anything significant about 10.0f?
-            return output.distance < 10.0f * Settings.EPSILON;
+            return output.Distance < 10.0f * Settings.EPSILON;
         }
 
         /// <summary>

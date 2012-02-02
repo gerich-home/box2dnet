@@ -164,7 +164,7 @@ namespace Box2D.Collision
                 // distanceOutput.iterations);
 
                 // If the shapes are overlapped, we give up on continuous collision.
-                if (distanceOutput.distance <= 0f)
+                if (distanceOutput.Distance <= 0f)
                 {
                     // System.out.println("failure, overlapped");
                     // Failure!
@@ -173,7 +173,7 @@ namespace Box2D.Collision
                     break;
                 }
 
-                if (distanceOutput.distance < target + tolerance)
+                if (distanceOutput.Distance < target + tolerance)
                 {
                     // System.out.println("touching, victory");
                     // Victory!

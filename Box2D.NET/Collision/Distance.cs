@@ -830,9 +830,9 @@ namespace Box2D.Collision
             GJK_MAX_ITERS = MathUtils.max(GJK_MAX_ITERS, iter);
 
             // Prepare output.
-            simplex.GetWitnessPoints(output.pointA, output.pointB);
-            output.distance = MathUtils.distance(output.pointA, output.pointB);
-            output.iterations = iter;
+            simplex.GetWitnessPoints(output.PointA, output.PointB);
+            output.Distance = MathUtils.distance(output.PointA, output.PointB);
+            output.Iterations = iter;
 
             // Cache the simplex.
             simplex.WriteCache(cache);
@@ -843,26 +843,26 @@ namespace Box2D.Collision
                 float rA = proxyA.Radius;
                 float rB = proxyB.Radius;
 
-                if (output.distance > rA + rB && output.distance > Settings.EPSILON)
+                if (output.Distance > rA + rB && output.Distance > Settings.EPSILON)
                 {
                     // Shapes are still no overlapped.
                     // Move the witness points to the outer surface.
-                    output.distance -= (rA + rB);
-                    normal.set_Renamed(output.pointB).subLocal(output.pointA);
+                    output.Distance -= (rA + rB);
+                    normal.set_Renamed(output.PointB).subLocal(output.PointA);
                     normal.normalize();
                     temp.set_Renamed(normal).mulLocal(rA);
-                    output.pointA.addLocal(temp);
+                    output.PointA.addLocal(temp);
                     temp.set_Renamed(normal).mulLocal(rB);
-                    output.pointB.subLocal(temp);
+                    output.PointB.subLocal(temp);
                 }
                 else
                 {
                     // Shapes are overlapped when radii are considered.
                     // Move the witness points to the middle.
                     // Vec2 p = 0.5f * (output.pointA + output.pointB);
-                    output.pointA.addLocal(output.pointB).mulLocal(.5f);
-                    output.pointB.set_Renamed(output.pointA);
-                    output.distance = 0.0f;
+                    output.PointA.addLocal(output.PointB).mulLocal(.5f);
+                    output.PointB.set_Renamed(output.PointA);
+                    output.Distance = 0.0f;
                 }
             }
         }
