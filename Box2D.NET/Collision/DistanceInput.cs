@@ -34,10 +34,10 @@ namespace Box2D.Collision
     /// </summary>
     public class DistanceInput
     {
-        public Distance.DistanceProxy proxyA = new Distance.DistanceProxy();
-        public Distance.DistanceProxy proxyB = new Distance.DistanceProxy();
-        public Transform transformA = new Transform();
-        public Transform transformB = new Transform();
-        public bool useRadii;
+        public Distance.DistanceProxy ProxyA = new Distance.DistanceProxy();
+        public Distance.DistanceProxy ProxyB = new Distance.DistanceProxy();
+        public Transform TransformA = new Transform();
+        public Transform TransformB = new Transform();
+        public bool UseRadii;
     }
 }

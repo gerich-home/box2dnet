@@ -697,11 +697,11 @@ namespace Box2D.Collision
         {
             GJK_CALLS++;
 
-            DistanceProxy proxyA = input.proxyA;
-            DistanceProxy proxyB = input.proxyB;
+            DistanceProxy proxyA = input.ProxyA;
+            DistanceProxy proxyB = input.ProxyB;
 
-            Transform transformA = input.transformA;
-            Transform transformB = input.transformB;
+            Transform transformA = input.TransformA;
+            Transform transformB = input.TransformB;
 
             // Initialize the simplex.
             simplex.ReadCache(cache, proxyA, transformA, proxyB, transformB);
@@ -838,7 +838,7 @@ namespace Box2D.Collision
             simplex.WriteCache(cache);
 
             // Apply radii if requested.
-            if (input.useRadii)
+            if (input.UseRadii)
             {
                 float rA = proxyA.Radius;
                 float rB = proxyB.Radius;

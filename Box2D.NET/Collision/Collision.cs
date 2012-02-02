@@ -70,11 +70,11 @@ namespace Box2D.Collision
         /// <returns></returns>
         public bool TestOverlap(Shape shapeA, int indexA, Shape shapeB, int indexB, Transform xfA, Transform xfB)
         {
-            input.proxyA.Set(shapeA, indexA);
-            input.proxyB.Set(shapeB, indexB);
-            input.transformA.set_Renamed(xfA);
-            input.transformB.set_Renamed(xfB);
-            input.useRadii = true;
+            input.ProxyA.Set(shapeA, indexA);
+            input.ProxyB.Set(shapeB, indexB);
+            input.TransformA.set_Renamed(xfA);
+            input.TransformB.set_Renamed(xfB);
+            input.UseRadii = true;
 
             cache.Count = 0;
 

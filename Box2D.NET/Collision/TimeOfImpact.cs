@@ -140,9 +140,9 @@ namespace Box2D.Collision
             int iter = 0;
 
             cache.Count = 0;
-            distanceInput.proxyA = input.proxyA;
-            distanceInput.proxyB = input.proxyB;
-            distanceInput.useRadii = false;
+            distanceInput.ProxyA = input.proxyA;
+            distanceInput.ProxyB = input.proxyB;
+            distanceInput.UseRadii = false;
 
             // The outer loop progressively attempts to compute new separating axes.
             // This loop terminates when an axis is repeated (no progress is made).
@@ -154,8 +154,8 @@ namespace Box2D.Collision
                 // sweepA.c.x, sweepA.c.y, sweepB.c.x, sweepB.c.y);
                 // Get the distance between shapes. We can also use the results
                 // to get a separating axis
-                distanceInput.transformA = xfA;
-                distanceInput.transformB = xfB;
+                distanceInput.TransformA = xfA;
+                distanceInput.TransformB = xfB;
                 pool.GetDistance().GetDistance(distanceOutput, cache, distanceInput);
 
                 // System.out.printf("Dist: %f at points %f, %f and %f, %f.  %d iterations\n",
