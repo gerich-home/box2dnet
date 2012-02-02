@@ -767,9 +767,9 @@ namespace Box2D.Dynamics
         {
             wrcwrapper.broadPhase = m_contactManager.m_broadPhase;
             wrcwrapper.callback = callback;
-            input.maxFraction = 1.0f;
-            input.p1.set_Renamed(point1);
-            input.p2.set_Renamed(point2);
+            input.MaxFraction = 1.0f;
+            input.P1.set_Renamed(point1);
+            input.P2.set_Renamed(point2);
             m_contactManager.m_broadPhase.Raycast(wrcwrapper, input);
         }
 
@@ -1770,12 +1770,12 @@ namespace Box2D.Dynamics
             {
                 float fraction = output.fraction;
                 // Vec2 point = (1.0f - fraction) * input.p1 + fraction * input.p2;
-                temp.set_Renamed(input.p2).mulLocal(fraction);
-                point.set_Renamed(input.p1).mulLocal(1 - fraction).addLocal(temp);
+                temp.set_Renamed(input.P2).mulLocal(fraction);
+                point.set_Renamed(input.P1).mulLocal(1 - fraction).addLocal(temp);
                 return callback.ReportFixture(fixture, point, output.normal, fraction);
             }
 
-            return input.maxFraction;
+            return input.MaxFraction;
         }
 
         internal BroadPhase broadPhase;

@@ -231,8 +231,8 @@ namespace Box2D.Collision
             Vec2 absD = argPool.PopVec2();
             Vec2 normal = argPool.PopVec2();
 
-            p.set_Renamed(input.p1);
-            d.set_Renamed(input.p2).subLocal(input.p1);
+            p.set_Renamed(input.P1);
+            d.set_Renamed(input.P2).subLocal(input.P1);
             Vec2.absToOut(d, absD);
 
             // x then y
@@ -326,7 +326,7 @@ namespace Box2D.Collision
 
             // Does the ray start inside the box?
             // Does the ray intersect beyond the max fraction?
-            if (tmin < 0.0f || input.maxFraction < tmin)
+            if (tmin < 0.0f || input.MaxFraction < tmin)
             {
                 argPool.PushVec2(4);
                 return false;

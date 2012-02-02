@@ -28,25 +28,27 @@ namespace Box2D.Collision
 {
 
     // updated to rev 100
-    /// <summary> Ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</summary>
+    /// <summary>
+    ///  Ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
+    /// </summary>
     public class RayCastInput
     {
-        public readonly Vec2 p1;
-        public readonly Vec2 p2;
-        public float maxFraction;
+        public readonly Vec2 P1;
+        public readonly Vec2 P2;
+        public float MaxFraction;
 
         public RayCastInput()
         {
-            p1 = new Vec2();
-            p2 = new Vec2();
-            maxFraction = 0;
+            P1 = new Vec2();
+            P2 = new Vec2();
+            MaxFraction = 0;
         }
 
-        public virtual void set_Renamed(RayCastInput rci)
+        public virtual void Set(RayCastInput rci)
         {
-            p1.set_Renamed(rci.p1);
-            p2.set_Renamed(rci.p2);
-            maxFraction = rci.maxFraction;
+            P1.set_Renamed(rci.P1);
+            P2.set_Renamed(rci.P2);
+            MaxFraction = rci.MaxFraction;
         }
     }
 }

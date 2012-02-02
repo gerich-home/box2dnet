@@ -436,9 +436,9 @@ namespace Box2D.Collision.Shapes
             Vec2 d = pool3;
             Vec2 temp = pool4;
 
-            p1.set_Renamed(input.p1).subLocal(xf.p);
+            p1.set_Renamed(input.P1).subLocal(xf.p);
             Rot.mulTrans(xf.q, p1, p1);
-            p2.set_Renamed(input.p2).subLocal(xf.p);
+            p2.set_Renamed(input.P2).subLocal(xf.p);
             Rot.mulTrans(xf.q, p2, p2);
             d.set_Renamed(p2).subLocal(p1);
 
@@ -446,7 +446,7 @@ namespace Box2D.Collision.Shapes
 
             // } else {
 
-            float lower = 0, upper = input.maxFraction;
+            float lower = 0, upper = input.MaxFraction;
 
             int index = -1;
 
@@ -494,7 +494,7 @@ namespace Box2D.Collision.Shapes
                 }
             }
 
-            Debug.Assert(0.0f <= lower && lower <= input.maxFraction);
+            Debug.Assert(0.0f <= lower && lower <= input.MaxFraction);
 
             if (index >= 0)
             {

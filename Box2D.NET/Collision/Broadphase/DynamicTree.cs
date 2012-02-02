@@ -321,8 +321,8 @@ namespace Box2D.Collision.Broadphase
         /// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
         public virtual void Raycast(ITreeRayCastCallback callback, RayCastInput input)
         {
-            Vec2 p1 = input.p1;
-            Vec2 p2 = input.p2;
+            Vec2 p1 = input.P1;
+            Vec2 p2 = input.P2;
             r.set_Renamed(p2).subLocal(p1);
             Debug.Assert(r.lengthSquared() > 0f);
             r.normalize();
@@ -334,7 +334,7 @@ namespace Box2D.Collision.Broadphase
             // Separating axis for segment (Gino, p80).
             // |dot(v, p1 - c)| > dot(|v|, h)
 
-            float maxFraction = input.maxFraction;
+            float maxFraction = input.MaxFraction;
 
             // Build a bounding box for the segment.
             AABB segAABB = aabb;
@@ -372,9 +372,9 @@ namespace Box2D.Collision.Broadphase
 
                 if (node.Leaf)
                 {
-                    subInput.p1.set_Renamed(input.p1);
-                    subInput.p2.set_Renamed(input.p2);
-                    subInput.maxFraction = maxFraction;
+                    subInput.P1.set_Renamed(input.P1);
+                    subInput.P2.set_Renamed(input.P2);
+                    subInput.MaxFraction = maxFraction;
 
                     float value = callback.RaycastCallback(subInput, nodeId);
 

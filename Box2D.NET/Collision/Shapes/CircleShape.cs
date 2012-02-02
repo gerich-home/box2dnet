@@ -137,11 +137,11 @@ namespace Box2D.Collision.Shapes
 
             Rot.mulToOutUnsafe(transform.q, P, position);
             position.addLocal(transform.p);
-            s.set_Renamed(input.p1).subLocal(position);
+            s.set_Renamed(input.P1).subLocal(position);
             float b = Vec2.dot(s, s) - Radius * Radius;
 
             // Solve quadratic equation.
-            r.set_Renamed(input.p2).subLocal(input.p1);
+            r.set_Renamed(input.P2).subLocal(input.P1);
             float c = Vec2.dot(s, r);
             float rr = Vec2.dot(r, r);
             float sigma = c * c - rr * b;
@@ -156,7 +156,7 @@ namespace Box2D.Collision.Shapes
             float a = -(c + MathUtils.sqrt(sigma));
 
             // Is the intersection point on the segment?
-            if (0.0f <= a && a <= input.maxFraction * rr)
+            if (0.0f <= a && a <= input.MaxFraction * rr)
             {
                 a /= rr;
                 output.fraction = a;

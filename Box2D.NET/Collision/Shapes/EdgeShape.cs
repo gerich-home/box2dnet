@@ -93,9 +93,9 @@ namespace Box2D.Collision.Shapes
         {
 
             // Put the ray into the edge's frame of reference.
-            Vec2 p1 = pool0.set_Renamed(input.p1).subLocal(xf.p);
+            Vec2 p1 = pool0.set_Renamed(input.P1).subLocal(xf.p);
             Rot.mulTrans(xf.q, p1, p1);
-            Vec2 p2 = pool1.set_Renamed(input.p2).subLocal(xf.p);
+            Vec2 p2 = pool1.set_Renamed(input.P2).subLocal(xf.p);
             Rot.mulTrans(xf.q, p1, p1);
             Vec2 d = p2.subLocal(p1); // we don't use p2 later
 
