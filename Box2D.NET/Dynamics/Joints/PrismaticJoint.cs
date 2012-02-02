@@ -531,11 +531,11 @@ namespace Box2D.Dynamics.Joints
                 m_motorImpulse = 0.0f;
             }
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
                 // Account for variable time step.
-                m_impulse.mulLocal(data.Step.dtRatio);
-                m_motorImpulse *= data.Step.dtRatio;
+                m_impulse.mulLocal(data.Step.DtRatio);
+                m_motorImpulse *= data.Step.DtRatio;
 
                 Vec2 P = pool.PopVec2();
                 temp.set_Renamed(m_axis).mulLocal(m_motorImpulse + m_impulse.z);
@@ -588,7 +588,7 @@ namespace Box2D.Dynamics.Joints
                 float Cdot = Vec2.dot(m_axis, temp) + m_a2 * wB - m_a1 * wA;
                 float impulse = m_motorMass * (m_motorSpeed - Cdot);
                 float oldImpulse = m_motorImpulse;
-                float maxImpulse = data.Step.dt * m_maxMotorForce;
+                float maxImpulse = data.Step.Dt * m_maxMotorForce;
                 m_motorImpulse = MathUtils.clamp(m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = m_motorImpulse - oldImpulse;
 

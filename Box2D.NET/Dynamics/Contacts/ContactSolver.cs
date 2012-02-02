@@ -160,12 +160,12 @@ namespace Box2D.Dynamics.Contacts
                     ManifoldPoint cp = manifold.Points[j];
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.points[j];
 
-                    if (m_step.warmStarting)
+                    if (m_step.WarmStarting)
                     {
                         //Debug.Assert(cp.normalImpulse == 0);
                         //Console.WriteLine("contact normal impulse: " + cp.normalImpulse);
-                        vcp.normalImpulse = m_step.dtRatio * cp.NormalImpulse;
-                        vcp.tangentImpulse = m_step.dtRatio * cp.TangentImpulse;
+                        vcp.normalImpulse = m_step.DtRatio * cp.NormalImpulse;
+                        vcp.tangentImpulse = m_step.DtRatio * cp.TangentImpulse;
                     }
                     else
                     {

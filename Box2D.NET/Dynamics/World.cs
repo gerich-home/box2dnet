@@ -547,21 +547,21 @@ namespace Box2D.Dynamics
 
             m_flags |= LOCKED;
 
-            step_Renamed_Field.dt = dt;
-            step_Renamed_Field.velocityIterations = velocityIterations;
-            step_Renamed_Field.positionIterations = positionIterations;
+            step_Renamed_Field.Dt = dt;
+            step_Renamed_Field.VelocityIterations = velocityIterations;
+            step_Renamed_Field.PositionIterations = positionIterations;
             if (dt > 0.0f)
             {
-                step_Renamed_Field.inv_dt = 1.0f / dt;
+                step_Renamed_Field.InvDt = 1.0f / dt;
             }
             else
             {
-                step_Renamed_Field.inv_dt = 0.0f;
+                step_Renamed_Field.InvDt = 0.0f;
             }
 
-            step_Renamed_Field.dtRatio = m_inv_dt0 * dt;
+            step_Renamed_Field.DtRatio = m_inv_dt0 * dt;
 
-            step_Renamed_Field.warmStarting = m_warmStarting;
+            step_Renamed_Field.WarmStarting = m_warmStarting;
 
             // Update contacts. This is where some contacts are destroyed.
             tempTimer.reset();
@@ -569,7 +569,7 @@ namespace Box2D.Dynamics
             m_profile.Collide = tempTimer.Milliseconds;
 
             // Integrate velocities, solve velocity constraints, and integrate positions.
-            if (m_stepComplete && step_Renamed_Field.dt > 0.0f)
+            if (m_stepComplete && step_Renamed_Field.Dt > 0.0f)
             {
                 tempTimer.reset();
                 solve(step_Renamed_Field);
@@ -577,16 +577,16 @@ namespace Box2D.Dynamics
             }
 
             // Handle TOI events.
-            if (m_continuousPhysics && step_Renamed_Field.dt > 0.0f)
+            if (m_continuousPhysics && step_Renamed_Field.Dt > 0.0f)
             {
                 tempTimer.reset();
                 solveTOI(step_Renamed_Field);
                 m_profile.SolveToi = tempTimer.Milliseconds;
             }
 
-            if (step_Renamed_Field.dt > 0.0f)
+            if (step_Renamed_Field.Dt > 0.0f)
             {
-                m_inv_dt0 = step_Renamed_Field.inv_dt;
+                m_inv_dt0 = step_Renamed_Field.InvDt;
             }
 
             if ((m_flags & CLEAR_FORCES) == CLEAR_FORCES)
@@ -1540,12 +1540,12 @@ namespace Box2D.Dynamics
                     }
                 }
 
-                subStep.dt = (1.0f - minAlpha) * step.dt;
-                subStep.inv_dt = 1.0f / subStep.dt;
-                subStep.dtRatio = 1.0f;
-                subStep.positionIterations = 20;
-                subStep.velocityIterations = step.velocityIterations;
-                subStep.warmStarting = false;
+                subStep.Dt = (1.0f - minAlpha) * step.Dt;
+                subStep.InvDt = 1.0f / subStep.Dt;
+                subStep.DtRatio = 1.0f;
+                subStep.PositionIterations = 20;
+                subStep.VelocityIterations = step.VelocityIterations;
+                subStep.WarmStarting = false;
                 island.SolveToi(subStep, bA2.IslandIndex, bB2.IslandIndex);
 
                 // Reset island flags and synchronize broad-phase proxies.

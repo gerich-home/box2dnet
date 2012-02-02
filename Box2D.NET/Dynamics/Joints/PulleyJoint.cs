@@ -275,11 +275,11 @@ namespace Box2D.Dynamics.Joints
                 m_mass = 1.0f / m_mass;
             }
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
 
                 // Scale impulses to support variable time steps.
-                m_impulse *= data.Step.dtRatio;
+                m_impulse *= data.Step.DtRatio;
 
                 // Warm starting.
                 Vec2 PA = pool.PopVec2();

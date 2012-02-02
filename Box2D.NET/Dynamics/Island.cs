@@ -241,7 +241,7 @@ namespace Box2D.Dynamics
 		{
 			// Console.WriteLine("Solving Island");
 
-			float h = step.dt;
+			float h = step.Dt;
 
 			// Integrate velocities and apply damping. Initialize the body state.
 			for (int i = 0; i < BodyCount; ++i)
@@ -301,7 +301,7 @@ namespace Box2D.Dynamics
 			//Console.WriteLine("island init vel");
 			contactSolver.initializeVelocityConstraints();
 
-			if (step.warmStarting)
+			if (step.WarmStarting)
 			{
 				//Console.WriteLine("island warm start");
 				contactSolver.warmStart();
@@ -317,7 +317,7 @@ namespace Box2D.Dynamics
 			// Solve velocity constraints
 			timer.reset();
 			//Console.WriteLine("island solving velocities");
-			for (int i = 0; i < step.velocityIterations; ++i)
+			for (int i = 0; i < step.VelocityIterations; ++i)
 			{
 				for (int j = 0; j < JointCount; ++j)
 				{
@@ -369,7 +369,7 @@ namespace Box2D.Dynamics
 			// Solve position constraints
 			timer.reset();
 			bool positionSolved = false;
-			for (int i = 0; i < step.positionIterations; ++i)
+			for (int i = 0; i < step.PositionIterations; ++i)
 			{
 				bool contactsOkay = contactSolver.solvePositionConstraints();
 
@@ -467,7 +467,7 @@ namespace Box2D.Dynamics
 			toiContactSolver.init(toiSolverDef);
 
 			// Solve position constraints.
-			for (int i = 0; i < subStep.positionIterations; ++i)
+			for (int i = 0; i < subStep.PositionIterations; ++i)
 			{
 				bool contactsOkay = toiContactSolver.solveTOIPositionConstraints(toiIndexA, toiIndexB);
 				if (contactsOkay)
@@ -520,7 +520,7 @@ namespace Box2D.Dynamics
 			toiContactSolver.initializeVelocityConstraints();
 
 			// Solve velocity constraints.
-			for (int i = 0; i < subStep.velocityIterations; ++i)
+			for (int i = 0; i < subStep.VelocityIterations; ++i)
 			{
 				toiContactSolver.solveVelocityConstraints();
 			}
@@ -528,7 +528,7 @@ namespace Box2D.Dynamics
 			// Don't store the TOI contact forces for warm starting
 			// because they can be quite large.
 
-			float h = subStep.dt;
+			float h = subStep.Dt;
 
 			// Integrate positions
 			for (int i = 0; i < BodyCount; ++i)

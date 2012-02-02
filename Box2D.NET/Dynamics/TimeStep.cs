@@ -34,22 +34,22 @@ namespace Box2D.Dynamics
         /// <summary>
         /// time step
         /// </summary>
-        public float dt;
+        public float Dt;
 
         /// <summary>
         /// inverse time step (0 if dt == 0).
         /// </summary>
-        public float inv_dt;
+        public float InvDt;
 
         /// <summary>
         /// dt * inv_dt0
         /// </summary>
-        public float dtRatio;
+        public float DtRatio;
 
-        public int velocityIterations;
+        public int VelocityIterations;
 
-        public int positionIterations;
+        public int PositionIterations;
 
-        public bool warmStarting;
+        public bool WarmStarting;
     }
 }

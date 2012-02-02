@@ -215,9 +215,9 @@ namespace Box2D.Dynamics.Joints
                 d[i].subLocal(bodies[prev].WorldCenter);
             }
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
-                m_impulse *= data.Step.dtRatio;
+                m_impulse *= data.Step.DtRatio;
                 // float lambda = -2.0f * crossMassSum / dotMassSum;
                 // System.out.println(crossMassSum + " " +dotMassSum);
                 // lambda = MathUtils.clamp(lambda, -Settings.maxLinearCorrection,

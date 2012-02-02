@@ -230,7 +230,7 @@ namespace Box2D.Dynamics.Joints
                 float k = m * omega * omega;
 
                 // magic formulas
-                float h = data.Step.dt;
+                float h = data.Step.Dt;
                 m_gamma = h * (d + h * k);
                 m_gamma = m_gamma != 0.0f ? 1.0f / m_gamma : 0.0f;
                 m_bias = C * h * k * m_gamma;
@@ -245,11 +245,11 @@ namespace Box2D.Dynamics.Joints
                 m_bias = 0.0f;
             }
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
                 Vec2 P = pool.PopVec2();
                 // Scale impulses to support a variable time step.
-                m_impulse.mulLocal(data.Step.dtRatio);
+                m_impulse.mulLocal(data.Step.DtRatio);
 
                 P.set_Renamed(m_impulse.x, m_impulse.y);
 

@@ -193,7 +193,7 @@ namespace Box2D.Dynamics.Joints
             // magic formulas
             // gamma has units of inverse mass.
             // beta has units of inverse time.
-            float h = data.Step.dt;
+            float h = data.Step.Dt;
             Debug.Assert(d + h * k > Settings.EPSILON);
             m_gamma = h * (d + h * k);
             if (m_gamma != 0.0f)
@@ -224,9 +224,9 @@ namespace Box2D.Dynamics.Joints
             // Cheat with some damping
             wB *= 0.98f;
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
-                m_impulse.mulLocal(data.Step.dtRatio);
+                m_impulse.mulLocal(data.Step.DtRatio);
                 vB.x += m_invMassB * m_impulse.x;
                 vB.y += m_invMassB * m_impulse.y;
                 wB += m_invIB * Vec2.cross(m_rB, m_impulse);
@@ -269,7 +269,7 @@ namespace Box2D.Dynamics.Joints
             Vec2 oldImpulse = temp;
             oldImpulse.set_Renamed(m_impulse);
             m_impulse.addLocal(impulse);
-            float maxImpulse = data.Step.dt * m_maxForce;
+            float maxImpulse = data.Step.Dt * m_maxForce;
             if (m_impulse.lengthSquared() > maxImpulse * maxImpulse)
             {
                 m_impulse.mulLocal(maxImpulse / m_impulse.length());

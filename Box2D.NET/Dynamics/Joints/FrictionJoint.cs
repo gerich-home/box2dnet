@@ -191,11 +191,11 @@ namespace Box2D.Dynamics.Joints
                 m_angularMass = 1.0f / m_angularMass;
             }
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
                 // Scale impulses to support a variable time step.
-                m_linearImpulse.mulLocal(data.Step.dtRatio);
-                m_angularImpulse *= data.Step.dtRatio;
+                m_linearImpulse.mulLocal(data.Step.DtRatio);
+                m_angularImpulse *= data.Step.DtRatio;
 
                 Vec2 P = pool.PopVec2();
                 P.set_Renamed(m_linearImpulse);
@@ -239,7 +239,7 @@ namespace Box2D.Dynamics.Joints
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
 
-            float h = data.Step.dt;
+            float h = data.Step.Dt;
 
             // Solve angular friction
             {

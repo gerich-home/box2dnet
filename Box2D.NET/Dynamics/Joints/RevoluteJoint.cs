@@ -202,13 +202,13 @@ namespace Box2D.Dynamics.Joints
                 m_limitState = LimitState.INACTIVE;
             }
 
-            if (data.Step.warmStarting)
+            if (data.Step.WarmStarting)
             {
                 Vec2 P = pool.PopVec2();
                 // Scale impulses to support a variable time step.
-                m_impulse.x *= data.Step.dtRatio;
-                m_impulse.y *= data.Step.dtRatio;
-                m_motorImpulse *= data.Step.dtRatio;
+                m_impulse.x *= data.Step.DtRatio;
+                m_impulse.y *= data.Step.DtRatio;
+                m_motorImpulse *= data.Step.DtRatio;
 
                 P.x = m_impulse.x;
                 P.y = m_impulse.y;
@@ -256,7 +256,7 @@ namespace Box2D.Dynamics.Joints
                 float Cdot = wB - wA - m_motorSpeed;
                 float impulse = (-m_motorMass) * Cdot;
                 float oldImpulse = m_motorImpulse;
-                float maxImpulse = data.Step.dt * m_maxMotorTorque;
+                float maxImpulse = data.Step.Dt * m_maxMotorTorque;
                 m_motorImpulse = MathUtils.clamp(m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = m_motorImpulse - oldImpulse;
 
