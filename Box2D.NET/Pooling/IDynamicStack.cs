@@ -37,12 +37,12 @@ namespace Box2D.Pooling
         /// Pops an item off the stack
         /// </summary>
         /// <returns></returns>
-        E pop();
+        E Pop();
 
         /// <summary>
         /// Pushes an item back on the stack
         /// </summary>
         /// <param name="argObject"></param>
-        void push(E argObject);
+        void Push(E argObject);
     }
 }

@@ -99,7 +99,7 @@ namespace Box2D.Pooling.Normal
             size = newStack.Length;
         }
 
-        public E pop()
+        public E Pop()
         {
             if (index >= size)
             {
@@ -108,7 +108,7 @@ namespace Box2D.Pooling.Normal
             return stack[index++];
         }
 
-        public void push(E argObject)
+        public void Push(E argObject)
         {
             Debug.Assert(index > 0);
             stack[--index] = (T)argObject;

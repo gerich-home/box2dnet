@@ -204,13 +204,13 @@ namespace Box2D.Dynamics
             {
                 if (reg.primary)
                 {
-                    Contact c = creator.pop();
+                    Contact c = creator.Pop();
                     c.init(fixtureA, indexA, fixtureB, indexB);
                     return c;
                 }
                 else
                 {
-                    Contact c = creator.pop();
+                    Contact c = creator.Pop();
                     c.init(fixtureB, indexB, fixtureA, indexA);
                     return c;
                 }
@@ -234,7 +234,7 @@ namespace Box2D.Dynamics
             ShapeType type2 = contact.FixtureB.Type;
 
             IDynamicStack<Contact> creator = contactStacks[(int)type1][(int)type2].creator;
-            creator.push(contact);
+            creator.Push(contact);
         }
 
         /// <summary>
