@@ -143,7 +143,7 @@ namespace Box2D.Dynamics
 
             m_type = bd.Type;
 
-            if (m_type == BodyType.DYNAMIC)
+            if (m_type == BodyType.Dynamic)
             {
                 Mass = 1f;
                 InvMass = 1f;
@@ -409,7 +409,7 @@ namespace Box2D.Dynamics
             }
             set
             {
-                if (m_type == BodyType.STATIC)
+                if (m_type == BodyType.Static)
                 {
                     return;
                 }
@@ -434,7 +434,7 @@ namespace Box2D.Dynamics
             }
             set
             {
-                if (m_type == BodyType.STATIC)
+                if (m_type == BodyType.Static)
                 {
                     return;
                 }
@@ -509,7 +509,7 @@ namespace Box2D.Dynamics
 
                 ResetMassData();
 
-                if (m_type == BodyType.STATIC)
+                if (m_type == BodyType.Static)
                 {
                     m_linearVelocity.setZero();
                     m_angularVelocity = 0.0f;
@@ -748,7 +748,7 @@ namespace Box2D.Dynamics
         /// <param name="point">the world position of the point of application.</param>
         public void ApplyForce(Vec2 force, Vec2 point)
         {
-            if (m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic)
             {
                 return;
             }
@@ -775,7 +775,7 @@ namespace Box2D.Dynamics
         /// <param name="force">the world force vector, usually in Newtons (N).</param>
         public void ApplyForceToCenter(Vec2 force)
         {
-            if (m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic)
             {
                 return;
             }
@@ -796,7 +796,7 @@ namespace Box2D.Dynamics
         /// <param name="torque">about the z-axis (out of the screen), usually in N-m.</param>
         public void ApplyTorque(float torque)
         {
-            if (m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic)
             {
                 return;
             }
@@ -818,7 +818,7 @@ namespace Box2D.Dynamics
         /// <param name="point">the world position of the point of application.</param>
         public void ApplyLinearImpulse(Vec2 impulse, Vec2 point)
         {
-            if (m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic)
             {
                 return;
             }
@@ -847,7 +847,7 @@ namespace Box2D.Dynamics
         /// <param name="impulse">the angular impulse in units of kg*m*m/s</param>
         public void ApplyAngularImpulse(float impulse)
         {
-            if (m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic)
             {
                 return;
             }
@@ -890,7 +890,7 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            if (m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic)
             {
                 return;
             }
@@ -949,7 +949,7 @@ namespace Box2D.Dynamics
             Sweep.localCenter.setZero();
 
             // Static and kinematic bodies have zero mass.
-            if (m_type == BodyType.STATIC || m_type == BodyType.KINEMATIC)
+            if (m_type == BodyType.Static || m_type == BodyType.Kinematic)
             {
                 // m_sweep.c0 = m_sweep.c = m_xf.position;
                 Sweep.c0.set_Renamed(Xf.p);
@@ -958,7 +958,7 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            Debug.Assert(m_type == BodyType.DYNAMIC);
+            Debug.Assert(m_type == BodyType.Dynamic);
 
             // Accumulate mass over all fixtures.
             Vec2 localCenter = World.Pool.PopVec2();
@@ -1188,7 +1188,7 @@ namespace Box2D.Dynamics
         public bool ShouldCollide(Body other)
         {
             // At least one body should be dynamic.
-            if (m_type != BodyType.DYNAMIC && other.m_type != BodyType.DYNAMIC)
+            if (m_type != BodyType.Dynamic && other.m_type != BodyType.Dynamic)
             {
                 return false;
             }

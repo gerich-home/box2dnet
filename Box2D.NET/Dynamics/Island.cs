@@ -260,7 +260,7 @@ namespace Box2D.Dynamics
 				b.Sweep.c0.set_Renamed(b.Sweep.c);
 				b.Sweep.a0 = b.Sweep.a;
 
-				if (b.m_type == BodyType.DYNAMIC)
+				if (b.m_type == BodyType.Dynamic)
 				{
 					// Integrate velocities.
 					// v += h * (b.m_gravityScale * gravity + b.m_invMass * b.m_force);
@@ -417,7 +417,7 @@ namespace Box2D.Dynamics
 				for (int i = 0; i < m_bodyCount; ++i)
 				{
 					Body b = m_bodies[i];
-					if (b.Type == BodyType.STATIC)
+					if (b.Type == BodyType.Static)
 					{
 						continue;
 					}

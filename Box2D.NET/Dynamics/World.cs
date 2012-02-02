@@ -645,12 +645,12 @@ namespace Box2D.Dynamics
                             color.set_Renamed(0.5f, 0.5f, 0.3f);
                             drawShape(f, xf, color);
                         }
-                        else if (b.Type == BodyType.STATIC)
+                        else if (b.Type == BodyType.Static)
                         {
                             color.set_Renamed(0.5f, 0.9f, 0.3f);
                             drawShape(f, xf, color);
                         }
-                        else if (b.Type == BodyType.KINEMATIC)
+                        else if (b.Type == BodyType.Kinematic)
                         {
                             color.set_Renamed(0.5f, 0.5f, 0.9f);
                             drawShape(f, xf, color);
@@ -1114,7 +1114,7 @@ namespace Box2D.Dynamics
                 }
 
                 // The seed can be dynamic or kinematic.
-                if (seed.Type == BodyType.STATIC)
+                if (seed.Type == BodyType.Static)
                 {
                     continue;
                 }
@@ -1138,7 +1138,7 @@ namespace Box2D.Dynamics
 
                     // To keep islands as small as possible, we don't
                     // propagate islands across static bodies.
-                    if (b.Type == BodyType.STATIC)
+                    if (b.Type == BodyType.Static)
                     {
                         continue;
                     }
@@ -1223,7 +1223,7 @@ namespace Box2D.Dynamics
                 {
                     // Allow static bodies to participate in other islands.
                     Body b = island.m_bodies[i];
-                    if (b.Type == BodyType.STATIC)
+                    if (b.Type == BodyType.Static)
                     {
                         b.Flags &= ~Body.TypeFlags.Island;
                     }
@@ -1240,7 +1240,7 @@ namespace Box2D.Dynamics
                     continue;
                 }
 
-                if (b.Type == BodyType.STATIC)
+                if (b.Type == BodyType.Static)
                 {
                     continue;
                 }
@@ -1326,10 +1326,10 @@ namespace Box2D.Dynamics
 
                         BodyType typeA = bA.m_type;
                         BodyType typeB = bB.m_type;
-                        Debug.Assert(typeA == BodyType.DYNAMIC || typeB == BodyType.DYNAMIC);
+                        Debug.Assert(typeA == BodyType.Dynamic || typeB == BodyType.Dynamic);
 
-                        bool activeA = bA.Awake && typeA != BodyType.STATIC;
-                        bool activeB = bB.Awake && typeB != BodyType.STATIC;
+                        bool activeA = bA.Awake && typeA != BodyType.Static;
+                        bool activeB = bB.Awake && typeB != BodyType.Static;
 
                         // Is at least one body active (awake and dynamic or kinematic)?
                         if (activeA == false && activeB == false)
@@ -1337,8 +1337,8 @@ namespace Box2D.Dynamics
                             continue;
                         }
 
-                        bool collideA = bA.Bullet || typeA != BodyType.DYNAMIC;
-                        bool collideB = bB.Bullet || typeB != BodyType.DYNAMIC;
+                        bool collideA = bA.Bullet || typeA != BodyType.Dynamic;
+                        bool collideB = bB.Bullet || typeB != BodyType.Dynamic;
 
                         // Are these two non-bullet dynamic bodies?
                         if (collideA == false && collideB == false)
@@ -1454,7 +1454,7 @@ namespace Box2D.Dynamics
                 for (int i = 0; i < 2; ++i)
                 {
                     Body body = tempBodies[i];
-                    if (body.m_type == BodyType.DYNAMIC)
+                    if (body.m_type == BodyType.Dynamic)
                     {
                         for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                         {
@@ -1478,7 +1478,7 @@ namespace Box2D.Dynamics
 
                             // Only add static, kinematic, or bullet bodies.
                             Body other = ce.other;
-                            if (other.m_type == BodyType.DYNAMIC && body.Bullet == false && other.Bullet == false)
+                            if (other.m_type == BodyType.Dynamic && body.Bullet == false && other.Bullet == false)
                             {
                                 continue;
                             }
@@ -1530,7 +1530,7 @@ namespace Box2D.Dynamics
                             // Add the other body to the island.
                             other.Flags |= Body.TypeFlags.Island;
 
-                            if (other.m_type != BodyType.STATIC)
+                            if (other.m_type != BodyType.Static)
                             {
                                 other.Awake = true;
                             }
@@ -1554,7 +1554,7 @@ namespace Box2D.Dynamics
                     Body body = island.m_bodies[i];
                     body.Flags &= ~Body.TypeFlags.Island;
 
-                    if (body.m_type != BodyType.DYNAMIC)
+                    if (body.m_type != BodyType.Dynamic)
                     {
                         continue;
                     }

@@ -129,7 +129,7 @@ namespace Box2D.Dynamics
             Awake = true;
             FixedRotation = false;
             Bullet = false;
-            Type = BodyType.STATIC;
+            Type = BodyType.Static;
             Active = true;
             GravityScale = 1.0f;
         }
