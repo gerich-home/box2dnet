@@ -153,7 +153,7 @@ namespace Box2D.Collision.Shapes
             int n = MathUtils.min(num, Settings.maxPolygonVertices);
 
             // Copy the vertices into a local buffer
-            Vec2[] ps = (vecPool != null) ? vecPool.get_Renamed(n) : new Vec2[n];
+            Vec2[] ps = (vecPool != null) ? vecPool.Get(n) : new Vec2[n];
             for (int i = 0; i < n; ++i)
             {
                 ps[i] = verts[i];

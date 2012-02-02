@@ -710,7 +710,7 @@ namespace Box2D.Dynamics
                         {
                             FixtureProxy proxy = f.m_proxies[i];
                             AABB aabb = m_contactManager.m_broadPhase.getFatAABB(proxy.proxyId);
-                            Vec2[] vs = avs.get_Renamed(4);
+                            Vec2[] vs = avs.Get(4);
                             vs[0].set_Renamed(aabb.lowerBound.x, aabb.lowerBound.y);
                             vs[1].set_Renamed(aabb.upperBound.x, aabb.lowerBound.y);
                             vs[2].set_Renamed(aabb.upperBound.x, aabb.upperBound.y);
@@ -1689,7 +1689,7 @@ namespace Box2D.Dynamics
                         PolygonShape poly = (PolygonShape)fixture.Shape;
                         int vertexCount = poly.m_count;
                         Debug.Assert(vertexCount <= Settings.maxPolygonVertices);
-                        Vec2[] vertices = tlvertices.get_Renamed(Settings.maxPolygonVertices);
+                        Vec2[] vertices = tlvertices.Get(Settings.maxPolygonVertices);
 
                         for (int i = 0; i < vertexCount; ++i)
                         {
