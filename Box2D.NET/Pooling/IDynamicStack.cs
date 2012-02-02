@@ -30,19 +30,19 @@ namespace Box2D.Pooling
     /// Object return order does not matter.
     /// </summary>
     /// <author>Daniel</author>
-    /// <typeparam name="E"></typeparam>
-    public interface IDynamicStack<E>
+    /// <typeparam name="T"></typeparam>
+    public interface IDynamicStack<T>
     {
         /// <summary>
         /// Pops an item off the stack
         /// </summary>
         /// <returns></returns>
-        E Pop();
+        T Pop();
 
         /// <summary>
         /// Pushes an item back on the stack
         /// </summary>
         /// <param name="argObject"></param>
-        void Push(E argObject);
+        void Push(T argObject);
     }
 }
