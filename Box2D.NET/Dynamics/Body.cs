@@ -583,7 +583,7 @@ namespace Box2D.Dynamics
                     int proxyCount = f.m_proxyCount;
                     for (int i = 0; i < proxyCount; ++i)
                     {
-                        broadPhase.touchProxy(f.m_proxies[i].proxyId);
+                        broadPhase.TouchProxy(f.m_proxies[i].proxyId);
                     }
                 }
             }

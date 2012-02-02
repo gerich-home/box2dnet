@@ -42,19 +42,13 @@ namespace Box2D.Collision.Broadphase
 	/// <author>Daniel Murphy</author>
 	public class BroadPhase : ITreeCallback
 	{
-		/// <summary>
-		/// Get the number of proxies.
-		/// </summary>
-		/// <returns></returns>
-		virtual public int ProxyCount
-		{
-			get
-			{
-				return m_proxyCount;
-			}
-		}
+	    /// <summary>
+	    /// Get the number of proxies.
+	    /// </summary>
+	    /// <returns></returns>
+	    public virtual int ProxyCount { get; private set; }
 
-		/// <summary>
+	    /// <summary>
 		/// Get the height of the embedded tree.
 		/// </summary>
 		/// <returns></returns>
@@ -88,9 +82,7 @@ namespace Box2D.Collision.Broadphase
 
 		private readonly DynamicTree m_tree;
 
-		private int m_proxyCount;
-
-		private int[] m_moveBuffer;
+	    private int[] m_moveBuffer;
 		private int m_moveCapacity;
 		private int m_moveCount;
 
@@ -102,7 +94,7 @@ namespace Box2D.Collision.Broadphase
 
 		public BroadPhase()
 		{
-			m_proxyCount = 0;
+			ProxyCount = 0;
 
 			m_pairCapacity = 16;
 			m_pairCount = 0;
@@ -126,11 +118,11 @@ namespace Box2D.Collision.Broadphase
 		/// <param name="aabb"></param>
 		/// <param name="userData"></param>
 		/// <returns></returns>
-		public int createProxy(AABB aabb, object userData)
+		public int CreateProxy(AABB aabb, object userData)
 		{
 			int proxyId = m_tree.createProxy(aabb, userData);
-			++m_proxyCount;
-			bufferMove(proxyId);
+			++ProxyCount;
+			BufferMove(proxyId);
 			return proxyId;
 		}
 
@@ -138,10 +130,10 @@ namespace Box2D.Collision.Broadphase
 		/// Destroy a proxy. It is up to the client to remove any pairs.
 		/// </summary>
 		/// <param name="proxyId"></param>
-		public void destroyProxy(int proxyId)
+		public void DestroyProxy(int proxyId)
 		{
-			unbufferMove(proxyId);
-			--m_proxyCount;
+			UnbufferMove(proxyId);
+			--ProxyCount;
 			m_tree.destroyProxy(proxyId);
 		}
 
@@ -149,35 +141,35 @@ namespace Box2D.Collision.Broadphase
 		/// Call MoveProxy as many times as you like, then when you are done call UpdatePairs to finalized
 		/// the proxy pairs (for your time step).
 		/// </summary>
-		public void moveProxy(int proxyId, AABB aabb, Vec2 displacement)
+		public void MoveProxy(int proxyId, AABB aabb, Vec2 displacement)
 		{
 			bool buffer = m_tree.moveProxy(proxyId, aabb, displacement);
 			if (buffer)
 			{
-				bufferMove(proxyId);
+				BufferMove(proxyId);
 			}
 		}
 
-		public virtual void touchProxy(int proxyId)
+		public virtual void TouchProxy(int proxyId)
 		{
-			bufferMove(proxyId);
+			BufferMove(proxyId);
 		}
 
-		public virtual object getUserData(int proxyId)
+		public virtual object GetUserData(int proxyId)
 		{
 			return m_tree.getUserData(proxyId);
 		}
 
-		public virtual AABB getFatAABB(int proxyId)
+		public virtual AABB GetFatAABB(int proxyId)
 		{
 			return m_tree.getFatAABB(proxyId);
 		}
 
-		public virtual bool testOverlap(int proxyIdA, int proxyIdB)
+		public virtual bool TestOverlap(int proxyIdA, int proxyIdB)
 		{
 			// return AABB.testOverlap(proxyA.aabb, proxyB.aabb);
-			AABB a = m_tree.getFatAABB(proxyIdA);
-			AABB b = m_tree.getFatAABB(proxyIdB);
+			var a = m_tree.getFatAABB(proxyIdA);
+			var b = m_tree.getFatAABB(proxyIdB);
 			if (b.lowerBound.x - a.upperBound.x > 0.0f || b.lowerBound.y - a.upperBound.y > 0.0f)
 			{
 				return false;
@@ -191,7 +183,7 @@ namespace Box2D.Collision.Broadphase
 			return true;
 		}
 
-		public virtual void drawTree(DebugDraw argDraw)
+		public virtual void DrawTree(DebugDraw argDraw)
 		{
 			m_tree.drawTree(argDraw);
 		}
@@ -200,7 +192,7 @@ namespace Box2D.Collision.Broadphase
 		/// Update the pairs. This results in pair callbacks. This can only add pairs.
 		/// </summary>
 		/// <param name="callback"></param>
-		public void updatePairs(IPairCallback callback)
+		public void UpdatePairs(IPairCallback callback)
 		{
 			// log.debug("beginning to update pairs");
 			// Reset pair buffer
@@ -217,7 +209,7 @@ namespace Box2D.Collision.Broadphase
 
 				// We have to query the tree with the fat AABB so that
 				// we don't fail to create a pair that may touch later.
-				AABB fatAABB = m_tree.getFatAABB(m_queryProxyId);
+				var fatAABB = m_tree.getFatAABB(m_queryProxyId);
 
 				// Query tree, create pairs and add them pair buffer.
 				// log.debug("quering aabb: "+m_queryProxy.aabb);
@@ -235,9 +227,9 @@ namespace Box2D.Collision.Broadphase
 			int i2 = 0;
 			while (i2 < m_pairCount)
 			{
-				Pair primaryPair = m_pairBuffer[i2];
-				Object userDataA = m_tree.getUserData(primaryPair.proxyIdA);
-				Object userDataB = m_tree.getUserData(primaryPair.proxyIdB);
+				var primaryPair = m_pairBuffer[i2];
+				var userDataA = m_tree.getUserData(primaryPair.proxyIdA);
+				var userDataB = m_tree.getUserData(primaryPair.proxyIdB);
 
 				// log.debug("returning pair: "+userDataA+", "+userDataB);
 				callback.AddPair(userDataA, userDataB);
@@ -246,7 +238,7 @@ namespace Box2D.Collision.Broadphase
 				// Skip any duplicate pairs.
 				while (i2 < m_pairCount)
 				{
-					Pair pair = m_pairBuffer[i2];
+					var pair = m_pairBuffer[i2];
 					if (pair.proxyIdA != primaryPair.proxyIdA || pair.proxyIdB != primaryPair.proxyIdB)
 					{
 						break;
@@ -266,7 +258,7 @@ namespace Box2D.Collision.Broadphase
 		/// </summary>
 		/// <param name="callback"></param>
 		/// <param name="aabb"></param>
-		public void query(ITreeCallback callback, AABB aabb)
+		public void Query(ITreeCallback callback, AABB aabb)
 		{
 			m_tree.query(callback, aabb);
 		}
@@ -279,16 +271,16 @@ namespace Box2D.Collision.Broadphase
 		/// </summary>
 		/// <param name="input">the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</param>
 		/// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
-		public void raycast(ITreeRayCastCallback callback, RayCastInput input)
+		public void Raycast(ITreeRayCastCallback callback, RayCastInput input)
 		{
 			m_tree.raycast(callback, input);
 		}
 
-		protected internal void bufferMove(int proxyId)
+		protected internal void BufferMove(int proxyId)
 		{
 			if (m_moveCount == m_moveCapacity)
 			{
-				int[] old = m_moveBuffer;
+				var old = m_moveBuffer;
 				m_moveCapacity *= 2;
 				m_moveBuffer = new int[m_moveCapacity];
 				Array.Copy(old, 0, m_moveBuffer, 0, old.Length);
@@ -298,7 +290,7 @@ namespace Box2D.Collision.Broadphase
 			++m_moveCount;
 		}
 
-		protected internal void unbufferMove(int proxyId)
+		protected internal void UnbufferMove(int proxyId)
 		{
 			for (int i = 0; i < m_moveCount; i++)
 			{
@@ -327,7 +319,7 @@ namespace Box2D.Collision.Broadphase
 			// Grow the pair buffer as needed.
 			if (m_pairCount == m_pairCapacity)
 			{
-				Pair[] oldBuffer = m_pairBuffer;
+				var oldBuffer = m_pairBuffer;
 				m_pairCapacity *= 2;
 				m_pairBuffer = new Pair[m_pairCapacity];
 				Array.Copy(oldBuffer, 0, m_pairBuffer, 0, oldBuffer.Length);

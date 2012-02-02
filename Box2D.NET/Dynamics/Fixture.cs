@@ -259,7 +259,7 @@ namespace Box2D.Dynamics
             BroadPhase broadPhase = world.m_contactManager.m_broadPhase;
             for (int i = 0; i < m_proxyCount; ++i)
             {
-                broadPhase.touchProxy(m_proxies[i].proxyId);
+                broadPhase.TouchProxy(m_proxies[i].proxyId);
             }
         }
 
@@ -395,7 +395,7 @@ namespace Box2D.Dynamics
             {
                 FixtureProxy proxy = m_proxies[i];
                 m_shape.computeAABB(proxy.aabb, xf, i);
-                proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
+                proxy.proxyId = broadPhase.CreateProxy(proxy.aabb, proxy);
                 proxy.fixture = this;
                 proxy.childIndex = i;
             }
@@ -411,7 +411,7 @@ namespace Box2D.Dynamics
             for (int i = 0; i < m_proxyCount; ++i)
             {
                 FixtureProxy proxy = m_proxies[i];
-                broadPhase.destroyProxy(proxy.proxyId);
+                broadPhase.DestroyProxy(proxy.proxyId);
                 proxy.proxyId = BroadPhase.NULL_PROXY;
             }
 
@@ -452,7 +452,7 @@ namespace Box2D.Dynamics
                 displacement.x = transform2.p.x - transform1.p.x;
                 displacement.y = transform2.p.y - transform1.p.y;
 
-                broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
+                broadPhase.MoveProxy(proxy.proxyId, proxy.aabb, displacement);
             }
         }
     }

@@ -179,7 +179,7 @@ namespace Box2D.Dynamics
 
         public virtual void findNewContacts()
         {
-            m_broadPhase.updatePairs(this);
+            m_broadPhase.UpdatePairs(this);
         }
 
         public virtual void destroy(Contact c)
@@ -301,7 +301,7 @@ namespace Box2D.Dynamics
 
                 int proxyIdA = fixtureA.m_proxies[indexA].proxyId;
                 int proxyIdB = fixtureB.m_proxies[indexB].proxyId;
-                bool overlap = m_broadPhase.testOverlap(proxyIdA, proxyIdB);
+                bool overlap = m_broadPhase.TestOverlap(proxyIdA, proxyIdB);
 
                 // Here we destroy contacts that cease to overlap in the broad-phase.
                 if (overlap == false)

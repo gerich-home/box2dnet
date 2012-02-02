@@ -709,7 +709,7 @@ namespace Box2D.Dynamics
                         for (int i = 0; i < f.m_proxyCount; ++i)
                         {
                             FixtureProxy proxy = f.m_proxies[i];
-                            AABB aabb = m_contactManager.m_broadPhase.getFatAABB(proxy.proxyId);
+                            AABB aabb = m_contactManager.m_broadPhase.GetFatAABB(proxy.proxyId);
                             Vec2[] vs = avs.Get(4);
                             vs[0].set_Renamed(aabb.lowerBound.x, aabb.lowerBound.y);
                             vs[1].set_Renamed(aabb.upperBound.x, aabb.lowerBound.y);
@@ -734,7 +734,7 @@ namespace Box2D.Dynamics
 
             if ((flags & DebugDraw.DrawFlags.DynamicTree) == DebugDraw.DrawFlags.DynamicTree)
             {
-                m_contactManager.m_broadPhase.drawTree(m_debugDraw);
+                m_contactManager.m_broadPhase.DrawTree(m_debugDraw);
             }
         }
 
@@ -749,7 +749,7 @@ namespace Box2D.Dynamics
         {
             wqwrapper.broadPhase = m_contactManager.m_broadPhase;
             wqwrapper.callback = callback;
-            m_contactManager.m_broadPhase.query(wqwrapper, aabb);
+            m_contactManager.m_broadPhase.Query(wqwrapper, aabb);
         }
 
         private readonly WorldRayCastWrapper wrcwrapper = new WorldRayCastWrapper();
@@ -770,7 +770,7 @@ namespace Box2D.Dynamics
             input.maxFraction = 1.0f;
             input.p1.set_Renamed(point1);
             input.p2.set_Renamed(point2);
-            m_contactManager.m_broadPhase.raycast(wrcwrapper, input);
+            m_contactManager.m_broadPhase.Raycast(wrcwrapper, input);
         }
 
         virtual public IWorldPool Pool
@@ -1740,7 +1740,7 @@ namespace Box2D.Dynamics
     {
         public virtual bool TreeCallback(int nodeId)
         {
-            FixtureProxy proxy = (FixtureProxy)broadPhase.getUserData(nodeId);
+            FixtureProxy proxy = (FixtureProxy)broadPhase.GetUserData(nodeId);
             return callback.ReportFixture(proxy.fixture);
         }
 
@@ -1760,7 +1760,7 @@ namespace Box2D.Dynamics
 
         public virtual float RaycastCallback(RayCastInput input, int nodeId)
         {
-            Object userData = broadPhase.getUserData(nodeId);
+            Object userData = broadPhase.GetUserData(nodeId);
             FixtureProxy proxy = (FixtureProxy)userData;
             Fixture fixture = proxy.fixture;
             int index = proxy.childIndex;
