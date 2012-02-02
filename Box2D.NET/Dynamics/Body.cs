@@ -540,7 +540,7 @@ namespace Box2D.Dynamics
                     int proxyCount = f.ProxyCount;
                     for (int i = 0; i < proxyCount; ++i)
                     {
-                        broadPhase.TouchProxy(f.Proxies[i].proxyId);
+                        broadPhase.TouchProxy(f.Proxies[i].ProxyId);
                     }
                 }
             }

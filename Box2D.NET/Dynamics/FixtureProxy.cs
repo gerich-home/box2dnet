@@ -33,9 +33,9 @@ namespace Box2D.Dynamics
     /// <author>Daniel</author>
     public class FixtureProxy
     {
-        internal readonly AABB aabb = new AABB();
-        internal Fixture fixture;
-        internal int childIndex;
-        internal int proxyId;
+        internal readonly AABB AABB = new AABB();
+        internal Fixture Fixture;
+        internal int ChildIndex;
+        internal int ProxyId;
     }
 }

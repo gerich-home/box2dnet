@@ -709,7 +709,7 @@ namespace Box2D.Dynamics
                         for (int i = 0; i < f.ProxyCount; ++i)
                         {
                             FixtureProxy proxy = f.Proxies[i];
-                            AABB aabb = m_contactManager.BroadPhase.GetFatAABB(proxy.proxyId);
+                            AABB aabb = m_contactManager.BroadPhase.GetFatAABB(proxy.ProxyId);
                             Vec2[] vs = avs.Get(4);
                             vs[0].set_Renamed(aabb.LowerBound.x, aabb.LowerBound.y);
                             vs[1].set_Renamed(aabb.UpperBound.x, aabb.LowerBound.y);
@@ -1741,7 +1741,7 @@ namespace Box2D.Dynamics
         public virtual bool TreeCallback(int nodeId)
         {
             FixtureProxy proxy = (FixtureProxy)broadPhase.GetUserData(nodeId);
-            return callback.ReportFixture(proxy.fixture);
+            return callback.ReportFixture(proxy.Fixture);
         }
 
         internal BroadPhase broadPhase;
@@ -1762,8 +1762,8 @@ namespace Box2D.Dynamics
         {
             Object userData = broadPhase.GetUserData(nodeId);
             FixtureProxy proxy = (FixtureProxy)userData;
-            Fixture fixture = proxy.fixture;
-            int index = proxy.childIndex;
+            Fixture fixture = proxy.Fixture;
+            int index = proxy.ChildIndex;
             bool hit = fixture.Raycast(output, input, index);
 
             if (hit)

@@ -201,7 +201,7 @@ namespace Box2D.Dynamics
             BroadPhase broadPhase = world.m_contactManager.BroadPhase;
             for (int i = 0; i < ProxyCount; ++i)
             {
-                broadPhase.TouchProxy(Proxies[i].proxyId);
+                broadPhase.TouchProxy(Proxies[i].ProxyId);
             }
         }
 
@@ -244,7 +244,7 @@ namespace Box2D.Dynamics
         public virtual AABB GetAABB(int childIndex)
         {
             Debug.Assert(childIndex >= 0 && childIndex < ProxyCount);
-            return Proxies[childIndex].aabb;
+            return Proxies[childIndex].AABB;
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace Box2D.Dynamics
                 Proxies = new FixtureProxy[childCount];
                 for (int i = 0; i < childCount; i++)
                 {
-                    Proxies[i] = new FixtureProxy {fixture = null, proxyId = BroadPhase.NULL_PROXY};
+                    Proxies[i] = new FixtureProxy {Fixture = null, ProxyId = BroadPhase.NULL_PROXY};
                 }
             }
 
@@ -299,8 +299,8 @@ namespace Box2D.Dynamics
                     {
                         Proxies[i] = new FixtureProxy();
                     }
-                    Proxies[i].fixture = null;
-                    Proxies[i].proxyId = BroadPhase.NULL_PROXY;
+                    Proxies[i].Fixture = null;
+                    Proxies[i].ProxyId = BroadPhase.NULL_PROXY;
                 }
             }
             ProxyCount = 0;
@@ -333,10 +333,10 @@ namespace Box2D.Dynamics
             for (int i = 0; i < ProxyCount; ++i)
             {
                 FixtureProxy proxy = Proxies[i];
-                Shape.ComputeAABB(proxy.aabb, xf, i);
-                proxy.proxyId = broadPhase.CreateProxy(proxy.aabb, proxy);
-                proxy.fixture = this;
-                proxy.childIndex = i;
+                Shape.ComputeAABB(proxy.AABB, xf, i);
+                proxy.ProxyId = broadPhase.CreateProxy(proxy.AABB, proxy);
+                proxy.Fixture = this;
+                proxy.ChildIndex = i;
             }
         }
 
@@ -350,8 +350,8 @@ namespace Box2D.Dynamics
             for (int i = 0; i < ProxyCount; ++i)
             {
                 FixtureProxy proxy = Proxies[i];
-                broadPhase.DestroyProxy(proxy.proxyId);
-                proxy.proxyId = BroadPhase.NULL_PROXY;
+                broadPhase.DestroyProxy(proxy.ProxyId);
+                proxy.ProxyId = BroadPhase.NULL_PROXY;
             }
 
             ProxyCount = 0;
@@ -381,17 +381,17 @@ namespace Box2D.Dynamics
                 // Compute an AABB that covers the swept shape (may miss some rotation effect).
                 AABB aabb1 = pool1;
                 AABB aab = pool2;
-                Shape.ComputeAABB(aabb1, transform1, proxy.childIndex);
-                Shape.ComputeAABB(aab, transform2, proxy.childIndex);
+                Shape.ComputeAABB(aabb1, transform1, proxy.ChildIndex);
+                Shape.ComputeAABB(aab, transform2, proxy.ChildIndex);
 
-                proxy.aabb.LowerBound.x = aabb1.LowerBound.x < aab.LowerBound.x ? aabb1.LowerBound.x : aab.LowerBound.x;
-                proxy.aabb.LowerBound.y = aabb1.LowerBound.y < aab.LowerBound.y ? aabb1.LowerBound.y : aab.LowerBound.y;
-                proxy.aabb.UpperBound.x = aabb1.UpperBound.x > aab.UpperBound.x ? aabb1.UpperBound.x : aab.UpperBound.x;
-                proxy.aabb.UpperBound.y = aabb1.UpperBound.y > aab.UpperBound.y ? aabb1.UpperBound.y : aab.UpperBound.y;
+                proxy.AABB.LowerBound.x = aabb1.LowerBound.x < aab.LowerBound.x ? aabb1.LowerBound.x : aab.LowerBound.x;
+                proxy.AABB.LowerBound.y = aabb1.LowerBound.y < aab.LowerBound.y ? aabb1.LowerBound.y : aab.LowerBound.y;
+                proxy.AABB.UpperBound.x = aabb1.UpperBound.x > aab.UpperBound.x ? aabb1.UpperBound.x : aab.UpperBound.x;
+                proxy.AABB.UpperBound.y = aabb1.UpperBound.y > aab.UpperBound.y ? aabb1.UpperBound.y : aab.UpperBound.y;
                 displacement.x = transform2.p.x - transform1.p.x;
                 displacement.y = transform2.p.y - transform1.p.y;
 
-                broadPhase.MoveProxy(proxy.proxyId, proxy.aabb, displacement);
+                broadPhase.MoveProxy(proxy.ProxyId, proxy.AABB, displacement);
             }
         }
     }
