@@ -60,11 +60,13 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// The mass of the shape, usually in kilograms.
         /// </summary>
-        public float mass;
+        public float Mass;
+
         /// <summary>
         /// The position of the shape's centroid relative to the shape's origin.
         /// </summary>
-        public Vec2 center;
+        public Vec2 Center;
+
         /// <summary>
         /// The rotational inertia of the shape about the local origin.
         /// </summary>
@@ -75,8 +77,8 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         public MassData()
         {
-            mass = I = 0f;
-            center = new Vec2();
+            Mass = I = 0f;
+            Center = new Vec2();
         }
 
         /// <summary>
@@ -85,16 +87,16 @@ namespace Box2D.Collision.Shapes
         /// <param name="md">mass data to copy from</param>
         public MassData(MassData md)
         {
-            mass = md.mass;
+            Mass = md.Mass;
             I = md.I;
-            center = md.center.Clone();
+            Center = md.Center.Clone();
         }
 
-        public virtual void set_Renamed(MassData md)
+        public virtual void Set(MassData md)
         {
-            mass = md.mass;
+            Mass = md.Mass;
             I = md.I;
-            center.set_Renamed(md.center);
+            Center.set_Renamed(md.Center);
         }
 
         /// <summary>

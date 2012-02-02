@@ -144,8 +144,8 @@ namespace Box2D.Collision.Shapes
 
         public override void ComputeMass(MassData massData, float density)
         {
-            massData.mass = 0.0f;
-            massData.center.setZero();
+            massData.Mass = 0.0f;
+            massData.Center.setZero();
             massData.I = 0.0f;
         }
 

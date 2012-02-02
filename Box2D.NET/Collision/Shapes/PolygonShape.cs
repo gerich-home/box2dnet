@@ -647,18 +647,18 @@ namespace Box2D.Collision.Shapes
             }
 
             // Total mass
-            massData.mass = density * area;
+            massData.Mass = density * area;
 
             // Center of mass
             Debug.Assert(area > Settings.EPSILON);
             center.mulLocal(1.0f / area);
-            massData.center.set_Renamed(center).addLocal(s);
+            massData.Center.set_Renamed(center).addLocal(s);
 
             // Inertia tensor relative to the local origin (point s)
             massData.I = I * density;
 
             // Shift to center of mass then to original body origin.
-            massData.I += massData.mass * (Vec2.dot(massData.center, massData.center));
+            massData.I += massData.Mass * (Vec2.dot(massData.Center, massData.Center));
         }
 
         /// <summary>

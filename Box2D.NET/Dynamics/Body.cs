@@ -952,10 +952,10 @@ namespace Box2D.Dynamics
             // data.I = m_I + m_mass * Vec2.dot(m_sweep.localCenter, m_sweep.localCenter);
             // data.center.set(m_sweep.localCenter);
 
-            data.mass = m_mass;
+            data.Mass = m_mass;
             data.I = m_I + m_mass * (m_sweep.localCenter.x * m_sweep.localCenter.x + m_sweep.localCenter.y * m_sweep.localCenter.y);
-            data.center.x = m_sweep.localCenter.x;
-            data.center.y = m_sweep.localCenter.y;
+            data.Center.x = m_sweep.localCenter.x;
+            data.Center.y = m_sweep.localCenter.y;
         }
 
         /// <summary>
@@ -982,7 +982,7 @@ namespace Box2D.Dynamics
             m_I = 0.0f;
             m_invI = 0.0f;
 
-            m_mass = massData.mass;
+            m_mass = massData.Mass;
             if (m_mass <= 0.0f)
             {
                 m_mass = 1f;
@@ -992,7 +992,7 @@ namespace Box2D.Dynamics
 
             if (massData.I > 0.0f && (m_flags & e_fixedRotationFlag) == 0)
             {
-                m_I = massData.I - m_mass * Vec2.dot(massData.center, massData.center);
+                m_I = massData.I - m_mass * Vec2.dot(massData.Center, massData.Center);
                 Debug.Assert(m_I > 0.0f);
                 m_invI = 1.0f / m_I;
             }
@@ -1000,7 +1000,7 @@ namespace Box2D.Dynamics
             Vec2 oldCenter = m_world.Pool.PopVec2();
             // Move center of mass.
             oldCenter.set_Renamed(m_sweep.c);
-            m_sweep.localCenter.set_Renamed(massData.center);
+            m_sweep.localCenter.set_Renamed(massData.Center);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
             Transform.mulToOutUnsafe(m_xf, m_sweep.localCenter, m_sweep.c0);
             m_sweep.c.set_Renamed(m_sweep.c0);
@@ -1055,9 +1055,9 @@ namespace Box2D.Dynamics
                     continue;
                 }
                 f.getMassData(massData);
-                m_mass += massData.mass;
+                m_mass += massData.Mass;
                 // center += massData.mass * massData.center;
-                temp.set_Renamed(massData.center).mulLocal(massData.mass);
+                temp.set_Renamed(massData.Center).mulLocal(massData.Mass);
                 localCenter.addLocal(temp);
                 m_I += massData.I;
             }

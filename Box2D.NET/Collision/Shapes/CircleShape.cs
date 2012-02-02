@@ -183,11 +183,11 @@ namespace Box2D.Collision.Shapes
 
         public override void ComputeMass(MassData massData, float density)
         {
-            massData.mass = density * Settings.PI * Radius * Radius;
-            massData.center.set_Renamed(m_p);
+            massData.Mass = density * Settings.PI * Radius * Radius;
+            massData.Center.set_Renamed(m_p);
 
             // inertia about the local origin
-            massData.I = massData.mass * (0.5f * Radius * Radius + Vec2.dot(m_p, m_p));
+            massData.I = massData.Mass * (0.5f * Radius * Radius + Vec2.dot(m_p, m_p));
         }
 
         // djm pooled from above
