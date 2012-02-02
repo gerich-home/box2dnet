@@ -65,6 +65,6 @@ namespace Box2D.Collision.Broadphase
 
         void query(IQueryCallback callback, AABB aabb);
 
-        void raycast(RayCastCallback callback, RayCastInput input);
+        void raycast(IRayCastCallback callback, RayCastInput input);
     }
 }

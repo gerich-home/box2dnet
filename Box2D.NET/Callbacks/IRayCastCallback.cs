@@ -35,7 +35,7 @@ namespace Box2D.Callbacks
     /// See World.rayCast
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public interface RayCastCallback
+    public interface IRayCastCallback
     {
         /// <summary>
         /// Called for each fixture found in the query. You control how the ray cast
@@ -49,11 +49,7 @@ namespace Box2D.Callbacks
         /// <param name="point">the point of initial intersection</param>
         /// <param name="normal">the normal vector at the point of intersection</param>
         /// <returns>-1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue</returns>
-        /// <param name="fixture"></param>
-        /// <param name="point"></param>
-        /// <param name="normal"></param>
         /// <param name="fraction"></param>
-        /// <returns></returns>
-        float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction);
+        float ReportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction);
     }
 }

@@ -763,7 +763,7 @@ namespace Box2D.Dynamics
         /// <param name="callback">a user implemented callback class.</param>
         /// <param name="point1">the ray starting point</param>
         /// <param name="point2">the ray ending point</param>
-        public virtual void raycast(RayCastCallback callback, Vec2 point1, Vec2 point2)
+        public virtual void raycast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
         {
             wrcwrapper.broadPhase = m_contactManager.m_broadPhase;
             wrcwrapper.callback = callback;
@@ -1772,14 +1772,14 @@ namespace Box2D.Dynamics
                 // Vec2 point = (1.0f - fraction) * input.p1 + fraction * input.p2;
                 temp.set_Renamed(input.p2).mulLocal(fraction);
                 point.set_Renamed(input.p1).mulLocal(1 - fraction).addLocal(temp);
-                return callback.reportFixture(fixture, point, output.normal, fraction);
+                return callback.ReportFixture(fixture, point, output.normal, fraction);
             }
 
             return input.maxFraction;
         }
 
         internal BroadPhase broadPhase;
-        internal RayCastCallback callback;
+        internal IRayCastCallback callback;
     }
 
 }
