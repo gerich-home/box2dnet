@@ -37,64 +37,64 @@ namespace Box2D.Collision.Shapes
     /// <author>Daniel</author>
     public class ChainShape : Shape
     {
-        public Vec2[] m_vertices;
-        public int m_count;
-        public readonly Vec2 m_prevVertex = new Vec2();
-        public readonly Vec2 m_nextVertex = new Vec2();
-        public bool m_hasPrevVertex = false;
-        public bool m_hasNextVertex = false;
+        public Vec2[] Vertices;
+        public int Count;
+        public bool HasPrevVertex;
+        public bool HasNextVertex;
 
         private readonly EdgeShape pool0 = new EdgeShape();
         private readonly Vec2 pool1 = new Vec2();
         private readonly Vec2 pool2 = new Vec2();
+        private readonly Vec2 m_prevVertex = new Vec2();
+        private readonly Vec2 m_nextVertex = new Vec2();
 
         public ChainShape() :
             base(ShapeType.Chain)
         {
-            m_vertices = null;
+            Vertices = null;
             Radius = Settings.polygonRadius;
-            m_count = 0;
+            Count = 0;
         }
 
         override public int ChildCount
         {
             get
             {
-                return m_count - 1;
+                return Count - 1;
             }
         }
 
         /// <summary>
         /// Get a child edge.
         /// </summary>
-        public virtual void getChildEdge(EdgeShape edge, int index)
+        public virtual void GetChildEdge(EdgeShape edge, int index)
         {
-            Debug.Assert(0 <= index && index < m_count - 1);
+            Debug.Assert(0 <= index && index < Count - 1);
             edge.Radius = Radius;
 
-            edge.m_vertex1.set_Renamed(m_vertices[index + 0]);
-            edge.m_vertex2.set_Renamed(m_vertices[index + 1]);
+            edge.m_vertex1.set_Renamed(Vertices[index + 0]);
+            edge.m_vertex2.set_Renamed(Vertices[index + 1]);
 
             if (index > 0)
             {
-                edge.m_vertex0.set_Renamed(m_vertices[index - 1]);
+                edge.m_vertex0.set_Renamed(Vertices[index - 1]);
                 edge.m_hasVertex0 = true;
             }
             else
             {
                 edge.m_vertex0.set_Renamed(m_prevVertex);
-                edge.m_hasVertex0 = m_hasPrevVertex;
+                edge.m_hasVertex0 = HasPrevVertex;
             }
 
-            if (index < m_count - 2)
+            if (index < Count - 2)
             {
-                edge.m_vertex3.set_Renamed(m_vertices[index + 2]);
+                edge.m_vertex3.set_Renamed(Vertices[index + 2]);
                 edge.m_hasVertex3 = true;
             }
             else
             {
                 edge.m_vertex3.set_Renamed(m_nextVertex);
-                edge.m_hasVertex3 = m_hasNextVertex;
+                edge.m_hasVertex3 = HasNextVertex;
             }
         }
 
@@ -105,38 +105,38 @@ namespace Box2D.Collision.Shapes
 
         public override bool Raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex)
         {
-            Debug.Assert(childIndex < m_count);
+            Debug.Assert(childIndex < Count);
 
             EdgeShape edgeShape = pool0;
 
             int i1 = childIndex;
             int i2 = childIndex + 1;
-            if (i2 == m_count)
+            if (i2 == Count)
             {
                 i2 = 0;
             }
 
-            edgeShape.m_vertex1.set_Renamed(m_vertices[i1]);
-            edgeShape.m_vertex2.set_Renamed(m_vertices[i2]);
+            edgeShape.m_vertex1.set_Renamed(Vertices[i1]);
+            edgeShape.m_vertex2.set_Renamed(Vertices[i2]);
 
             return edgeShape.Raycast(output, input, xf, 0);
         }
 
         public override void ComputeAABB(AABB aabb, Transform xf, int childIndex)
         {
-            Debug.Assert(childIndex < m_count);
+            Debug.Assert(childIndex < Count);
 
             int i1 = childIndex;
             int i2 = childIndex + 1;
-            if (i2 == m_count)
+            if (i2 == Count)
             {
                 i2 = 0;
             }
 
             Vec2 v1 = pool1;
             Vec2 v2 = pool2;
-            Transform.mulToOutUnsafe(xf, m_vertices[i1], v1);
-            Transform.mulToOutUnsafe(xf, m_vertices[i2], v2);
+            Transform.mulToOutUnsafe(xf, Vertices[i1], v1);
+            Transform.mulToOutUnsafe(xf, Vertices[i2], v2);
 
             Vec2.minToOut(v1, v2, aabb.lowerBound);
             Vec2.maxToOut(v1, v2, aabb.upperBound);
@@ -152,11 +152,11 @@ namespace Box2D.Collision.Shapes
         public override Shape Clone()
         {
             ChainShape clone = new ChainShape();
-            clone.createChain(m_vertices, m_count);
+            clone.CreateChain(Vertices, Count);
             clone.m_prevVertex.set_Renamed(m_prevVertex);
             clone.m_nextVertex.set_Renamed(m_nextVertex);
-            clone.m_hasPrevVertex = m_hasPrevVertex;
-            clone.m_hasNextVertex = m_hasNextVertex;
+            clone.HasPrevVertex = HasPrevVertex;
+            clone.HasNextVertex = HasNextVertex;
             return clone;
         }
 
@@ -165,21 +165,21 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="vertices">an array of vertices, these are copied</param>
         /// <param name="count">the vertex count</param>
-        public virtual void createLoop(Vec2[] vertices, int count)
+        public virtual void CreateLoop(Vec2[] vertices, int count)
         {
-            Debug.Assert(m_vertices == null && m_count == 0);
+            Debug.Assert(Vertices == null && Count == 0);
             Debug.Assert(count >= 3);
-            m_count = count + 1;
-            m_vertices = new Vec2[m_count];
+            Count = count + 1;
+            Vertices = new Vec2[Count];
             for (int i = 0; i < count; i++)
             {
-                m_vertices[i] = new Vec2(vertices[i]);
+                Vertices[i] = new Vec2(vertices[i]);
             }
-            m_vertices[count] = m_vertices[0];
-            m_prevVertex.set_Renamed(m_vertices[m_count - 2]);
-            m_nextVertex.set_Renamed(m_vertices[1]);
-            m_hasPrevVertex = true;
-            m_hasNextVertex = true;
+            Vertices[count] = Vertices[0];
+            m_prevVertex.set_Renamed(Vertices[Count - 2]);
+            m_nextVertex.set_Renamed(Vertices[1]);
+            HasPrevVertex = true;
+            HasNextVertex = true;
         }
 
         /// <summary>
@@ -187,42 +187,40 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="vertices">an array of vertices, these are copied</param>
         /// <param name="count">the vertex count</param>
-        public virtual void createChain(Vec2[] vertices, int count)
+        public virtual void CreateChain(Vec2[] vertices, int count)
         {
-            Debug.Assert(m_vertices == null && m_count == 0);
+            Debug.Assert(Vertices == null && Count == 0);
             Debug.Assert(count >= 2);
-            m_count = count;
-            m_vertices = new Vec2[m_count];
-            for (int i = 0; i < m_count; i++)
+            Count = count;
+            Vertices = new Vec2[Count];
+            for (int i = 0; i < Count; i++)
             {
-                m_vertices[i] = new Vec2(vertices[i]);
+                Vertices[i] = new Vec2(vertices[i]);
             }
-            m_hasPrevVertex = false;
-            m_hasNextVertex = false;
+            HasPrevVertex = false;
+            HasNextVertex = false;
         }
 
         /// <summary>
         /// Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops.
         /// </summary>
-        /// <param name="prevVertex"></param>
         virtual public Vec2 PrevVertex
         {
             set
             {
                 m_prevVertex.set_Renamed(value);
-                m_hasPrevVertex = true;
+                HasPrevVertex = true;
             }
         }
         /// <summary>
         /// Establish connectivity to a vertex that follows the last vertex. Don't call this for loops.
         /// </summary>
-        /// <param name="nextVertex"></param>
         virtual public Vec2 NextVertex
         {
             set
             {
                 m_nextVertex.set_Renamed(value);
-                m_hasNextVertex = true;
+                HasNextVertex = true;
             }
         }
     }

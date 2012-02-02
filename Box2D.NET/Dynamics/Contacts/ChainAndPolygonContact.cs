@@ -50,7 +50,7 @@ namespace Box2D.Dynamics.Contacts
         public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)
         {
             ChainShape chain = (ChainShape)m_fixtureA.Shape;
-            chain.getChildEdge(edge, m_indexA);
+            chain.GetChildEdge(edge, m_indexA);
             pool.GetCollision().collideEdgeAndPolygon(manifold, edge, xfA, (PolygonShape)m_fixtureB.Shape, xfB);
         }
     }

@@ -1714,8 +1714,8 @@ namespace Box2D.Dynamics
                 case ShapeType.Chain:
                     {
                         ChainShape chain = (ChainShape)fixture.Shape;
-                        int count = chain.m_count;
-                        Vec2[] vertices = chain.m_vertices;
+                        int count = chain.Count;
+                        Vec2[] vertices = chain.Vertices;
 
                         Transform.mulToOutUnsafe(xf, vertices[0], v1);
                         for (int i = 1; i < count; ++i)

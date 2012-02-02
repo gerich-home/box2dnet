@@ -590,16 +590,16 @@ namespace Box2D.Collision
 
                     case ShapeType.Chain:
                         ChainShape chain = (ChainShape)shape;
-                        Debug.Assert(0 <= index && index < chain.m_count);
+                        Debug.Assert(0 <= index && index < chain.Count);
 
-                        m_buffer[0] = chain.m_vertices[index];
-                        if (index + 1 < chain.m_count)
+                        m_buffer[0] = chain.Vertices[index];
+                        if (index + 1 < chain.Count)
                         {
-                            m_buffer[1] = chain.m_vertices[index + 1];
+                            m_buffer[1] = chain.Vertices[index + 1];
                         }
                         else
                         {
-                            m_buffer[1] = chain.m_vertices[0];
+                            m_buffer[1] = chain.Vertices[0];
                         }
 
                         m_vertices[0].set_Renamed(m_buffer[0]);
