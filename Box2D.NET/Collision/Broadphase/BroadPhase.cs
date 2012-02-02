@@ -228,8 +228,8 @@ namespace Box2D.Collision.Broadphase
 			while (i2 < m_pairCount)
 			{
 				var primaryPair = m_pairBuffer[i2];
-				var userDataA = m_tree.GetUserData(primaryPair.proxyIdA);
-				var userDataB = m_tree.GetUserData(primaryPair.proxyIdB);
+				var userDataA = m_tree.GetUserData(primaryPair.ProxyIdA);
+				var userDataB = m_tree.GetUserData(primaryPair.ProxyIdB);
 
 				// log.debug("returning pair: "+userDataA+", "+userDataB);
 				callback.AddPair(userDataA, userDataB);
@@ -239,7 +239,7 @@ namespace Box2D.Collision.Broadphase
 				while (i2 < m_pairCount)
 				{
 					var pair = m_pairBuffer[i2];
-					if (pair.proxyIdA != primaryPair.proxyIdA || pair.proxyIdB != primaryPair.proxyIdB)
+					if (pair.ProxyIdA != primaryPair.ProxyIdA || pair.ProxyIdB != primaryPair.ProxyIdB)
 					{
 						break;
 					}
@@ -332,14 +332,14 @@ namespace Box2D.Collision.Broadphase
 			if (proxyId < m_queryProxyId)
 			{
 				// log.debug("new proxy is first");
-				m_pairBuffer[m_pairCount].proxyIdA = proxyId;
-				m_pairBuffer[m_pairCount].proxyIdB = m_queryProxyId;
+				m_pairBuffer[m_pairCount].ProxyIdA = proxyId;
+				m_pairBuffer[m_pairCount].ProxyIdB = m_queryProxyId;
 			}
 			else
 			{
 				// log.debug("new proxy is second");
-				m_pairBuffer[m_pairCount].proxyIdA = m_queryProxyId;
-				m_pairBuffer[m_pairCount].proxyIdB = proxyId;
+				m_pairBuffer[m_pairCount].ProxyIdA = m_queryProxyId;
+				m_pairBuffer[m_pairCount].ProxyIdB = proxyId;
 			}
 
 			++m_pairCount;

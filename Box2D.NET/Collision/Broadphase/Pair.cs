@@ -34,19 +34,19 @@ namespace Box2D.Collision.Broadphase
     /// </summary>
     public class Pair : IComparable<Pair>
     {
-        public int proxyIdA;
-        public int proxyIdB;
+        public int ProxyIdA;
+        public int ProxyIdB;
 
         public int CompareTo(Pair pair2)
         {
-            if (this.proxyIdA < pair2.proxyIdA)
+            if (ProxyIdA < pair2.ProxyIdA)
             {
                 return -1;
             }
 
-            if (this.proxyIdA == pair2.proxyIdA)
+            if (ProxyIdA == pair2.ProxyIdA)
             {
-                return proxyIdB < pair2.proxyIdB ? -1 : (proxyIdB == pair2.proxyIdB ? 0 : 1);
+                return ProxyIdB < pair2.ProxyIdB ? -1 : (ProxyIdB == pair2.ProxyIdB ? 0 : 1);
             }
 
             return 1;
