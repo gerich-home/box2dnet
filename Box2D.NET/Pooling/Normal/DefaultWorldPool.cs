@@ -51,7 +51,7 @@ namespace Box2D.Pooling.Normal
         private readonly Dictionary<int, int[]> aints = new Dictionary<int, int[]>();
         private readonly Dictionary<int, Vec2[]> avecs = new Dictionary<int, Vec2[]>();
 
-        private readonly Type[] classes = new Type[] { typeof(IWorldPool) };
+        private readonly Type[] classes = new[] { typeof(IWorldPool) };
         private readonly object[] args;
 
         private readonly MutableStack<Contact, PolygonContact> pcstack;
@@ -246,7 +246,7 @@ namespace Box2D.Pooling.Normal
         {
             if (!avecs.ContainsKey(argLength))
             {
-                Vec2[] ray = new Vec2[argLength];
+                var ray = new Vec2[argLength];
                 for (int i = 0; i < argLength; i++)
                 {
                     ray[i] = new Vec2();
