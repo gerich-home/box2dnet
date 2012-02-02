@@ -35,19 +35,19 @@ namespace Box2D.Pooling.Arrays
     /// <author>dmurph</author>
     public class Vec2Array
     {
-        private readonly Dictionary<int, Vec2[]> _map = new Dictionary<int, Vec2[]>();
+        private readonly Dictionary<int, Vec2[]> map = new Dictionary<int, Vec2[]>();
 
         public virtual Vec2[] Get(int argLength)
         {
             Debug.Assert(argLength > 0);
 
-            if (!_map.ContainsKey(argLength))
+            if (!map.ContainsKey(argLength))
             {
-                _map.Add(argLength, GetInitializedArray(argLength));
+                map.Add(argLength, GetInitializedArray(argLength));
             }
 
-            Debug.Assert(_map[argLength].Length == argLength); // Array not built of correct length
-            return _map[argLength];
+            Debug.Assert(map[argLength].Length == argLength); // Array not built of correct length
+            return map[argLength];
         }
 
         protected internal virtual Vec2[] GetInitializedArray(int argLength)

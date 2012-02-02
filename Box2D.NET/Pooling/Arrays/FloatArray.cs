@@ -33,19 +33,19 @@ namespace Box2D.Pooling.Arrays
     /// <author>Daniel</author>
     public class FloatArray
     {
-        private readonly Dictionary<int, float[]> _map = new Dictionary<int, float[]>();
+        private readonly Dictionary<int, float[]> map = new Dictionary<int, float[]>();
 
         public virtual float[] Get(int argLength)
         {
             Debug.Assert(argLength > 0);
 
-            if (!_map.ContainsKey(argLength))
+            if (!map.ContainsKey(argLength))
             {
-                _map.Add(argLength, GetInitializedArray(argLength));
+                map.Add(argLength, GetInitializedArray(argLength));
             }
 
-            Debug.Assert(_map[argLength].Length == argLength); //Array not built of correct length
-            return _map[argLength];
+            Debug.Assert(map[argLength].Length == argLength); //Array not built of correct length
+            return map[argLength];
         }
 
         protected internal virtual float[] GetInitializedArray(int argLength)
