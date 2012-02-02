@@ -306,19 +306,19 @@ namespace Box2D.Common
         public static Vec2 clamp(Vec2 a, Vec2 low, Vec2 high)
         {
             Vec2 min = new Vec2();
-            min.x = a.x < high.x ? a.x : high.x;
-            min.y = a.y < high.y ? a.y : high.y;
-            min.x = low.x > min.x ? low.x : min.x;
-            min.y = low.y > min.y ? low.y : min.y;
+            min.X = a.X < high.X ? a.X : high.X;
+            min.Y = a.Y < high.Y ? a.Y : high.Y;
+            min.X = low.X > min.X ? low.X : min.X;
+            min.Y = low.Y > min.Y ? low.Y : min.Y;
             return min;
         }
 
         public static void clampToOut(Vec2 a, Vec2 low, Vec2 high, Vec2 dest)
         {
-            dest.x = a.x < high.x ? a.x : high.x;
-            dest.y = a.y < high.y ? a.y : high.y;
-            dest.x = low.x > dest.x ? low.x : dest.x;
-            dest.y = low.y > dest.y ? low.y : dest.y;
+            dest.X = a.X < high.X ? a.X : high.X;
+            dest.Y = a.Y < high.Y ? a.Y : high.Y;
+            dest.X = low.X > dest.X ? low.X : dest.X;
+            dest.Y = low.Y > dest.Y ? low.Y : dest.Y;
         }
 
         /// <summary>
@@ -472,8 +472,8 @@ namespace Box2D.Common
 
         public static float distanceSquared(Vec2 v1, Vec2 v2)
         {
-            float dx = (v1.x - v2.x);
-            float dy = (v1.y - v2.y);
+            float dx = (v1.X - v2.X);
+            float dy = (v1.Y - v2.Y);
             return dx * dx + dy * dy;
         }
 

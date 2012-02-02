@@ -46,8 +46,8 @@ namespace Box2D.Collision
 
         public virtual void Set(RayCastInput rci)
         {
-            P1.set_Renamed(rci.P1);
-            P2.set_Renamed(rci.P2);
+            P1.Set(rci.P1);
+            P2.Set(rci.P2);
             MaxFraction = rci.MaxFraction;
         }
     }

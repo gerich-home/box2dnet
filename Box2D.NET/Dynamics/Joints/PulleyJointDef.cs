@@ -94,10 +94,10 @@ namespace Box2D.Dynamics.Joints
             groundAnchorB = ga2;
             localAnchorA = bodyA.GetLocalPoint(anchor1);
             localAnchorB = bodyB.GetLocalPoint(anchor2);
-            Vec2 d1 = anchor1.sub(ga1);
-            lengthA = d1.length();
-            Vec2 d2 = anchor2.sub(ga2);
-            lengthB = d2.length();
+            Vec2 d1 = anchor1.Sub(ga1);
+            lengthA = d1.Length();
+            Vec2 d2 = anchor2.Sub(ga2);
+            lengthB = d2.Length();
             ratio = r;
             Debug.Assert(ratio > Settings.EPSILON);
         }

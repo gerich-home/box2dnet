@@ -69,7 +69,7 @@ namespace Box2D.Common
         /// <summary>Set this to equal another transform. </summary>
         public Transform set_Renamed(Transform xf)
         {
-            p.set_Renamed(xf.p);
+            p.Set(xf.p);
             q.set_Renamed(xf.q);
             return this;
         }
@@ -81,59 +81,59 @@ namespace Box2D.Common
         /// <param name="angle"></param>
         public void set_Renamed(Vec2 p, float angle)
         {
-            this.p.set_Renamed(p);
+            this.p.Set(p);
             q.set_Renamed(angle);
         }
 
         /// <summary>Set this to the identity transform. </summary>
         public void setIdentity()
         {
-            p.setZero();
+            p.SetZero();
             q.setIdentity();
         }
 
         public static Vec2 mul(Transform T, Vec2 v)
         {
-            return new Vec2((T.q.c * v.x - T.q.s * v.y) + T.p.x, (T.q.s * v.x + T.q.c * v.y) + T.p.y);
+            return new Vec2((T.q.c * v.X - T.q.s * v.Y) + T.p.X, (T.q.s * v.X + T.q.c * v.Y) + T.p.Y);
         }
 
         public static void mulToOut(Transform T, Vec2 v, Vec2 out_Renamed)
         {
-            float tempy = (T.q.s * v.x + T.q.c * v.y) + T.p.y;
-            out_Renamed.x = (T.q.c * v.x - T.q.s * v.y) + T.p.x;
-            out_Renamed.y = tempy;
+            float tempy = (T.q.s * v.X + T.q.c * v.Y) + T.p.Y;
+            out_Renamed.X = (T.q.c * v.X - T.q.s * v.Y) + T.p.X;
+            out_Renamed.Y = tempy;
         }
 
         public static void mulToOutUnsafe(Transform T, Vec2 v, Vec2 out_Renamed)
         {
             Debug.Assert(v != out_Renamed);
-            out_Renamed.x = (T.q.c * v.x - T.q.s * v.y) + T.p.x;
-            out_Renamed.y = (T.q.s * v.x + T.q.c * v.y) + T.p.y;
+            out_Renamed.X = (T.q.c * v.X - T.q.s * v.Y) + T.p.X;
+            out_Renamed.Y = (T.q.s * v.X + T.q.c * v.Y) + T.p.Y;
         }
 
         public static Vec2 mulTrans(Transform T, Vec2 v)
         {
-            float px = v.x - T.p.x;
-            float py = v.y - T.p.y;
+            float px = v.X - T.p.X;
+            float py = v.Y - T.p.Y;
             return new Vec2((T.q.c * px + T.q.s * py), ((-T.q.s) * px + T.q.c * py));
         }
 
         public static void mulTransToOut(Transform T, Vec2 v, Vec2 out_Renamed)
         {
-            float px = v.x - T.p.x;
-            float py = v.y - T.p.y;
+            float px = v.X - T.p.X;
+            float py = v.Y - T.p.Y;
             float tempy = ((-T.q.s) * px + T.q.c * py);
-            out_Renamed.x = (T.q.c * px + T.q.s * py);
-            out_Renamed.y = tempy;
+            out_Renamed.X = (T.q.c * px + T.q.s * py);
+            out_Renamed.Y = tempy;
         }
 
         public static void mulTransToOutUnsafe(Transform T, Vec2 v, Vec2 out_Renamed)
         {
             Debug.Assert(v != out_Renamed);
-            float px = v.x - T.p.x;
-            float py = v.y - T.p.y;
-            out_Renamed.x = (T.q.c * px + T.q.s * py);
-            out_Renamed.y = (-T.q.s * px + T.q.c * py);
+            float px = v.X - T.p.X;
+            float py = v.Y - T.p.Y;
+            out_Renamed.X = (T.q.c * px + T.q.s * py);
+            out_Renamed.Y = (-T.q.s * px + T.q.c * py);
         }
 
         public static Transform mul(Transform A, Transform B)
@@ -141,7 +141,7 @@ namespace Box2D.Common
             Transform C = new Transform();
             Rot.mulUnsafe(A.q, B.q, C.q);
             Rot.mulToOutUnsafe(A.q, B.p, C.p);
-            C.p.addLocal(A.p);
+            C.p.AddLocal(A.p);
             return C;
         }
 
@@ -150,7 +150,7 @@ namespace Box2D.Common
             Debug.Assert(out_Renamed != A);
             Rot.mul(A.q, B.q, out_Renamed.q);
             Rot.mulToOut(A.q, B.p, out_Renamed.p);
-            out_Renamed.p.addLocal(A.p);
+            out_Renamed.p.AddLocal(A.p);
         }
 
         public static void mulToOutUnsafe(Transform A, Transform B, Transform out_Renamed)
@@ -159,7 +159,7 @@ namespace Box2D.Common
             Debug.Assert(out_Renamed != A);
             Rot.mulUnsafe(A.q, B.q, out_Renamed.q);
             Rot.mulToOutUnsafe(A.q, B.p, out_Renamed.p);
-            out_Renamed.p.addLocal(A.p);
+            out_Renamed.p.AddLocal(A.p);
         }
 
         private static Vec2 pool = new Vec2();
@@ -168,7 +168,7 @@ namespace Box2D.Common
         {
             Transform C = new Transform();
             Rot.mulTransUnsafe(A.q, B.q, C.q);
-            pool.set_Renamed(B.p).subLocal(A.p);
+            pool.Set(B.p).SubLocal(A.p);
             Rot.mulTransUnsafe(A.q, pool, C.p);
             return C;
         }
@@ -177,7 +177,7 @@ namespace Box2D.Common
         {
             Debug.Assert(out_Renamed != A);
             Rot.mulTrans(A.q, B.q, out_Renamed.q);
-            pool.set_Renamed(B.p).subLocal(A.p);
+            pool.Set(B.p).SubLocal(A.p);
             Rot.mulTrans(A.q, pool, out_Renamed.p);
         }
 
@@ -186,7 +186,7 @@ namespace Box2D.Common
             Debug.Assert(out_Renamed != A);
             Debug.Assert(out_Renamed != B);
             Rot.mulTransUnsafe(A.q, B.q, out_Renamed.q);
-            pool.set_Renamed(B.p).subLocal(A.p);
+            pool.Set(B.p).SubLocal(A.p);
             Rot.mulTransUnsafe(A.q, pool, out_Renamed.p);
         }
 

@@ -59,7 +59,7 @@ namespace Box2D.Collision.Shapes
         public override Shape Clone()
         {
             CircleShape shape = new CircleShape();
-            shape.P.set_Renamed(P);
+            shape.P.Set(P);
             shape.Radius = Radius;
             return shape;
         }
@@ -119,10 +119,10 @@ namespace Box2D.Collision.Shapes
         {
             Vec2 center = pool1;
             Rot.mulToOutUnsafe(transform.q, P, center);
-            center.addLocal(transform.p);
+            center.AddLocal(transform.p);
 
-            Vec2 d = center.subLocal(p).negateLocal();
-            return Vec2.dot(d, d) <= Radius * Radius;
+            Vec2 d = center.SubLocal(p).NegateLocal();
+            return Vec2.Dot(d, d) <= Radius * Radius;
         }
 
         // Collision Detection in Interactive 3D Environments by Gino van den Bergen
@@ -136,14 +136,14 @@ namespace Box2D.Collision.Shapes
             Vec2 r = pool3;
 
             Rot.mulToOutUnsafe(transform.q, P, position);
-            position.addLocal(transform.p);
-            s.set_Renamed(input.P1).subLocal(position);
-            float b = Vec2.dot(s, s) - Radius * Radius;
+            position.AddLocal(transform.p);
+            s.Set(input.P1).SubLocal(position);
+            float b = Vec2.Dot(s, s) - Radius * Radius;
 
             // Solve quadratic equation.
-            r.set_Renamed(input.P2).subLocal(input.P1);
-            float c = Vec2.dot(s, r);
-            float rr = Vec2.dot(r, r);
+            r.Set(input.P2).SubLocal(input.P1);
+            float c = Vec2.Dot(s, r);
+            float rr = Vec2.Dot(r, r);
             float sigma = c * c - rr * b;
 
             // Check for negative discriminant and short segment.
@@ -160,9 +160,9 @@ namespace Box2D.Collision.Shapes
             {
                 a /= rr;
                 output.Fraction = a;
-                output.Normal.set_Renamed(r).mulLocal(a);
-                output.Normal.addLocal(s);
-                output.Normal.normalize();
+                output.Normal.Set(r).MulLocal(a);
+                output.Normal.AddLocal(s);
+                output.Normal.Normalize();
                 return true;
             }
 
@@ -173,21 +173,21 @@ namespace Box2D.Collision.Shapes
         {
             Vec2 p = pool1;
             Rot.mulToOutUnsafe(transform.q, P, p);
-            p.addLocal(transform.p);
+            p.AddLocal(transform.p);
 
-            aabb.LowerBound.x = p.x - Radius;
-            aabb.LowerBound.y = p.y - Radius;
-            aabb.UpperBound.x = p.x + Radius;
-            aabb.UpperBound.y = p.y + Radius;
+            aabb.LowerBound.X = p.X - Radius;
+            aabb.LowerBound.Y = p.Y - Radius;
+            aabb.UpperBound.X = p.X + Radius;
+            aabb.UpperBound.Y = p.Y + Radius;
         }
 
         public override void ComputeMass(MassData massData, float density)
         {
             massData.Mass = density * Settings.PI * Radius * Radius;
-            massData.Center.set_Renamed(P);
+            massData.Center.Set(P);
 
             // inertia about the local origin
-            massData.I = massData.Mass * (0.5f * Radius * Radius + Vec2.dot(P, P));
+            massData.I = massData.Mass * (0.5f * Radius * Radius + Vec2.Dot(P, P));
         }
 
         // djm pooled from above

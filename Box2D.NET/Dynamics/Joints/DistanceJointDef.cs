@@ -107,10 +107,10 @@ namespace Box2D.Dynamics.Joints
         {
             bodyA = b1;
             bodyB = b2;
-            localAnchorA.set_Renamed(bodyA.GetLocalPoint(anchor1));
-            localAnchorB.set_Renamed(bodyB.GetLocalPoint(anchor2));
-            Vec2 d = anchor2.sub(anchor1);
-            length = d.length();
+            localAnchorA.Set(bodyA.GetLocalPoint(anchor1));
+            localAnchorB.Set(bodyB.GetLocalPoint(anchor2));
+            Vec2 d = anchor2.Sub(anchor1);
+            length = d.Length();
         }
     }
 }

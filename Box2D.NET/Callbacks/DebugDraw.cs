@@ -176,7 +176,7 @@ namespace Box2D.Callbacks
 
         public void DrawString(Vec2 pos, String s, Color3f color)
         {
-            DrawString(pos.x, pos.y, s, color);
+            DrawString(pos.X, pos.Y, s, color);
         }
 
         /// <param name="x"></param>
@@ -214,7 +214,7 @@ namespace Box2D.Callbacks
         /// <param name="argScreen"></param>
         public virtual void GetWorldToScreenToOut(float worldX, float worldY, Vec2 argScreen)
         {
-            argScreen.set_Renamed(worldX, worldY);
+            argScreen.Set(worldX, worldY);
             ViewportTranform.getWorldToScreen(argScreen, argScreen);
         }
 
@@ -252,7 +252,7 @@ namespace Box2D.Callbacks
         /// <param name="argWorld"></param>
         public virtual void GetScreenToWorldToOut(float screenX, float screenY, Vec2 argWorld)
         {
-            argWorld.set_Renamed(screenX, screenY);
+            argWorld.Set(screenX, screenY);
             ViewportTranform.getScreenToWorld(argWorld, argWorld);
         }
 

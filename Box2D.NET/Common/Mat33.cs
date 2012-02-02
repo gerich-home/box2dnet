@@ -72,21 +72,21 @@ namespace Box2D.Common
 
         public static Vec2 mul22(Mat33 A, Vec2 v)
         {
-            return new Vec2(A.ex.x * v.x + A.ey.x * v.y, A.ex.y * v.x + A.ey.y * v.y);
+            return new Vec2(A.ex.x * v.X + A.ey.x * v.Y, A.ex.y * v.X + A.ey.y * v.Y);
         }
 
         public static void mul22ToOut(Mat33 A, Vec2 v, Vec2 out_Renamed)
         {
-            float tempx = A.ex.x * v.x + A.ey.x * v.y;
-            out_Renamed.y = A.ex.y * v.x + A.ey.y * v.y;
-            out_Renamed.x = tempx;
+            float tempx = A.ex.x * v.X + A.ey.x * v.Y;
+            out_Renamed.Y = A.ex.y * v.X + A.ey.y * v.Y;
+            out_Renamed.X = tempx;
         }
 
         public static void mul22ToOutUnsafe(Mat33 A, Vec2 v, Vec2 out_Renamed)
         {
             Debug.Assert(v != out_Renamed);
-            out_Renamed.y = A.ex.y * v.x + A.ey.y * v.y;
-            out_Renamed.x = A.ex.x * v.x + A.ey.x * v.y;
+            out_Renamed.Y = A.ex.y * v.X + A.ey.y * v.Y;
+            out_Renamed.X = A.ex.x * v.X + A.ey.x * v.Y;
         }
 
         public static void mulToOut(Mat33 A, Vec3 v, Vec3 out_Renamed)
@@ -136,8 +136,8 @@ namespace Box2D.Common
             {
                 det = 1.0f / det;
             }
-            out_Renamed.x = det * (a22 * b.x - a12 * b.y);
-            out_Renamed.y = det * (a11 * b.y - a21 * b.x);
+            out_Renamed.X = det * (a22 * b.X - a12 * b.Y);
+            out_Renamed.Y = det * (a11 * b.Y - a21 * b.X);
         }
 
         // djm pooling from below

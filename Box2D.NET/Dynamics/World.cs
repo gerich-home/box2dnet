@@ -111,7 +111,7 @@ namespace Box2D.Dynamics
             m_stepComplete = true;
 
             SleepingAllowed = true;
-            m_gravity.set_Renamed(gravity);
+            m_gravity.Set(gravity);
 
             Flags = CLEAR_FORCES;
 
@@ -590,7 +590,7 @@ namespace Box2D.Dynamics
         {
             for (Body body = BodyList; body != null; body = body.Next)
             {
-                body.Force.setZero();
+                body.Force.SetZero();
                 body.Torque = 0.0f;
             }
         }
@@ -689,10 +689,10 @@ namespace Box2D.Dynamics
                             FixtureProxy proxy = f.Proxies[i];
                             AABB aabb = ContactManager.BroadPhase.GetFatAABB(proxy.ProxyId);
                             Vec2[] vs = avs.Get(4);
-                            vs[0].set_Renamed(aabb.LowerBound.x, aabb.LowerBound.y);
-                            vs[1].set_Renamed(aabb.UpperBound.x, aabb.LowerBound.y);
-                            vs[2].set_Renamed(aabb.UpperBound.x, aabb.UpperBound.y);
-                            vs[3].set_Renamed(aabb.LowerBound.x, aabb.UpperBound.y);
+                            vs[0].Set(aabb.LowerBound.X, aabb.LowerBound.Y);
+                            vs[1].Set(aabb.UpperBound.X, aabb.LowerBound.Y);
+                            vs[2].Set(aabb.UpperBound.X, aabb.UpperBound.Y);
+                            vs[3].Set(aabb.LowerBound.X, aabb.UpperBound.Y);
 
                             DebugDraw.DrawPolygon(vs, 4, color);
                         }
@@ -705,7 +705,7 @@ namespace Box2D.Dynamics
                 for (Body b = BodyList; b != null; b = b.Next)
                 {
                     xf.set_Renamed(b.GetTransform());
-                    xf.p.set_Renamed(b.WorldCenter);
+                    xf.p.Set(b.WorldCenter);
                     DebugDraw.DrawTransform(xf);
                 }
             }
@@ -746,8 +746,8 @@ namespace Box2D.Dynamics
             wrcwrapper.BroadPhase = ContactManager.BroadPhase;
             wrcwrapper.Callback = callback;
             input.MaxFraction = 1.0f;
-            input.P1.set_Renamed(point1);
-            input.P2.set_Renamed(point2);
+            input.P1.Set(point1);
+            input.P2.Set(point2);
             ContactManager.BroadPhase.Raycast(wrcwrapper, input);
         }
 
@@ -910,7 +910,7 @@ namespace Box2D.Dynamics
             }
             set
             {
-                m_gravity.set_Renamed(value);
+                m_gravity.Set(value);
             }
         }
 
@@ -1551,8 +1551,8 @@ namespace Box2D.Dynamics
                         if (fixture.UserData != null && fixture.UserData.Equals(LIQUID_INT))
                         {
                             Body b = fixture.Body;
-                            liquidOffset.set_Renamed(b.m_linearVelocity);
-                            float linVelLength = b.m_linearVelocity.length();
+                            liquidOffset.Set(b.m_linearVelocity);
+                            float linVelLength = b.m_linearVelocity.Length();
                             if (averageLinearVel == -1)
                             {
                                 averageLinearVel = linVelLength;
@@ -1561,9 +1561,9 @@ namespace Box2D.Dynamics
                             {
                                 averageLinearVel = .98f * averageLinearVel + .02f * linVelLength;
                             }
-                            liquidOffset.mulLocal(liquidLength / averageLinearVel / 2);
-                            circCenterMoved.set_Renamed(center).addLocal(liquidOffset);
-                            center.subLocal(liquidOffset);
+                            liquidOffset.MulLocal(liquidLength / averageLinearVel / 2);
+                            circCenterMoved.Set(center).AddLocal(liquidOffset);
+                            center.SubLocal(liquidOffset);
                             DebugDraw.DrawSegment(center, circCenterMoved, liquidColor);
                             return;
                         }
@@ -1612,7 +1612,7 @@ namespace Box2D.Dynamics
                             Transform.mulToOutUnsafe(xf, vertices[i], v2);
                             DebugDraw.DrawSegment(v1, v2, color);
                             DebugDraw.DrawCircle(v1, 0.05f, color);
-                            v1.set_Renamed(v2);
+                            v1.Set(v2);
                         }
                     }
                     break;
@@ -1659,8 +1659,8 @@ namespace Box2D.Dynamics
             {
                 float fraction = output.Fraction;
                 // Vec2 point = (1.0f - fraction) * input.p1 + fraction * input.p2;
-                temp.set_Renamed(input.P2).mulLocal(fraction);
-                point.set_Renamed(input.P1).mulLocal(1 - fraction).addLocal(temp);
+                temp.Set(input.P2).MulLocal(fraction);
+                point.Set(input.P1).MulLocal(1 - fraction).AddLocal(temp);
                 return Callback.ReportFixture(fixture, point, output.Normal, fraction);
             }
 

@@ -152,8 +152,8 @@ namespace Box2D.Collision
             int numOut = 0;
 
             // Calculate the distance of end points to the line
-            float distance0 = Vec2.dot(normal, vIn[0].v) - offset;
-            float distance1 = Vec2.dot(normal, vIn[1].v) - offset;
+            float distance0 = Vec2.Dot(normal, vIn[0].v) - offset;
+            float distance1 = Vec2.Dot(normal, vIn[1].v) - offset;
 
             // If the points are behind the plane
             if (distance0 <= 0.0f)
@@ -171,7 +171,7 @@ namespace Box2D.Collision
                 // Find intersection point of edge and plane
                 float interp = distance0 / (distance0 - distance1);
                 // vOut[numOut].v = vIn[0].v + interp * (vIn[1].v - vIn[0].v);
-                vOut[numOut].v.set_Renamed(vIn[1].v).subLocal(vIn[0].v).mulLocal(interp).addLocal(vIn[0].v);
+                vOut[numOut].v.Set(vIn[1].v).SubLocal(vIn[0].v).MulLocal(interp).AddLocal(vIn[0].v);
 
                 // VertexA is hitting edgeB.
                 vOut[numOut].id.IndexA = (sbyte)vertexIndexA;
@@ -206,8 +206,8 @@ namespace Box2D.Collision
             // before inline:
             Transform.mulToOut(xfA, circle1.P, pA);
             Transform.mulToOut(xfB, circle2.P, pB);
-            d.set_Renamed(pB).subLocal(pA);
-            float distSqr = d.x * d.x + d.y * d.y;
+            d.Set(pB).SubLocal(pA);
+            float distSqr = d.X * d.X + d.Y * d.Y;
 
             // after inline:
             // final Vec2 v = circle1.m_p;
@@ -231,11 +231,11 @@ namespace Box2D.Collision
             }
 
             manifold.Type = Manifold.ManifoldType.Circles;
-            manifold.LocalPoint.set_Renamed(circle1.P);
-            manifold.LocalNormal.setZero();
+            manifold.LocalPoint.Set(circle1.P);
+            manifold.LocalNormal.SetZero();
             manifold.PointCount = 1;
 
-            manifold.Points[0].LocalPoint.set_Renamed(circle2.P);
+            manifold.Points[0].LocalPoint.Set(circle2.P);
             manifold.Points[0].Id.Zero();
         }
 
@@ -261,8 +261,8 @@ namespace Box2D.Collision
             Transform.mulToOut(xfB, circle.P, c);
             Transform.mulTransToOut(xfA, c, cLocal);
 
-            float cLocalx = cLocal.x;
-            float cLocaly = cLocal.y;
+            float cLocalx = cLocal.X;
+            float cLocaly = cLocal.Y;
             // after inline:
             // final float cy = xfB.p.y + xfB.q.ex.y * v.x + xfB.q.ey.y * v.y;
             // final float cx = xfB.p.x + xfB.q.ex.x * v.x + xfB.q.ey.x * v.y;
@@ -291,10 +291,10 @@ namespace Box2D.Collision
                 // float s = Vec2.dot(normals[i], temp);
                 // after inline
                 Vec2 vertex = vertices[i];
-                float tempx = cLocalx - vertex.x;
-                float tempy = cLocaly - vertex.y;
+                float tempx = cLocalx - vertex.X;
+                float tempy = cLocaly - vertex.Y;
                 Vec2 normal = normals[i];
-                float s = normal.x * tempx + normal.y * tempy;
+                float s = normal.X * tempx + normal.Y * tempy;
 
 
                 if (s > radius)
@@ -328,13 +328,13 @@ namespace Box2D.Collision
                 // manifold.points[0].localPoint.set(circle.m_p);
                 // after inline:
                 Vec2 normal = normals[normalIndex];
-                manifold.LocalNormal.x = normal.x;
-                manifold.LocalNormal.y = normal.y;
-                manifold.LocalPoint.x = (v1.x + v2.x) * .5f;
-                manifold.LocalPoint.y = (v1.y + v2.y) * .5f;
+                manifold.LocalNormal.X = normal.X;
+                manifold.LocalNormal.Y = normal.Y;
+                manifold.LocalPoint.X = (v1.X + v2.X) * .5f;
+                manifold.LocalPoint.Y = (v1.Y + v2.Y) * .5f;
                 ManifoldPoint mpoint = manifold.Points[0];
-                mpoint.LocalPoint.x = circle.P.x;
-                mpoint.LocalPoint.y = circle.P.y;
+                mpoint.LocalPoint.X = circle.P.X;
+                mpoint.LocalPoint.Y = circle.P.Y;
                 mpoint.Id.Zero();
                 // end inline
                 return;
@@ -349,24 +349,24 @@ namespace Box2D.Collision
             // temp2.set(v1).subLocal(v2);
             // float u2 = Vec2.dot(temp, temp2);
             // after inline:
-            float tempX = cLocalx - v1.x;
-            float tempY = cLocaly - v1.y;
-            float temp2X = v2.x - v1.x;
-            float temp2Y = v2.y - v1.y;
+            float tempX = cLocalx - v1.X;
+            float tempY = cLocaly - v1.Y;
+            float temp2X = v2.X - v1.X;
+            float temp2Y = v2.Y - v1.Y;
             float u1 = tempX * temp2X + tempY * temp2Y;
 
-            float temp3X = cLocalx - v2.x;
-            float temp3Y = cLocaly - v2.y;
-            float temp4X = v1.x - v2.x;
-            float temp4Y = v1.y - v2.y;
+            float temp3X = cLocalx - v2.X;
+            float temp3Y = cLocaly - v2.Y;
+            float temp4X = v1.X - v2.X;
+            float temp4Y = v1.Y - v2.Y;
             float u2 = temp3X * temp4X + temp3Y * temp4Y;
             // end inline
 
             if (u1 <= 0f)
             {
                 // inlined
-                float dx = cLocalx - v1.x;
-                float dy = cLocaly - v1.y;
+                float dx = cLocalx - v1.X;
+                float dy = cLocaly - v1.Y;
                 if (dx * dx + dy * dy > radius * radius)
                 {
                     return;
@@ -377,19 +377,19 @@ namespace Box2D.Collision
                 // before inline:
                 // manifold.localNormal.set(cLocal).subLocal(v1);
                 // after inline:
-                manifold.LocalNormal.x = cLocalx - v1.x;
-                manifold.LocalNormal.y = cLocaly - v1.y;
+                manifold.LocalNormal.X = cLocalx - v1.X;
+                manifold.LocalNormal.Y = cLocaly - v1.Y;
                 // end inline
-                manifold.LocalNormal.normalize();
-                manifold.LocalPoint.set_Renamed(v1);
-                manifold.Points[0].LocalPoint.set_Renamed(circle.P);
+                manifold.LocalNormal.Normalize();
+                manifold.LocalPoint.Set(v1);
+                manifold.Points[0].LocalPoint.Set(circle.P);
                 manifold.Points[0].Id.Zero();
             }
             else if (u2 <= 0.0f)
             {
                 // inlined
-                float dx = cLocalx - v2.x;
-                float dy = cLocaly - v2.y;
+                float dx = cLocalx - v2.X;
+                float dy = cLocaly - v2.Y;
                 if (dx * dx + dy * dy > radius * radius)
                 {
                     return;
@@ -400,12 +400,12 @@ namespace Box2D.Collision
                 // before inline:
                 // manifold.localNormal.set(cLocal).subLocal(v2);
                 // after inline:
-                manifold.LocalNormal.x = cLocalx - v2.x;
-                manifold.LocalNormal.y = cLocaly - v2.y;
+                manifold.LocalNormal.X = cLocalx - v2.X;
+                manifold.LocalNormal.Y = cLocaly - v2.Y;
                 // end inline
-                manifold.LocalNormal.normalize();
-                manifold.LocalPoint.set_Renamed(v2);
-                manifold.Points[0].LocalPoint.set_Renamed(circle.P);
+                manifold.LocalNormal.Normalize();
+                manifold.LocalPoint.Set(v2);
+                manifold.Points[0].LocalPoint.Set(circle.P);
                 manifold.Points[0].Id.Zero();
             }
             else
@@ -421,13 +421,13 @@ namespace Box2D.Collision
                 // return;
                 // }
                 // after inline:
-                float fcx = (v1.x + v2.x) * .5f;
-                float fcy = (v1.y + v2.y) * .5f;
+                float fcx = (v1.X + v2.X) * .5f;
+                float fcy = (v1.Y + v2.Y) * .5f;
 
                 float tx = cLocalx - fcx;
                 float ty = cLocaly - fcy;
                 Vec2 normal = normals[vertIndex1];
-                separation = tx * normal.x + ty * normal.y;
+                separation = tx * normal.X + ty * normal.Y;
                 if (separation > radius)
                 {
                     return;
@@ -436,10 +436,10 @@ namespace Box2D.Collision
 
                 manifold.PointCount = 1;
                 manifold.Type = Manifold.ManifoldType.FaceA;
-                manifold.LocalNormal.set_Renamed(normals[vertIndex1]);
-                manifold.LocalPoint.x = fcx; // (faceCenter)
-                manifold.LocalPoint.y = fcy;
-                manifold.Points[0].LocalPoint.set_Renamed(circle.P);
+                manifold.LocalNormal.Set(normals[vertIndex1]);
+                manifold.LocalPoint.X = fcx; // (faceCenter)
+                manifold.LocalPoint.Y = fcy;
+                manifold.Points[0].LocalPoint.Set(circle.P);
                 manifold.Points[0].Id.Zero();
             }
         }
@@ -479,8 +479,8 @@ namespace Box2D.Collision
             Rot.mulToOutUnsafe(xf1.q, normals1[edge1], normal1World);
             // Vec2 normal1 = MulT(xf2.R, normal1World);
             Rot.mulTransUnsafe(xf2.q, normal1World, normal1);
-            float normal1x = normal1.x;
-            float normal1y = normal1.y;
+            float normal1x = normal1.X;
+            float normal1y = normal1.Y;
             // after inline:
             // R.mulToOut(v,out);
             // final Mat22 R = xf1.q;
@@ -499,7 +499,7 @@ namespace Box2D.Collision
             for (int i = 0; i < count2; ++i)
             {
                 Vec2 a = vertices2[i];
-                float dot = a.x * normal1x + a.y * normal1y;
+                float dot = a.X * normal1x + a.Y * normal1y;
                 if (dot < minDot)
                 {
                     minDot = dot;
@@ -513,7 +513,7 @@ namespace Box2D.Collision
             Transform.mulToOut(xf1, vertices1[edge1], v1);
             Transform.mulToOut(xf2, vertices2[index], v2);
 
-            float separation = Vec2.dot(v2.subLocal(v1), normal1World);
+            float separation = Vec2.Dot(v2.SubLocal(v1), normal1World);
             return separation;
 
             // after inline:
@@ -551,11 +551,11 @@ namespace Box2D.Collision
             // before inline:
             Transform.mulToOutUnsafe(xf2, poly2.Centroid, d);
             Transform.mulToOutUnsafe(xf1, poly1.Centroid, temp);
-            d.subLocal(temp);
+            d.SubLocal(temp);
 
             Rot.mulTransUnsafe(xf1.q, d, dLocal1);
-            float dLocal1x = dLocal1.x;
-            float dLocal1y = dLocal1.y;
+            float dLocal1x = dLocal1.X;
+            float dLocal1y = dLocal1.Y;
             // after inline:
             // final float predy = xf2.p.y + xf2.q.ex.y * v.x + xf2.q.ey.y * v.y;
             // final float predx = xf2.p.x + xf2.q.ex.x * v.x + xf2.q.ey.x * v.y;
@@ -578,7 +578,7 @@ namespace Box2D.Collision
             for (int i = 0; i < count1; i++)
             {
                 Vec2 normal = normals1[i];
-                dot = normal.x * dLocal1x + normal.y * dLocal1y;
+                dot = normal.X * dLocal1x + normal.Y * dLocal1y;
                 if (dot > maxDot)
                 {
                     maxDot = dot;
@@ -671,7 +671,7 @@ namespace Box2D.Collision
             float minDot = Single.MaxValue;
             for (int i = 0; i < count2; ++i)
             {
-                float dot = Vec2.dot(normal1, normals2[i]);
+                float dot = Vec2.Dot(normal1, normals2[i]);
                 if (dot < minDot)
                 {
                     minDot = dot;
@@ -778,20 +778,20 @@ namespace Box2D.Collision
 
             int iv1 = edge1;
             int iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
-            v11.set_Renamed(vertices1[iv1]);
-            v12.set_Renamed(vertices1[iv2]);
-            localTangent.set_Renamed(v12).subLocal(v11);
-            localTangent.normalize();
+            v11.Set(vertices1[iv1]);
+            v12.Set(vertices1[iv2]);
+            localTangent.Set(v12).SubLocal(v11);
+            localTangent.Normalize();
 
-            Vec2.crossToOutUnsafe(localTangent, 1f, localNormal); // Vec2 localNormal = Vec2.cross(dv,
+            Vec2.CrossToOutUnsafe(localTangent, 1f, localNormal); // Vec2 localNormal = Vec2.cross(dv,
             // 1.0f);
 
-            planePoint.set_Renamed(v11).addLocal(v12).mulLocal(.5f); // Vec2 planePoint = 0.5f * (v11
+            planePoint.Set(v11).AddLocal(v12).MulLocal(.5f); // Vec2 planePoint = 0.5f * (v11
             // + v12);
 
             Rot.mulToOutUnsafe(xf1.q, localTangent, tangent); // Vec2 sideNormal = Mul(xf1.R, v12
             // - v11);
-            Vec2.crossToOutUnsafe(tangent, 1f, normal); // Vec2 frontNormal = Vec2.cross(sideNormal,
+            Vec2.CrossToOutUnsafe(tangent, 1f, normal); // Vec2 frontNormal = Vec2.cross(sideNormal,
             // 1.0f);
 
             Transform.mulToOut(xf1, v11, v11);
@@ -800,11 +800,11 @@ namespace Box2D.Collision
             // v12 = Mul(xf1, v12);
 
             // Face offset
-            float frontOffset = Vec2.dot(normal, v11);
+            float frontOffset = Vec2.Dot(normal, v11);
 
             // Side offsets, extended by polytope skin thickness.
-            float sideOffset1 = -Vec2.dot(tangent, v11) + totalRadius;
-            float sideOffset2 = Vec2.dot(tangent, v12) + totalRadius;
+            float sideOffset1 = -Vec2.Dot(tangent, v11) + totalRadius;
+            float sideOffset2 = Vec2.Dot(tangent, v12) + totalRadius;
 
             // Clip incident edge against extruded edge1 side edges.
             // ClipVertex clipPoints1[2];
@@ -813,9 +813,9 @@ namespace Box2D.Collision
 
             // Clip to box side 1
             // np = ClipSegmentToLine(clipPoints1, incidentEdge, -sideNormal, sideOffset1);
-            tangent.negateLocal();
+            tangent.NegateLocal();
             np = ClipSegmentToLine(clipPoints1, incidentEdge, tangent, sideOffset1, iv1);
-            tangent.negateLocal();
+            tangent.NegateLocal();
 
             if (np < 2)
             {
@@ -831,13 +831,13 @@ namespace Box2D.Collision
             }
 
             // Now clipPoints2 contains the clipped points.
-            manifold.LocalNormal.set_Renamed(localNormal);
-            manifold.LocalPoint.set_Renamed(planePoint);
+            manifold.LocalNormal.Set(localNormal);
+            manifold.LocalPoint.Set(planePoint);
 
             int pointCount = 0;
             for (int i = 0; i < Settings.maxManifoldPoints; ++i)
             {
-                float separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
+                float separation = Vec2.Dot(normal, clipPoints2[i].v) - frontOffset;
 
                 if (separation <= totalRadius)
                 {
@@ -879,11 +879,11 @@ namespace Box2D.Collision
 
             Vec2 A = edgeA.Vertex1;
             Vec2 B = edgeA.Vertex2;
-            e.set_Renamed(B).subLocal(A);
+            e.Set(B).SubLocal(A);
 
             // Barycentric coordinates
-            float u = Vec2.dot(e, temp.set_Renamed(B).subLocal(Q));
-            float v = Vec2.dot(e, temp.set_Renamed(Q).subLocal(A));
+            float u = Vec2.Dot(e, temp.Set(B).SubLocal(Q));
+            float v = Vec2.Dot(e, temp.Set(Q).SubLocal(A));
 
             float radius = edgeA.Radius + circleB.Radius;
 
@@ -895,8 +895,8 @@ namespace Box2D.Collision
             if (v <= 0.0f)
             {
                 Vec2 _P = A;
-                d.set_Renamed(Q).subLocal(_P);
-                float dd = Vec2.dot(d, d);
+                d.Set(Q).SubLocal(_P);
+                float dd = Vec2.Dot(d, d);
                 if (dd > radius * radius)
                 {
                     return;
@@ -907,8 +907,8 @@ namespace Box2D.Collision
                 {
                     Vec2 A1 = edgeA.Vertex0;
                     Vec2 B1 = A;
-                    e1.set_Renamed(B1).subLocal(A1);
-                    float u1 = Vec2.dot(e1, temp.set_Renamed(B1).subLocal(Q));
+                    e1.Set(B1).SubLocal(A1);
+                    float u1 = Vec2.Dot(e1, temp.Set(B1).SubLocal(Q));
 
                     // Is the circle in Region AB of the previous edge?
                     if (u1 > 0.0f)
@@ -921,11 +921,11 @@ namespace Box2D.Collision
                 cf.TypeA = (sbyte)ContactID.Type.Vertex;
                 manifold.PointCount = 1;
                 manifold.Type = Manifold.ManifoldType.Circles;
-                manifold.LocalNormal.setZero();
-                manifold.LocalPoint.set_Renamed(_P);
+                manifold.LocalNormal.SetZero();
+                manifold.LocalPoint.Set(_P);
                 // manifold.points[0].id.key = 0;
                 manifold.Points[0].Id.Set(cf);
-                manifold.Points[0].LocalPoint.set_Renamed(circleB.P);
+                manifold.Points[0].LocalPoint.Set(circleB.P);
                 return;
             }
 
@@ -933,8 +933,8 @@ namespace Box2D.Collision
             if (u <= 0.0f)
             {
                 Vec2 _P = B;
-                d.set_Renamed(Q).subLocal(_P);
-                float dd = Vec2.dot(d, d);
+                d.Set(Q).SubLocal(_P);
+                float dd = Vec2.Dot(d, d);
                 if (dd > radius * radius)
                 {
                     return;
@@ -946,8 +946,8 @@ namespace Box2D.Collision
                     Vec2 B2 = edgeA.Vertex3;
                     Vec2 A2 = B;
                     Vec2 e2 = e1;
-                    e2.set_Renamed(B2).subLocal(A2);
-                    float v2 = Vec2.dot(e2, temp.set_Renamed(Q).subLocal(A2));
+                    e2.Set(B2).SubLocal(A2);
+                    float v2 = Vec2.Dot(e2, temp.Set(Q).SubLocal(A2));
 
                     // Is the circle in Region AB of the next edge?
                     if (v2 > 0.0f)
@@ -960,45 +960,45 @@ namespace Box2D.Collision
                 cf.TypeA = (sbyte)ContactID.Type.Vertex;
                 manifold.PointCount = 1;
                 manifold.Type = Manifold.ManifoldType.Circles;
-                manifold.LocalNormal.setZero();
-                manifold.LocalPoint.set_Renamed(_P);
+                manifold.LocalNormal.SetZero();
+                manifold.LocalPoint.Set(_P);
                 // manifold.points[0].id.key = 0;
                 manifold.Points[0].Id.Set(cf);
-                manifold.Points[0].LocalPoint.set_Renamed(circleB.P);
+                manifold.Points[0].LocalPoint.Set(circleB.P);
                 return;
             }
 
             // Region AB
-            float den = Vec2.dot(e, e);
+            float den = Vec2.Dot(e, e);
             Debug.Assert(den > 0.0f);
 
             // Vec2 P = (1.0f / den) * (u * A + v * B);
-            P.set_Renamed(A).mulLocal(u).addLocal(temp.set_Renamed(B).mulLocal(v));
-            P.mulLocal(1.0f / den);
-            d.set_Renamed(Q).subLocal(P);
-            float dd2 = Vec2.dot(d, d);
+            P.Set(A).MulLocal(u).AddLocal(temp.Set(B).MulLocal(v));
+            P.MulLocal(1.0f / den);
+            d.Set(Q).SubLocal(P);
+            float dd2 = Vec2.Dot(d, d);
             if (dd2 > radius * radius)
             {
                 return;
             }
 
-            n.x = -e.y;
-            n.y = e.x;
-            if (Vec2.dot(n, temp.set_Renamed(Q).subLocal(A)) < 0.0f)
+            n.X = -e.Y;
+            n.Y = e.X;
+            if (Vec2.Dot(n, temp.Set(Q).SubLocal(A)) < 0.0f)
             {
-                n.set_Renamed(-n.x, -n.y);
+                n.Set(-n.X, -n.Y);
             }
-            n.normalize();
+            n.Normalize();
 
             cf.IndexA = 0;
             cf.TypeA = (sbyte)ContactID.Type.Face;
             manifold.PointCount = 1;
             manifold.Type = Manifold.ManifoldType.FaceA;
-            manifold.LocalNormal.set_Renamed(n);
-            manifold.LocalPoint.set_Renamed(A);
+            manifold.LocalNormal.Set(n);
+            manifold.LocalPoint.Set(A);
             // manifold.points[0].id.key = 0;
             manifold.Points[0].Id.Set(cf);
-            manifold.Points[0].LocalPoint.set_Renamed(circleB.P);
+            manifold.Points[0].LocalPoint.Set(circleB.P);
         }
 
         private readonly EPCollider collider = new EPCollider();
@@ -1033,7 +1033,7 @@ namespace Box2D.Collision
 
             public virtual void Set(ClipVertex cv)
             {
-                v.set_Renamed(cv.v);
+                v.Set(cv.v);
                 id.Set(cv.id);
             }
         }
@@ -1180,31 +1180,31 @@ namespace Box2D.Collision
                 bool hasVertex0 = edgeA.HasVertex0;
                 bool hasVertex3 = edgeA.HasVertex3;
 
-                edge1.set_Renamed(V2).subLocal(V1);
-                edge1.normalize();
-                Normal1.set_Renamed(edge1.y, -edge1.x);
-                float offset1 = Vec2.dot(Normal1, temp.set_Renamed(CentroidB).subLocal(V1));
+                edge1.Set(V2).SubLocal(V1);
+                edge1.Normalize();
+                Normal1.Set(edge1.Y, -edge1.X);
+                float offset1 = Vec2.Dot(Normal1, temp.Set(CentroidB).SubLocal(V1));
                 float offset0 = 0.0f, offset2 = 0.0f;
                 bool convex1 = false, convex2 = false;
 
                 // Is there a preceding edge?
                 if (hasVertex0)
                 {
-                    edge0.set_Renamed(V1).subLocal(V0);
-                    edge0.normalize();
-                    Normal0.set_Renamed(edge0.y, -edge0.x);
-                    convex1 = Vec2.cross(edge0, edge1) >= 0.0f;
-                    offset0 = Vec2.dot(Normal0, temp.set_Renamed(CentroidB).subLocal(V0));
+                    edge0.Set(V1).SubLocal(V0);
+                    edge0.Normalize();
+                    Normal0.Set(edge0.Y, -edge0.X);
+                    convex1 = Vec2.Cross(edge0, edge1) >= 0.0f;
+                    offset0 = Vec2.Dot(Normal0, temp.Set(CentroidB).SubLocal(V0));
                 }
 
                 // Is there a following edge?
                 if (hasVertex3)
                 {
-                    edge2.set_Renamed(V3).subLocal(V2);
-                    edge2.normalize();
-                    Normal2.set_Renamed(edge2.y, -edge2.x);
-                    convex2 = Vec2.cross(edge1, edge2) > 0.0f;
-                    offset2 = Vec2.dot(Normal2, temp.set_Renamed(CentroidB).subLocal(V2));
+                    edge2.Set(V3).SubLocal(V2);
+                    edge2.Normalize();
+                    Normal2.Set(edge2.Y, -edge2.X);
+                    convex2 = Vec2.Cross(edge1, edge2) > 0.0f;
+                    offset2 = Vec2.Dot(Normal2, temp.Set(CentroidB).SubLocal(V2));
                 }
 
                 // Determine front or back collision. Determine collision normal limits.
@@ -1215,15 +1215,15 @@ namespace Box2D.Collision
                         Front = offset0 >= 0.0f || offset1 >= 0.0f || offset2 >= 0.0f;
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal0);
-                            UpperLimit.set_Renamed(Normal2);
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal0);
+                            UpperLimit.Set(Normal2);
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal1).negateLocal();
-                            UpperLimit.set_Renamed(Normal1).negateLocal();
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal1).NegateLocal();
+                            UpperLimit.Set(Normal1).NegateLocal();
                         }
                     }
                     else if (convex1)
@@ -1231,15 +1231,15 @@ namespace Box2D.Collision
                         Front = offset0 >= 0.0f || (offset1 >= 0.0f && offset2 >= 0.0f);
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal0);
-                            UpperLimit.set_Renamed(Normal1);
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal0);
+                            UpperLimit.Set(Normal1);
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal2).negateLocal();
-                            UpperLimit.set_Renamed(Normal1).negateLocal();
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal2).NegateLocal();
+                            UpperLimit.Set(Normal1).NegateLocal();
                         }
                     }
                     else if (convex2)
@@ -1247,15 +1247,15 @@ namespace Box2D.Collision
                         Front = offset2 >= 0.0f || (offset0 >= 0.0f && offset1 >= 0.0f);
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal1);
-                            UpperLimit.set_Renamed(Normal2);
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal1);
+                            UpperLimit.Set(Normal2);
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal1).negateLocal();
-                            UpperLimit.set_Renamed(Normal0).negateLocal();
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal1).NegateLocal();
+                            UpperLimit.Set(Normal0).NegateLocal();
                         }
                     }
                     else
@@ -1263,15 +1263,15 @@ namespace Box2D.Collision
                         Front = offset0 >= 0.0f && offset1 >= 0.0f && offset2 >= 0.0f;
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal1);
-                            UpperLimit.set_Renamed(Normal1);
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal1);
+                            UpperLimit.Set(Normal1);
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal2).negateLocal();
-                            UpperLimit.set_Renamed(Normal0).negateLocal();
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal2).NegateLocal();
+                            UpperLimit.Set(Normal0).NegateLocal();
                         }
                     }
                 }
@@ -1282,15 +1282,15 @@ namespace Box2D.Collision
                         Front = offset0 >= 0.0f || offset1 >= 0.0f;
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal0);
-                            UpperLimit.set_Renamed(Normal1).negateLocal();
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal0);
+                            UpperLimit.Set(Normal1).NegateLocal();
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal1);
-                            UpperLimit.set_Renamed(Normal1).negateLocal();
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal1);
+                            UpperLimit.Set(Normal1).NegateLocal();
                         }
                     }
                     else
@@ -1298,15 +1298,15 @@ namespace Box2D.Collision
                         Front = offset0 >= 0.0f && offset1 >= 0.0f;
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal1);
-                            UpperLimit.set_Renamed(Normal1).negateLocal();
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal1);
+                            UpperLimit.Set(Normal1).NegateLocal();
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal1);
-                            UpperLimit.set_Renamed(Normal0).negateLocal();
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal1);
+                            UpperLimit.Set(Normal0).NegateLocal();
                         }
                     }
                 }
@@ -1317,15 +1317,15 @@ namespace Box2D.Collision
                         Front = offset1 >= 0.0f || offset2 >= 0.0f;
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal1).negateLocal();
-                            UpperLimit.set_Renamed(Normal2);
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal1).NegateLocal();
+                            UpperLimit.Set(Normal2);
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal1).negateLocal();
-                            UpperLimit.set_Renamed(Normal1);
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal1).NegateLocal();
+                            UpperLimit.Set(Normal1);
                         }
                     }
                     else
@@ -1333,15 +1333,15 @@ namespace Box2D.Collision
                         Front = offset1 >= 0.0f && offset2 >= 0.0f;
                         if (Front)
                         {
-                            Normal.set_Renamed(Normal1);
-                            LowerLimit.set_Renamed(Normal1).negateLocal();
-                            UpperLimit.set_Renamed(Normal1);
+                            Normal.Set(Normal1);
+                            LowerLimit.Set(Normal1).NegateLocal();
+                            UpperLimit.Set(Normal1);
                         }
                         else
                         {
-                            Normal.set_Renamed(Normal1).negateLocal();
-                            LowerLimit.set_Renamed(Normal2).negateLocal();
-                            UpperLimit.set_Renamed(Normal1);
+                            Normal.Set(Normal1).NegateLocal();
+                            LowerLimit.Set(Normal2).NegateLocal();
+                            UpperLimit.Set(Normal1);
                         }
                     }
                 }
@@ -1350,15 +1350,15 @@ namespace Box2D.Collision
                     Front = offset1 >= 0.0f;
                     if (Front)
                     {
-                        Normal.set_Renamed(Normal1);
-                        LowerLimit.set_Renamed(Normal1).negateLocal();
-                        UpperLimit.set_Renamed(Normal1).negateLocal();
+                        Normal.Set(Normal1);
+                        LowerLimit.Set(Normal1).NegateLocal();
+                        UpperLimit.Set(Normal1).NegateLocal();
                     }
                     else
                     {
-                        Normal.set_Renamed(Normal1).negateLocal();
-                        LowerLimit.set_Renamed(Normal1);
-                        UpperLimit.set_Renamed(Normal1);
+                        Normal.Set(Normal1).NegateLocal();
+                        LowerLimit.Set(Normal1);
+                        UpperLimit.Set(Normal1);
                     }
                 }
 
@@ -1418,10 +1418,10 @@ namespace Box2D.Collision
 
                     // Search for the polygon normal that is most anti-parallel to the edge normal.
                     int bestIndex = 0;
-                    float bestValue = Vec2.dot(Normal, PolygonB.Normals[0]);
+                    float bestValue = Vec2.Dot(Normal, PolygonB.Normals[0]);
                     for (int i = 1; i < PolygonB.count; ++i)
                     {
-                        float value = Vec2.dot(Normal, PolygonB.Normals[i]);
+                        float value = Vec2.Dot(Normal, PolygonB.Normals[i]);
                         if (value < bestValue)
                         {
                             bestValue = value;
@@ -1432,13 +1432,13 @@ namespace Box2D.Collision
                     int i1 = bestIndex;
                     int i2 = i1 + 1 < PolygonB.count ? i1 + 1 : 0;
 
-                    ie[0].v.set_Renamed(PolygonB.Vertices[i1]);
+                    ie[0].v.Set(PolygonB.Vertices[i1]);
                     ie[0].id.IndexA = 0;
                     ie[0].id.IndexB = (sbyte)i1;
                     ie[0].id.TypeA = (sbyte)ContactID.Type.Face;
                     ie[0].id.TypeB = (sbyte)ContactID.Type.Vertex;
 
-                    ie[1].v.set_Renamed(PolygonB.Vertices[i2]);
+                    ie[1].v.Set(PolygonB.Vertices[i2]);
                     ie[1].id.IndexA = 0;
                     ie[1].id.IndexB = (sbyte)i2;
                     ie[1].id.TypeA = (sbyte)ContactID.Type.Face;
@@ -1448,30 +1448,30 @@ namespace Box2D.Collision
                     {
                         rf.I1 = 0;
                         rf.I2 = 1;
-                        rf.V1.set_Renamed(V1);
-                        rf.V2.set_Renamed(V2);
-                        rf.Normal.set_Renamed(Normal1);
+                        rf.V1.Set(V1);
+                        rf.V2.Set(V2);
+                        rf.Normal.Set(Normal1);
                     }
                     else
                     {
                         rf.I1 = 1;
                         rf.I2 = 0;
-                        rf.V1.set_Renamed(V2);
-                        rf.V2.set_Renamed(V1);
-                        rf.Normal.set_Renamed(Normal1).negateLocal();
+                        rf.V1.Set(V2);
+                        rf.V2.Set(V1);
+                        rf.Normal.Set(Normal1).NegateLocal();
                     }
                 }
                 else
                 {
                     manifold.Type = Manifold.ManifoldType.FaceB;
 
-                    ie[0].v.set_Renamed(V1);
+                    ie[0].v.Set(V1);
                     ie[0].id.IndexA = 0;
                     ie[0].id.IndexB = (sbyte)primaryAxis.Index;
                     ie[0].id.TypeA = (sbyte)ContactID.Type.Vertex;
                     ie[0].id.TypeB = (sbyte)ContactID.Type.Face;
 
-                    ie[1].v.set_Renamed(V2);
+                    ie[1].v.Set(V2);
                     ie[1].id.IndexA = 0;
                     ie[1].id.IndexB = (sbyte)primaryAxis.Index;
                     ie[1].id.TypeA = (sbyte)ContactID.Type.Vertex;
@@ -1479,15 +1479,15 @@ namespace Box2D.Collision
 
                     rf.I1 = primaryAxis.Index;
                     rf.I2 = rf.I1 + 1 < PolygonB.count ? rf.I1 + 1 : 0;
-                    rf.V1.set_Renamed(PolygonB.Vertices[rf.I1]);
-                    rf.V2.set_Renamed(PolygonB.Vertices[rf.I2]);
-                    rf.Normal.set_Renamed(PolygonB.Normals[rf.I1]);
+                    rf.V1.Set(PolygonB.Vertices[rf.I1]);
+                    rf.V2.Set(PolygonB.Vertices[rf.I2]);
+                    rf.Normal.Set(PolygonB.Normals[rf.I1]);
                 }
 
-                rf.SideNormal1.set_Renamed(rf.Normal.y, -rf.Normal.x);
-                rf.SideNormal2.set_Renamed(rf.SideNormal1).negateLocal();
-                rf.SideOffset1 = Vec2.dot(rf.SideNormal1, rf.V1);
-                rf.SideOffset2 = Vec2.dot(rf.SideNormal2, rf.V2);
+                rf.SideNormal1.Set(rf.Normal.Y, -rf.Normal.X);
+                rf.SideNormal2.Set(rf.SideNormal1).NegateLocal();
+                rf.SideOffset1 = Vec2.Dot(rf.SideNormal1, rf.V1);
+                rf.SideOffset2 = Vec2.Dot(rf.SideNormal2, rf.V2);
 
                 // Clip incident edge against extruded edge1 side edges.
                 int np;
@@ -1511,13 +1511,13 @@ namespace Box2D.Collision
                 // Now clipPoints2 contains the clipped points.
                 if (primaryAxis.type == EPAxis.Type.EdgeA)
                 {
-                    manifold.LocalNormal.set_Renamed(rf.Normal);
-                    manifold.LocalPoint.set_Renamed(rf.V1);
+                    manifold.LocalNormal.Set(rf.Normal);
+                    manifold.LocalPoint.Set(rf.V1);
                 }
                 else
                 {
-                    manifold.LocalNormal.set_Renamed(polygonB.Normals[rf.I1]);
-                    manifold.LocalPoint.set_Renamed(polygonB.Vertices[rf.I1]);
+                    manifold.LocalNormal.Set(polygonB.Normals[rf.I1]);
+                    manifold.LocalPoint.Set(polygonB.Vertices[rf.I1]);
                 }
 
                 int pointCount = 0;
@@ -1525,7 +1525,7 @@ namespace Box2D.Collision
                 {
                     float separation;
 
-                    separation = Vec2.dot(rf.Normal, temp.set_Renamed(clipPoints2[i].v).subLocal(rf.V1));
+                    separation = Vec2.Dot(rf.Normal, temp.Set(clipPoints2[i].v).SubLocal(rf.V1));
 
                     if (separation <= Radius)
                     {
@@ -1539,7 +1539,7 @@ namespace Box2D.Collision
                         }
                         else
                         {
-                            cp.LocalPoint.set_Renamed(clipPoints2[i].v);
+                            cp.LocalPoint.Set(clipPoints2[i].v);
                             cp.Id.TypeA = clipPoints2[i].id.TypeB;
                             cp.Id.TypeB = clipPoints2[i].id.TypeA;
                             cp.Id.IndexA = clipPoints2[i].id.IndexB;
@@ -1562,7 +1562,7 @@ namespace Box2D.Collision
 
                 for (int i = 0; i < PolygonB.count; ++i)
                 {
-                    float s = Vec2.dot(Normal, temp.set_Renamed(PolygonB.Vertices[i]).subLocal(V1));
+                    float s = Vec2.Dot(Normal, temp.Set(PolygonB.Vertices[i]).SubLocal(V1));
                     if (s < axis.Separation)
                     {
                         axis.Separation = s;
@@ -1580,14 +1580,14 @@ namespace Box2D.Collision
                 //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                 axis.Separation = Single.Epsilon;
 
-                perp.set_Renamed(-Normal.y, Normal.x);
+                perp.Set(-Normal.Y, Normal.X);
 
                 for (int i = 0; i < PolygonB.count; ++i)
                 {
-                    n.set_Renamed(PolygonB.Normals[i]).negateLocal();
+                    n.Set(PolygonB.Normals[i]).NegateLocal();
 
-                    float s1 = Vec2.dot(n, temp.set_Renamed(PolygonB.Vertices[i]).subLocal(V1));
-                    float s2 = Vec2.dot(n, temp.set_Renamed(PolygonB.Vertices[i]).subLocal(V2));
+                    float s1 = Vec2.Dot(n, temp.Set(PolygonB.Vertices[i]).SubLocal(V1));
+                    float s2 = Vec2.Dot(n, temp.Set(PolygonB.Vertices[i]).SubLocal(V2));
                     float s = MathUtils.min(s1, s2);
 
                     if (s > Radius)
@@ -1600,16 +1600,16 @@ namespace Box2D.Collision
                     }
 
                     // Adjacency
-                    if (Vec2.dot(n, perp) >= 0.0f)
+                    if (Vec2.Dot(n, perp) >= 0.0f)
                     {
-                        if (Vec2.dot(temp.set_Renamed(n).subLocal(UpperLimit), Normal) < -Settings.angularSlop)
+                        if (Vec2.Dot(temp.Set(n).SubLocal(UpperLimit), Normal) < -Settings.angularSlop)
                         {
                             continue;
                         }
                     }
                     else
                     {
-                        if (Vec2.dot(temp.set_Renamed(n).subLocal(LowerLimit), Normal) < -Settings.angularSlop)
+                        if (Vec2.Dot(temp.Set(n).SubLocal(LowerLimit), Normal) < -Settings.angularSlop)
                         {
                             continue;
                         }

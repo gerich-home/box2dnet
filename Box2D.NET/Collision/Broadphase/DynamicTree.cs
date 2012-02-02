@@ -168,10 +168,10 @@ namespace Box2D.Collision.Broadphase
 
             // Fatten the aabb
             TreeNode node = m_nodes[proxyId];
-            node.AABB.LowerBound.x = aabb.LowerBound.x - Settings.aabbExtension;
-            node.AABB.LowerBound.y = aabb.LowerBound.y - Settings.aabbExtension;
-            node.AABB.UpperBound.x = aabb.UpperBound.x + Settings.aabbExtension;
-            node.AABB.UpperBound.y = aabb.UpperBound.y + Settings.aabbExtension;
+            node.AABB.LowerBound.X = aabb.LowerBound.X - Settings.aabbExtension;
+            node.AABB.LowerBound.Y = aabb.LowerBound.Y - Settings.aabbExtension;
+            node.AABB.UpperBound.X = aabb.UpperBound.X + Settings.aabbExtension;
+            node.AABB.UpperBound.Y = aabb.UpperBound.Y + Settings.aabbExtension;
             node.UserData = userData;
 
             InsertLeaf(proxyId);
@@ -214,36 +214,36 @@ namespace Box2D.Collision.Broadphase
             // Extend AABB
             Vec2 lowerBound = aabb.LowerBound;
             Vec2 upperBound = aabb.UpperBound;
-            lowerBound.x -= Settings.aabbExtension;
-            lowerBound.y -= Settings.aabbExtension;
-            upperBound.x += Settings.aabbExtension;
-            upperBound.y += Settings.aabbExtension;
+            lowerBound.X -= Settings.aabbExtension;
+            lowerBound.Y -= Settings.aabbExtension;
+            upperBound.X += Settings.aabbExtension;
+            upperBound.Y += Settings.aabbExtension;
 
 
             // Predict AABB displacement.
-            float dx = displacement.x * Settings.aabbMultiplier;
-            float dy = displacement.y * Settings.aabbMultiplier;
+            float dx = displacement.X * Settings.aabbMultiplier;
+            float dy = displacement.Y * Settings.aabbMultiplier;
             if (dx < 0.0f)
             {
-                lowerBound.x += dx;
+                lowerBound.X += dx;
             }
             else
             {
-                upperBound.x += dx;
+                upperBound.X += dx;
             }
 
             if (dy < 0.0f)
             {
-                lowerBound.y += dy;
+                lowerBound.Y += dy;
             }
             else
             {
-                upperBound.y += dy;
+                upperBound.Y += dy;
             }
-            node.AABB.LowerBound.x = lowerBound.x;
-            node.AABB.LowerBound.y = lowerBound.y;
-            node.AABB.UpperBound.x = upperBound.x;
-            node.AABB.UpperBound.y = upperBound.y;
+            node.AABB.LowerBound.X = lowerBound.X;
+            node.AABB.LowerBound.Y = lowerBound.Y;
+            node.AABB.UpperBound.X = upperBound.X;
+            node.AABB.UpperBound.Y = upperBound.Y;
 
             InsertLeaf(proxyId);
             return true;
@@ -323,13 +323,13 @@ namespace Box2D.Collision.Broadphase
         {
             Vec2 p1 = input.P1;
             Vec2 p2 = input.P2;
-            r.set_Renamed(p2).subLocal(p1);
-            Debug.Assert(r.lengthSquared() > 0f);
-            r.normalize();
+            r.Set(p2).SubLocal(p1);
+            Debug.Assert(r.LengthSquared() > 0f);
+            r.Normalize();
 
             // v is perpendicular to the segment.
-            Vec2.crossToOutUnsafe(1f, r, v);
-            absV.set_Renamed(v).absLocal();
+            Vec2.CrossToOutUnsafe(1f, r, v);
+            absV.Set(v).AbsLocal();
 
             // Separating axis for segment (Gino, p80).
             // |dot(v, p1 - c)| > dot(|v|, h)
@@ -339,9 +339,9 @@ namespace Box2D.Collision.Broadphase
             // Build a bounding box for the segment.
             AABB segAABB = aabb;
             // Vec2 t = p1 + maxFraction * (p2 - p1);
-            temp.set_Renamed(p2).subLocal(p1).mulLocal(maxFraction).addLocal(p1);
-            Vec2.minToOut(p1, temp, segAABB.LowerBound);
-            Vec2.maxToOut(p1, temp, segAABB.UpperBound);
+            temp.Set(p2).SubLocal(p1).MulLocal(maxFraction).AddLocal(p1);
+            Vec2.MinToOut(p1, temp, segAABB.LowerBound);
+            Vec2.MaxToOut(p1, temp, segAABB.UpperBound);
 
             intStack.Push(m_root);
             while (intStack.Count > 0)
@@ -363,8 +363,8 @@ namespace Box2D.Collision.Broadphase
                 // |dot(v, p1 - c)| > dot(|v|, h)
                 node.AABB.GetCenterToOut(c);
                 node.AABB.GetExtentsToOut(h);
-                temp.set_Renamed(p1).subLocal(c);
-                float separation = MathUtils.abs(Vec2.dot(v, temp)) - Vec2.dot(absV, h);
+                temp.Set(p1).SubLocal(c);
+                float separation = MathUtils.abs(Vec2.Dot(v, temp)) - Vec2.Dot(absV, h);
                 if (separation > 0.0f)
                 {
                     continue;
@@ -372,8 +372,8 @@ namespace Box2D.Collision.Broadphase
 
                 if (node.Leaf)
                 {
-                    subInput.P1.set_Renamed(input.P1);
-                    subInput.P2.set_Renamed(input.P2);
+                    subInput.P1.Set(input.P1);
+                    subInput.P2.Set(input.P2);
                     subInput.MaxFraction = maxFraction;
 
                     float value = callback.RaycastCallback(subInput, nodeId);
@@ -388,9 +388,9 @@ namespace Box2D.Collision.Broadphase
                     {
                         // Update segment bounding box.
                         maxFraction = value;
-                        t.set_Renamed(p2).subLocal(p1).mulLocal(maxFraction).addLocal(p1);
-                        Vec2.minToOut(p1, t, segAABB.LowerBound);
-                        Vec2.maxToOut(p1, t, segAABB.UpperBound);
+                        t.Set(p2).SubLocal(p1).MulLocal(maxFraction).AddLocal(p1);
+                        Vec2.MinToOut(p1, t, segAABB.LowerBound);
+                        Vec2.MaxToOut(p1, t, segAABB.UpperBound);
                     }
                 }
                 else
@@ -1001,7 +1001,7 @@ namespace Box2D.Collision.Broadphase
             argDraw.DrawPolygon(drawVecs, 4, color);
 
             argDraw.ViewportTranform.getWorldToScreen(node.AABB.UpperBound, textVec);
-            argDraw.DrawString(textVec.x, textVec.y, nodeId + "-" + (spot + 1) + "/" + height, color);
+            argDraw.DrawString(textVec.X, textVec.Y, nodeId + "-" + (spot + 1) + "/" + height, color);
 
             if (node.Child1 != TreeNode.NULL_NODE)
             {

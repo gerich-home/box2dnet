@@ -57,9 +57,9 @@ namespace Box2D.Collision
 
             public void Set(SimplexVertex sv)
             {
-                WA.set_Renamed(sv.WA);
-                WB.set_Renamed(sv.WB);
-                W.set_Renamed(sv.W);
+                WA.Set(sv.WA);
+                WB.Set(sv.WB);
+                W.Set(sv.W);
                 A = sv.A;
                 IndexA = sv.IndexA;
                 IndexB = sv.IndexB;
@@ -145,10 +145,10 @@ namespace Box2D.Collision
 
 
                         case 3:
-                            case3.set_Renamed(m_v2.W).subLocal(m_v1.W);
-                            case33.set_Renamed(m_v3.W).subLocal(m_v1.W);
+                            case3.Set(m_v2.W).SubLocal(m_v1.W);
+                            case33.Set(m_v3.W).SubLocal(m_v1.W);
                             // return Vec2.cross(m_v2.w - m_v1.w, m_v3.w - m_v1.w);
-                            return Vec2.cross(case3, case33);
+                            return Vec2.Cross(case3, case33);
 
 
                         default:
@@ -176,7 +176,7 @@ namespace Box2D.Collision
                     Vec2 wBLocal = proxyB.GetVertex(v.IndexB);
                     Transform.mulToOutUnsafe(transformA, wALocal, v.WA);
                     Transform.mulToOutUnsafe(transformB, wBLocal, v.WB);
-                    v.W.set_Renamed(v.WB).subLocal(v.WA);
+                    v.W.Set(v.WB).SubLocal(v.WA);
                     v.A = 0.0f;
                 }
 
@@ -203,7 +203,7 @@ namespace Box2D.Collision
                     Vec2 wBLocal = proxyB.GetVertex(0);
                     Transform.mulToOutUnsafe(transformA, wALocal, v.WA);
                     Transform.mulToOutUnsafe(transformB, wBLocal, v.WB);
-                    v.W.set_Renamed(v.WB).subLocal(v.WA);
+                    v.W.Set(v.WB).SubLocal(v.WA);
                     Count = 1;
                 }
             }
@@ -228,30 +228,30 @@ namespace Box2D.Collision
                 {
 
                     case 1:
-                        result.set_Renamed(m_v1.W).negateLocal();
+                        result.Set(m_v1.W).NegateLocal();
                         return;
 
                     case 2:
-                        e12.set_Renamed(m_v2.W).subLocal(m_v1.W);
+                        e12.Set(m_v2.W).SubLocal(m_v1.W);
                         // use out for a temp variable real quick
-                        result.set_Renamed(m_v1.W).negateLocal();
-                        float sgn = Vec2.cross(e12, result);
+                        result.Set(m_v1.W).NegateLocal();
+                        float sgn = Vec2.Cross(e12, result);
 
                         if (sgn > 0f)
                         {
                             // Origin is left of e12.
-                            Vec2.crossToOutUnsafe(1f, e12, result);
+                            Vec2.CrossToOutUnsafe(1f, e12, result);
                             return;
                         }
                         else
                         {
                             // Origin is right of e12.
-                            Vec2.crossToOutUnsafe(e12, 1f, result);
+                            Vec2.CrossToOutUnsafe(e12, 1f, result);
                             return;
                         }
                     default:
                         Debug.Assert(false);
-                        result.setZero();
+                        result.SetZero();
                         return;
                 }
             }
@@ -271,26 +271,26 @@ namespace Box2D.Collision
 
                     case 0:
                         Debug.Assert(false);
-                        result.setZero();
+                        result.SetZero();
                         return;
 
                     case 1:
-                        result.set_Renamed(m_v1.W);
+                        result.Set(m_v1.W);
                         return;
 
                     case 2:
-                        case22.set_Renamed(m_v2.W).mulLocal(m_v2.A);
-                        case2.set_Renamed(m_v1.W).mulLocal(m_v1.A).addLocal(case22);
-                        result.set_Renamed(case2);
+                        case22.Set(m_v2.W).MulLocal(m_v2.A);
+                        case2.Set(m_v1.W).MulLocal(m_v1.A).AddLocal(case22);
+                        result.Set(case2);
                         return;
 
                     case 3:
-                        result.setZero();
+                        result.SetZero();
                         return;
 
                     default:
                         Debug.Assert(false);
-                        result.setZero();
+                        result.SetZero();
                         return;
 
                 }
@@ -311,28 +311,28 @@ namespace Box2D.Collision
 
 
                     case 1:
-                        pA.set_Renamed(m_v1.WA);
-                        pB.set_Renamed(m_v1.WB);
+                        pA.Set(m_v1.WA);
+                        pB.Set(m_v1.WB);
                         break;
 
 
                     case 2:
-                        case2.set_Renamed(m_v1.WA).mulLocal(m_v1.A);
-                        pA.set_Renamed(m_v2.WA).mulLocal(m_v2.A).addLocal(case2);
+                        case2.Set(m_v1.WA).MulLocal(m_v1.A);
+                        pA.Set(m_v2.WA).MulLocal(m_v2.A).AddLocal(case2);
                         // m_v1.a * m_v1.wA + m_v2.a * m_v2.wA;
                         // *pB = m_v1.a * m_v1.wB + m_v2.a * m_v2.wB;
-                        case2.set_Renamed(m_v1.WB).mulLocal(m_v1.A);
-                        pB.set_Renamed(m_v2.WB).mulLocal(m_v2.A).addLocal(case2);
+                        case2.Set(m_v1.WB).MulLocal(m_v1.A);
+                        pB.Set(m_v2.WB).MulLocal(m_v2.A).AddLocal(case2);
 
                         break;
 
 
                     case 3:
-                        pA.set_Renamed(m_v1.WA).mulLocal(m_v1.A);
-                        case3.set_Renamed(m_v2.WA).mulLocal(m_v2.A);
-                        case33.set_Renamed(m_v3.WA).mulLocal(m_v3.A);
-                        pA.addLocal(case3).addLocal(case33);
-                        pB.set_Renamed(pA);
+                        pA.Set(m_v1.WA).MulLocal(m_v1.A);
+                        case3.Set(m_v2.WA).MulLocal(m_v2.A);
+                        case33.Set(m_v3.WA).MulLocal(m_v3.A);
+                        pA.AddLocal(case3).AddLocal(case33);
+                        pB.Set(pA);
                         // *pA = m_v1.a * m_v1.wA + m_v2.a * m_v2.wA + m_v3.a * m_v3.wA;
                         // *pB = *pA;
                         break;
@@ -376,10 +376,10 @@ namespace Box2D.Collision
                 // a2 = d12_2 / d12
                 Vec2 w1 = m_v1.W;
                 Vec2 w2 = m_v2.W;
-                e12.set_Renamed(w2).subLocal(w1);
+                e12.Set(w2).SubLocal(w1);
 
                 // w1 region
-                float d12_2 = -Vec2.dot(w1, e12);
+                float d12_2 = -Vec2.Dot(w1, e12);
                 if (d12_2 <= 0.0f)
                 {
                     // a2 <= 0, so we clamp it to 0
@@ -389,7 +389,7 @@ namespace Box2D.Collision
                 }
 
                 // w2 region
-                float d12_1 = Vec2.dot(w2, e12);
+                float d12_1 = Vec2.Dot(w2, e12);
                 if (d12_1 <= 0.0f)
                 {
                     // a1 <= 0, so we clamp it to 0
@@ -423,17 +423,17 @@ namespace Box2D.Collision
             /// </summary>
             public void Solve3()
             {
-                w1.set_Renamed(m_v1.W);
-                w2.set_Renamed(m_v2.W);
-                w3.set_Renamed(m_v3.W);
+                w1.Set(m_v1.W);
+                w2.Set(m_v2.W);
+                w3.Set(m_v3.W);
 
                 // Edge12
                 // [1 1 ][a1] = [1]
                 // [w1.e12 w2.e12][a2] = [0]
                 // a3 = 0
-                e12.set_Renamed(w2).subLocal(w1);
-                float w1e12 = Vec2.dot(w1, e12);
-                float w2e12 = Vec2.dot(w2, e12);
+                e12.Set(w2).SubLocal(w1);
+                float w1e12 = Vec2.Dot(w1, e12);
+                float w2e12 = Vec2.Dot(w2, e12);
                 float d12_1 = w2e12;
                 float d12_2 = -w1e12;
 
@@ -441,9 +441,9 @@ namespace Box2D.Collision
                 // [1 1 ][a1] = [1]
                 // [w1.e13 w3.e13][a3] = [0]
                 // a2 = 0
-                e13.set_Renamed(w3).subLocal(w1);
-                float w1e13 = Vec2.dot(w1, e13);
-                float w3e13 = Vec2.dot(w3, e13);
+                e13.Set(w3).SubLocal(w1);
+                float w1e13 = Vec2.Dot(w1, e13);
+                float w3e13 = Vec2.Dot(w3, e13);
                 float d13_1 = w3e13;
                 float d13_2 = -w1e13;
 
@@ -451,18 +451,18 @@ namespace Box2D.Collision
                 // [1 1 ][a2] = [1]
                 // [w2.e23 w3.e23][a3] = [0]
                 // a1 = 0
-                e23.set_Renamed(w3).subLocal(w2);
-                float w2e23 = Vec2.dot(w2, e23);
-                float w3e23 = Vec2.dot(w3, e23);
+                e23.Set(w3).SubLocal(w2);
+                float w2e23 = Vec2.Dot(w2, e23);
+                float w3e23 = Vec2.Dot(w3, e23);
                 float d23_1 = w3e23;
                 float d23_2 = -w2e23;
 
                 // Triangle123
-                float n123 = Vec2.cross(e12, e13);
+                float n123 = Vec2.Cross(e12, e13);
 
-                float d123_1 = n123 * Vec2.cross(w2, w3);
-                float d123_2 = n123 * Vec2.cross(w3, w1);
-                float d123_3 = n123 * Vec2.cross(w1, w2);
+                float d123_1 = n123 * Vec2.Cross(w2, w3);
+                float d123_2 = n123 * Vec2.Cross(w3, w1);
+                float d123_3 = n123 * Vec2.Cross(w1, w2);
 
                 // w1 region
                 if (d12_2 <= 0.0f && d13_2 <= 0.0f)
@@ -570,7 +570,7 @@ namespace Box2D.Collision
 
                     case ShapeType.Circle:
                         CircleShape circle = (CircleShape)shape;
-                        Vertices[0].set_Renamed(circle.P);
+                        Vertices[0].Set(circle.P);
                         VertexCount = 1;
                         Radius = circle.Radius;
 
@@ -582,7 +582,7 @@ namespace Box2D.Collision
                         Radius = poly.Radius;
                         for (int i = 0; i < VertexCount; i++)
                         {
-                            Vertices[i].set_Renamed(poly.Vertices[i]);
+                            Vertices[i].Set(poly.Vertices[i]);
                         }
                         break;
 
@@ -600,16 +600,16 @@ namespace Box2D.Collision
                             Buffer[1] = chain.Vertices[0];
                         }
 
-                        Vertices[0].set_Renamed(Buffer[0]);
-                        Vertices[1].set_Renamed(Buffer[1]);
+                        Vertices[0].Set(Buffer[0]);
+                        Vertices[1].Set(Buffer[1]);
                         VertexCount = 2;
                         Radius = chain.Radius;
                         break;
 
                     case ShapeType.Edge:
                         EdgeShape edge = (EdgeShape)shape;
-                        Vertices[0].set_Renamed(edge.Vertex1);
-                        Vertices[1].set_Renamed(edge.Vertex2);
+                        Vertices[0].Set(edge.Vertex1);
+                        Vertices[1].Set(edge.Vertex2);
                         VertexCount = 2;
                         Radius = edge.Radius;
                         break;
@@ -629,10 +629,10 @@ namespace Box2D.Collision
             public int GetSupport(Vec2 d)
             {
                 int bestIndex = 0;
-                float bestValue = Vec2.dot(Vertices[0], d);
+                float bestValue = Vec2.Dot(Vertices[0], d);
                 for (int i = 1; i < VertexCount; i++)
                 {
-                    float value = Vec2.dot(Vertices[i], d);
+                    float value = Vec2.Dot(Vertices[i], d);
                     if (value > bestValue)
                     {
                         bestIndex = i;
@@ -651,10 +651,10 @@ namespace Box2D.Collision
             public Vec2 GetSupportVertex(Vec2 d)
             {
                 int bestIndex = 0;
-                float bestValue = Vec2.dot(Vertices[0], d);
+                float bestValue = Vec2.Dot(Vertices[0], d);
                 for (int i = 1; i < VertexCount; i++)
                 {
-                    float value = Vec2.dot(Vertices[i], d);
+                    float value = Vec2.Dot(Vertices[i], d);
                     if (value > bestValue)
                     {
                         bestIndex = i;
@@ -715,7 +715,7 @@ namespace Box2D.Collision
             int saveCount;
 
             simplex.GetClosestPoint(closestPoint);
-            float distanceSqr1 = closestPoint.lengthSquared();
+            float distanceSqr1 = closestPoint.LengthSquared();
             float distanceSqr2;
 
             // Main iteration loop
@@ -759,7 +759,7 @@ namespace Box2D.Collision
 
                 // Compute closest point.
                 simplex.GetClosestPoint(closestPoint);
-                distanceSqr2 = closestPoint.lengthSquared();
+                distanceSqr2 = closestPoint.LengthSquared();
 
                 // ensure progress
                 if (distanceSqr2 >= distanceSqr1)
@@ -772,7 +772,7 @@ namespace Box2D.Collision
                 simplex.GetSearchDirection(d);
 
                 // Ensure the search direction is numerically fit.
-                if (d.lengthSquared() < Settings.EPSILON * Settings.EPSILON)
+                if (d.LengthSquared() < Settings.EPSILON * Settings.EPSILON)
                 {
                     // The origin is probably contained by a line segment
                     // or triangle. Thus the shapes are overlapped.
@@ -793,14 +793,14 @@ namespace Box2D.Collision
                 // Compute a tentative new simplex vertex using support points.
                 SimplexVertex vertex = vertices[simplex.Count];
 
-                Rot.mulTransUnsafe(transformA.q, d.negateLocal(), temp);
+                Rot.mulTransUnsafe(transformA.q, d.NegateLocal(), temp);
                 vertex.IndexA = proxyA.GetSupport(temp);
                 Transform.mulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.WA);
                 // Vec2 wBLocal;
-                Rot.mulTransUnsafe(transformB.q, d.negateLocal(), temp);
+                Rot.mulTransUnsafe(transformB.q, d.NegateLocal(), temp);
                 vertex.IndexB = proxyB.GetSupport(temp);
                 Transform.mulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.WB);
-                vertex.W.set_Renamed(vertex.WB).subLocal(vertex.WA);
+                vertex.W.Set(vertex.WB).SubLocal(vertex.WA);
 
                 // Iteration count is equated to the number of support point calls.
                 ++iter;
@@ -848,20 +848,20 @@ namespace Box2D.Collision
                     // Shapes are still no overlapped.
                     // Move the witness points to the outer surface.
                     output.Distance -= (rA + rB);
-                    normal.set_Renamed(output.PointB).subLocal(output.PointA);
-                    normal.normalize();
-                    temp.set_Renamed(normal).mulLocal(rA);
-                    output.PointA.addLocal(temp);
-                    temp.set_Renamed(normal).mulLocal(rB);
-                    output.PointB.subLocal(temp);
+                    normal.Set(output.PointB).SubLocal(output.PointA);
+                    normal.Normalize();
+                    temp.Set(normal).MulLocal(rA);
+                    output.PointA.AddLocal(temp);
+                    temp.Set(normal).MulLocal(rB);
+                    output.PointB.SubLocal(temp);
                 }
                 else
                 {
                     // Shapes are overlapped when radii are considered.
                     // Move the witness points to the middle.
                     // Vec2 p = 0.5f * (output.pointA + output.pointB);
-                    output.PointA.addLocal(output.PointB).mulLocal(.5f);
-                    output.PointB.set_Renamed(output.PointA);
+                    output.PointA.AddLocal(output.PointB).MulLocal(.5f);
+                    output.PointB.Set(output.PointA);
                     output.Distance = 0.0f;
                 }
             }

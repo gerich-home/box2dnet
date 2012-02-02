@@ -57,7 +57,7 @@ namespace Box2D.Dynamics.Joints
         public MouseJointDef()
         {
             type = JointType.MOUSE;
-            target.set_Renamed(0, 0);
+            target.Set(0, 0);
             maxForce = 0;
             frequencyHz = 5;
             dampingRatio = .7f;

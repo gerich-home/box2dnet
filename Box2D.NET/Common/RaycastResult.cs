@@ -36,7 +36,7 @@ namespace Box2D.Common
         public virtual RaycastResult set_Renamed(RaycastResult argOther)
         {
             lambda = argOther.lambda;
-            normal.set_Renamed(argOther.normal);
+            normal.Set(argOther.normal);
             return this;
         }
     }

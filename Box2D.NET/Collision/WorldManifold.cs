@@ -86,8 +86,8 @@ namespace Box2D.Collision
                         Vec2 pointA = pool3;
                         Vec2 pointB = pool4;
 
-                        Normal.x = 1;
-                        Normal.y = 0;
+                        Normal.X = 1;
+                        Normal.Y = 0;
                         // pointA.x = xfA.p.x + xfA.q.ex.x * manifold.localPoint.x + xfA.q.ey.x *
                         // manifold.localPoint.y;
                         // pointA.y = xfA.p.y + xfA.q.ex.y * manifold.localPoint.x + xfA.q.ey.y *
@@ -101,19 +101,19 @@ namespace Box2D.Collision
 
                         if (MathUtils.distanceSquared(pointA, pointB) > Settings.EPSILON * Settings.EPSILON)
                         {
-                            Normal.x = pointB.x - pointA.x;
-                            Normal.y = pointB.y - pointA.y;
-                            Normal.normalize();
+                            Normal.X = pointB.X - pointA.X;
+                            Normal.Y = pointB.Y - pointA.Y;
+                            Normal.Normalize();
                         }
 
-                        float cAx = Normal.x * radiusA + pointA.x;
-                        float cAy = Normal.y * radiusA + pointA.y;
+                        float cAx = Normal.X * radiusA + pointA.X;
+                        float cAy = Normal.Y * radiusA + pointA.Y;
 
-                        float cBx = (-Normal.x) * radiusB + pointB.x;
-                        float cBy = (-Normal.y) * radiusB + pointB.y;
+                        float cBx = (-Normal.X) * radiusB + pointB.X;
+                        float cBy = (-Normal.Y) * radiusB + pointB.Y;
 
-                        Points[0].x = (cAx + cBx) * .5f;
-                        Points[0].y = (cAy + cBy) * .5f;
+                        Points[0].X = (cAx + cBx) * .5f;
+                        Points[0].Y = (cAy + cBy) * .5f;
                     }
                     break;
 
@@ -141,16 +141,16 @@ namespace Box2D.Collision
                             // cB.set(normal).mulLocal(radiusB).subLocal(clipPoint).negateLocal();
                             // points[i].set(cA).addLocal(cB).mulLocal(0.5f);
 
-                            float scalar = radiusA - ((clipPoint.x - planePoint.x) * Normal.x + (clipPoint.y - planePoint.y) * Normal.y);
+                            float scalar = radiusA - ((clipPoint.X - planePoint.X) * Normal.X + (clipPoint.Y - planePoint.Y) * Normal.Y);
 
-                            float cAx = Normal.x * scalar + clipPoint.x;
-                            float cAy = Normal.y * scalar + clipPoint.y;
+                            float cAx = Normal.X * scalar + clipPoint.X;
+                            float cAy = Normal.Y * scalar + clipPoint.Y;
 
-                            float cBx = (-Normal.x) * radiusB + clipPoint.x;
-                            float cBy = (-Normal.y) * radiusB + clipPoint.y;
+                            float cBx = (-Normal.X) * radiusB + clipPoint.X;
+                            float cBy = (-Normal.Y) * radiusB + clipPoint.Y;
 
-                            Points[i].x = (cAx + cBx) * .5f;
-                            Points[i].y = (cAy + cBy) * .5f;
+                            Points[i].X = (cAx + cBx) * .5f;
+                            Points[i].Y = (cAy + cBy) * .5f;
                         }
                     }
                     break;
@@ -192,20 +192,20 @@ namespace Box2D.Collision
                         // clipPoint.y = xfA.p.y + xfA.q.ex.y * manifold.points[i].localPoint.x + xfA.q.ey.y *
                         // manifold.points[i].localPoint.y;
 
-                        float scalar = radiusB - ((clipPoint2.x - planePoint2.x) * Normal.x + (clipPoint2.y - planePoint2.y) * Normal.y);
+                        float scalar = radiusB - ((clipPoint2.X - planePoint2.X) * Normal.X + (clipPoint2.Y - planePoint2.Y) * Normal.Y);
 
-                        float cBx = Normal.x * scalar + clipPoint2.x;
-                        float cBy = Normal.y * scalar + clipPoint2.y;
+                        float cBx = Normal.X * scalar + clipPoint2.X;
+                        float cBy = Normal.Y * scalar + clipPoint2.Y;
 
-                        float cAx = (-Normal.x) * radiusA + clipPoint2.x;
-                        float cAy = (-Normal.y) * radiusA + clipPoint2.y;
+                        float cAx = (-Normal.X) * radiusA + clipPoint2.X;
+                        float cAy = (-Normal.Y) * radiusA + clipPoint2.Y;
 
-                        Points[i].x = (cAx + cBx) * .5f;
-                        Points[i].y = (cAy + cBy) * .5f;
+                        Points[i].X = (cAx + cBx) * .5f;
+                        Points[i].Y = (cAy + cBy) * .5f;
                     }
                     // Ensure normal points from A to B.
-                    Normal.x = -Normal.x;
-                    Normal.y = -Normal.y;
+                    Normal.X = -Normal.X;
+                    Normal.Y = -Normal.Y;
                     break;
             }
         }

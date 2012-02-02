@@ -72,28 +72,28 @@ namespace Box2D.Collision.Shapes
             Debug.Assert(0 <= index && index < Count - 1);
             edge.Radius = Radius;
 
-            edge.Vertex1.set_Renamed(Vertices[index + 0]);
-            edge.Vertex2.set_Renamed(Vertices[index + 1]);
+            edge.Vertex1.Set(Vertices[index + 0]);
+            edge.Vertex2.Set(Vertices[index + 1]);
 
             if (index > 0)
             {
-                edge.Vertex0.set_Renamed(Vertices[index - 1]);
+                edge.Vertex0.Set(Vertices[index - 1]);
                 edge.HasVertex0 = true;
             }
             else
             {
-                edge.Vertex0.set_Renamed(m_prevVertex);
+                edge.Vertex0.Set(m_prevVertex);
                 edge.HasVertex0 = HasPrevVertex;
             }
 
             if (index < Count - 2)
             {
-                edge.Vertex3.set_Renamed(Vertices[index + 2]);
+                edge.Vertex3.Set(Vertices[index + 2]);
                 edge.HasVertex3 = true;
             }
             else
             {
-                edge.Vertex3.set_Renamed(m_nextVertex);
+                edge.Vertex3.Set(m_nextVertex);
                 edge.HasVertex3 = HasNextVertex;
             }
         }
@@ -116,8 +116,8 @@ namespace Box2D.Collision.Shapes
                 i2 = 0;
             }
 
-            edgeShape.Vertex1.set_Renamed(Vertices[i1]);
-            edgeShape.Vertex2.set_Renamed(Vertices[i2]);
+            edgeShape.Vertex1.Set(Vertices[i1]);
+            edgeShape.Vertex2.Set(Vertices[i2]);
 
             return edgeShape.Raycast(output, input, xf, 0);
         }
@@ -138,14 +138,14 @@ namespace Box2D.Collision.Shapes
             Transform.mulToOutUnsafe(xf, Vertices[i1], v1);
             Transform.mulToOutUnsafe(xf, Vertices[i2], v2);
 
-            Vec2.minToOut(v1, v2, aabb.LowerBound);
-            Vec2.maxToOut(v1, v2, aabb.UpperBound);
+            Vec2.MinToOut(v1, v2, aabb.LowerBound);
+            Vec2.MaxToOut(v1, v2, aabb.UpperBound);
         }
 
         public override void ComputeMass(MassData massData, float density)
         {
             massData.Mass = 0.0f;
-            massData.Center.setZero();
+            massData.Center.SetZero();
             massData.I = 0.0f;
         }
 
@@ -153,8 +153,8 @@ namespace Box2D.Collision.Shapes
         {
             ChainShape clone = new ChainShape();
             clone.CreateChain(Vertices, Count);
-            clone.m_prevVertex.set_Renamed(m_prevVertex);
-            clone.m_nextVertex.set_Renamed(m_nextVertex);
+            clone.m_prevVertex.Set(m_prevVertex);
+            clone.m_nextVertex.Set(m_nextVertex);
             clone.HasPrevVertex = HasPrevVertex;
             clone.HasNextVertex = HasNextVertex;
             return clone;
@@ -176,8 +176,8 @@ namespace Box2D.Collision.Shapes
                 Vertices[i] = new Vec2(vertices[i]);
             }
             Vertices[count] = Vertices[0];
-            m_prevVertex.set_Renamed(Vertices[Count - 2]);
-            m_nextVertex.set_Renamed(Vertices[1]);
+            m_prevVertex.Set(Vertices[Count - 2]);
+            m_nextVertex.Set(Vertices[1]);
             HasPrevVertex = true;
             HasNextVertex = true;
         }
@@ -208,7 +208,7 @@ namespace Box2D.Collision.Shapes
         {
             set
             {
-                m_prevVertex.set_Renamed(value);
+                m_prevVertex.Set(value);
                 HasPrevVertex = true;
             }
         }
@@ -219,7 +219,7 @@ namespace Box2D.Collision.Shapes
         {
             set
             {
-                m_nextVertex.set_Renamed(value);
+                m_nextVertex.Set(value);
                 HasNextVertex = true;
             }
         }

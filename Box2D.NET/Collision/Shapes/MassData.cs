@@ -96,7 +96,7 @@ namespace Box2D.Collision.Shapes
         {
             Mass = md.Mass;
             I = md.I;
-            Center.set_Renamed(md.Center);
+            Center.Set(md.Center);
         }
 
         /// <summary>

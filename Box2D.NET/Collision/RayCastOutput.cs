@@ -44,7 +44,7 @@ namespace Box2D.Collision
 
         public virtual void Set(RayCastOutput rco)
         {
-            Normal.set_Renamed(rco.Normal);
+            Normal.Set(rco.Normal);
             Fraction = rco.Fraction;
         }
     }

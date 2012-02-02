@@ -43,8 +43,8 @@ namespace Box2D.Common
         public override String ToString()
         {
             String s = "";
-            s += ("[" + ex.x + "," + ey.x + "]\n");
-            s += ("[" + ex.y + "," + ey.y + "]");
+            s += ("[" + ex.X + "," + ey.X + "]\n");
+            s += ("[" + ex.Y + "," + ey.Y + "]");
             return s;
         }
 
@@ -88,19 +88,19 @@ namespace Box2D.Common
         /// <param name="m">Matrix to copy</param>
         public Mat22 set_Renamed(Mat22 m)
         {
-            ex.x = m.ex.x;
-            ex.y = m.ex.y;
-            ey.x = m.ey.x;
-            ey.y = m.ey.y;
+            ex.X = m.ex.X;
+            ex.Y = m.ex.Y;
+            ey.X = m.ey.X;
+            ey.Y = m.ey.Y;
             return this;
         }
 
         public Mat22 set_Renamed(float exx, float col2x, float exy, float col2y)
         {
-            ex.x = exx;
-            ex.y = exy;
-            ey.x = col2x;
-            ey.y = col2y;
+            ex.X = exx;
+            ex.Y = exy;
+            ey.X = col2x;
+            ey.Y = col2y;
             return this;
         }
 
@@ -120,10 +120,10 @@ namespace Box2D.Common
         {
             float c = MathUtils.cos(angle);
             float s = MathUtils.sin(angle);
-            ex.x = c;
-            ey.x = -s;
-            ex.y = s;
-            ey.y = c;
+            ex.X = c;
+            ey.X = -s;
+            ex.Y = s;
+            ey.Y = c;
         }
 
         /// <summary>
@@ -131,10 +131,10 @@ namespace Box2D.Common
         /// </summary>
         public void setIdentity()
         {
-            ex.x = 1.0f;
-            ey.x = 0.0f;
-            ex.y = 0.0f;
-            ey.y = 1.0f;
+            ex.X = 1.0f;
+            ey.X = 0.0f;
+            ex.Y = 0.0f;
+            ey.Y = 1.0f;
         }
 
         /// <summary>
@@ -142,10 +142,10 @@ namespace Box2D.Common
         /// </summary>
         public void setZero()
         {
-            ex.x = 0.0f;
-            ey.x = 0.0f;
-            ex.y = 0.0f;
-            ey.y = 0.0f;
+            ex.X = 0.0f;
+            ey.X = 0.0f;
+            ex.Y = 0.0f;
+            ey.Y = 0.0f;
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace Box2D.Common
         {
             get
             {
-                return MathUtils.atan2(ex.y, ex.x);
+                return MathUtils.atan2(ex.Y, ex.X);
             }
 
         }
@@ -168,10 +168,10 @@ namespace Box2D.Common
         /// <param name="c2">Column 2</param>
         public void set_Renamed(Vec2 c1, Vec2 c2)
         {
-            ex.x = c1.x;
-            ey.x = c2.x;
-            ex.y = c1.y;
-            ey.y = c2.y;
+            ex.X = c1.X;
+            ey.X = c2.X;
+            ex.Y = c1.Y;
+            ey.Y = c2.Y;
         }
 
         /// <summary>
@@ -179,10 +179,10 @@ namespace Box2D.Common
         /// </summary>
         public Mat22 invert()
         {
-            float a = ex.x;
-            float b = ey.x;
-            float c = ex.y;
-            float d = ey.y;
+            float a = ex.X;
+            float b = ey.X;
+            float c = ex.Y;
+            float d = ey.Y;
 
             Mat22 B = new Mat22();
             float det = a * d - b * c;
@@ -190,44 +190,44 @@ namespace Box2D.Common
             {
                 det = 1.0f / det;
             }
-            B.ex.x = det * d;
-            B.ey.x = (-det) * b;
-            B.ex.y = (-det) * c;
-            B.ey.y = det * a;
+            B.ex.X = det * d;
+            B.ey.X = (-det) * b;
+            B.ex.Y = (-det) * c;
+            B.ey.Y = det * a;
             return B;
         }
 
         public Mat22 invertLocal()
         {
-            float a = ex.x;
-            float b = ey.x;
-            float c = ex.y;
-            float d = ey.y;
+            float a = ex.X;
+            float b = ey.X;
+            float c = ex.Y;
+            float d = ey.Y;
             float det = a * d - b * c;
             if (det != 0)
             {
                 det = 1.0f / det;
             }
-            ex.x = det * d;
-            ey.x = (-det) * b;
-            ex.y = (-det) * c;
-            ey.y = det * a;
+            ex.X = det * d;
+            ey.X = (-det) * b;
+            ex.Y = (-det) * c;
+            ey.Y = det * a;
             return this;
         }
 
         public void invertToOut(Mat22 out_Renamed)
         {
-            float a = ex.x;
-            float b = ey.x;
-            float c = ex.y;
-            float d = ey.y;
+            float a = ex.X;
+            float b = ey.X;
+            float c = ex.Y;
+            float d = ey.Y;
             float det = a * d - b * c;
             // b2Assert(det != 0.0f);
             det = 1.0f / det;
-            out_Renamed.ex.x = det * d;
-            out_Renamed.ey.x = (-det) * b;
-            out_Renamed.ex.y = (-det) * c;
-            out_Renamed.ey.y = det * a;
+            out_Renamed.ex.X = det * d;
+            out_Renamed.ey.X = (-det) * b;
+            out_Renamed.ex.Y = (-det) * c;
+            out_Renamed.ey.Y = det * a;
         }
 
 
@@ -238,14 +238,14 @@ namespace Box2D.Common
         /// <returns>Absolute value matrix</returns>
         public Mat22 abs()
         {
-            return new Mat22(MathUtils.abs(ex.x), MathUtils.abs(ey.x), MathUtils.abs(ex.y), MathUtils.abs(ey.y));
+            return new Mat22(MathUtils.abs(ex.X), MathUtils.abs(ey.X), MathUtils.abs(ex.Y), MathUtils.abs(ey.Y));
         }
 
         /* djm: added */
         public void absLocal()
         {
-            ex.absLocal();
-            ey.absLocal();
+            ex.AbsLocal();
+            ey.AbsLocal();
         }
 
         /// <summary>
@@ -260,10 +260,10 @@ namespace Box2D.Common
         /* djm created */
         public static void absToOut(Mat22 R, Mat22 out_Renamed)
         {
-            out_Renamed.ex.x = MathUtils.abs(R.ex.x);
-            out_Renamed.ex.y = MathUtils.abs(R.ex.y);
-            out_Renamed.ey.x = MathUtils.abs(R.ey.x);
-            out_Renamed.ey.y = MathUtils.abs(R.ey.y);
+            out_Renamed.ex.X = MathUtils.abs(R.ex.X);
+            out_Renamed.ex.Y = MathUtils.abs(R.ex.Y);
+            out_Renamed.ey.X = MathUtils.abs(R.ey.X);
+            out_Renamed.ey.Y = MathUtils.abs(R.ey.Y);
         }
 
         /// <summary>
@@ -273,21 +273,21 @@ namespace Box2D.Common
         /// <returns>Resulting vector</returns>
         public Vec2 mul(Vec2 v)
         {
-            return new Vec2(ex.x * v.x + ey.x * v.y, ex.y * v.x + ey.y * v.y);
+            return new Vec2(ex.X * v.X + ey.X * v.Y, ex.Y * v.X + ey.Y * v.Y);
         }
 
         public void mulToOut(Vec2 v, Vec2 out_Renamed)
         {
-            float tempy = ex.y * v.x + ey.y * v.y;
-            out_Renamed.x = ex.x * v.x + ey.x * v.y;
-            out_Renamed.y = tempy;
+            float tempy = ex.Y * v.X + ey.Y * v.Y;
+            out_Renamed.X = ex.X * v.X + ey.X * v.Y;
+            out_Renamed.Y = tempy;
         }
 
         public void mulToOutUnsafe(Vec2 v, Vec2 out_Renamed)
         {
             Debug.Assert(v != out_Renamed);
-            out_Renamed.x = ex.x * v.x + ey.x * v.y;
-            out_Renamed.y = ex.y * v.x + ey.y * v.y;
+            out_Renamed.X = ex.X * v.X + ey.X * v.Y;
+            out_Renamed.Y = ex.Y * v.X + ey.Y * v.Y;
         }
 
 
@@ -302,10 +302,10 @@ namespace Box2D.Common
             * Mat22 C = new Mat22();C.set(this.mul(R.ex), this.mul(R.ey));return C;
             */
             Mat22 C = new Mat22();
-            C.ex.x = ex.x * R.ex.x + ey.x * R.ex.y;
-            C.ex.y = ex.y * R.ex.x + ey.y * R.ex.y;
-            C.ey.x = ex.x * R.ey.x + ey.x * R.ey.y;
-            C.ey.y = ex.y * R.ey.x + ey.y * R.ey.y;
+            C.ex.X = ex.X * R.ex.X + ey.X * R.ex.Y;
+            C.ex.Y = ex.Y * R.ex.X + ey.Y * R.ex.Y;
+            C.ey.X = ex.X * R.ey.X + ey.X * R.ey.Y;
+            C.ey.Y = ex.Y * R.ey.X + ey.Y * R.ey.Y;
             // C.set(ex,col2);
             return C;
         }
@@ -318,24 +318,24 @@ namespace Box2D.Common
 
         public void mulToOut(Mat22 R, Mat22 out_Renamed)
         {
-            float tempy1 = this.ex.y * R.ex.x + this.ey.y * R.ex.y;
-            float tempx1 = this.ex.x * R.ex.x + this.ey.x * R.ex.y;
-            out_Renamed.ex.x = tempx1;
-            out_Renamed.ex.y = tempy1;
-            float tempy2 = this.ex.y * R.ey.x + this.ey.y * R.ey.y;
-            float tempx2 = this.ex.x * R.ey.x + this.ey.x * R.ey.y;
-            out_Renamed.ey.x = tempx2;
-            out_Renamed.ey.y = tempy2;
+            float tempy1 = this.ex.Y * R.ex.X + this.ey.Y * R.ex.Y;
+            float tempx1 = this.ex.X * R.ex.X + this.ey.X * R.ex.Y;
+            out_Renamed.ex.X = tempx1;
+            out_Renamed.ex.Y = tempy1;
+            float tempy2 = this.ex.Y * R.ey.X + this.ey.Y * R.ey.Y;
+            float tempx2 = this.ex.X * R.ey.X + this.ey.X * R.ey.Y;
+            out_Renamed.ey.X = tempx2;
+            out_Renamed.ey.Y = tempy2;
         }
 
         public void mulToOutUnsafe(Mat22 R, Mat22 out_Renamed)
         {
             Debug.Assert(out_Renamed != R);
             Debug.Assert(out_Renamed != this);
-            out_Renamed.ex.x = this.ex.x * R.ex.x + this.ey.x * R.ex.y;
-            out_Renamed.ex.y = this.ex.y * R.ex.x + this.ey.y * R.ex.y;
-            out_Renamed.ey.x = this.ex.x * R.ey.x + this.ey.x * R.ey.y;
-            out_Renamed.ey.y = this.ex.y * R.ey.x + this.ey.y * R.ey.y;
+            out_Renamed.ex.X = this.ex.X * R.ex.X + this.ey.X * R.ex.Y;
+            out_Renamed.ex.Y = this.ex.Y * R.ex.X + this.ey.Y * R.ex.Y;
+            out_Renamed.ey.X = this.ex.X * R.ey.X + this.ey.X * R.ey.Y;
+            out_Renamed.ey.Y = this.ex.Y * R.ey.X + this.ey.Y * R.ey.Y;
         }
 
         /// <summary>
@@ -354,11 +354,11 @@ namespace Box2D.Common
 
             Mat22 C = new Mat22();
 
-            C.ex.x = Vec2.dot(this.ex, B.ex);
-            C.ex.y = Vec2.dot(this.ey, B.ex);
+            C.ex.X = Vec2.Dot(this.ex, B.ex);
+            C.ex.Y = Vec2.Dot(this.ey, B.ex);
 
-            C.ey.x = Vec2.dot(this.ex, B.ey);
-            C.ey.y = Vec2.dot(this.ey, B.ey);
+            C.ey.X = Vec2.Dot(this.ex, B.ey);
+            C.ey.Y = Vec2.Dot(this.ey, B.ey);
             return C;
         }
 
@@ -375,24 +375,24 @@ namespace Box2D.Common
             * Vec2.dot(this.ex, B.ey); out.ey.y = Vec2.dot(this.ey, B.ey);
             */
 
-            float x1 = this.ex.x * B.ex.x + this.ex.y * B.ex.y;
-            float y1 = this.ey.x * B.ex.x + this.ey.y * B.ex.y;
-            float x2 = this.ex.x * B.ey.x + this.ex.y * B.ey.y;
-            float y2 = this.ey.x * B.ey.x + this.ey.y * B.ey.y;
-            out_Renamed.ex.x = x1;
-            out_Renamed.ey.x = x2;
-            out_Renamed.ex.y = y1;
-            out_Renamed.ey.y = y2;
+            float x1 = this.ex.X * B.ex.X + this.ex.Y * B.ex.Y;
+            float y1 = this.ey.X * B.ex.X + this.ey.Y * B.ex.Y;
+            float x2 = this.ex.X * B.ey.X + this.ex.Y * B.ey.Y;
+            float y2 = this.ey.X * B.ey.X + this.ey.Y * B.ey.Y;
+            out_Renamed.ex.X = x1;
+            out_Renamed.ey.X = x2;
+            out_Renamed.ex.Y = y1;
+            out_Renamed.ey.Y = y2;
         }
 
         public void mulTransToOutUnsafe(Mat22 B, Mat22 out_Renamed)
         {
             Debug.Assert(B != out_Renamed);
             Debug.Assert(this != out_Renamed);
-            out_Renamed.ex.x = this.ex.x * B.ex.x + this.ex.y * B.ex.y;
-            out_Renamed.ey.x = this.ex.x * B.ey.x + this.ex.y * B.ey.y;
-            out_Renamed.ex.y = this.ey.x * B.ex.x + this.ey.y * B.ex.y;
-            out_Renamed.ey.y = this.ey.x * B.ey.x + this.ey.y * B.ey.y;
+            out_Renamed.ex.X = this.ex.X * B.ex.X + this.ex.Y * B.ex.Y;
+            out_Renamed.ey.X = this.ex.X * B.ey.X + this.ex.Y * B.ey.Y;
+            out_Renamed.ex.Y = this.ey.X * B.ex.X + this.ey.Y * B.ex.Y;
+            out_Renamed.ey.Y = this.ey.X * B.ey.X + this.ey.Y * B.ey.Y;
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace Box2D.Common
         public Vec2 mulTrans(Vec2 v)
         {
             // return new Vec2(Vec2.dot(v, ex), Vec2.dot(v, col2));
-            return new Vec2((v.x * ex.x + v.y * ex.y), (v.x * ey.x + v.y * ey.y));
+            return new Vec2((v.X * ex.X + v.Y * ex.Y), (v.X * ey.X + v.Y * ey.Y));
         }
 
         /* djm added */
@@ -413,9 +413,9 @@ namespace Box2D.Common
             * out.x = Vec2.dot(v, ex); out.y = Vec2.dot(v, col2);
             */
 
-            float tempx = v.x * ex.x + v.y * ex.y;
-            out_Renamed.y = v.x * ey.x + v.y * ey.y;
-            out_Renamed.x = tempx;
+            float tempx = v.X * ex.X + v.Y * ex.Y;
+            out_Renamed.Y = v.X * ey.X + v.Y * ey.Y;
+            out_Renamed.X = tempx;
         }
 
         /// <summary>
@@ -427,10 +427,10 @@ namespace Box2D.Common
         {
             // return new Mat22(ex.add(B.ex), col2.add(B.ey));
             Mat22 m = new Mat22();
-            m.ex.x = ex.x + B.ex.x;
-            m.ex.y = ex.y + B.ex.y;
-            m.ey.x = ey.x + B.ey.x;
-            m.ey.y = ey.y + B.ey.y;
+            m.ex.X = ex.X + B.ex.X;
+            m.ex.Y = ex.Y + B.ex.Y;
+            m.ey.X = ey.X + B.ey.X;
+            m.ey.Y = ey.Y + B.ey.Y;
             return m;
         }
 
@@ -443,10 +443,10 @@ namespace Box2D.Common
         {
             // ex.addLocal(B.ex);
             // col2.addLocal(B.ey);
-            ex.x += B.ex.x;
-            ex.y += B.ex.y;
-            ey.x += B.ey.x;
-            ey.y += B.ey.y;
+            ex.X += B.ex.X;
+            ex.Y += B.ex.Y;
+            ey.X += B.ey.X;
+            ey.Y += B.ey.Y;
             return this;
         }
 
@@ -456,138 +456,138 @@ namespace Box2D.Common
         /// <returns>The vector x that solves the above equation.</returns>
         public Vec2 solve(Vec2 b)
         {
-            float a11 = ex.x;
-            float a12 = ey.x;
-            float a21 = ex.y;
-            float a22 = ey.y;
+            float a11 = ex.X;
+            float a12 = ey.X;
+            float a21 = ex.Y;
+            float a22 = ey.Y;
             float det = a11 * a22 - a12 * a21;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
-            Vec2 x = new Vec2(det * (a22 * b.x - a12 * b.y), det * (a11 * b.y - a21 * b.x));
+            Vec2 x = new Vec2(det * (a22 * b.X - a12 * b.Y), det * (a11 * b.Y - a21 * b.X));
             return x;
         }
 
         public void solveToOut(Vec2 b, Vec2 out_Renamed)
         {
-            float a11 = ex.x;
-            float a12 = ey.x;
-            float a21 = ex.y;
-            float a22 = ey.y;
+            float a11 = ex.X;
+            float a12 = ey.X;
+            float a21 = ex.Y;
+            float a22 = ey.Y;
             float det = a11 * a22 - a12 * a21;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
-            float tempy = det * (a11 * b.y - a21 * b.x);
-            out_Renamed.x = det * (a22 * b.x - a12 * b.y);
-            out_Renamed.y = tempy;
+            float tempy = det * (a11 * b.Y - a21 * b.X);
+            out_Renamed.X = det * (a22 * b.X - a12 * b.Y);
+            out_Renamed.Y = tempy;
         }
 
         public static Vec2 mul(Mat22 R, Vec2 v)
         {
             // return R.mul(v);
-            return new Vec2(R.ex.x * v.x + R.ey.x * v.y, R.ex.y * v.x + R.ey.y * v.y);
+            return new Vec2(R.ex.X * v.X + R.ey.X * v.Y, R.ex.Y * v.X + R.ey.Y * v.Y);
         }
 
         public static void mulToOut(Mat22 R, Vec2 v, Vec2 out_Renamed)
         {
-            float tempy = R.ex.y * v.x + R.ey.y * v.y;
-            out_Renamed.x = R.ex.x * v.x + R.ey.x * v.y;
-            out_Renamed.y = tempy;
+            float tempy = R.ex.Y * v.X + R.ey.Y * v.Y;
+            out_Renamed.X = R.ex.X * v.X + R.ey.X * v.Y;
+            out_Renamed.Y = tempy;
         }
 
         public static void mulToOutUnsafe(Mat22 R, Vec2 v, Vec2 out_Renamed)
         {
             Debug.Assert(v != out_Renamed);
-            out_Renamed.x = R.ex.x * v.x + R.ey.x * v.y;
-            out_Renamed.y = R.ex.y * v.x + R.ey.y * v.y;
+            out_Renamed.X = R.ex.X * v.X + R.ey.X * v.Y;
+            out_Renamed.Y = R.ex.Y * v.X + R.ey.Y * v.Y;
         }
 
         public static Mat22 mul(Mat22 A, Mat22 B)
         {
             // return A.mul(B);
             Mat22 C = new Mat22();
-            C.ex.x = A.ex.x * B.ex.x + A.ey.x * B.ex.y;
-            C.ex.y = A.ex.y * B.ex.x + A.ey.y * B.ex.y;
-            C.ey.x = A.ex.x * B.ey.x + A.ey.x * B.ey.y;
-            C.ey.y = A.ex.y * B.ey.x + A.ey.y * B.ey.y;
+            C.ex.X = A.ex.X * B.ex.X + A.ey.X * B.ex.Y;
+            C.ex.Y = A.ex.Y * B.ex.X + A.ey.Y * B.ex.Y;
+            C.ey.X = A.ex.X * B.ey.X + A.ey.X * B.ey.Y;
+            C.ey.Y = A.ex.Y * B.ey.X + A.ey.Y * B.ey.Y;
             return C;
         }
 
         public static void mulToOut(Mat22 A, Mat22 B, Mat22 out_Renamed)
         {
-            float tempy1 = A.ex.y * B.ex.x + A.ey.y * B.ex.y;
-            float tempx1 = A.ex.x * B.ex.x + A.ey.x * B.ex.y;
-            float tempy2 = A.ex.y * B.ey.x + A.ey.y * B.ey.y;
-            float tempx2 = A.ex.x * B.ey.x + A.ey.x * B.ey.y;
-            out_Renamed.ex.x = tempx1;
-            out_Renamed.ex.y = tempy1;
-            out_Renamed.ey.x = tempx2;
-            out_Renamed.ey.y = tempy2;
+            float tempy1 = A.ex.Y * B.ex.X + A.ey.Y * B.ex.Y;
+            float tempx1 = A.ex.X * B.ex.X + A.ey.X * B.ex.Y;
+            float tempy2 = A.ex.Y * B.ey.X + A.ey.Y * B.ey.Y;
+            float tempx2 = A.ex.X * B.ey.X + A.ey.X * B.ey.Y;
+            out_Renamed.ex.X = tempx1;
+            out_Renamed.ex.Y = tempy1;
+            out_Renamed.ey.X = tempx2;
+            out_Renamed.ey.Y = tempy2;
         }
 
         public static void mulToOutUnsafe(Mat22 A, Mat22 B, Mat22 out_Renamed)
         {
             Debug.Assert(out_Renamed != A);
             Debug.Assert(out_Renamed != B);
-            out_Renamed.ex.x = A.ex.x * B.ex.x + A.ey.x * B.ex.y;
-            out_Renamed.ex.y = A.ex.y * B.ex.x + A.ey.y * B.ex.y;
-            out_Renamed.ey.x = A.ex.x * B.ey.x + A.ey.x * B.ey.y;
-            out_Renamed.ey.y = A.ex.y * B.ey.x + A.ey.y * B.ey.y;
+            out_Renamed.ex.X = A.ex.X * B.ex.X + A.ey.X * B.ex.Y;
+            out_Renamed.ex.Y = A.ex.Y * B.ex.X + A.ey.Y * B.ex.Y;
+            out_Renamed.ey.X = A.ex.X * B.ey.X + A.ey.X * B.ey.Y;
+            out_Renamed.ey.Y = A.ex.Y * B.ey.X + A.ey.Y * B.ey.Y;
         }
 
         public static Vec2 mulTrans(Mat22 R, Vec2 v)
         {
-            return new Vec2((v.x * R.ex.x + v.y * R.ex.y), (v.x * R.ey.x + v.y * R.ey.y));
+            return new Vec2((v.X * R.ex.X + v.Y * R.ex.Y), (v.X * R.ey.X + v.Y * R.ey.Y));
         }
 
         public static void mulTransToOut(Mat22 R, Vec2 v, Vec2 out_Renamed)
         {
-            float outx = v.x * R.ex.x + v.y * R.ex.y;
-            out_Renamed.y = v.x * R.ey.x + v.y * R.ey.y;
-            out_Renamed.x = outx;
+            float outx = v.X * R.ex.X + v.Y * R.ex.Y;
+            out_Renamed.Y = v.X * R.ey.X + v.Y * R.ey.Y;
+            out_Renamed.X = outx;
         }
 
         public static void mulTransToOutUnsafe(Mat22 R, Vec2 v, Vec2 out_Renamed)
         {
             Debug.Assert(out_Renamed != v);
-            out_Renamed.y = v.x * R.ey.x + v.y * R.ey.y;
-            out_Renamed.x = v.x * R.ex.x + v.y * R.ex.y;
+            out_Renamed.Y = v.X * R.ey.X + v.Y * R.ey.Y;
+            out_Renamed.X = v.X * R.ex.X + v.Y * R.ex.Y;
         }
 
         public static Mat22 mulTrans(Mat22 A, Mat22 B)
         {
             Mat22 C = new Mat22();
-            C.ex.x = A.ex.x * B.ex.x + A.ex.y * B.ex.y;
-            C.ex.y = A.ey.x * B.ex.x + A.ey.y * B.ex.y;
-            C.ey.x = A.ex.x * B.ey.x + A.ex.y * B.ey.y;
-            C.ey.y = A.ey.x * B.ey.x + A.ey.y * B.ey.y;
+            C.ex.X = A.ex.X * B.ex.X + A.ex.Y * B.ex.Y;
+            C.ex.Y = A.ey.X * B.ex.X + A.ey.Y * B.ex.Y;
+            C.ey.X = A.ex.X * B.ey.X + A.ex.Y * B.ey.Y;
+            C.ey.Y = A.ey.X * B.ey.X + A.ey.Y * B.ey.Y;
             return C;
         }
 
         public static void mulTransToOut(Mat22 A, Mat22 B, Mat22 out_Renamed)
         {
-            float x1 = A.ex.x * B.ex.x + A.ex.y * B.ex.y;
-            float y1 = A.ey.x * B.ex.x + A.ey.y * B.ex.y;
-            float x2 = A.ex.x * B.ey.x + A.ex.y * B.ey.y;
-            float y2 = A.ey.x * B.ey.x + A.ey.y * B.ey.y;
+            float x1 = A.ex.X * B.ex.X + A.ex.Y * B.ex.Y;
+            float y1 = A.ey.X * B.ex.X + A.ey.Y * B.ex.Y;
+            float x2 = A.ex.X * B.ey.X + A.ex.Y * B.ey.Y;
+            float y2 = A.ey.X * B.ey.X + A.ey.Y * B.ey.Y;
 
-            out_Renamed.ex.x = x1;
-            out_Renamed.ex.y = y1;
-            out_Renamed.ey.x = x2;
-            out_Renamed.ey.y = y2;
+            out_Renamed.ex.X = x1;
+            out_Renamed.ex.Y = y1;
+            out_Renamed.ey.X = x2;
+            out_Renamed.ey.Y = y2;
         }
 
         public static void mulTransToOutUnsafe(Mat22 A, Mat22 B, Mat22 out_Renamed)
         {
             Debug.Assert(A != out_Renamed);
             Debug.Assert(B != out_Renamed);
-            out_Renamed.ex.x = A.ex.x * B.ex.x + A.ex.y * B.ex.y;
-            out_Renamed.ex.y = A.ey.x * B.ex.x + A.ey.y * B.ex.y;
-            out_Renamed.ey.x = A.ex.x * B.ey.x + A.ex.y * B.ey.y;
-            out_Renamed.ey.y = A.ey.x * B.ey.x + A.ey.y * B.ey.y;
+            out_Renamed.ex.X = A.ex.X * B.ex.X + A.ex.Y * B.ex.Y;
+            out_Renamed.ex.Y = A.ey.X * B.ex.X + A.ey.Y * B.ex.Y;
+            out_Renamed.ey.X = A.ex.X * B.ey.X + A.ex.Y * B.ey.Y;
+            out_Renamed.ey.Y = A.ey.X * B.ey.X + A.ey.Y * B.ey.Y;
         }
 
         public static Mat22 createRotationalTransform(float angle)
@@ -595,10 +595,10 @@ namespace Box2D.Common
             Mat22 mat = new Mat22();
             float c = MathUtils.cos(angle);
             float s = MathUtils.sin(angle);
-            mat.ex.x = c;
-            mat.ey.x = -s;
-            mat.ex.y = s;
-            mat.ey.y = c;
+            mat.ex.X = c;
+            mat.ey.X = -s;
+            mat.ex.Y = s;
+            mat.ey.Y = c;
             return mat;
         }
 
@@ -606,24 +606,24 @@ namespace Box2D.Common
         {
             float c = MathUtils.cos(angle);
             float s = MathUtils.sin(angle);
-            out_Renamed.ex.x = c;
-            out_Renamed.ey.x = -s;
-            out_Renamed.ex.y = s;
-            out_Renamed.ey.y = c;
+            out_Renamed.ex.X = c;
+            out_Renamed.ey.X = -s;
+            out_Renamed.ex.Y = s;
+            out_Renamed.ey.Y = c;
         }
 
         public static Mat22 createScaleTransform(float scale)
         {
             Mat22 mat = new Mat22();
-            mat.ex.x = scale;
-            mat.ey.y = scale;
+            mat.ex.X = scale;
+            mat.ey.Y = scale;
             return mat;
         }
 
         public static void createScaleTransform(float scale, Mat22 out_Renamed)
         {
-            out_Renamed.ex.x = scale;
-            out_Renamed.ey.y = scale;
+            out_Renamed.ex.X = scale;
+            out_Renamed.ey.Y = scale;
         }
 
         public override int GetHashCode()

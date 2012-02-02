@@ -83,9 +83,9 @@ namespace Box2D.Common
 
         public Sweep set_Renamed(Sweep argCloneFrom)
         {
-            localCenter.set_Renamed(argCloneFrom.localCenter);
-            c0.set_Renamed(argCloneFrom.c0);
-            c.set_Renamed(argCloneFrom.c);
+            localCenter.Set(argCloneFrom.localCenter);
+            c0.Set(argCloneFrom.c0);
+            c.Set(argCloneFrom.c);
             a0 = argCloneFrom.a0;
             a = argCloneFrom.a;
             return this;
@@ -109,8 +109,8 @@ namespace Box2D.Common
             * xf.R.set(a); }
             */
 
-            xf.p.x = (1.0f - beta) * c0.x + beta * c.x;
-            xf.p.y = (1.0f - beta) * c0.y + beta * c.y;
+            xf.p.X = (1.0f - beta) * c0.X + beta * c.X;
+            xf.p.Y = (1.0f - beta) * c0.Y + beta * c.Y;
             // float angle = (1.0f - alpha) * a0 + alpha * a;
             // xf.R.set(angle);
             xf.q.set_Renamed((1.0f - beta) * a0 + beta * a);
@@ -118,8 +118,8 @@ namespace Box2D.Common
             // Shift to origin
             //xf->p -= b2Mul(xf->q, localCenter);
             Rot q = xf.q;
-            xf.p.x -= (q.c * localCenter.x - q.s * localCenter.y);
-            xf.p.y -= (q.s * localCenter.x + q.c * localCenter.y);
+            xf.p.X -= (q.c * localCenter.X - q.s * localCenter.Y);
+            xf.p.Y -= (q.s * localCenter.X + q.c * localCenter.Y);
         }
 
         /// <summary>
@@ -135,8 +135,8 @@ namespace Box2D.Common
             //    c0.y = (1.0f - beta) * c0.y + beta * c.y;
             //    a0 = (1.0f - beta) * a0 + beta * a;
             //    alpha0 = alpha;
-            c0.x = (1.0f - alpha) * c0.x + alpha * c.x;
-            c0.y = (1.0f - alpha) * c0.y + alpha * c.y;
+            c0.X = (1.0f - alpha) * c0.X + alpha * c.X;
+            c0.Y = (1.0f - alpha) * c0.Y + alpha * c.Y;
             a0 = (1.0f - alpha) * a0 + alpha * a;
         }
     }

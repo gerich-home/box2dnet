@@ -104,8 +104,8 @@ namespace Box2D.Dynamics.Joints
         /// <seealso cref="Joint.getReactionForce(float, Vec2)"></seealso>
         public override void getReactionForce(float inv_dt, Vec2 argOut)
         {
-            argOut.set_Renamed(m_impulse.x, m_impulse.y);
-            argOut.mulLocal(inv_dt);
+            argOut.Set(m_impulse.x, m_impulse.y);
+            argOut.MulLocal(inv_dt);
         }
 
         /// <seealso cref="Joint.getReactionTorque(float)"></seealso>
@@ -159,8 +159,8 @@ namespace Box2D.Dynamics.Joints
         {
             m_indexA = m_bodyA.IslandIndex;
             m_indexB = m_bodyB.IslandIndex;
-            m_localCenterA.set_Renamed(m_bodyA.Sweep.localCenter);
-            m_localCenterB.set_Renamed(m_bodyB.Sweep.localCenter);
+            m_localCenterA.Set(m_bodyA.Sweep.localCenter);
+            m_localCenterB.Set(m_bodyB.Sweep.localCenter);
             m_invMassA = m_bodyA.InvMass;
             m_invMassB = m_bodyB.InvMass;
             m_invIA = m_bodyA.InvI;
@@ -184,8 +184,8 @@ namespace Box2D.Dynamics.Joints
             qB.set_Renamed(aB);
 
             // Compute the effective masses.
-            Rot.mulToOutUnsafe(qA, temp.set_Renamed(m_localAnchorA).subLocal(m_localCenterA), m_rA);
-            Rot.mulToOutUnsafe(qB, temp.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), m_rB);
+            Rot.mulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
+            Rot.mulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
 
             // J = [-I -r1_skew I r2_skew]
             // [ 0 -1 0 1]
@@ -201,12 +201,12 @@ namespace Box2D.Dynamics.Joints
 
             Mat33 K = pool.PopMat33();
 
-            K.ex.x = mA + mB + m_rA.y * m_rA.y * iA + m_rB.y * m_rB.y * iB;
-            K.ey.x = (-m_rA.y) * m_rA.x * iA - m_rB.y * m_rB.x * iB;
-            K.ez.x = (-m_rA.y) * iA - m_rB.y * iB;
+            K.ex.x = mA + mB + m_rA.Y * m_rA.Y * iA + m_rB.Y * m_rB.Y * iB;
+            K.ey.x = (-m_rA.Y) * m_rA.X * iA - m_rB.Y * m_rB.X * iB;
+            K.ez.x = (-m_rA.Y) * iA - m_rB.Y * iB;
             K.ex.y = K.ey.x;
-            K.ey.y = mA + mB + m_rA.x * m_rA.x * iA + m_rB.x * m_rB.x * iB;
-            K.ez.y = m_rA.x * iA + m_rB.x * iB;
+            K.ey.y = mA + mB + m_rA.X * m_rA.X * iA + m_rB.X * m_rB.X * iB;
+            K.ez.y = m_rA.X * iA + m_rB.X * iB;
             K.ex.z = K.ez.x;
             K.ey.z = K.ez.y;
             K.ez.z = iA + iB;
@@ -251,15 +251,15 @@ namespace Box2D.Dynamics.Joints
                 // Scale impulses to support a variable time step.
                 m_impulse.mulLocal(data.Step.DtRatio);
 
-                P.set_Renamed(m_impulse.x, m_impulse.y);
+                P.Set(m_impulse.x, m_impulse.y);
 
-                vA.x -= mA * P.x;
-                vA.y -= mA * P.y;
-                wA -= iA * (Vec2.cross(m_rA, P) + m_impulse.z);
+                vA.X -= mA * P.X;
+                vA.Y -= mA * P.Y;
+                wA -= iA * (Vec2.Cross(m_rA, P) + m_impulse.z);
 
-                vB.x += mB * P.x;
-                vB.y += mB * P.y;
-                wB += iB * (Vec2.cross(m_rB, P) + m_impulse.z);
+                vB.X += mB * P.X;
+                vB.Y += mB * P.Y;
+                wB += iB * (Vec2.Cross(m_rB, P) + m_impulse.z);
                 pool.PushVec2(1);
             }
             else
@@ -267,9 +267,9 @@ namespace Box2D.Dynamics.Joints
                 m_impulse.setZero();
             }
 
-            data.Velocities[m_indexA].v.set_Renamed(vA);
+            data.Velocities[m_indexA].v.Set(vA);
             data.Velocities[m_indexA].w = wA;
-            data.Velocities[m_indexB].v.set_Renamed(vB);
+            data.Velocities[m_indexB].v.Set(vB);
             data.Velocities[m_indexB].w = wB;
 
             pool.PushVec2(1);
@@ -302,56 +302,56 @@ namespace Box2D.Dynamics.Joints
                 wA -= iA * impulse2;
                 wB += iB * impulse2;
 
-                Vec2.crossToOutUnsafe(wB, m_rB, Cdot1);
-                Vec2.crossToOutUnsafe(wA, m_rA, temp);
-                Cdot1.addLocal(vB).subLocal(vA).subLocal(temp);
+                Vec2.CrossToOutUnsafe(wB, m_rB, Cdot1);
+                Vec2.CrossToOutUnsafe(wA, m_rA, temp);
+                Cdot1.AddLocal(vB).SubLocal(vA).SubLocal(temp);
 
                 Vec2 impulse1 = P;
                 Mat33.mul22ToOutUnsafe(m_mass, Cdot1, impulse1);
-                impulse1.negateLocal();
+                impulse1.NegateLocal();
 
-                m_impulse.x += impulse1.x;
-                m_impulse.y += impulse1.y;
+                m_impulse.x += impulse1.X;
+                m_impulse.y += impulse1.Y;
 
-                vA.x -= mA * P.x;
-                vA.y -= mA * P.y;
-                wA -= iA * Vec2.cross(m_rA, P);
+                vA.X -= mA * P.X;
+                vA.Y -= mA * P.Y;
+                wA -= iA * Vec2.Cross(m_rA, P);
 
-                vB.x += mB * P.x;
-                vB.y += mB * P.y;
-                wB += iB * Vec2.cross(m_rB, P);
+                vB.X += mB * P.X;
+                vB.Y += mB * P.Y;
+                wB += iB * Vec2.Cross(m_rB, P);
             }
             else
             {
-                Vec2.crossToOutUnsafe(wA, m_rA, temp);
-                Vec2.crossToOutUnsafe(wB, m_rB, Cdot1);
-                Cdot1.addLocal(vB).subLocal(vA).subLocal(temp);
+                Vec2.CrossToOutUnsafe(wA, m_rA, temp);
+                Vec2.CrossToOutUnsafe(wB, m_rB, Cdot1);
+                Cdot1.AddLocal(vB).SubLocal(vA).SubLocal(temp);
                 float Cdot2 = wB - wA;
 
                 Vec3 Cdot = pool.PopVec3();
-                Cdot.set_Renamed(Cdot1.x, Cdot1.y, Cdot2);
+                Cdot.set_Renamed(Cdot1.X, Cdot1.Y, Cdot2);
 
                 Vec3 impulse = pool.PopVec3();
                 Mat33.mulToOutUnsafe(m_mass, Cdot, impulse);
                 impulse.negateLocal();
                 m_impulse.addLocal(impulse);
 
-                P.set_Renamed(impulse.x, impulse.y);
+                P.Set(impulse.x, impulse.y);
 
-                vA.x -= mA * P.x;
-                vA.y -= mA * P.y;
-                wA -= iA * (Vec2.cross(m_rA, P) + impulse.z);
+                vA.X -= mA * P.X;
+                vA.Y -= mA * P.Y;
+                wA -= iA * (Vec2.Cross(m_rA, P) + impulse.z);
 
-                vB.x += mB * P.x;
-                vB.y += mB * P.y;
-                wB += iB * (Vec2.cross(m_rB, P) + impulse.z);
+                vB.X += mB * P.X;
+                vB.Y += mB * P.Y;
+                wB += iB * (Vec2.Cross(m_rB, P) + impulse.z);
 
                 pool.PushVec3(2);
             }
 
-            data.Velocities[m_indexA].v.set_Renamed(vA);
+            data.Velocities[m_indexA].v.Set(vA);
             data.Velocities[m_indexA].w = wA;
-            data.Velocities[m_indexB].v.set_Renamed(vB);
+            data.Velocities[m_indexB].v.Set(vB);
             data.Velocities[m_indexB].w = wB;
 
             pool.PushVec2(3);
@@ -376,70 +376,70 @@ namespace Box2D.Dynamics.Joints
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
 
-            Rot.mulToOutUnsafe(qA, temp.set_Renamed(m_localAnchorA).subLocal(m_localCenterA), rA);
-            Rot.mulToOutUnsafe(qB, temp.set_Renamed(m_localAnchorB).subLocal(m_localCenterB), rB);
+            Rot.mulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.mulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
             float positionError, angularError;
 
             Mat33 K = pool.PopMat33();
             Vec2 C1 = pool.PopVec2();
             Vec2 P = pool.PopVec2();
 
-            K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
-            K.ey.x = (-rA.y) * rA.x * iA - rB.y * rB.x * iB;
-            K.ez.x = (-rA.y) * iA - rB.y * iB;
+            K.ex.x = mA + mB + rA.Y * rA.Y * iA + rB.Y * rB.Y * iB;
+            K.ey.x = (-rA.Y) * rA.X * iA - rB.Y * rB.X * iB;
+            K.ez.x = (-rA.Y) * iA - rB.Y * iB;
             K.ex.y = K.ey.x;
-            K.ey.y = mA + mB + rA.x * rA.x * iA + rB.x * rB.x * iB;
-            K.ez.y = rA.x * iA + rB.x * iB;
+            K.ey.y = mA + mB + rA.X * rA.X * iA + rB.X * rB.X * iB;
+            K.ez.y = rA.X * iA + rB.X * iB;
             K.ex.z = K.ez.x;
             K.ey.z = K.ez.y;
             K.ez.z = iA + iB;
 
             if (m_frequencyHz > 0.0f)
             {
-                C1.set_Renamed(cB).addLocal(rB).subLocal(cA).subLocal(rA);
+                C1.Set(cB).AddLocal(rB).SubLocal(cA).SubLocal(rA);
 
-                positionError = C1.length();
+                positionError = C1.Length();
                 angularError = 0.0f;
 
                 K.solve22ToOut(C1, P);
-                P.negateLocal();
+                P.NegateLocal();
 
-                cA.x -= mA * P.x;
-                cA.y -= mA * P.y;
-                aA -= iA * Vec2.cross(rA, P);
+                cA.X -= mA * P.X;
+                cA.Y -= mA * P.Y;
+                aA -= iA * Vec2.Cross(rA, P);
 
-                cB.x += mB * P.x;
-                cB.y += mB * P.y;
-                aB += iB * Vec2.cross(rB, P);
+                cB.X += mB * P.X;
+                cB.Y += mB * P.Y;
+                aB += iB * Vec2.Cross(rB, P);
             }
             else
             {
-                C1.set_Renamed(cB).addLocal(rB).subLocal(cA).subLocal(rA);
+                C1.Set(cB).AddLocal(rB).SubLocal(cA).SubLocal(rA);
                 float C2 = aB - aA - m_referenceAngle;
 
-                positionError = C1.length();
+                positionError = C1.Length();
                 angularError = MathUtils.abs(C2);
 
                 Vec3 C = pool.PopVec3();
                 Vec3 impulse = pool.PopVec3();
-                C.set_Renamed(C1.x, C1.y, C2);
+                C.set_Renamed(C1.X, C1.Y, C2);
 
                 K.solve33ToOut(C, impulse);
                 impulse.negateLocal();
-                P.set_Renamed(impulse.x, impulse.y);
+                P.Set(impulse.x, impulse.y);
 
-                cA.x -= mA * P.x;
-                cA.y -= mA * P.y;
-                aA -= iA * (Vec2.cross(rA, P) + impulse.z);
+                cA.X -= mA * P.X;
+                cA.Y -= mA * P.Y;
+                aA -= iA * (Vec2.Cross(rA, P) + impulse.z);
 
-                cB.x += mB * P.x;
-                cB.y += mB * P.y;
-                aB += iB * (Vec2.cross(rB, P) + impulse.z);
+                cB.X += mB * P.X;
+                cB.Y += mB * P.Y;
+                aB += iB * (Vec2.Cross(rB, P) + impulse.z);
             }
 
-            data.Positions[m_indexA].c.set_Renamed(cA);
+            data.Positions[m_indexA].c.Set(cA);
             data.Positions[m_indexA].a = aA;
-            data.Positions[m_indexB].c.set_Renamed(cB);
+            data.Positions[m_indexB].c.Set(cB);
             data.Positions[m_indexB].a = aB;
 
             pool.PushVec2(5);

@@ -253,15 +253,15 @@ namespace Box2D.Dynamics
 				float w = b.m_angularVelocity;
 
 				// Store positions for continuous collision.
-				b.Sweep.c0.set_Renamed(b.Sweep.c);
+				b.Sweep.c0.Set(b.Sweep.c);
 				b.Sweep.a0 = b.Sweep.a;
 
 				if (b.m_type == BodyType.Dynamic)
 				{
 					// Integrate velocities.
 					// v += h * (b.m_gravityScale * gravity + b.m_invMass * b.m_force);
-					v.x += h * (b.GravityScale * gravity.x + b.InvMass * b.Force.x);
-					v.y += h * (b.GravityScale * gravity.y + b.InvMass * b.Force.y);
+					v.X += h * (b.GravityScale * gravity.X + b.InvMass * b.Force.X);
+					v.Y += h * (b.GravityScale * gravity.Y + b.InvMass * b.Force.Y);
 					w += h * b.InvI * b.Torque;
 
 					// Apply damping.
@@ -272,14 +272,14 @@ namespace Box2D.Dynamics
 					// v2 = exp(-c * dt) * v1
 					// Taylor expansion:
 					// v2 = (1.0f - c * dt) * v1
-					v.mulLocal(MathUtils.clamp(1.0f - h * b.LinearDamping, 0.0f, 1.0f));
+					v.MulLocal(MathUtils.clamp(1.0f - h * b.LinearDamping, 0.0f, 1.0f));
 					w *= MathUtils.clamp(1.0f - h * b.AngularDamping, 0.0f, 1.0f);
 				}
 				//Debug.Assert (v.x == 0);
 
-				Positions[i].c.set_Renamed(c);
+				Positions[i].c.Set(c);
 				Positions[i].a = a;
-				Velocities[i].v.set_Renamed(v);
+				Velocities[i].v.Set(v);
 				Velocities[i].w = w;
 			}
 
@@ -340,14 +340,14 @@ namespace Box2D.Dynamics
 				float w = Velocities[i].w;
 
 				// Check for large velocities
-				translation.x = v.x * h;
-				translation.y = v.y * h;
+				translation.X = v.X * h;
+				translation.Y = v.Y * h;
 
-				if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared)
+				if (Vec2.Dot(translation, translation) > Settings.maxTranslationSquared)
 				{
-					float ratio = Settings.maxTranslation / translation.length();
-					v.x *= ratio;
-					v.y *= ratio;
+					float ratio = Settings.maxTranslation / translation.Length();
+					v.X *= ratio;
+					v.Y *= ratio;
 				}
 
 				float rotation = h * w;
@@ -358,8 +358,8 @@ namespace Box2D.Dynamics
 				}
 
 				// Integrate
-				c.x += h * v.x;
-				c.y += h * v.y;
+				c.X += h * v.X;
+				c.Y += h * v.Y;
 				a += h * w;
 
 				Positions[i].a = a;
@@ -392,9 +392,9 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body body = Bodies[i];
-				body.Sweep.c.set_Renamed(Positions[i].c);
+				body.Sweep.c.Set(Positions[i].c);
 				body.Sweep.a = Positions[i].a;
-				body.m_linearVelocity.set_Renamed(Velocities[i].v);
+				body.m_linearVelocity.Set(Velocities[i].v);
 				body.m_angularVelocity = Velocities[i].w;
 				body.SynchronizeTransform();
 			}
@@ -418,7 +418,7 @@ namespace Box2D.Dynamics
 						continue;
 					}
 
-					if ((b.Flags & Body.TypeFlags.AutoSleep) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || Vec2.dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
+					if ((b.Flags & Body.TypeFlags.AutoSleep) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || Vec2.Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
 					{
 						b.SleepTime = 0.0f;
 						minSleepTime = 0.0f;
@@ -453,9 +453,9 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body b = Bodies[i];
-				Positions[i].c.set_Renamed(b.Sweep.c);
+				Positions[i].c.Set(b.Sweep.c);
 				Positions[i].a = b.Sweep.a;
-				Velocities[i].v.set_Renamed(b.m_linearVelocity);
+				Velocities[i].v.Set(b.m_linearVelocity);
 				Velocities[i].w = b.m_angularVelocity;
 			}
 
@@ -510,9 +510,9 @@ namespace Box2D.Dynamics
 			// #endif
 
 			// Leap of faith to new safe state.
-			Bodies[toiIndexA].Sweep.c0.set_Renamed(Positions[toiIndexA].c);
+			Bodies[toiIndexA].Sweep.c0.Set(Positions[toiIndexA].c);
 			Bodies[toiIndexA].Sweep.a0 = Positions[toiIndexA].a;
-			Bodies[toiIndexB].Sweep.c0.set_Renamed(Positions[toiIndexB].c);
+			Bodies[toiIndexB].Sweep.c0.Set(Positions[toiIndexB].c);
 			Bodies[toiIndexB].Sweep.a0 = Positions[toiIndexB].a;
 
 			// No warm starting is needed for TOI events because warm
@@ -539,11 +539,11 @@ namespace Box2D.Dynamics
 				float w = Velocities[i].w;
 
 				// Check for large velocities
-				translation.set_Renamed(v).mulLocal(h);
-				if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared)
+				translation.Set(v).MulLocal(h);
+				if (Vec2.Dot(translation, translation) > Settings.maxTranslationSquared)
 				{
-					float ratio = Settings.maxTranslation / translation.length();
-					v.mulLocal(ratio);
+					float ratio = Settings.maxTranslation / translation.Length();
+					v.MulLocal(ratio);
 				}
 
 				float rotation = h * w;
@@ -554,20 +554,20 @@ namespace Box2D.Dynamics
 				}
 
 				// Integrate
-				c.x += v.x * h;
-				c.y += v.y * h;
+				c.X += v.X * h;
+				c.Y += v.Y * h;
 				a += h * w;
 
-				Positions[i].c.set_Renamed(c);
+				Positions[i].c.Set(c);
 				Positions[i].a = a;
-				Velocities[i].v.set_Renamed(v);
+				Velocities[i].v.Set(v);
 				Velocities[i].w = w;
 
 				// Sync bodies
 				Body body = Bodies[i];
-				body.Sweep.c.set_Renamed(c);
+				body.Sweep.c.Set(c);
 				body.Sweep.a = a;
-				body.m_linearVelocity.set_Renamed(v);
+				body.m_linearVelocity.Set(v);
 				body.m_angularVelocity = w;
 				body.SynchronizeTransform();
 			}

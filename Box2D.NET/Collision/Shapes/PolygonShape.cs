@@ -69,17 +69,17 @@ namespace Box2D.Collision.Shapes
                 Normals[i] = new Vec2();
             }
             Radius = Settings.polygonRadius;
-            Centroid.setZero();
+            Centroid.SetZero();
         }
 
         public override Shape Clone()
         {
             PolygonShape shape = new PolygonShape();
-            shape.Centroid.set_Renamed(Centroid);
+            shape.Centroid.Set(Centroid);
             for (int i = 0; i < shape.Normals.Length; i++)
             {
-                shape.Normals[i].set_Renamed(Normals[i]);
-                shape.Vertices[i].set_Renamed(Vertices[i]);
+                shape.Normals[i].Set(Normals[i]);
+                shape.Vertices[i].Set(Vertices[i]);
             }
             shape.Radius = Radius;
             shape.VertexCount = VertexCount;
@@ -95,15 +95,15 @@ namespace Box2D.Collision.Shapes
         public void SetAsEdge(Vec2 v1, Vec2 v2)
         {
             VertexCount = 2;
-            Vertices[0].set_Renamed(v1);
-            Vertices[1].set_Renamed(v2);
-            Centroid.set_Renamed(v1).addLocal(v2).mulLocal(0.5f);
+            Vertices[0].Set(v1);
+            Vertices[1].Set(v2);
+            Centroid.Set(v1).AddLocal(v2).MulLocal(0.5f);
             // = 0.5f * (v1 + v2);
-            Normals[0].set_Renamed(v2).subLocal(v1);
-            Vec2.crossToOut(Normals[0], 1f, Normals[0]);
+            Normals[0].Set(v2).SubLocal(v1);
+            Vec2.CrossToOut(Normals[0], 1f, Normals[0]);
             // m_normals[0] = Cross(v2 - v1, 1.0f);
-            Normals[0].normalize();
-            Normals[1].set_Renamed(Normals[0]).negateLocal();
+            Normals[0].Normalize();
+            Normals[1].Set(Normals[0]).NegateLocal();
         }
 
         /// <summary>
@@ -147,11 +147,11 @@ namespace Box2D.Collision.Shapes
 
             // Find the right most point on the hull
             int i0 = 0;
-            float x0 = ps[0].x;
+            float x0 = ps[0].X;
             for (int i = 1; i < num; ++i)
             {
-                float x = ps[i].x;
-                if (x > x0 || (x == x0 && ps[i].y < ps[i0].y))
+                float x = ps[i].X;
+                if (x > x0 || (x == x0 && ps[i].Y < ps[i0].Y))
                 {
                     i0 = i;
                     x0 = x;
@@ -175,16 +175,16 @@ namespace Box2D.Collision.Shapes
                         continue;
                     }
 
-                    Vec2 r = pool1.set_Renamed(ps[ie]).subLocal(ps[hull[m]]);
-                    Vec2 v = pool2.set_Renamed(ps[j]).subLocal(ps[hull[m]]);
-                    float c = Vec2.cross(r, v);
+                    Vec2 r = pool1.Set(ps[ie]).SubLocal(ps[hull[m]]);
+                    Vec2 v = pool2.Set(ps[j]).SubLocal(ps[hull[m]]);
+                    float c = Vec2.Cross(r, v);
                     if (c < 0.0f)
                     {
                         ie = j;
                     }
 
                     // Collinearity check
-                    if (c == 0.0f && v.lengthSquared() > r.lengthSquared())
+                    if (c == 0.0f && v.LengthSquared() > r.LengthSquared())
                     {
                         ie = j;
                     }
@@ -208,7 +208,7 @@ namespace Box2D.Collision.Shapes
                 {
                     Vertices[i] = new Vec2();
                 }
-                Vertices[i].set_Renamed(ps[hull[i]]);
+                Vertices[i].Set(ps[hull[i]]);
             }
 
             Vec2 edge = pool1;
@@ -218,11 +218,11 @@ namespace Box2D.Collision.Shapes
             {
                 int i1 = i;
                 int i2 = i + 1 < VertexCount ? i + 1 : 0;
-                edge.set_Renamed(Vertices[i2]).subLocal(Vertices[i1]);
+                edge.Set(Vertices[i2]).SubLocal(Vertices[i1]);
 
-                Debug.Assert(edge.lengthSquared() > Settings.EPSILON * Settings.EPSILON);
-                Vec2.crossToOutUnsafe(edge, 1f, Normals[i]);
-                Normals[i].normalize();
+                Debug.Assert(edge.LengthSquared() > Settings.EPSILON * Settings.EPSILON);
+                Vec2.CrossToOutUnsafe(edge, 1f, Normals[i]);
+                Normals[i].Normalize();
             }
 
             // Compute the polygon centroid.
@@ -237,15 +237,15 @@ namespace Box2D.Collision.Shapes
         public void SetAsBox(float hx, float hy)
         {
             VertexCount = 4;
-            Vertices[0].set_Renamed(-hx, -hy);
-            Vertices[1].set_Renamed(hx, -hy);
-            Vertices[2].set_Renamed(hx, hy);
-            Vertices[3].set_Renamed(-hx, hy);
-            Normals[0].set_Renamed(0.0f, -1.0f);
-            Normals[1].set_Renamed(1.0f, 0.0f);
-            Normals[2].set_Renamed(0.0f, 1.0f);
-            Normals[3].set_Renamed(-1.0f, 0.0f);
-            Centroid.setZero();
+            Vertices[0].Set(-hx, -hy);
+            Vertices[1].Set(hx, -hy);
+            Vertices[2].Set(hx, hy);
+            Vertices[3].Set(-hx, hy);
+            Normals[0].Set(0.0f, -1.0f);
+            Normals[1].Set(1.0f, 0.0f);
+            Normals[2].Set(0.0f, 1.0f);
+            Normals[3].Set(-1.0f, 0.0f);
+            Centroid.SetZero();
         }
 
         /// <summary>
@@ -258,18 +258,18 @@ namespace Box2D.Collision.Shapes
         public void SetAsBox(float hx, float hy, Vec2 center, float angle)
         {
             VertexCount = 4;
-            Vertices[0].set_Renamed(-hx, -hy);
-            Vertices[1].set_Renamed(hx, -hy);
-            Vertices[2].set_Renamed(hx, hy);
-            Vertices[3].set_Renamed(-hx, hy);
-            Normals[0].set_Renamed(0.0f, -1.0f);
-            Normals[1].set_Renamed(1.0f, 0.0f);
-            Normals[2].set_Renamed(0.0f, 1.0f);
-            Normals[3].set_Renamed(-1.0f, 0.0f);
-            Centroid.set_Renamed(center);
+            Vertices[0].Set(-hx, -hy);
+            Vertices[1].Set(hx, -hy);
+            Vertices[2].Set(hx, hy);
+            Vertices[3].Set(-hx, hy);
+            Normals[0].Set(0.0f, -1.0f);
+            Normals[1].Set(1.0f, 0.0f);
+            Normals[2].Set(0.0f, 1.0f);
+            Normals[3].Set(-1.0f, 0.0f);
+            Centroid.Set(center);
 
             Transform xf = poolt1;
-            xf.p.set_Renamed(center);
+            xf.p.Set(center);
             xf.q.set_Renamed(angle);
 
             // Transform vertices and normals.
@@ -293,9 +293,9 @@ namespace Box2D.Collision.Shapes
             Vec2 pLocal = pool1;
             Vec2 temp = pool2;
 
-            pLocal.set_Renamed(p).subLocal(xf.p);
+            pLocal.Set(p).SubLocal(xf.p);
             Rot.mulTransUnsafe(xf.q, pLocal, temp);
-            pLocal.set_Renamed(temp);
+            pLocal.Set(temp);
 
             if (m_debug)
             {
@@ -311,8 +311,8 @@ namespace Box2D.Collision.Shapes
 
             for (int i = 0; i < VertexCount; ++i)
             {
-                temp.set_Renamed(pLocal).subLocal(Vertices[i]);
-                float dot = Vec2.dot(Normals[i], temp);
+                temp.Set(pLocal).SubLocal(Vertices[i]);
+                float dot = Vec2.Dot(Normals[i], temp);
                 if (dot > 0.0f)
                 {
                     return false;
@@ -328,28 +328,28 @@ namespace Box2D.Collision.Shapes
             Vec2 lower = aabb.LowerBound;
             Vec2 upper = aabb.UpperBound;
             Vec2 v1 = Vertices[0];
-            lower.x = (xf.q.c * v1.x - xf.q.s * v1.y) + xf.p.x;
-            lower.y = (xf.q.s * v1.x + xf.q.c * v1.y) + xf.p.y;
-            upper.set_Renamed(lower);
+            lower.X = (xf.q.c * v1.X - xf.q.s * v1.Y) + xf.p.X;
+            lower.Y = (xf.q.s * v1.X + xf.q.c * v1.Y) + xf.p.Y;
+            upper.Set(lower);
 
             for (int i = 1; i < VertexCount; ++i)
             {
                 Vec2 v2 = Vertices[i];
-                v.x = (xf.q.c * v2.x - xf.q.s * v2.y) + xf.p.x;
-                v.y = (xf.q.s * v2.x + xf.q.c * v2.y) + xf.p.y;
+                v.X = (xf.q.c * v2.X - xf.q.s * v2.Y) + xf.p.X;
+                v.Y = (xf.q.s * v2.X + xf.q.c * v2.Y) + xf.p.Y;
                 // Vec2 v = Mul(xf, m_vertices[i]);
-                Vec2.minToOut(lower, v, lower);
-                Vec2.maxToOut(upper, v, upper);
+                Vec2.MinToOut(lower, v, lower);
+                Vec2.MaxToOut(upper, v, upper);
             }
 
             // Vec2 r(m_radius, m_radius);
             // aabb.lowerBound = lower - r;
             // aabb.upperBound = upper + r;
 
-            aabb.LowerBound.x -= Radius;
-            aabb.LowerBound.y -= Radius;
-            aabb.UpperBound.x += Radius;
-            aabb.UpperBound.y += Radius;
+            aabb.LowerBound.X -= Radius;
+            aabb.LowerBound.Y -= Radius;
+            aabb.UpperBound.X += Radius;
+            aabb.UpperBound.Y += Radius;
         }
 
         // djm pooling, and from above
@@ -436,11 +436,11 @@ namespace Box2D.Collision.Shapes
             Vec2 d = pool3;
             Vec2 temp = pool4;
 
-            p1.set_Renamed(input.P1).subLocal(xf.p);
+            p1.Set(input.P1).SubLocal(xf.p);
             Rot.mulTrans(xf.q, p1, p1);
-            p2.set_Renamed(input.P2).subLocal(xf.p);
+            p2.Set(input.P2).SubLocal(xf.p);
             Rot.mulTrans(xf.q, p2, p2);
-            d.set_Renamed(p2).subLocal(p1);
+            d.Set(p2).SubLocal(p1);
 
             // if (count == 2) {
 
@@ -455,9 +455,9 @@ namespace Box2D.Collision.Shapes
                 // p = p1 + a * d
                 // dot(normal, p - v) = 0
                 // dot(normal, p1 - v) + a * dot(normal, d) = 0
-                temp.set_Renamed(Vertices[i]).subLocal(p1);
-                float numerator = Vec2.dot(Normals[i], temp);
-                float denominator = Vec2.dot(Normals[i], d);
+                temp.Set(Vertices[i]).SubLocal(p1);
+                float numerator = Vec2.Dot(Normals[i], temp);
+                float denominator = Vec2.Dot(Normals[i], d);
 
                 if (denominator == 0.0f)
                 {
@@ -510,13 +510,13 @@ namespace Box2D.Collision.Shapes
         {
             Debug.Assert(count >= 3);
 
-            result.set_Renamed(0.0f, 0.0f);
+            result.Set(0.0f, 0.0f);
             float area = 0.0f;
 
             // pRef is the reference point for forming triangles.
             // It's location doesn't change the result (except for rounding error).
             Vec2 pRef = pool1;
-            pRef.setZero();
+            pRef.SetZero();
 
             Vec2 e1 = pool2;
             Vec2 e2 = pool3;
@@ -530,22 +530,22 @@ namespace Box2D.Collision.Shapes
                 Vec2 p2 = vs[i];
                 Vec2 p3 = i + 1 < count ? vs[i + 1] : vs[0];
 
-                e1.set_Renamed(p2).subLocal(p1);
-                e2.set_Renamed(p3).subLocal(p1);
+                e1.Set(p2).SubLocal(p1);
+                e2.Set(p3).SubLocal(p1);
 
-                float D = Vec2.cross(e1, e2);
+                float D = Vec2.Cross(e1, e2);
 
                 float triangleArea = 0.5f * D;
                 area += triangleArea;
 
                 // Area weighted centroid
-                e1.set_Renamed(p1).addLocal(p2).addLocal(p3).mulLocal(triangleArea * inv3);
-                result.addLocal(e1);
+                e1.Set(p1).AddLocal(p2).AddLocal(p3).MulLocal(triangleArea * inv3);
+                result.AddLocal(e1);
             }
 
             // Centroid
             Debug.Assert(area > Settings.EPSILON);
-            result.mulLocal(1.0f / area);
+            result.MulLocal(1.0f / area);
         }
 
         public override void ComputeMass(MassData massData, float density)
@@ -577,20 +577,20 @@ namespace Box2D.Collision.Shapes
             Debug.Assert(VertexCount >= 3);
 
             Vec2 center = pool1;
-            center.setZero();
+            center.SetZero();
             float area = 0.0f;
             float I = 0.0f;
 
             // pRef is the reference point for forming triangles.
             // It's location doesn't change the result (except for rounding error).
             Vec2 s = pool2;
-            s.setZero();
+            s.SetZero();
             // This code would put the reference point inside the polygon.
             for (int i = 0; i < VertexCount; ++i)
             {
-                s.addLocal(Vertices[i]);
+                s.AddLocal(Vertices[i]);
             }
-            s.mulLocal(1.0f / VertexCount);
+            s.MulLocal(1.0f / VertexCount);
 
             const float k_inv3 = 1.0f / 3.0f;
 
@@ -600,22 +600,22 @@ namespace Box2D.Collision.Shapes
             for (int i = 0; i < VertexCount; ++i)
             {
                 // Triangle vertices.
-                e1.set_Renamed(Vertices[i]).subLocal(s);
-                e2.set_Renamed(s).negateLocal().addLocal(i + 1 < VertexCount ? Vertices[i + 1] : Vertices[0]);
+                e1.Set(Vertices[i]).SubLocal(s);
+                e2.Set(s).NegateLocal().AddLocal(i + 1 < VertexCount ? Vertices[i + 1] : Vertices[0]);
 
-                float D = Vec2.cross(e1, e2);
+                float D = Vec2.Cross(e1, e2);
 
                 float triangleArea = 0.5f * D;
                 area += triangleArea;
 
                 // Area weighted centroid
-                center.x += triangleArea * k_inv3 * (e1.x + e2.x);
-                center.y += triangleArea * k_inv3 * (e1.y + e2.y);
+                center.X += triangleArea * k_inv3 * (e1.X + e2.X);
+                center.Y += triangleArea * k_inv3 * (e1.Y + e2.Y);
 
-                float ex1 = e1.x;
-                float ey1 = e1.y;
-                float ex2 = e2.x;
-                float ey2 = e2.y;
+                float ex1 = e1.X;
+                float ey1 = e1.Y;
+                float ex2 = e2.X;
+                float ey2 = e2.Y;
 
                 float intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
                 float inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
@@ -628,14 +628,14 @@ namespace Box2D.Collision.Shapes
 
             // Center of mass
             Debug.Assert(area > Settings.EPSILON);
-            center.mulLocal(1.0f / area);
-            massData.Center.set_Renamed(center).addLocal(s);
+            center.MulLocal(1.0f / area);
+            massData.Center.Set(center).AddLocal(s);
 
             // Inertia tensor relative to the local origin (point s)
             massData.I = I * density;
 
             // Shift to center of mass then to original body origin.
-            massData.I += massData.Mass * (Vec2.dot(massData.Center, massData.Center));
+            massData.I += massData.Mass * (Vec2.Dot(massData.Center, massData.Center));
         }
 
         /// <summary>
@@ -649,7 +649,7 @@ namespace Box2D.Collision.Shapes
                 int i1 = i;
                 int i2 = i < VertexCount - 1 ? i1 + 1 : 0;
                 Vec2 p = Vertices[i1];
-                Vec2 e = pool1.set_Renamed(Vertices[i2]).subLocal(p);
+                Vec2 e = pool1.Set(Vertices[i2]).SubLocal(p);
 
                 for (int j = 0; j < VertexCount; ++j)
                 {
@@ -658,8 +658,8 @@ namespace Box2D.Collision.Shapes
                         continue;
                     }
 
-                    Vec2 v = pool2.set_Renamed(Vertices[j]).subLocal(p);
-                    float c = Vec2.cross(e, v);
+                    Vec2 v = pool2.Set(Vertices[j]).SubLocal(p);
+                    float c = Vec2.Cross(e, v);
                     if (c < 0.0f)
                     {
                         return false;

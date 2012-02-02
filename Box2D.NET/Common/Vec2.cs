@@ -32,9 +32,8 @@ namespace Box2D.Common
     [Serializable]
     public class Vec2
     {
-        private const long serialVersionUID = 1L;
-
-        public float x, y;
+        public float X;
+        public float Y;
 
         public Vec2() :
             this(0, 0)
@@ -43,254 +42,292 @@ namespace Box2D.Common
 
         public Vec2(float x, float y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
         public Vec2(Vec2 toCopy) :
-            this(toCopy.x, toCopy.y)
+            this(toCopy.X, toCopy.Y)
         {
         }
 
-        /// <summary>Zero out this vector. </summary>
-        public void setZero()
+        /// <summary>
+        /// Zero out this vector. 
+        /// </summary>
+        public void SetZero()
         {
-            x = 0.0f;
-            y = 0.0f;
+            X = 0.0f;
+            Y = 0.0f;
         }
 
-        /// <summary>Set the vector component-wise. </summary>
-        public Vec2 set_Renamed(float x, float y)
+        /// <summary>
+        /// Set the vector component-wise. 
+        /// </summary>
+        public Vec2 Set(float x, float y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
             return this;
         }
 
-        /// <summary>Set this vector to another vector. </summary>
-        public Vec2 set_Renamed(Vec2 v)
+        /// <summary>
+        /// Set this vector to another vector. 
+        /// </summary>
+        public Vec2 Set(Vec2 v)
         {
-            this.x = v.x;
-            this.y = v.y;
+            X = v.X;
+            Y = v.Y;
             return this;
         }
 
-        /// <summary>Return the sum of this vector and another; does not alter either one. </summary>
-        public Vec2 add(Vec2 v)
+        /// <summary>
+        /// Return the sum of this vector and another; does not alter either one. 
+        /// </summary>
+        public Vec2 Add(Vec2 v)
         {
-            return new Vec2(x + v.x, y + v.y);
+            return new Vec2(X + v.X, Y + v.Y);
         }
 
-        /// <summary>Return the difference of this vector and another; does not alter either one. </summary>
-        public Vec2 sub(Vec2 v)
+        /// <summary>
+        /// Return the difference of this vector and another; does not alter either one.
+        /// </summary>
+        public Vec2 Sub(Vec2 v)
         {
-            return new Vec2(x - v.x, y - v.y);
+            return new Vec2(X - v.X, Y - v.Y);
         }
 
-        /// <summary>Return this vector multiplied by a scalar; does not alter this vector. </summary>
-        public Vec2 mul(float a)
+        /// <summary>
+        /// Return this vector multiplied by a scalar; does not alter this vector.
+        /// </summary>
+        public Vec2 Mul(float a)
         {
-            return new Vec2(x * a, y * a);
+            return new Vec2(X * a, Y * a);
         }
 
-        /// <summary>Return the negation of this vector; does not alter this vector. </summary>
-        public Vec2 negate()
+        /// <summary>
+        /// Return the negation of this vector; does not alter this vector.
+        /// </summary>
+        public Vec2 Negate()
         {
-            return new Vec2(-x, -y);
+            return new Vec2(-X, -Y);
         }
 
-        /// <summary>Flip the vector and return it - alters this vector. </summary>
-        public Vec2 negateLocal()
+        /// <summary>
+        /// Flip the vector and return it - alters this vector. 
+        /// </summary>
+        public Vec2 NegateLocal()
         {
-            x = -x;
-            y = -y;
+            X = -X;
+            Y = -Y;
             return this;
         }
 
-        /// <summary>Add another vector to this one and returns result - alters this vector. </summary>
-        public Vec2 addLocal(Vec2 v)
+        /// <summary>
+        /// Add another vector to this one and returns result - alters this vector. 
+        /// </summary>
+        public Vec2 AddLocal(Vec2 v)
         {
-            x += v.x;
-            y += v.y;
+            X += v.X;
+            Y += v.Y;
             return this;
         }
 
-        /// <summary>Adds values to this vector and returns result - alters this vector. </summary>
-        public Vec2 addLocal(float x, float y)
+        /// <summary>
+        /// Adds values to this vector and returns result - alters this vector. 
+        /// </summary>
+        public Vec2 AddLocal(float x, float y)
         {
-            this.x += x;
-            this.y += y;
+            X += x;
+            Y += y;
             return this;
         }
 
-        /// <summary>Subtract another vector from this one and return result - alters this vector. </summary>
-        public Vec2 subLocal(Vec2 v)
+        /// <summary>
+        /// Subtract another vector from this one and return result - alters this vector. 
+        /// </summary>
+        public Vec2 SubLocal(Vec2 v)
         {
-            x -= v.x;
-            y -= v.y;
+            X -= v.X;
+            Y -= v.Y;
             return this;
         }
 
-        /// <summary>Multiply this vector by a number and return result - alters this vector. </summary>
-        public Vec2 mulLocal(float a)
+        /// <summary>
+        /// Multiply this vector by a number and return result - alters this vector.
+        /// </summary>
+        public Vec2 MulLocal(float a)
         {
-            x *= a;
-            y *= a;
+            X *= a;
+            Y *= a;
             return this;
         }
 
-        /// <summary>Get the skew vector such that dot(skew_vec, other) == cross(vec, other) </summary>
-        public Vec2 skew()
+        /// <summary>
+        /// Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
+        /// </summary>
+        public Vec2 Skew()
         {
-            return new Vec2(-y, x);
+            return new Vec2(-Y, X);
         }
 
-        /// <summary>Get the skew vector such that dot(skew_vec, other) == cross(vec, other) </summary>
-        public void skew(Vec2 out_Renamed)
+        /// <summary>
+        /// Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
+        /// </summary>
+        public void Skew(Vec2 result)
         {
-            out_Renamed.x = -y;
-            out_Renamed.y = x;
+            result.X = -Y;
+            result.Y = X;
         }
 
-        /// <summary>Return the length of this vector. </summary>
-        public float length()
+        /// <summary>
+        /// Return the length of this vector.
+        /// </summary>
+        public float Length()
         {
-            return MathUtils.sqrt(x * x + y * y);
+            return MathUtils.sqrt(X * X + Y * Y);
         }
 
-        /// <summary>Return the squared length of this vector. </summary>
-        public float lengthSquared()
+        /// <summary>
+        /// Return the squared length of this vector.
+        /// </summary>
+        public float LengthSquared()
         {
-            return (x * x + y * y);
+            return (X * X + Y * Y);
         }
 
-        /// <summary>Normalize this vector and return the length before normalization. Alters this vector. </summary>
-        public float normalize()
+        /// <summary>
+        /// Normalize this vector and return the length before normalization. Alters this vector. 
+        /// </summary>
+        public float Normalize()
         {
-            float length = this.length();
+            float length = Length();
             if (length < Settings.EPSILON)
             {
                 return 0f;
             }
 
             float invLength = 1.0f / length;
-            x *= invLength;
-            y *= invLength;
+            X *= invLength;
+            Y *= invLength;
             return length;
         }
 
-        /// <summary>Return a new vector that has positive components. </summary>
-        public Vec2 abs()
+        /// <summary>
+        /// Return a new vector that has positive components. 
+        /// </summary>
+        public Vec2 Abs()
         {
-            return new Vec2(MathUtils.abs(x), MathUtils.abs(y));
+            return new Vec2(MathUtils.abs(X), MathUtils.abs(Y));
         }
 
-        public void absLocal()
+        public void AbsLocal()
         {
-            x = MathUtils.abs(x);
-            y = MathUtils.abs(y);
+            X = MathUtils.abs(X);
+            Y = MathUtils.abs(Y);
         }
 
-        /// <summary>Return a copy of this vector. </summary>
+        /// <summary>
+        /// Return a copy of this vector. 
+        /// </summary>
         public Vec2 Clone()
         {
-            return new Vec2(x, y);
+            return new Vec2(X, Y);
         }
 
         public override String ToString()
         {
-            return "(" + x + "," + y + ")";
+            return string.Format("({0},{1})", X, Y);
         }
 
         /*
         * Static
         */
 
-        public static Vec2 abs(Vec2 a)
+        public static Vec2 Abs(Vec2 a)
         {
-            return new Vec2(MathUtils.abs(a.x), MathUtils.abs(a.y));
+            return new Vec2(MathUtils.abs(a.X), MathUtils.abs(a.Y));
         }
 
-        public static void absToOut(Vec2 a, Vec2 out_Renamed)
+        public static void AbsToOut(Vec2 a, Vec2 result)
         {
-            out_Renamed.x = MathUtils.abs(a.x);
-            out_Renamed.y = MathUtils.abs(a.y);
+            result.X = MathUtils.abs(a.X);
+            result.Y = MathUtils.abs(a.Y);
         }
 
-        public static float dot(Vec2 a, Vec2 b)
+        public static float Dot(Vec2 a, Vec2 b)
         {
-            return a.x * b.x + a.y * b.y;
+            return a.X * b.X + a.Y * b.Y;
         }
 
-        public static float cross(Vec2 a, Vec2 b)
+        public static float Cross(Vec2 a, Vec2 b)
         {
-            return a.x * b.y - a.y * b.x;
+            return a.X * b.Y - a.Y * b.X;
         }
 
-        public static Vec2 cross(Vec2 a, float s)
+        public static Vec2 Cross(Vec2 a, float s)
         {
-            return new Vec2(s * a.y, (-s) * a.x);
+            return new Vec2(s * a.Y, (-s) * a.X);
         }
 
-        public static void crossToOut(Vec2 a, float s, Vec2 out_Renamed)
+        public static void CrossToOut(Vec2 a, float s, Vec2 result)
         {
-            float tempy = (-s) * a.x;
-            out_Renamed.x = s * a.y;
-            out_Renamed.y = tempy;
+            float tempy = (-s) * a.X;
+            result.X = s * a.Y;
+            result.Y = tempy;
         }
 
-        public static void crossToOutUnsafe(Vec2 a, float s, Vec2 out_Renamed)
+        public static void CrossToOutUnsafe(Vec2 a, float s, Vec2 result)
         {
-            Debug.Assert(out_Renamed != a);
-            out_Renamed.x = s * a.y;
-            out_Renamed.y = (-s) * a.x;
+            Debug.Assert(result != a);
+            result.X = s * a.Y;
+            result.Y = (-s) * a.X;
         }
 
-        public static Vec2 cross(float s, Vec2 a)
+        public static Vec2 Cross(float s, Vec2 a)
         {
-            return new Vec2((-s) * a.y, s * a.x);
+            return new Vec2((-s) * a.Y, s * a.X);
         }
 
-        public static void crossToOut(float s, Vec2 a, Vec2 out_Renamed)
+        public static void CrossToOut(float s, Vec2 a, Vec2 result)
         {
-            float tempY = s * a.x;
-            out_Renamed.x = (-s) * a.y;
-            out_Renamed.y = tempY;
+            float tempY = s * a.X;
+            result.X = (-s) * a.Y;
+            result.Y = tempY;
         }
 
-        public static void crossToOutUnsafe(float s, Vec2 a, Vec2 out_Renamed)
+        public static void CrossToOutUnsafe(float s, Vec2 a, Vec2 result)
         {
-            Debug.Assert(out_Renamed != a);
-            out_Renamed.x = (-s) * a.y;
-            out_Renamed.y = s * a.x;
+            Debug.Assert(result != a);
+            result.X = (-s) * a.Y;
+            result.Y = s * a.X;
         }
 
-        public static void negateToOut(Vec2 a, Vec2 out_Renamed)
+        public static void NegateToOut(Vec2 a, Vec2 result)
         {
-            out_Renamed.x = -a.x;
-            out_Renamed.y = -a.y;
+            result.X = -a.X;
+            result.Y = -a.Y;
         }
 
-        public static Vec2 min(Vec2 a, Vec2 b)
+        public static Vec2 Min(Vec2 a, Vec2 b)
         {
-            return new Vec2(a.x < b.x ? a.x : b.x, a.y < b.y ? a.y : b.y);
+            return new Vec2(a.X < b.X ? a.X : b.X, a.Y < b.Y ? a.Y : b.Y);
         }
 
-        public static Vec2 max(Vec2 a, Vec2 b)
+        public static Vec2 Max(Vec2 a, Vec2 b)
         {
-            return new Vec2(a.x > b.x ? a.x : b.x, a.y > b.y ? a.y : b.y);
+            return new Vec2(a.X > b.X ? a.X : b.X, a.Y > b.Y ? a.Y : b.Y);
         }
 
-        public static void minToOut(Vec2 a, Vec2 b, Vec2 out_Renamed)
+        public static void MinToOut(Vec2 a, Vec2 b, Vec2 result)
         {
-            out_Renamed.x = a.x < b.x ? a.x : b.x;
-            out_Renamed.y = a.y < b.y ? a.y : b.y;
+            result.X = a.X < b.X ? a.X : b.X;
+            result.Y = a.Y < b.Y ? a.Y : b.Y;
         }
 
-        public static void maxToOut(Vec2 a, Vec2 b, Vec2 out_Renamed)
+        public static void MaxToOut(Vec2 a, Vec2 b, Vec2 result)
         {
-            out_Renamed.x = a.x > b.x ? a.x : b.x;
-            out_Renamed.y = a.y > b.y ? a.y : b.y;
+            result.X = a.X > b.X ? a.X : b.X;
+            result.Y = a.Y > b.Y ? a.Y : b.Y;
         }
 
         private static int FloatToIntBits(float number)
@@ -301,10 +338,10 @@ namespace Box2D.Common
         public override int GetHashCode()
         {
             // automatically generated by Eclipse
-            int prime = 31;
+            const int prime = 31;
             int result = 1;
-            result = prime * result + FloatToIntBits(x);
-            result = prime * result + FloatToIntBits(y);
+            result = prime * result + FloatToIntBits(X);
+            result = prime * result + FloatToIntBits(Y);
             return result;
         }
 
@@ -318,19 +355,21 @@ namespace Box2D.Common
             if (GetType() != obj.GetType())
                 return false;
             Vec2 other = (Vec2)obj;
-            if (FloatToIntBits(x) != FloatToIntBits(other.x))
+            if (FloatToIntBits(X) != FloatToIntBits(other.X))
                 return false;
-            if (FloatToIntBits(y) != FloatToIntBits(other.y))
+            if (FloatToIntBits(Y) != FloatToIntBits(other.Y))
                 return false;
             return true;
         }
 
-        /// <summary>True if the vector represents a pair of valid, non-infinite floating point numbers. </summary>
+        /// <summary>
+        /// True if the vector represents a pair of valid, non-infinite floating point numbers.
+        /// </summary>
         virtual public bool Valid
         {
             get
             {
-                return !Single.IsNaN(x) && !Single.IsInfinity(x) && !Single.IsNaN(y) && !Single.IsInfinity(y);
+                return !Single.IsNaN(X) && !Single.IsInfinity(X) && !Single.IsNaN(Y) && !Single.IsInfinity(Y);
             }
         }
     }

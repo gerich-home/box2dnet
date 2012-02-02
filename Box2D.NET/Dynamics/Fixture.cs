@@ -384,12 +384,12 @@ namespace Box2D.Dynamics
                 Shape.ComputeAABB(aabb1, transform1, proxy.ChildIndex);
                 Shape.ComputeAABB(aab, transform2, proxy.ChildIndex);
 
-                proxy.AABB.LowerBound.x = aabb1.LowerBound.x < aab.LowerBound.x ? aabb1.LowerBound.x : aab.LowerBound.x;
-                proxy.AABB.LowerBound.y = aabb1.LowerBound.y < aab.LowerBound.y ? aabb1.LowerBound.y : aab.LowerBound.y;
-                proxy.AABB.UpperBound.x = aabb1.UpperBound.x > aab.UpperBound.x ? aabb1.UpperBound.x : aab.UpperBound.x;
-                proxy.AABB.UpperBound.y = aabb1.UpperBound.y > aab.UpperBound.y ? aabb1.UpperBound.y : aab.UpperBound.y;
-                displacement.x = transform2.p.x - transform1.p.x;
-                displacement.y = transform2.p.y - transform1.p.y;
+                proxy.AABB.LowerBound.X = aabb1.LowerBound.X < aab.LowerBound.X ? aabb1.LowerBound.X : aab.LowerBound.X;
+                proxy.AABB.LowerBound.Y = aabb1.LowerBound.Y < aab.LowerBound.Y ? aabb1.LowerBound.Y : aab.LowerBound.Y;
+                proxy.AABB.UpperBound.X = aabb1.UpperBound.X > aab.UpperBound.X ? aabb1.UpperBound.X : aab.UpperBound.X;
+                proxy.AABB.UpperBound.Y = aabb1.UpperBound.Y > aab.UpperBound.Y ? aabb1.UpperBound.Y : aab.UpperBound.Y;
+                displacement.X = transform2.p.X - transform1.p.X;
+                displacement.Y = transform2.p.Y - transform1.p.Y;
 
                 broadPhase.MoveProxy(proxy.ProxyId, proxy.AABB, displacement);
             }

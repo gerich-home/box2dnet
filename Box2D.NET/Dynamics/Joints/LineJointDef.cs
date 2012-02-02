@@ -79,7 +79,7 @@ namespace Box2D.Dynamics.Joints
         public LineJointDef()
         {
             type = JointType.WHEEL;
-            localAxisA.set_Renamed(1, 0);
+            localAxisA.Set(1, 0);
             enableLimit = false;
             lowerTranslation = 0;
             upperTranslation = 0;

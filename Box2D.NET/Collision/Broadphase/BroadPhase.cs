@@ -170,12 +170,12 @@ namespace Box2D.Collision.Broadphase
 			// return AABB.testOverlap(proxyA.aabb, proxyB.aabb);
 			var a = m_tree.GetFatAABB(proxyIdA);
 			var b = m_tree.GetFatAABB(proxyIdB);
-			if (b.LowerBound.x - a.UpperBound.x > 0.0f || b.LowerBound.y - a.UpperBound.y > 0.0f)
+			if (b.LowerBound.X - a.UpperBound.X > 0.0f || b.LowerBound.Y - a.UpperBound.Y > 0.0f)
 			{
 				return false;
 			}
 
-			if (a.LowerBound.x - b.UpperBound.x > 0.0f || a.LowerBound.y - b.UpperBound.y > 0.0f)
+			if (a.LowerBound.X - b.UpperBound.X > 0.0f || a.LowerBound.Y - b.UpperBound.Y > 0.0f)
 			{
 				return false;
 			}

@@ -83,8 +83,8 @@ namespace Box2D.Common
 
         public virtual void set_Renamed(OBBViewportTransform vpt)
         {
-            box.center.set_Renamed(vpt.box.center);
-            box.extents.set_Renamed(vpt.box.extents);
+            box.center.Set(vpt.box.center);
+            box.extents.Set(vpt.box.extents);
             box.R.set_Renamed(vpt.box.R);
             yFlip = vpt.yFlip;
         }
@@ -93,7 +93,7 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void setCamera(float x, float y, float scale)
         {
-            box.center.set_Renamed(x, y);
+            box.center.Set(x, y);
             Mat22.createScaleTransform(scale, box.R);
         }
 
@@ -108,14 +108,14 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void setExtents(Vec2 argExtents)
         {
-            box.extents.set_Renamed(argExtents);
+            box.extents.Set(argExtents);
         }
 
         /// <seealso cref="IViewportTransform.setExtents(float, float)">
         /// </seealso>
         public virtual void setExtents(float argHalfWidth, float argHalfHeight)
         {
-            box.extents.set_Renamed(argHalfWidth, argHalfHeight);
+            box.extents.Set(argHalfWidth, argHalfHeight);
         }
 
         /// <seealso cref="IViewportTransform.getCenter()">
@@ -129,14 +129,14 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void setCenter(Vec2 argPos)
         {
-            box.center.set_Renamed(argPos);
+            box.center.Set(argPos);
         }
 
         /// <seealso cref="IViewportTransform.setCenter(float, float)">
         /// </seealso>
         public virtual void setCenter(float x, float y)
         {
-            box.center.set_Renamed(x, y);
+            box.center.Set(x, y);
         }
 
         /// <summary>
@@ -179,14 +179,14 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void getWorldToScreen(Vec2 argWorld, Vec2 argScreen)
         {
-            argScreen.set_Renamed(argWorld);
-            argScreen.subLocal(box.center);
+            argScreen.Set(argWorld);
+            argScreen.SubLocal(box.center);
             box.R.mulToOut(argScreen, argScreen);
             if (yFlip)
             {
                 yFlipMat.mulToOut(argScreen, argScreen);
             }
-            argScreen.addLocal(box.extents);
+            argScreen.AddLocal(box.extents);
         }
 
         private readonly Mat22 inv2 = new Mat22();
@@ -195,15 +195,15 @@ namespace Box2D.Common
         /// </seealso>
         public virtual void getScreenToWorld(Vec2 argScreen, Vec2 argWorld)
         {
-            argWorld.set_Renamed(argScreen);
-            argWorld.subLocal(box.extents);
+            argWorld.Set(argScreen);
+            argWorld.SubLocal(box.extents);
             box.R.invertToOut(inv2);
             inv2.mulToOut(argWorld, argWorld);
             if (yFlip)
             {
                 yFlipMatInv.mulToOut(argWorld, argWorld);
             }
-            argWorld.addLocal(box.center);
+            argWorld.AddLocal(box.center);
         }
     }
 }

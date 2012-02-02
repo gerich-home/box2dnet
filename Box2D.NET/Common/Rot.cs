@@ -103,12 +103,12 @@ namespace Box2D.Common
 
         public virtual void getXAxis(Vec2 xAxis)
         {
-            xAxis.set_Renamed(c, s);
+            xAxis.Set(c, s);
         }
 
         public virtual void getYAxis(Vec2 yAxis)
         {
-            yAxis.set_Renamed(-s, c);
+            yAxis.Set(-s, c);
         }
 
         public virtual Rot Clone()
@@ -157,28 +157,28 @@ namespace Box2D.Common
 
         public static void mulToOut(Rot q, Vec2 v, Vec2 out_Renamed)
         {
-            float tempy = q.s * v.x + q.c * v.y;
-            out_Renamed.x = q.c * v.x - q.s * v.y;
-            out_Renamed.y = tempy;
+            float tempy = q.s * v.X + q.c * v.Y;
+            out_Renamed.X = q.c * v.X - q.s * v.Y;
+            out_Renamed.Y = tempy;
         }
 
         public static void mulToOutUnsafe(Rot q, Vec2 v, Vec2 out_Renamed)
         {
-            out_Renamed.x = q.c * v.x - q.s * v.y;
-            out_Renamed.y = q.s * v.x + q.c * v.y;
+            out_Renamed.X = q.c * v.X - q.s * v.Y;
+            out_Renamed.Y = q.s * v.X + q.c * v.Y;
         }
 
         public static void mulTrans(Rot q, Vec2 v, Vec2 out_Renamed)
         {
-            float tempy = (-q.s) * v.x + q.c * v.y;
-            out_Renamed.x = q.c * v.x + q.s * v.y;
-            out_Renamed.y = tempy;
+            float tempy = (-q.s) * v.X + q.c * v.Y;
+            out_Renamed.X = q.c * v.X + q.s * v.Y;
+            out_Renamed.Y = tempy;
         }
 
         public static void mulTransUnsafe(Rot q, Vec2 v, Vec2 out_Renamed)
         {
-            out_Renamed.x = q.c * v.x + q.s * v.y;
-            out_Renamed.y = (-q.s) * v.x + q.c * v.y;
+            out_Renamed.X = q.c * v.X + q.s * v.Y;
+            out_Renamed.Y = (-q.s) * v.X + q.c * v.Y;
         }
     }
 }

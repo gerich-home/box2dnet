@@ -114,12 +114,12 @@ namespace Box2D.Dynamics
 
             World = world;
 
-            Xf.p.set_Renamed(bd.Position);
+            Xf.p.Set(bd.Position);
             Xf.q.set_Renamed(bd.Angle);
 
-            Sweep.localCenter.setZero();
-            Sweep.c0.set_Renamed(Xf.p);
-            Sweep.c.set_Renamed(Xf.p);
+            Sweep.localCenter.SetZero();
+            Sweep.c0.Set(Xf.p);
+            Sweep.c.Set(Xf.p);
             Sweep.a0 = bd.Angle;
             Sweep.a = bd.Angle;
             Sweep.alpha0 = 0.0f;
@@ -129,14 +129,14 @@ namespace Box2D.Dynamics
             Prev = null;
             Next = null;
 
-            m_linearVelocity.set_Renamed(bd.LinearVelocity);
+            m_linearVelocity.Set(bd.LinearVelocity);
             m_angularVelocity = bd.AngularVelocity;
 
             LinearDamping = bd.LinearDamping;
             AngularDamping = bd.AngularDamping;
             GravityScale = bd.GravityScale;
 
-            Force.setZero();
+            Force.SetZero();
             Torque = 0.0f;
 
             SleepTime = 0.0f;
@@ -325,13 +325,13 @@ namespace Box2D.Dynamics
             }
 
             Xf.q.set_Renamed(angle);
-            Xf.p.set_Renamed(position);
+            Xf.p.Set(position);
 
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
             Transform.mulToOutUnsafe(Xf, Sweep.localCenter, Sweep.c);
             Sweep.a = angle;
 
-            Sweep.c0.set_Renamed(Sweep.c);
+            Sweep.c0.Set(Sweep.c);
             Sweep.a0 = Sweep.a;
 
             BroadPhase broadPhase = World.ContactManager.BroadPhase;
@@ -414,12 +414,12 @@ namespace Box2D.Dynamics
                     return;
                 }
 
-                if (Vec2.dot(value, value) > 0.0f)
+                if (Vec2.Dot(value, value) > 0.0f)
                 {
                     Awake = true;
                 }
 
-                m_linearVelocity.set_Renamed(value);
+                m_linearVelocity.Set(value);
             }
         }
 
@@ -467,7 +467,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return I + Mass * (Sweep.localCenter.x * Sweep.localCenter.x + Sweep.localCenter.y * Sweep.localCenter.y);
+                return I + Mass * (Sweep.localCenter.X * Sweep.localCenter.X + Sweep.localCenter.Y * Sweep.localCenter.Y);
             }
         }
 
@@ -511,16 +511,16 @@ namespace Box2D.Dynamics
 
                 if (m_type == BodyType.Static)
                 {
-                    m_linearVelocity.setZero();
+                    m_linearVelocity.SetZero();
                     m_angularVelocity = 0.0f;
                     Sweep.a0 = Sweep.a;
-                    Sweep.c0.set_Renamed(Sweep.c);
+                    Sweep.c0.Set(Sweep.c);
                     SynchronizeFixtures();
                 }
 
                 Awake = true;
 
-                Force.setZero();
+                Force.SetZero();
                 Torque = 0.0f;
 
                 // Delete the attached contacts.
@@ -616,9 +616,9 @@ namespace Box2D.Dynamics
                 {
                     Flags &= ~TypeFlags.Awake;
                     SleepTime = 0.0f;
-                    m_linearVelocity.setZero();
+                    m_linearVelocity.SetZero();
                     m_angularVelocity = 0.0f;
-                    Force.setZero();
+                    Force.SetZero();
                     Torque = 0.0f;
                 }
             }
@@ -763,10 +763,10 @@ namespace Box2D.Dynamics
             // temp.set(point).subLocal(m_sweep.c);
             // m_torque += Vec2.cross(temp, force);
 
-            Force.x += force.x;
-            Force.y += force.y;
+            Force.X += force.X;
+            Force.Y += force.Y;
 
-            Torque += (point.x - Sweep.c.x) * force.y - (point.y - Sweep.c.y) * force.x;
+            Torque += (point.X - Sweep.c.X) * force.Y - (point.Y - Sweep.c.Y) * force.X;
         }
 
         /// <summary>
@@ -785,8 +785,8 @@ namespace Box2D.Dynamics
                 Awake = true;
             }
 
-            Force.x += force.x;
-            Force.y += force.y;
+            Force.X += force.X;
+            Force.Y += force.Y;
         }
 
         /// <summary>
@@ -835,10 +835,10 @@ namespace Box2D.Dynamics
             // temp.set(point).subLocal(m_sweep.c);
             // m_angularVelocity += m_invI * Vec2.cross(temp, impulse);
 
-            m_linearVelocity.x += impulse.x * InvMass;
-            m_linearVelocity.y += impulse.y * InvMass;
+            m_linearVelocity.X += impulse.X * InvMass;
+            m_linearVelocity.Y += impulse.Y * InvMass;
 
-            m_angularVelocity += InvI * ((point.x - Sweep.c.x) * impulse.y - (point.y - Sweep.c.y) * impulse.x);
+            m_angularVelocity += InvI * ((point.X - Sweep.c.X) * impulse.Y - (point.Y - Sweep.c.Y) * impulse.X);
         }
 
         /// <summary>
@@ -870,9 +870,9 @@ namespace Box2D.Dynamics
             // data.center.set(m_sweep.localCenter);
 
             data.Mass = Mass;
-            data.I = I + Mass * (Sweep.localCenter.x * Sweep.localCenter.x + Sweep.localCenter.y * Sweep.localCenter.y);
-            data.Center.x = Sweep.localCenter.x;
-            data.Center.y = Sweep.localCenter.y;
+            data.I = I + Mass * (Sweep.localCenter.X * Sweep.localCenter.X + Sweep.localCenter.Y * Sweep.localCenter.Y);
+            data.Center.X = Sweep.localCenter.X;
+            data.Center.Y = Sweep.localCenter.Y;
         }
 
         /// <summary>
@@ -909,25 +909,25 @@ namespace Box2D.Dynamics
 
             if (massData.I > 0.0f && (Flags & TypeFlags.FixedRotation) == 0)
             {
-                I = massData.I - Mass * Vec2.dot(massData.Center, massData.Center);
+                I = massData.I - Mass * Vec2.Dot(massData.Center, massData.Center);
                 Debug.Assert(I > 0.0f);
                 InvI = 1.0f / I;
             }
 
             Vec2 oldCenter = World.Pool.PopVec2();
             // Move center of mass.
-            oldCenter.set_Renamed(Sweep.c);
-            Sweep.localCenter.set_Renamed(massData.Center);
+            oldCenter.Set(Sweep.c);
+            Sweep.localCenter.Set(massData.Center);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
             Transform.mulToOutUnsafe(Xf, Sweep.localCenter, Sweep.c0);
-            Sweep.c.set_Renamed(Sweep.c0);
+            Sweep.c.Set(Sweep.c0);
 
             // Update center of mass velocity.
             // m_linearVelocity += Cross(m_angularVelocity, m_sweep.c - oldCenter);
             Vec2 temp = World.Pool.PopVec2();
-            temp.set_Renamed(Sweep.c).subLocal(oldCenter);
-            Vec2.crossToOut(m_angularVelocity, temp, temp);
-            m_linearVelocity.addLocal(temp);
+            temp.Set(Sweep.c).SubLocal(oldCenter);
+            Vec2.CrossToOut(m_angularVelocity, temp, temp);
+            m_linearVelocity.AddLocal(temp);
 
             World.Pool.PushVec2(2);
         }
@@ -946,14 +946,14 @@ namespace Box2D.Dynamics
             InvMass = 0.0f;
             I = 0.0f;
             InvI = 0.0f;
-            Sweep.localCenter.setZero();
+            Sweep.localCenter.SetZero();
 
             // Static and kinematic bodies have zero mass.
             if (m_type == BodyType.Static || m_type == BodyType.Kinematic)
             {
                 // m_sweep.c0 = m_sweep.c = m_xf.position;
-                Sweep.c0.set_Renamed(Xf.p);
-                Sweep.c.set_Renamed(Xf.p);
+                Sweep.c0.Set(Xf.p);
+                Sweep.c.Set(Xf.p);
                 Sweep.a0 = Sweep.a;
                 return;
             }
@@ -962,7 +962,7 @@ namespace Box2D.Dynamics
 
             // Accumulate mass over all fixtures.
             Vec2 localCenter = World.Pool.PopVec2();
-            localCenter.setZero();
+            localCenter.SetZero();
             Vec2 temp = World.Pool.PopVec2();
             MassData massData = pmd;
             for (Fixture f = FixtureList; f != null; f = f.Next)
@@ -974,8 +974,8 @@ namespace Box2D.Dynamics
                 f.GetMassData(massData);
                 Mass += massData.Mass;
                 // center += massData.mass * massData.center;
-                temp.set_Renamed(massData.Center).mulLocal(massData.Mass);
-                localCenter.addLocal(temp);
+                temp.Set(massData.Center).MulLocal(massData.Mass);
+                localCenter.AddLocal(temp);
                 I += massData.I;
             }
 
@@ -983,7 +983,7 @@ namespace Box2D.Dynamics
             if (Mass > 0.0f)
             {
                 InvMass = 1.0f / Mass;
-                localCenter.mulLocal(InvMass);
+                localCenter.MulLocal(InvMass);
             }
             else
             {
@@ -995,7 +995,7 @@ namespace Box2D.Dynamics
             if (I > 0.0f && (Flags & TypeFlags.FixedRotation) == 0)
             {
                 // Center the inertia about the center of mass.
-                I -= Mass * Vec2.dot(localCenter, localCenter);
+                I -= Mass * Vec2.Dot(localCenter, localCenter);
                 Debug.Assert(I > 0.0f);
                 InvI = 1.0f / I;
             }
@@ -1007,19 +1007,19 @@ namespace Box2D.Dynamics
 
             Vec2 oldCenter = World.Pool.PopVec2();
             // Move center of mass.
-            oldCenter.set_Renamed(Sweep.c);
-            Sweep.localCenter.set_Renamed(localCenter);
+            oldCenter.Set(Sweep.c);
+            Sweep.localCenter.Set(localCenter);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
             Transform.mulToOutUnsafe(Xf, Sweep.localCenter, Sweep.c0);
-            Sweep.c.set_Renamed(Sweep.c0);
+            Sweep.c.Set(Sweep.c0);
 
             // Update center of mass velocity.
             // m_linearVelocity += Cross(m_angularVelocity, m_sweep.c - oldCenter);
-            temp.set_Renamed(Sweep.c).subLocal(oldCenter);
+            temp.Set(Sweep.c).SubLocal(oldCenter);
 
             Vec2 temp2 = oldCenter;
-            Vec2.crossToOutUnsafe(m_angularVelocity, temp, temp2);
-            m_linearVelocity.addLocal(temp2);
+            Vec2.CrossToOutUnsafe(m_angularVelocity, temp, temp2);
+            m_linearVelocity.AddLocal(temp2);
 
             World.Pool.PushVec2(3);
         }
@@ -1116,9 +1116,9 @@ namespace Box2D.Dynamics
 
         public void GetLinearVelocityFromWorldPointToOut(Vec2 worldPoint, Vec2 result)
         {
-            result.set_Renamed(worldPoint).subLocal(Sweep.c);
-            Vec2.crossToOut(m_angularVelocity, result, result);
-            result.addLocal(m_linearVelocity);
+            result.Set(worldPoint).SubLocal(Sweep.c);
+            Vec2.CrossToOut(m_angularVelocity, result, result);
+            result.AddLocal(m_linearVelocity);
         }
 
         /// <summary>
@@ -1153,8 +1153,8 @@ namespace Box2D.Dynamics
             // inlined:
             xf1.q.s = MathUtils.sin(Sweep.a0);
             xf1.q.c = MathUtils.cos(Sweep.a0);
-            xf1.p.x = Sweep.c0.x - xf1.q.c * Sweep.localCenter.x + xf1.q.s * Sweep.localCenter.y;
-            xf1.p.y = Sweep.c0.y - xf1.q.s * Sweep.localCenter.x - xf1.q.c * Sweep.localCenter.y;
+            xf1.p.X = Sweep.c0.X - xf1.q.c * Sweep.localCenter.X + xf1.q.s * Sweep.localCenter.Y;
+            xf1.p.Y = Sweep.c0.Y - xf1.q.s * Sweep.localCenter.X - xf1.q.c * Sweep.localCenter.Y;
             // end inline
 
             for (Fixture f = FixtureList; f != null; f = f.Next)
@@ -1175,8 +1175,8 @@ namespace Box2D.Dynamics
             Xf.q.c = MathUtils.cos(Sweep.a);
             Rot q = Xf.q;
             Vec2 v = Sweep.localCenter;
-            Xf.p.x = Sweep.c.x - q.c * v.x + q.s * v.y;
-            Xf.p.y = Sweep.c.y - q.s * v.x - q.c * v.y;
+            Xf.p.X = Sweep.c.X - q.c * v.X + q.s * v.Y;
+            Xf.p.Y = Sweep.c.Y - q.s * v.X - q.c * v.Y;
         }
 
         /// <summary>
@@ -1212,12 +1212,12 @@ namespace Box2D.Dynamics
         {
             // Advance to the new safe time. This doesn't sync the broad-phase.
             Sweep.advance(t);
-            Sweep.c.set_Renamed(Sweep.c0);
+            Sweep.c.Set(Sweep.c0);
             Sweep.a = Sweep.a0;
             Xf.q.set_Renamed(Sweep.a);
             // m_xf.position = m_sweep.c - Mul(m_xf.R, m_sweep.localCenter);
             Rot.mulToOutUnsafe(Xf.q, Sweep.localCenter, Xf.p);
-            Xf.p.mulLocal(-1).addLocal(Sweep.c);
+            Xf.p.MulLocal(-1).AddLocal(Sweep.c);
         }
     }
 }

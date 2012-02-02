@@ -38,13 +38,13 @@ namespace Box2D.Collision
         {
             get
             {
-                float dx = UpperBound.x - LowerBound.x;
+                float dx = UpperBound.X - LowerBound.X;
                 if (dx < 0f)
                 {
                     return false;
                 }
 
-                float dy = UpperBound.y - LowerBound.y;
+                float dy = UpperBound.Y - LowerBound.Y;
                 if (dy < 0)
                 {
                     return false;
@@ -62,8 +62,8 @@ namespace Box2D.Collision
             get
             {
                 Vec2 center = new Vec2(LowerBound);
-                center.addLocal(UpperBound);
-                center.mulLocal(.5f);
+                center.AddLocal(UpperBound);
+                center.MulLocal(.5f);
                 return center;
             }
         }
@@ -77,8 +77,8 @@ namespace Box2D.Collision
             get
             {
                 Vec2 center = new Vec2(UpperBound);
-                center.subLocal(LowerBound);
-                center.mulLocal(.5f);
+                center.SubLocal(LowerBound);
+                center.MulLocal(.5f);
                 return center;
             }
         }
@@ -91,7 +91,7 @@ namespace Box2D.Collision
         {
             get
             {
-                return 2.0f * (UpperBound.x - LowerBound.x + UpperBound.y - LowerBound.y);
+                return 2.0f * (UpperBound.X - LowerBound.X + UpperBound.Y - LowerBound.Y);
             }
         }
 
@@ -134,33 +134,33 @@ namespace Box2D.Collision
         public void Set(AABB aabb)
         {
             Vec2 v = aabb.LowerBound;
-            LowerBound.x = v.x;
-            LowerBound.y = v.y;
+            LowerBound.X = v.X;
+            LowerBound.Y = v.Y;
             Vec2 v1 = aabb.UpperBound;
-            UpperBound.x = v1.x;
-            UpperBound.y = v1.y;
+            UpperBound.X = v1.X;
+            UpperBound.Y = v1.Y;
         }
 
         public void GetCenterToOut(Vec2 result)
         {
-            result.x = (LowerBound.x + UpperBound.x) * .5f;
-            result.y = (LowerBound.y + UpperBound.y) * .5f;
+            result.X = (LowerBound.X + UpperBound.X) * .5f;
+            result.Y = (LowerBound.Y + UpperBound.Y) * .5f;
         }
 
         public void GetExtentsToOut(Vec2 result)
         {
-            result.x = (UpperBound.x - LowerBound.x) * .5f;
-            result.y = (UpperBound.y - LowerBound.y) * .5f; // thanks FDN1
+            result.X = (UpperBound.X - LowerBound.X) * .5f;
+            result.Y = (UpperBound.Y - LowerBound.Y) * .5f; // thanks FDN1
         }
 
         public void GetVertices(Vec2[] argRay)
         {
-            argRay[0].set_Renamed(LowerBound);
-            argRay[1].set_Renamed(LowerBound);
-            argRay[1].x += UpperBound.x - LowerBound.x;
-            argRay[2].set_Renamed(UpperBound);
-            argRay[3].set_Renamed(UpperBound);
-            argRay[3].x -= (UpperBound.x - LowerBound.x);
+            argRay[0].Set(LowerBound);
+            argRay[1].Set(LowerBound);
+            argRay[1].X += UpperBound.X - LowerBound.X;
+            argRay[2].Set(UpperBound);
+            argRay[3].Set(UpperBound);
+            argRay[3].X -= (UpperBound.X - LowerBound.X);
         }
 
         /// <summary>
@@ -170,10 +170,10 @@ namespace Box2D.Collision
         /// <param name="aab"></param>
         public void Combine(AABB aabb1, AABB aab)
         {
-            LowerBound.x = aabb1.LowerBound.x < aab.LowerBound.x ? aabb1.LowerBound.x : aab.LowerBound.x;
-            LowerBound.y = aabb1.LowerBound.y < aab.LowerBound.y ? aabb1.LowerBound.y : aab.LowerBound.y;
-            UpperBound.x = aabb1.UpperBound.x > aab.UpperBound.x ? aabb1.UpperBound.x : aab.UpperBound.x;
-            UpperBound.y = aabb1.UpperBound.y > aab.UpperBound.y ? aabb1.UpperBound.y : aab.UpperBound.y;
+            LowerBound.X = aabb1.LowerBound.X < aab.LowerBound.X ? aabb1.LowerBound.X : aab.LowerBound.X;
+            LowerBound.Y = aabb1.LowerBound.Y < aab.LowerBound.Y ? aabb1.LowerBound.Y : aab.LowerBound.Y;
+            UpperBound.X = aabb1.UpperBound.X > aab.UpperBound.X ? aabb1.UpperBound.X : aab.UpperBound.X;
+            UpperBound.Y = aabb1.UpperBound.Y > aab.UpperBound.Y ? aabb1.UpperBound.Y : aab.UpperBound.Y;
         }
 
         /// <summary>
@@ -182,10 +182,10 @@ namespace Box2D.Collision
         /// <param name="aabb"></param>
         public void Combine(AABB aabb)
         {
-            LowerBound.x = LowerBound.x < aabb.LowerBound.x ? LowerBound.x : aabb.LowerBound.x;
-            LowerBound.y = LowerBound.y < aabb.LowerBound.y ? LowerBound.y : aabb.LowerBound.y;
-            UpperBound.x = UpperBound.x > aabb.UpperBound.x ? UpperBound.x : aabb.UpperBound.x;
-            UpperBound.y = UpperBound.y > aabb.UpperBound.y ? UpperBound.y : aabb.UpperBound.y;
+            LowerBound.X = LowerBound.X < aabb.LowerBound.X ? LowerBound.X : aabb.LowerBound.X;
+            LowerBound.Y = LowerBound.Y < aabb.LowerBound.Y ? LowerBound.Y : aabb.LowerBound.Y;
+            UpperBound.X = UpperBound.X > aabb.UpperBound.X ? UpperBound.X : aabb.UpperBound.X;
+            UpperBound.Y = UpperBound.Y > aabb.UpperBound.Y ? UpperBound.Y : aabb.UpperBound.Y;
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Box2D.Collision
             */
             // djm: faster putting all of them together, as if one is false we leave the logic
             // early
-            return LowerBound.x > aabb.LowerBound.x && LowerBound.y > aabb.LowerBound.y && aabb.UpperBound.x > UpperBound.x && aabb.UpperBound.y > UpperBound.y;
+            return LowerBound.X > aabb.LowerBound.X && LowerBound.Y > aabb.LowerBound.Y && aabb.UpperBound.X > UpperBound.X && aabb.UpperBound.Y > UpperBound.Y;
         }
 
         /// <deprecated> please use {@link #raycast(RayCastOutput, RayCastInput, IWorldPool)} for better performance
@@ -231,15 +231,15 @@ namespace Box2D.Collision
             Vec2 absD = argPool.PopVec2();
             Vec2 normal = argPool.PopVec2();
 
-            p.set_Renamed(input.P1);
-            d.set_Renamed(input.P2).subLocal(input.P1);
-            Vec2.absToOut(d, absD);
+            p.Set(input.P1);
+            d.Set(input.P2).SubLocal(input.P1);
+            Vec2.AbsToOut(d, absD);
 
             // x then y
-            if (absD.x < Settings.EPSILON)
+            if (absD.X < Settings.EPSILON)
             {
                 // Parallel.
-                if (p.x < LowerBound.x || UpperBound.x < p.x)
+                if (p.X < LowerBound.X || UpperBound.X < p.X)
                 {
                     argPool.PushVec2(4);
                     return false;
@@ -247,9 +247,9 @@ namespace Box2D.Collision
             }
             else
             {
-                float inv_d = 1.0f / d.x;
-                float t1 = (LowerBound.x - p.x) * inv_d;
-                float t2 = (UpperBound.x - p.x) * inv_d;
+                float inv_d = 1.0f / d.X;
+                float t1 = (LowerBound.X - p.X) * inv_d;
+                float t2 = (UpperBound.X - p.X) * inv_d;
 
                 // Sign of the normal vector.
                 float s = -1.0f;
@@ -265,8 +265,8 @@ namespace Box2D.Collision
                 // Push the min up
                 if (t1 > tmin)
                 {
-                    normal.setZero();
-                    normal.x = s;
+                    normal.SetZero();
+                    normal.X = s;
                     tmin = t1;
                 }
 
@@ -280,10 +280,10 @@ namespace Box2D.Collision
                 }
             }
 
-            if (absD.y < Settings.EPSILON)
+            if (absD.Y < Settings.EPSILON)
             {
                 // Parallel.
-                if (p.y < LowerBound.y || UpperBound.y < p.y)
+                if (p.Y < LowerBound.Y || UpperBound.Y < p.Y)
                 {
                     argPool.PushVec2(4);
                     return false;
@@ -291,9 +291,9 @@ namespace Box2D.Collision
             }
             else
             {
-                float inv_d = 1.0f / d.y;
-                float t1 = (LowerBound.y - p.y) * inv_d;
-                float t2 = (UpperBound.y - p.y) * inv_d;
+                float inv_d = 1.0f / d.Y;
+                float t1 = (LowerBound.Y - p.Y) * inv_d;
+                float t2 = (UpperBound.Y - p.Y) * inv_d;
 
                 // Sign of the normal vector.
                 float s = -1.0f;
@@ -309,8 +309,8 @@ namespace Box2D.Collision
                 // Push the min up
                 if (t1 > tmin)
                 {
-                    normal.setZero();
-                    normal.y = s;
+                    normal.SetZero();
+                    normal.Y = s;
                     tmin = t1;
                 }
 
@@ -334,20 +334,20 @@ namespace Box2D.Collision
 
             // Intersection.
             output.Fraction = tmin;
-            output.Normal.x = normal.x;
-            output.Normal.y = normal.y;
+            output.Normal.X = normal.X;
+            output.Normal.Y = normal.Y;
             argPool.PushVec2(4);
             return true;
         }
 
         public static bool TestOverlap(AABB a, AABB b)
         {
-            if (b.LowerBound.x - a.UpperBound.x > 0.0f || b.LowerBound.y - a.UpperBound.y > 0.0f)
+            if (b.LowerBound.X - a.UpperBound.X > 0.0f || b.LowerBound.Y - a.UpperBound.Y > 0.0f)
             {
                 return false;
             }
 
-            if (a.LowerBound.x - b.UpperBound.x > 0.0f || a.LowerBound.y - b.UpperBound.y > 0.0f)
+            if (a.LowerBound.X - b.UpperBound.X > 0.0f || a.LowerBound.Y - b.UpperBound.Y > 0.0f)
             {
                 return false;
             }

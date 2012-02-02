@@ -125,8 +125,8 @@ namespace Box2D.Collision
             }
 
             Type = cp.Type;
-            LocalNormal.set_Renamed(cp.LocalNormal);
-            LocalPoint.set_Renamed(cp.LocalPoint);
+            LocalNormal.Set(cp.LocalNormal);
+            LocalPoint.Set(cp.LocalPoint);
             PointCount = cp.PointCount;
         }
     }

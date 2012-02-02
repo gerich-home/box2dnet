@@ -70,10 +70,10 @@ namespace Box2D.Dynamics.Joints
             {
                 float area = 0.0f;
                 // i'm glad i changed these all to member access
-                area += bodies[bodies.Length - 1].WorldCenter.x * bodies[0].WorldCenter.y - bodies[0].WorldCenter.x * bodies[bodies.Length - 1].WorldCenter.y;
+                area += bodies[bodies.Length - 1].WorldCenter.X * bodies[0].WorldCenter.Y - bodies[0].WorldCenter.X * bodies[bodies.Length - 1].WorldCenter.Y;
                 for (int i = 0; i < bodies.Length - 1; ++i)
                 {
-                    area += bodies[i].WorldCenter.x * bodies[i + 1].WorldCenter.y - bodies[i + 1].WorldCenter.x * bodies[i].WorldCenter.y;
+                    area += bodies[i].WorldCenter.X * bodies[i + 1].WorldCenter.Y - bodies[i + 1].WorldCenter.X * bodies[i].WorldCenter.Y;
                 }
                 area *= .5f;
                 return area;
@@ -99,7 +99,7 @@ namespace Box2D.Dynamics.Joints
             for (int i = 0; i < targetLengths.Length; ++i)
             {
                 int next = (i == targetLengths.Length - 1) ? 0 : i + 1;
-                float dist = bodies[i].WorldCenter.sub(bodies[next].WorldCenter).length();
+                float dist = bodies[i].WorldCenter.Sub(bodies[next].WorldCenter).Length();
                 targetLengths[i] = dist;
             }
             targetVolume = Area;
@@ -159,15 +159,15 @@ namespace Box2D.Dynamics.Joints
             for (int i = 0; i < bodies.Length; ++i)
             {
                 int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                float dx = bodies[next].WorldCenter.x - bodies[i].WorldCenter.x;
-                float dy = bodies[next].WorldCenter.y - bodies[i].WorldCenter.y;
+                float dx = bodies[next].WorldCenter.X - bodies[i].WorldCenter.X;
+                float dy = bodies[next].WorldCenter.Y - bodies[i].WorldCenter.Y;
                 float dist = MathUtils.sqrt(dx * dx + dy * dy);
                 if (dist < Settings.EPSILON)
                 {
                     dist = 1.0f;
                 }
-                normals[i].x = dy / dist;
-                normals[i].y = (-dx) / dist;
+                normals[i].X = dy / dist;
+                normals[i].Y = (-dx) / dist;
                 perimeter += dist;
             }
 
@@ -180,19 +180,19 @@ namespace Box2D.Dynamics.Joints
             for (int i = 0; i < bodies.Length; ++i)
             {
                 int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                delta.set_Renamed(toExtrude * (normals[i].x + normals[next].x), toExtrude * (normals[i].y + normals[next].y));
+                delta.Set(toExtrude * (normals[i].X + normals[next].X), toExtrude * (normals[i].Y + normals[next].Y));
                 // sumdeltax += dx;
-                float norm = delta.length();
+                float norm = delta.Length();
                 if (norm > Settings.maxLinearCorrection)
                 {
-                    delta.mulLocal(Settings.maxLinearCorrection / norm);
+                    delta.MulLocal(Settings.maxLinearCorrection / norm);
                 }
                 if (norm > Settings.linearSlop)
                 {
                     done = false;
                 }
-                bodies[next].Sweep.c.x += delta.x;
-                bodies[next].Sweep.c.y += delta.y;
+                bodies[next].Sweep.c.X += delta.X;
+                bodies[next].Sweep.c.Y += delta.Y;
                 bodies[next].SynchronizeTransform();
                 // bodies[next].m_linearVelocity.x += delta.x * step.inv_dt;
                 // bodies[next].m_linearVelocity.y += delta.y * step.inv_dt;
@@ -211,8 +211,8 @@ namespace Box2D.Dynamics.Joints
             {
                 int prev = (i == 0) ? bodies.Length - 1 : i - 1;
                 int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                d[i].set_Renamed(bodies[next].WorldCenter);
-                d[i].subLocal(bodies[prev].WorldCenter);
+                d[i].Set(bodies[next].WorldCenter);
+                d[i].SubLocal(bodies[prev].WorldCenter);
             }
 
             if (data.Step.WarmStarting)
@@ -225,8 +225,8 @@ namespace Box2D.Dynamics.Joints
                 // m_impulse = lambda;
                 for (int i = 0; i < bodies.Length; ++i)
                 {
-                    bodies[i].m_linearVelocity.x += bodies[i].InvMass * d[i].y * .5f * m_impulse;
-                    bodies[i].m_linearVelocity.y += bodies[i].InvMass * (-d[i].x) * .5f * m_impulse;
+                    bodies[i].m_linearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * m_impulse;
+                    bodies[i].m_linearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * m_impulse;
                 }
             }
             else
@@ -252,10 +252,10 @@ namespace Box2D.Dynamics.Joints
             {
                 int prev = (i == 0) ? bodies.Length - 1 : i - 1;
                 int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                d[i].set_Renamed(bodies[next].WorldCenter);
-                d[i].subLocal(bodies[prev].WorldCenter);
-                dotMassSum += (d[i].lengthSquared()) / bodies[i].Mass;
-                crossMassSum += Vec2.cross(bodies[i].LinearVelocity, d[i]);
+                d[i].Set(bodies[next].WorldCenter);
+                d[i].SubLocal(bodies[prev].WorldCenter);
+                dotMassSum += (d[i].LengthSquared()) / bodies[i].Mass;
+                crossMassSum += Vec2.Cross(bodies[i].LinearVelocity, d[i]);
             }
             float lambda = (-2.0f) * crossMassSum / dotMassSum;
             // System.out.println(crossMassSum + " " +dotMassSum);
@@ -265,8 +265,8 @@ namespace Box2D.Dynamics.Joints
             // System.out.println(m_impulse);
             for (int i = 0; i < bodies.Length; ++i)
             {
-                bodies[i].m_linearVelocity.x += bodies[i].InvMass * d[i].y * .5f * lambda;
-                bodies[i].m_linearVelocity.y += bodies[i].InvMass * (-d[i].x) * .5f * lambda;
+                bodies[i].m_linearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * lambda;
+                bodies[i].m_linearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * lambda;
             }
         }
 

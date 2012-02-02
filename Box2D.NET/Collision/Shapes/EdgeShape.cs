@@ -79,8 +79,8 @@ namespace Box2D.Collision.Shapes
 
         public virtual void Set(Vec2 v1, Vec2 v2)
         {
-            Vertex1.set_Renamed(v1);
-            Vertex2.set_Renamed(v2);
+            Vertex1.Set(v1);
+            Vertex2.Set(v2);
             HasVertex0 = HasVertex3 = false;
         }
 
@@ -93,24 +93,24 @@ namespace Box2D.Collision.Shapes
         {
 
             // Put the ray into the edge's frame of reference.
-            Vec2 p1 = pool0.set_Renamed(input.P1).subLocal(xf.p);
+            Vec2 p1 = pool0.Set(input.P1).SubLocal(xf.p);
             Rot.mulTrans(xf.q, p1, p1);
-            Vec2 p2 = pool1.set_Renamed(input.P2).subLocal(xf.p);
+            Vec2 p2 = pool1.Set(input.P2).SubLocal(xf.p);
             Rot.mulTrans(xf.q, p1, p1);
-            Vec2 d = p2.subLocal(p1); // we don't use p2 later
+            Vec2 d = p2.SubLocal(p1); // we don't use p2 later
 
             Vec2 v1 = Vertex1;
             Vec2 v2 = Vertex2;
-            Vec2 normal = pool2.set_Renamed(v2).subLocal(v1);
-            normal.set_Renamed(normal.y, -normal.x);
-            normal.normalize();
+            Vec2 normal = pool2.Set(v2).SubLocal(v1);
+            normal.Set(normal.Y, -normal.X);
+            normal.Normalize();
 
             // q = p1 + t * d
             // dot(normal, q - v1) = 0
             // dot(normal, p1 - v1) + t * dot(normal, d) = 0
-            pool3.set_Renamed(v1).subLocal(p1);
-            float numerator = Vec2.dot(normal, pool3);
-            float denominator = Vec2.dot(normal, d);
+            pool3.Set(v1).SubLocal(p1);
+            float numerator = Vec2.Dot(normal, pool3);
+            float denominator = Vec2.Dot(normal, d);
 
             if (denominator == 0.0f)
             {
@@ -127,20 +127,20 @@ namespace Box2D.Collision.Shapes
             Vec2 r = pool4;
 
             // Vec2 q = p1 + t * d;
-            q.set_Renamed(d).mulLocal(t).addLocal(p1);
+            q.Set(d).MulLocal(t).AddLocal(p1);
 
             // q = v1 + s * r
             // s = dot(q - v1, r) / dot(r, r)
             // Vec2 r = v2 - v1;
-            r.set_Renamed(v2).subLocal(v1);
-            float rr = Vec2.dot(r, r);
+            r.Set(v2).SubLocal(v1);
+            float rr = Vec2.Dot(r, r);
             if (rr == 0.0f)
             {
                 return false;
             }
 
-            pool5.set_Renamed(q).subLocal(v1);
-            float s = Vec2.dot(pool5, r) / rr;
+            pool5.Set(q).SubLocal(v1);
+            float s = Vec2.Dot(pool5, r) / rr;
             if (s < 0.0f || 1.0f < s)
             {
                 return false;
@@ -150,12 +150,12 @@ namespace Box2D.Collision.Shapes
             if (numerator > 0.0f)
             {
                 // argOutput.normal = -normal;
-                output.Normal.set_Renamed(normal).negateLocal();
+                output.Normal.Set(normal).NegateLocal();
             }
             else
             {
                 // output.normal = normal;
-                output.Normal.set_Renamed(normal);
+                output.Normal.Set(normal);
             }
             return true;
         }
@@ -168,19 +168,19 @@ namespace Box2D.Collision.Shapes
             Transform.mulToOutUnsafe(xf, Vertex1, v1);
             Transform.mulToOutUnsafe(xf, Vertex2, v2);
 
-            Vec2.minToOut(v1, v2, aabb.LowerBound);
-            Vec2.maxToOut(v1, v2, aabb.UpperBound);
+            Vec2.MinToOut(v1, v2, aabb.LowerBound);
+            Vec2.MaxToOut(v1, v2, aabb.UpperBound);
 
-            aabb.LowerBound.x -= Radius;
-            aabb.LowerBound.y -= Radius;
-            aabb.UpperBound.x += Radius;
-            aabb.UpperBound.y += Radius;
+            aabb.LowerBound.X -= Radius;
+            aabb.LowerBound.Y -= Radius;
+            aabb.UpperBound.X += Radius;
+            aabb.UpperBound.Y += Radius;
         }
 
         public override void ComputeMass(MassData massData, float density)
         {
             massData.Mass = 0.0f;
-            massData.Center.set_Renamed(Vertex1).addLocal(Vertex2).mulLocal(0.5f);
+            massData.Center.Set(Vertex1).AddLocal(Vertex2).MulLocal(0.5f);
             massData.I = 0.0f;
         }
 
@@ -190,10 +190,10 @@ namespace Box2D.Collision.Shapes
             edge.Radius = this.Radius;
             edge.HasVertex0 = this.HasVertex0;
             edge.HasVertex3 = this.HasVertex3;
-            edge.Vertex0.set_Renamed(this.Vertex0);
-            edge.Vertex1.set_Renamed(this.Vertex1);
-            edge.Vertex2.set_Renamed(this.Vertex2);
-            edge.Vertex3.set_Renamed(this.Vertex3);
+            edge.Vertex0.Set(this.Vertex0);
+            edge.Vertex1.Set(this.Vertex1);
+            edge.Vertex2.Set(this.Vertex2);
+            edge.Vertex3.Set(this.Vertex3);
             return edge;
         }
     }
