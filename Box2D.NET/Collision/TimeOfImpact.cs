@@ -47,11 +47,11 @@ namespace Box2D.Collision
 
         public const int MAX_ITERATIONS = 1000;
 
-        public static int ToiCalls = 0;
-        public static int ToiIters = 0;
-        public static int ToiMaxIters = 0;
-        public static int ToiRootIters = 0;
-        public static int ToiMaxRootIters = 0;
+        public static int ToiCalls;
+        public static int ToiIters;
+        public static int ToiMaxIters;
+        public static int ToiRootIters;
+        public static int ToiMaxRootIters;
 
         /// <summary>
         /// Input parameters for TOI
@@ -67,7 +67,7 @@ namespace Box2D.Collision
             /// <summary>
             /// Defines sweep interval [0, tMax]
             /// </summary>
-            public float TMax;
+            public float tMax;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Box2D.Collision
             ++ToiCalls;
 
             output.State = TOIOutputState.Unknown;
-            output.T = input.TMax;
+            output.T = input.tMax;
 
             Distance.DistanceProxy proxyA = input.ProxyA;
             Distance.DistanceProxy proxyB = input.ProxyB;
@@ -129,7 +129,7 @@ namespace Box2D.Collision
             sweepA.normalize();
             sweepB.normalize();
 
-            float tMax = input.TMax;
+            float tMax = input.tMax;
 
             float totalRadius = proxyA.Radius + proxyB.Radius;
             // djm: whats with all these constants?

@@ -1261,7 +1261,7 @@ namespace Box2D.Dynamics
                         input.ProxyB.Set(fB.Shape, indexB);
                         input.SweepA.set_Renamed(bA.Sweep);
                         input.SweepB.set_Renamed(bB.Sweep);
-                        input.TMax = 1.0f;
+                        input.tMax = 1.0f;
 
                         Pool.GetTimeOfImpact().GetTimeOfImpact(toiOutput, input);
 
