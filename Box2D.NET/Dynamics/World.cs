@@ -183,13 +183,13 @@ namespace Box2D.Dynamics
                 if (reg.primary)
                 {
                     Contact c = creator.Pop();
-                    c.init(fixtureA, indexA, fixtureB, indexB);
+                    c.Init(fixtureA, indexA, fixtureB, indexB);
                     return c;
                 }
                 else
                 {
                     Contact c = creator.Pop();
-                    c.init(fixtureB, indexB, fixtureA, indexA);
+                    c.Init(fixtureB, indexB, fixtureA, indexA);
                     return c;
                 }
             }
@@ -200,7 +200,7 @@ namespace Box2D.Dynamics
         public void PushContact(Contact contact)
         {
 
-            if (contact.m_manifold.PointCount > 0)
+            if (contact.Manifold.PointCount > 0)
             {
                 contact.FixtureA.Body.Awake = true;
                 contact.FixtureB.Body.Awake = true;
@@ -386,7 +386,7 @@ namespace Box2D.Dynamics
                     {
                         // Flag the contact for filtering at the next time step (where either
                         // body is awake).
-                        edge.contact.flagForFiltering();
+                        edge.contact.SetFlagForFiltering();
                     }
 
                     edge = edge.next;
@@ -490,7 +490,7 @@ namespace Box2D.Dynamics
                     {
                         // Flag the contact for filtering at the next time step (where either
                         // body is awake).
-                        edge.contact.flagForFiltering();
+                        edge.contact.SetFlagForFiltering();
                     }
 
                     edge = edge.next;
@@ -973,9 +973,9 @@ namespace Box2D.Dynamics
             {
                 b.Flags &= ~Body.TypeFlags.Island;
             }
-            for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
+            for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
             {
-                c.m_flags &= ~Contact.ISLAND_FLAG;
+                c.Flags &= ~Contact.ISLAND_FLAG;
             }
             for (Joint j = JointList; j != null; j = j.m_next)
             {
@@ -1036,7 +1036,7 @@ namespace Box2D.Dynamics
                         Contact contact = ce.contact;
 
                         // Has this contact already been added to an island?
-                        if ((contact.m_flags & Contact.ISLAND_FLAG) == Contact.ISLAND_FLAG)
+                        if ((contact.Flags & Contact.ISLAND_FLAG) == Contact.ISLAND_FLAG)
                         {
                             continue;
                         }
@@ -1048,15 +1048,15 @@ namespace Box2D.Dynamics
                         }
 
                         // Skip sensors.
-                        bool sensorA = contact.m_fixtureA.IsSensor;
-                        bool sensorB = contact.m_fixtureB.IsSensor;
+                        bool sensorA = contact.FixtureA.IsSensor;
+                        bool sensorB = contact.FixtureB.IsSensor;
                         if (sensorA || sensorB)
                         {
                             continue;
                         }
 
                         island.Add(contact);
-                        contact.m_flags |= Contact.ISLAND_FLAG;
+                        contact.Flags |= Contact.ISLAND_FLAG;
 
                         Body other = ce.other;
 
@@ -1161,12 +1161,12 @@ namespace Box2D.Dynamics
                     b.Sweep.Alpha0 = 0.0f;
                 }
 
-                for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
+                for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
                 {
                     // Invalidate TOI
-                    c.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
-                    c.m_toiCount = 0;
-                    c.m_toi = 1.0f;
+                    c.Flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
+                    c.ToiCount = 0;
+                    c.Toi = 1.0f;
                 }
             }
 
@@ -1177,7 +1177,7 @@ namespace Box2D.Dynamics
                 Contact minContact = null;
                 float minAlpha = 1.0f;
 
-                for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
+                for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
                 {
                     // Is this contact disabled?
                     if (c.Enabled == false)
@@ -1186,16 +1186,16 @@ namespace Box2D.Dynamics
                     }
 
                     // Prevent excessive sub-stepping.
-                    if (c.m_toiCount > Settings.MAX_SUB_STEPS)
+                    if (c.ToiCount > Settings.MAX_SUB_STEPS)
                     {
                         continue;
                     }
 
                     float alpha;
-                    if ((c.m_flags & Contact.TOI_FLAG) != 0)
+                    if ((c.Flags & Contact.TOI_FLAG) != 0)
                     {
                         // This contact has a valid cached TOI.
-                        alpha = c.m_toi;
+                        alpha = c.Toi;
                     }
                     else
                     {
@@ -1274,8 +1274,8 @@ namespace Box2D.Dynamics
                             alpha = 1.0f;
                         }
 
-                        c.m_toi = alpha;
-                        c.m_flags |= Contact.TOI_FLAG;
+                        c.Toi = alpha;
+                        c.Flags |= Contact.TOI_FLAG;
                     }
 
                     if (alpha < minAlpha)
@@ -1306,9 +1306,9 @@ namespace Box2D.Dynamics
                 bB2.Advance(minAlpha);
 
                 // The TOI contact likely has some new contact points.
-                minContact.update(ContactManager.ContactListener);
-                minContact.m_flags &= ~Contact.TOI_FLAG;
-                ++minContact.m_toiCount;
+                minContact.Update(ContactManager.ContactListener);
+                minContact.Flags &= ~Contact.TOI_FLAG;
+                ++minContact.ToiCount;
 
                 // Is the contact solid?
                 if (minContact.Enabled == false || minContact.Touching == false)
@@ -1333,7 +1333,7 @@ namespace Box2D.Dynamics
 
                 bA2.Flags |= Body.TypeFlags.Island;
                 bB2.Flags |= Body.TypeFlags.Island;
-                minContact.m_flags |= Contact.ISLAND_FLAG;
+                minContact.Flags |= Contact.ISLAND_FLAG;
 
                 // Get contacts on bodyA and bodyB.
                 tempBodies[0] = bA2;
@@ -1358,7 +1358,7 @@ namespace Box2D.Dynamics
                             Contact contact = ce.contact;
 
                             // Has this contact already been added to the island?
-                            if ((contact.m_flags & Contact.ISLAND_FLAG) != 0)
+                            if ((contact.Flags & Contact.ISLAND_FLAG) != 0)
                             {
                                 continue;
                             }
@@ -1371,8 +1371,8 @@ namespace Box2D.Dynamics
                             }
 
                             // Skip sensors.
-                            bool sensorA = contact.m_fixtureA.IsSensor;
-                            bool sensorB = contact.m_fixtureB.IsSensor;
+                            bool sensorA = contact.FixtureA.IsSensor;
+                            bool sensorB = contact.FixtureB.IsSensor;
                             if (sensorA || sensorB)
                             {
                                 continue;
@@ -1386,7 +1386,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Update the contact points
-                            contact.update(ContactManager.ContactListener);
+                            contact.Update(ContactManager.ContactListener);
 
                             // Was the contact disabled by the user?
                             if (contact.Enabled == false)
@@ -1405,7 +1405,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Add the contact to the island
-                            contact.m_flags |= Contact.ISLAND_FLAG;
+                            contact.Flags |= Contact.ISLAND_FLAG;
                             island.Add(contact);
 
                             // Has the other body already been added to the island?
@@ -1451,7 +1451,7 @@ namespace Box2D.Dynamics
                     // Invalidate all contact TOIs on this displaced body.
                     for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                     {
-                        ce.contact.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
+                        ce.contact.Flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
                     }
                 }
 

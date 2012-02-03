@@ -27,6 +27,7 @@ using Box2D.Collision;
 using Box2D.Collision.Shapes;
 using Box2D.Common;
 using Box2D.Pooling;
+using System;
 
 namespace Box2D.Dynamics.Contacts
 {
@@ -40,102 +41,103 @@ namespace Box2D.Dynamics.Contacts
     public abstract class Contact
     {
         // Flags stored in m_flags
-        // Used when crawling contact graph when forming islands.
-        public const int ISLAND_FLAG = 0x0001;
-        // Set when the shapes are touching.
-        public const int TOUCHING_FLAG = 0x0002; // NO_UCD
-        // This contact can be disabled (by user)
-        public const int ENABLED_FLAG = 0x0004;
-        // This contact needs filtering because a fixture filter was changed.
-        public const int FILTER_FLAG = 0x0008;
-        // This bullet contact had a TOI event
-        public const int BULLET_HIT_FLAG = 0x0010;
+        [Flags]
+        public enum ContactFlags
+        {
+            None = 0x0000,
 
-        public const int TOI_FLAG = 0x0020;
+            /// <summary>
+            /// Used when crawling contact graph when forming islands.
+            /// </summary>
+            Island = 0x0001,
 
-        public int m_flags;
+            /// <summary>
+            /// Set when the shapes are touching.
+            /// </summary>
+            Touching = 0x0002, // NO_UCD
+
+            /// <summary>
+            /// This contact can be disabled (by user)
+            /// </summary>
+            Enabled = 0x0004,
+
+            /// <summary>
+            /// This contact needs filtering because a fixture filter was changed.
+            /// </summary>
+            Filter = 0x0008,
+
+            /// <summary>
+            /// This bullet contact had a TOI event
+            /// </summary>
+            BulletHit = 0x0010,
+
+            ToiFlag = 0x0020,
+        }
+
+
+        public ContactFlags Flags;
 
         // World pool and list pointers.
-        public Contact m_prev;
-        public Contact m_next;
+        public Contact Prev;
 
         // Nodes for connecting bodies.
-        public ContactEdge m_nodeA = null;
-        public ContactEdge m_nodeB = null;
+        public ContactEdge NodeA;
+        public ContactEdge NodeB;
 
-        public Fixture m_fixtureA;
-        public Fixture m_fixtureB;
+        public float ToiCount;
+        public float Toi;
 
-        public int m_indexA;
-        public int m_indexB;
-
-        public readonly Manifold m_manifold;
-
-        public float m_toiCount;
-        public float m_toi;
-
-        public float m_friction;
-        public float m_restitution;
-
-        public float m_tangentSpeed;
-
-        protected readonly internal IWorldPool pool;
+        protected readonly internal IWorldPool Pool;
 
         protected internal Contact(IWorldPool argPool)
         {
-            m_fixtureA = null;
-            m_fixtureB = null;
-            m_nodeA = new ContactEdge();
-            m_nodeB = new ContactEdge();
-            m_manifold = new Manifold();
-            pool = argPool;
+            FixtureA = null;
+            FixtureB = null;
+            NodeA = new ContactEdge();
+            NodeB = new ContactEdge();
+            Manifold = new Manifold();
+            Pool = argPool;
         }
 
         /// <summary>
         /// initialization for pooling
         /// </summary>
-        public virtual void init(Fixture fA, int indexA, Fixture fB, int indexB)
+        public virtual void Init(Fixture fA, int indexA, Fixture fB, int indexB)
         {
-            m_flags = 0;
+            Flags = 0;
 
-            m_fixtureA = fA;
-            m_fixtureB = fB;
+            FixtureA = fA;
+            FixtureB = fB;
 
-            m_indexA = indexA;
-            m_indexB = indexB;
+            ChildIndexA = indexA;
+            ChildIndexB = indexB;
 
-            m_manifold.PointCount = 0;
+            Manifold.PointCount = 0;
 
-            m_prev = null;
-            m_next = null;
+            Prev = null;
+            Next = null;
 
-            m_nodeA.contact = null;
-            m_nodeA.prev = null;
-            m_nodeA.next = null;
-            m_nodeA.other = null;
+            NodeA.contact = null;
+            NodeA.prev = null;
+            NodeA.next = null;
+            NodeA.other = null;
 
-            m_nodeB.contact = null;
-            m_nodeB.prev = null;
-            m_nodeB.next = null;
-            m_nodeB.other = null;
+            NodeB.contact = null;
+            NodeB.prev = null;
+            NodeB.next = null;
+            NodeB.other = null;
 
-            m_toiCount = 0;
-            m_friction = mixFriction(fA.Friction, fB.Friction);
-            m_restitution = mixRestitution(fA.Restitution, fB.Restitution);
+            ToiCount = 0;
+            Friction = MixFriction(fA.Friction, fB.Friction);
+            Restitution = MixRestitution(fA.Restitution, fB.Restitution);
 
-            m_tangentSpeed = 0;
+            TangentSpeed = 0;
         }
 
         /// <summary>
         /// Get the contact manifold. Do not set the point count to zero. Instead call Disable.
         /// </summary>
-        public Manifold Manifold
-        {
-            get
-            {
-                return m_manifold;
-            }
-        }
+        public Manifold Manifold { get; private set; }
 
         /// <summary>
         /// Is this contact touching
@@ -145,7 +147,7 @@ namespace Box2D.Dynamics.Contacts
         {
             get
             {
-                return (m_flags & TOUCHING_FLAG) == TOUCHING_FLAG;
+                return (Flags & ContactFlags.Touching) == ContactFlags.Touching;
             }
         }
 
@@ -158,17 +160,17 @@ namespace Box2D.Dynamics.Contacts
         {
             get
             {
-                return (m_flags & ENABLED_FLAG) == ENABLED_FLAG;
+                return (Flags & ContactFlags.Enabled) == ContactFlags.Enabled;
             }
             set
             {
                 if (value)
                 {
-                    m_flags |= ENABLED_FLAG;
+                    Flags |= ContactFlags.Enabled;
                 }
                 else
                 {
-                    m_flags &= ~ENABLED_FLAG;
+                    Flags &= ~ContactFlags.Enabled;
                 }
             }
         }
@@ -177,143 +179,83 @@ namespace Box2D.Dynamics.Contacts
         /// Get the next contact in the world's contact list.
         /// </summary>
         /// <returns></returns>
-        public Contact Next
-        {
-            get
-            {
-                return m_next;
-            }
-        }
+        public Contact Next { get; set; }
 
         /// <summary>
         /// Get the first fixture in this contact.
         /// </summary>
         /// <returns></returns>
-        public Fixture FixtureA
-        {
-            get
-            {
-                return m_fixtureA;
-            }
-        }
+        public Fixture FixtureA { get; set; }
 
-        public int ChildIndexA
-        {
-            get
-            {
-                return m_indexA;
-            }
-        }
+        public int ChildIndexA { get; set; }
 
         /// <summary>
         /// Get the second fixture in this contact.
         /// </summary>
         /// <returns></returns>
-        public Fixture FixtureB
-        {
-            get
-            {
-                return m_fixtureB;
-            }
-        }
+        public Fixture FixtureB { get; set; }
 
-        public int ChildIndexB
-        {
-            get
-            {
-                return m_indexB;
-            }
-        }
+        public int ChildIndexB { get; set; }
 
-        public float Friction
-        {
-            get
-            {
-                return m_friction;
-            }
-            set
-            {
-                m_friction = value;
-            }
-        }
+        public float Friction { get; set; }
 
-        public float Restitution
-        {
-            get
-            {
-                return m_restitution;
-            }
-            set
-            {
-                m_restitution = value;
-            }
-        }
+        public float Restitution { get; set; }
 
-        public float TangentSpeed
-        {
-            get
-            {
-                return m_tangentSpeed;
-            }
-            set
-            {
-                m_tangentSpeed = value;
-            }
-        }
+        public float TangentSpeed { get; set; }
 
         /// <summary>
         /// Get the world manifold.
         /// </summary>
-        public void getWorldManifold(WorldManifold worldManifold)
+        public void GetWorldManifold(WorldManifold worldManifold)
         {
-            Body bodyA = m_fixtureA.Body;
-            Body bodyB = m_fixtureB.Body;
-            Shape shapeA = m_fixtureA.Shape;
-            Shape shapeB = m_fixtureB.Shape;
+            Body bodyA = FixtureA.Body;
+            Body bodyB = FixtureB.Body;
+            Shape shapeA = FixtureA.Shape;
+            Shape shapeB = FixtureB.Shape;
 
-            worldManifold.Initialize(m_manifold, bodyA.GetTransform(), shapeA.Radius, bodyB.GetTransform(), shapeB.Radius);
+            worldManifold.Initialize(Manifold, bodyA.GetTransform(), shapeA.Radius, bodyB.GetTransform(), shapeB.Radius);
         }
 
-        public void resetFriction()
+        public void ResetFriction()
         {
-            m_friction = mixFriction(m_fixtureA.Friction, m_fixtureB.Friction);
+            Friction = MixFriction(FixtureA.Friction, FixtureB.Friction);
         }
 
-        public void resetRestitution()
+        public void ResetRestitution()
         {
-            m_restitution = mixRestitution(m_fixtureA.Restitution, m_fixtureB.Restitution);
+            Restitution = MixRestitution(FixtureA.Restitution, FixtureB.Restitution);
         }
 
-        public abstract void evaluate(Manifold manifold, Transform xfA, Transform xfB);
+        public abstract void Evaluate(Manifold manifold, Transform xfA, Transform xfB);
 
         /// <summary>
         /// Flag this contact for filtering. Filtering will occur the next time step.
         /// </summary>
-        public void flagForFiltering()
+        public void SetFlagForFiltering()
         {
-            m_flags |= FILTER_FLAG;
+            Flags |= ContactFlags.Filter;
         }
 
         // djm pooling
         private readonly Manifold oldManifold = new Manifold();
 
-        public void update(IContactListener listener)
+        public void Update(IContactListener listener)
         {
 
-            oldManifold.Set(m_manifold);
+            oldManifold.Set(Manifold);
 
             // Re-enable this contact.
-            m_flags |= ENABLED_FLAG;
+            Flags |= ContactFlags.Enabled;
 
-            bool touching = false;
-            bool wasTouching = (m_flags & TOUCHING_FLAG) == TOUCHING_FLAG;
+            bool touching;
+            bool wasTouching = (Flags & ContactFlags.Touching) == ContactFlags.Touching;
 
-            bool sensorA = m_fixtureA.Sensor;
-            bool sensorB = m_fixtureB.Sensor;
+            bool sensorA = FixtureA.Sensor;
+            bool sensorB = FixtureB.Sensor;
             bool sensor = sensorA || sensorB;
 
-            Body bodyA = m_fixtureA.Body;
-            Body bodyB = m_fixtureB.Body;
+            Body bodyA = FixtureA.Body;
+            Body bodyB = FixtureB.Body;
             Transform xfA = bodyA.GetTransform();
             Transform xfB = bodyB.GetTransform();
             // log.debug("TransformA: "+xfA);
@@ -321,23 +263,23 @@ namespace Box2D.Dynamics.Contacts
 
             if (sensor)
             {
-                Shape shapeA = m_fixtureA.Shape;
-                Shape shapeB = m_fixtureB.Shape;
-                touching = pool.GetCollision().TestOverlap(shapeA, m_indexA, shapeB, m_indexB, xfA, xfB);
+                Shape shapeA = FixtureA.Shape;
+                Shape shapeB = FixtureB.Shape;
+                touching = Pool.GetCollision().TestOverlap(shapeA, ChildIndexA, shapeB, ChildIndexB, xfA, xfB);
 
                 // Sensors don't generate manifolds.
-                m_manifold.PointCount = 0;
+                Manifold.PointCount = 0;
             }
             else
             {
-                evaluate(m_manifold, xfA, xfB);
-                touching = m_manifold.PointCount > 0;
+                Evaluate(Manifold, xfA, xfB);
+                touching = Manifold.PointCount > 0;
 
                 // Match old contact ids to new contact ids and copy the
                 // stored impulses to warm start the solver.
-                for (int i = 0; i < m_manifold.PointCount; ++i)
+                for (int i = 0; i < Manifold.PointCount; ++i)
                 {
-                    ManifoldPoint mp2 = m_manifold.Points[i];
+                    ManifoldPoint mp2 = Manifold.Points[i];
                     mp2.NormalImpulse = 0.0f;
                     mp2.TangentImpulse = 0.0f;
                     ContactID id2 = mp2.Id;
@@ -364,11 +306,11 @@ namespace Box2D.Dynamics.Contacts
 
             if (touching)
             {
-                m_flags |= TOUCHING_FLAG;
+                Flags |= ContactFlags.Touching;
             }
             else
             {
-                m_flags &= ~TOUCHING_FLAG;
+                Flags &= ~ContactFlags.Touching;
             }
 
             if (listener == null)
@@ -376,17 +318,17 @@ namespace Box2D.Dynamics.Contacts
                 return;
             }
 
-            if (wasTouching == false && touching == true)
+            if (!wasTouching && touching)
             {
                 listener.BeginContact(this);
             }
 
-            if (wasTouching == true && touching == false)
+            if (wasTouching && !touching)
             {
                 listener.EndContact(this);
             }
 
-            if (sensor == false && touching)
+            if (!sensor && touching)
             {
                 listener.PreSolve(this, oldManifold);
             }
@@ -399,7 +341,7 @@ namespace Box2D.Dynamics.Contacts
         /// <param name="friction1"></param>
         /// <param name="friction2"></param>
         /// <returns></returns>
-        public static float mixFriction(float friction1, float friction2)
+        public static float MixFriction(float friction1, float friction2)
         {
             return MathUtils.Sqrt(friction1 * friction2);
         }
@@ -411,7 +353,7 @@ namespace Box2D.Dynamics.Contacts
         /// <param name="restitution1"></param>
         /// <param name="restitution2"></param>
         /// <returns></returns>
-        public static float mixRestitution(float restitution1, float restitution2)
+        public static float MixRestitution(float restitution1, float restitution2)
         {
             return restitution1 > restitution2 ? restitution1 : restitution2;
         }

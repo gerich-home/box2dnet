@@ -38,20 +38,20 @@ namespace Box2D.Dynamics.Contacts
         {
         }
 
-        public override void init(Fixture fA, int indexA, Fixture fB, int indexB)
+        public override void Init(Fixture fA, int indexA, Fixture fB, int indexB)
         {
-            base.init(fA, indexA, fB, indexB);
-            Debug.Assert(m_fixtureA.Type == ShapeType.Chain);
-            Debug.Assert(m_fixtureB.Type == ShapeType.Polygon);
+            base.Init(fA, indexA, fB, indexB);
+            Debug.Assert(FixtureA.Type == ShapeType.Chain);
+            Debug.Assert(FixtureB.Type == ShapeType.Polygon);
         }
 
         private readonly EdgeShape edge = new EdgeShape();
 
-        public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)
+        public override void Evaluate(Manifold manifold, Transform xfA, Transform xfB)
         {
-            ChainShape chain = (ChainShape)m_fixtureA.Shape;
-            chain.GetChildEdge(edge, m_indexA);
-            pool.GetCollision().CollideEdgeAndPolygon(manifold, edge, xfA, (PolygonShape)m_fixtureB.Shape, xfB);
+            ChainShape chain = (ChainShape)FixtureA.Shape;
+            chain.GetChildEdge(edge, ChildIndexA);
+            Pool.GetCollision().CollideEdgeAndPolygon(manifold, edge, xfA, (PolygonShape)FixtureB.Shape, xfB);
         }
     }
 }

@@ -110,8 +110,8 @@ namespace Box2D.Dynamics.Contacts
                 //Console.WriteLine("contacts: " + m_count);
                 Contact contact = m_contacts[i];
 
-                Fixture fixtureA = contact.m_fixtureA;
-                Fixture fixtureB = contact.m_fixtureB;
+                Fixture fixtureA = contact.FixtureA;
+                Fixture fixtureB = contact.FixtureB;
                 Shape shapeA = fixtureA.Shape;
                 Shape shapeB = fixtureB.Shape;
                 float radiusA = shapeA.Radius;
@@ -124,9 +124,9 @@ namespace Box2D.Dynamics.Contacts
                 Debug.Assert(pointCount > 0);
 
                 ContactVelocityConstraint vc = m_velocityConstraints[i];
-                vc.friction = contact.m_friction;
-                vc.restitution = contact.m_restitution;
-                vc.tangentSpeed = contact.m_tangentSpeed;
+                vc.friction = contact.Friction;
+                vc.restitution = contact.Restitution;
+                vc.tangentSpeed = contact.TangentSpeed;
                 vc.indexA = bodyA.IslandIndex;
                 vc.indexB = bodyB.IslandIndex;
                 vc.invMassA = bodyA.InvMass;

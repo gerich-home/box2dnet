@@ -134,39 +134,39 @@ namespace Box2D.Dynamics
             bodyB = fixtureB.Body;
 
             // Insert into the world.
-            c.m_prev = null;
-            c.m_next = ContactList;
+            c.Prev = null;
+            c.Next = ContactList;
             if (ContactList != null)
             {
-                ContactList.m_prev = c;
+                ContactList.Prev = c;
             }
             ContactList = c;
 
             // Connect to island graph.
 
             // Connect to body A
-            c.m_nodeA.contact = c;
-            c.m_nodeA.other = bodyB;
+            c.NodeA.contact = c;
+            c.NodeA.other = bodyB;
 
-            c.m_nodeA.prev = null;
-            c.m_nodeA.next = bodyA.ContactList;
+            c.NodeA.prev = null;
+            c.NodeA.next = bodyA.ContactList;
             if (bodyA.ContactList != null)
             {
-                bodyA.ContactList.prev = c.m_nodeA;
+                bodyA.ContactList.prev = c.NodeA;
             }
-            bodyA.ContactList = c.m_nodeA;
+            bodyA.ContactList = c.NodeA;
 
             // Connect to body B
-            c.m_nodeB.contact = c;
-            c.m_nodeB.other = bodyA;
+            c.NodeB.contact = c;
+            c.NodeB.other = bodyA;
 
-            c.m_nodeB.prev = null;
-            c.m_nodeB.next = bodyB.ContactList;
+            c.NodeB.prev = null;
+            c.NodeB.next = bodyB.ContactList;
             if (bodyB.ContactList != null)
             {
-                bodyB.ContactList.prev = c.m_nodeB;
+                bodyB.ContactList.prev = c.NodeB;
             }
-            bodyB.ContactList = c.m_nodeB;
+            bodyB.ContactList = c.NodeB;
 
             // wake up the bodies
             bodyA.Awake = true;
@@ -193,51 +193,51 @@ namespace Box2D.Dynamics
             }
 
             // Remove from the world.
-            if (c.m_prev != null)
+            if (c.Prev != null)
             {
-                c.m_prev.m_next = c.m_next;
+                c.Prev.Next = c.Next;
             }
 
-            if (c.m_next != null)
+            if (c.Next != null)
             {
-                c.m_next.m_prev = c.m_prev;
+                c.Next.Prev = c.Prev;
             }
 
             if (c == ContactList)
             {
-                ContactList = c.m_next;
+                ContactList = c.Next;
             }
 
             // Remove from body 1
-            if (c.m_nodeA.prev != null)
+            if (c.NodeA.prev != null)
             {
-                c.m_nodeA.prev.next = c.m_nodeA.next;
+                c.NodeA.prev.next = c.NodeA.next;
             }
 
-            if (c.m_nodeA.next != null)
+            if (c.NodeA.next != null)
             {
-                c.m_nodeA.next.prev = c.m_nodeA.prev;
+                c.NodeA.next.prev = c.NodeA.prev;
             }
 
-            if (c.m_nodeA == bodyA.ContactList)
+            if (c.NodeA == bodyA.ContactList)
             {
-                bodyA.ContactList = c.m_nodeA.next;
+                bodyA.ContactList = c.NodeA.next;
             }
 
             // Remove from body 2
-            if (c.m_nodeB.prev != null)
+            if (c.NodeB.prev != null)
             {
-                c.m_nodeB.prev.next = c.m_nodeB.next;
+                c.NodeB.prev.next = c.NodeB.next;
             }
 
-            if (c.m_nodeB.next != null)
+            if (c.NodeB.next != null)
             {
-                c.m_nodeB.next.prev = c.m_nodeB.prev;
+                c.NodeB.next.prev = c.NodeB.prev;
             }
 
-            if (c.m_nodeB == bodyB.ContactList)
+            if (c.NodeB == bodyB.ContactList)
             {
-                bodyB.ContactList = c.m_nodeB.next;
+                bodyB.ContactList = c.NodeB.next;
             }
 
             // Call the factory.
@@ -263,7 +263,7 @@ namespace Box2D.Dynamics
                 Body bodyB = fixtureB.Body;
 
                 // is this contact flagged for filtering?
-                if ((c.m_flags & Contact.FILTER_FLAG) == Contact.FILTER_FLAG)
+                if ((c.Flags & Contact.FILTER_FLAG) == Contact.FILTER_FLAG)
                 {
                     // Should these bodies collide?
                     if (bodyB.ShouldCollide(bodyA) == false)
@@ -284,7 +284,7 @@ namespace Box2D.Dynamics
                     }
 
                     // Clear the filtering flag.
-                    c.m_flags &= ~Contact.FILTER_FLAG;
+                    c.Flags &= ~Contact.FILTER_FLAG;
                 }
 
                 bool activeA = bodyA.Awake && bodyA.Type != BodyType.Static;
@@ -311,7 +311,7 @@ namespace Box2D.Dynamics
                 }
 
                 // The contact persists.
-                c.update(ContactListener);
+                c.Update(ContactListener);
                 c = c.Next;
             }
         }

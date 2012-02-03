@@ -38,16 +38,16 @@ namespace Box2D.Dynamics.Contacts
         {
         }
 
-        public override void init(Fixture fA, int indexA, Fixture fB, int indexB)
+        public override void Init(Fixture fA, int indexA, Fixture fB, int indexB)
         {
-            base.init(fA, indexA, fB, indexB);
-            Debug.Assert(m_fixtureA.Type == ShapeType.Edge);
-            Debug.Assert(m_fixtureB.Type == ShapeType.Circle);
+            base.Init(fA, indexA, fB, indexB);
+            Debug.Assert(FixtureA.Type == ShapeType.Edge);
+            Debug.Assert(FixtureB.Type == ShapeType.Circle);
         }
 
-        public override void evaluate(Manifold manifold, Transform xfA, Transform xfB)
+        public override void Evaluate(Manifold manifold, Transform xfA, Transform xfB)
         {
-            pool.GetCollision().CollideEdgeAndCircle(manifold, (EdgeShape)m_fixtureA.Shape, xfA, (CircleShape)m_fixtureB.Shape, xfB);
+            Pool.GetCollision().CollideEdgeAndCircle(manifold, (EdgeShape)FixtureA.Shape, xfA, (CircleShape)FixtureB.Shape, xfB);
         }
     }
 }

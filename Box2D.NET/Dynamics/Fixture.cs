@@ -185,7 +185,7 @@ namespace Box2D.Dynamics
                 Fixture fixtureB = contact.FixtureB;
                 if (fixtureA == this || fixtureB == this)
                 {
-                    contact.flagForFiltering();
+                    contact.SetFlagForFiltering();
                 }
                 edge = edge.next;
             }
