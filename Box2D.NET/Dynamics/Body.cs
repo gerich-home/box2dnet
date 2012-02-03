@@ -47,7 +47,7 @@ namespace Box2D.Dynamics
             Toi = 0x0040,
         }
 
-        public BodyType m_type;
+        private BodyType m_type;
 
         public TypeFlags Flags;
 
@@ -63,11 +63,11 @@ namespace Box2D.Dynamics
         /// </summary>
         public readonly Sweep Sweep = new Sweep();
 
-        public readonly Vec2 m_linearVelocity = new Vec2();
-        public float m_angularVelocity;
+        private readonly Vec2 m_linearVelocity = new Vec2();
+        private float m_angularVelocity;
 
         public readonly Vec2 Force = new Vec2();
-        public float Torque = 0;
+        public float Torque;
 
         public Body Prev;
 
@@ -319,7 +319,7 @@ namespace Box2D.Dynamics
         public void SetTransform(Vec2 position, float angle)
         {
             Debug.Assert(World.Locked == false);
-            if (World.Locked == true)
+            if (World.Locked)
             {
                 return;
             }
@@ -485,7 +485,6 @@ namespace Box2D.Dynamics
         /// Gets or sets the type of this body.
         /// Setter may alter the mass and velocity.
         /// </summary>
-        /// <param name="type"></param>
         public BodyType Type
         {
             get
@@ -495,7 +494,7 @@ namespace Box2D.Dynamics
             set
             {
                 Debug.Assert(World.Locked == false);
-                if (World.Locked == true)
+                if (World.Locked)
                 {
                     return;
                 }
@@ -885,7 +884,7 @@ namespace Box2D.Dynamics
         {
             // TODO_ERIN adjust linear velocity and torque to account for movement of center.
             Debug.Assert(World.Locked == false);
-            if (World.Locked == true)
+            if (World.Locked)
             {
                 return;
             }

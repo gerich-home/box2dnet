@@ -287,8 +287,8 @@ namespace Box2D.Dynamics
                     c.m_flags &= ~Contact.FILTER_FLAG;
                 }
 
-                bool activeA = bodyA.Awake && bodyA.m_type != BodyType.Static;
-                bool activeB = bodyB.Awake && bodyB.m_type != BodyType.Static;
+                bool activeA = bodyA.Awake && bodyA.Type != BodyType.Static;
+                bool activeB = bodyB.Awake && bodyB.Type != BodyType.Static;
 
                 // At least one body must be awake and it must be dynamic or kinematic.
                 if (activeA == false && activeB == false)

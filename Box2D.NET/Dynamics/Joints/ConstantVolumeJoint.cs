@@ -225,8 +225,8 @@ namespace Box2D.Dynamics.Joints
                 // m_impulse = lambda;
                 for (int i = 0; i < bodies.Length; ++i)
                 {
-                    bodies[i].m_linearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * m_impulse;
-                    bodies[i].m_linearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * m_impulse;
+                    bodies[i].LinearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * m_impulse;
+                    bodies[i].LinearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * m_impulse;
                 }
             }
             else
@@ -265,8 +265,8 @@ namespace Box2D.Dynamics.Joints
             // System.out.println(m_impulse);
             for (int i = 0; i < bodies.Length; ++i)
             {
-                bodies[i].m_linearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * lambda;
-                bodies[i].m_linearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * lambda;
+                bodies[i].LinearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * lambda;
+                bodies[i].LinearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * lambda;
             }
         }
 

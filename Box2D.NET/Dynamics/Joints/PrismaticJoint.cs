@@ -259,10 +259,10 @@ namespace Box2D.Dynamics.Joints
                 d.Set(p2).SubLocal(p1);
                 Rot.MulToOutUnsafe(bA.Xf.Q, m_localXAxisA, axis);
 
-                Vec2 vA = bA.m_linearVelocity;
-                Vec2 vB = bB.m_linearVelocity;
-                float wA = bA.m_angularVelocity;
-                float wB = bB.m_angularVelocity;
+                Vec2 vA = bA.LinearVelocity;
+                Vec2 vB = bB.LinearVelocity;
+                float wA = bA.AngularVelocity;
+                float wB = bB.AngularVelocity;
 
 
                 Vec2.CrossToOutUnsafe(wA, axis, temp);

@@ -514,7 +514,7 @@ namespace Box2D.Dynamics.Joints
             {
                 Body b1 = m_bodyA;
                 Body b2 = m_bodyB;
-                return b2.m_angularVelocity - b1.m_angularVelocity;
+                return b2.AngularVelocity - b1.AngularVelocity;
             }
         }
 

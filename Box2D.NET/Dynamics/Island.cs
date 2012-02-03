@@ -249,14 +249,14 @@ namespace Box2D.Dynamics
 				Body b = Bodies[i];
 				Vec2 c = b.Sweep.C;
 				float a = b.Sweep.A;
-				Vec2 v = b.m_linearVelocity;
-				float w = b.m_angularVelocity;
+				Vec2 v = b.LinearVelocity;
+				float w = b.AngularVelocity;
 
 				// Store positions for continuous collision.
 				b.Sweep.C0.Set(b.Sweep.C);
 				b.Sweep.A0 = b.Sweep.A;
 
-				if (b.m_type == BodyType.Dynamic)
+                if (b.Type == BodyType.Dynamic)
 				{
 					// Integrate velocities.
 					// v += h * (b.m_gravityScale * gravity + b.m_invMass * b.m_force);
@@ -394,8 +394,8 @@ namespace Box2D.Dynamics
 				Body body = Bodies[i];
 				body.Sweep.C.Set(Positions[i].c);
 				body.Sweep.A = Positions[i].a;
-				body.m_linearVelocity.Set(Velocities[i].v);
-				body.m_angularVelocity = Velocities[i].w;
+                body.LinearVelocity.Set(Velocities[i].v);
+				body.AngularVelocity = Velocities[i].w;
 				body.SynchronizeTransform();
 			}
 
@@ -418,7 +418,7 @@ namespace Box2D.Dynamics
 						continue;
 					}
 
-					if ((b.Flags & Body.TypeFlags.AutoSleep) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || Vec2.Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
+                    if ((b.Flags & Body.TypeFlags.AutoSleep) == 0 || b.AngularVelocity * b.AngularVelocity > angTolSqr || Vec2.Dot(b.LinearVelocity, b.LinearVelocity) > linTolSqr)
 					{
 						b.SleepTime = 0.0f;
 						minSleepTime = 0.0f;
@@ -455,8 +455,8 @@ namespace Box2D.Dynamics
 				Body b = Bodies[i];
 				Positions[i].c.Set(b.Sweep.C);
 				Positions[i].a = b.Sweep.A;
-				Velocities[i].v.Set(b.m_linearVelocity);
-				Velocities[i].w = b.m_angularVelocity;
+                Velocities[i].v.Set(b.LinearVelocity);
+                Velocities[i].w = b.AngularVelocity;
 			}
 
 			toiSolverDef.contacts = Contacts;
@@ -567,8 +567,8 @@ namespace Box2D.Dynamics
 				Body body = Bodies[i];
 				body.Sweep.C.Set(c);
 				body.Sweep.A = a;
-				body.m_linearVelocity.Set(v);
-				body.m_angularVelocity = w;
+                body.LinearVelocity.Set(v);
+                body.AngularVelocity = w;
 				body.SynchronizeTransform();
 			}
 

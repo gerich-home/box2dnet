@@ -1213,8 +1213,8 @@ namespace Box2D.Dynamics
                         Body bA = fA.Body;
                         Body bB = fB.Body;
 
-                        BodyType typeA = bA.m_type;
-                        BodyType typeB = bB.m_type;
+                        BodyType typeA = bA.Type;
+                        BodyType typeB = bB.Type;
                         Debug.Assert(typeA == BodyType.Dynamic || typeB == BodyType.Dynamic);
 
                         bool activeA = bA.Awake && typeA != BodyType.Static;
@@ -1343,7 +1343,7 @@ namespace Box2D.Dynamics
                 for (int i = 0; i < 2; ++i)
                 {
                     Body body = tempBodies[i];
-                    if (body.m_type == BodyType.Dynamic)
+                    if (body.Type == BodyType.Dynamic)
                     {
                         for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                         {
@@ -1367,7 +1367,7 @@ namespace Box2D.Dynamics
 
                             // Only add static, kinematic, or bullet bodies.
                             Body other = ce.other;
-                            if (other.m_type == BodyType.Dynamic && body.Bullet == false && other.Bullet == false)
+                            if (other.Type == BodyType.Dynamic && body.Bullet == false && other.Bullet == false)
                             {
                                 continue;
                             }
@@ -1419,7 +1419,7 @@ namespace Box2D.Dynamics
                             // Add the other body to the island.
                             other.Flags |= Body.TypeFlags.Island;
 
-                            if (other.m_type != BodyType.Static)
+                            if (other.Type != BodyType.Static)
                             {
                                 other.Awake = true;
                             }
@@ -1443,7 +1443,7 @@ namespace Box2D.Dynamics
                     Body body = island.Bodies[i];
                     body.Flags &= ~Body.TypeFlags.Island;
 
-                    if (body.m_type != BodyType.Dynamic)
+                    if (body.Type != BodyType.Dynamic)
                     {
                         continue;
                     }
@@ -1551,8 +1551,8 @@ namespace Box2D.Dynamics
                         if (fixture.UserData != null && fixture.UserData.Equals(LIQUID_INT))
                         {
                             Body b = fixture.Body;
-                            liquidOffset.Set(b.m_linearVelocity);
-                            float linVelLength = b.m_linearVelocity.Length();
+                            liquidOffset.Set(b.LinearVelocity);
+                            float linVelLength = b.LinearVelocity.Length();
                             if (averageLinearVel == -1)
                             {
                                 averageLinearVel = linVelLength;
