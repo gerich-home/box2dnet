@@ -48,8 +48,8 @@ namespace Box2D.Collision
         //UPGRADE_NOTE: The access modifier for this class or class field has been changed in order to prevent compilation errors due to the visibility level. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1296'"
         private class SimplexVertex
         {
-            public readonly Vec2 WA = new Vec2(); // support point in shapeA
-            public readonly Vec2 WB = new Vec2(); // support point in shapeB
+            public readonly Vec2 Wa = new Vec2(); // support point in shapeA
+            public readonly Vec2 Wb = new Vec2(); // support point in shapeB
             public readonly Vec2 W = new Vec2(); // wB - wA
             public float A; // barycentric coordinate for closest point
             public int IndexA; // wA index
@@ -57,8 +57,8 @@ namespace Box2D.Collision
 
             public void Set(SimplexVertex sv)
             {
-                WA.Set(sv.WA);
-                WB.Set(sv.WB);
+                Wa.Set(sv.Wa);
+                Wb.Set(sv.Wb);
                 W.Set(sv.W);
                 A = sv.A;
                 IndexA = sv.IndexA;
@@ -174,9 +174,9 @@ namespace Box2D.Collision
                     v.IndexB = cache.IndexB[i];
                     Vec2 wALocal = proxyA.GetVertex(v.IndexA);
                     Vec2 wBLocal = proxyB.GetVertex(v.IndexB);
-                    Transform.mulToOutUnsafe(transformA, wALocal, v.WA);
-                    Transform.mulToOutUnsafe(transformB, wBLocal, v.WB);
-                    v.W.Set(v.WB).SubLocal(v.WA);
+                    Transform.mulToOutUnsafe(transformA, wALocal, v.Wa);
+                    Transform.mulToOutUnsafe(transformB, wBLocal, v.Wb);
+                    v.W.Set(v.Wb).SubLocal(v.Wa);
                     v.A = 0.0f;
                 }
 
@@ -201,9 +201,9 @@ namespace Box2D.Collision
                     v.IndexB = 0;
                     Vec2 wALocal = proxyA.GetVertex(0);
                     Vec2 wBLocal = proxyB.GetVertex(0);
-                    Transform.mulToOutUnsafe(transformA, wALocal, v.WA);
-                    Transform.mulToOutUnsafe(transformB, wBLocal, v.WB);
-                    v.W.Set(v.WB).SubLocal(v.WA);
+                    Transform.mulToOutUnsafe(transformA, wALocal, v.Wa);
+                    Transform.mulToOutUnsafe(transformB, wBLocal, v.Wb);
+                    v.W.Set(v.Wb).SubLocal(v.Wa);
                     Count = 1;
                 }
             }
@@ -311,26 +311,26 @@ namespace Box2D.Collision
 
 
                     case 1:
-                        pA.Set(m_v1.WA);
-                        pB.Set(m_v1.WB);
+                        pA.Set(m_v1.Wa);
+                        pB.Set(m_v1.Wb);
                         break;
 
 
                     case 2:
-                        case2.Set(m_v1.WA).MulLocal(m_v1.A);
-                        pA.Set(m_v2.WA).MulLocal(m_v2.A).AddLocal(case2);
+                        case2.Set(m_v1.Wa).MulLocal(m_v1.A);
+                        pA.Set(m_v2.Wa).MulLocal(m_v2.A).AddLocal(case2);
                         // m_v1.a * m_v1.wA + m_v2.a * m_v2.wA;
                         // *pB = m_v1.a * m_v1.wB + m_v2.a * m_v2.wB;
-                        case2.Set(m_v1.WB).MulLocal(m_v1.A);
-                        pB.Set(m_v2.WB).MulLocal(m_v2.A).AddLocal(case2);
+                        case2.Set(m_v1.Wb).MulLocal(m_v1.A);
+                        pB.Set(m_v2.Wb).MulLocal(m_v2.A).AddLocal(case2);
 
                         break;
 
 
                     case 3:
-                        pA.Set(m_v1.WA).MulLocal(m_v1.A);
-                        case3.Set(m_v2.WA).MulLocal(m_v2.A);
-                        case33.Set(m_v3.WA).MulLocal(m_v3.A);
+                        pA.Set(m_v1.Wa).MulLocal(m_v1.A);
+                        case3.Set(m_v2.Wa).MulLocal(m_v2.A);
+                        case33.Set(m_v3.Wa).MulLocal(m_v3.A);
                         pA.AddLocal(case3).AddLocal(case33);
                         pB.Set(pA);
                         // *pA = m_v1.a * m_v1.wA + m_v2.a * m_v2.wA + m_v3.a * m_v3.wA;
@@ -712,11 +712,9 @@ namespace Box2D.Collision
             // These store the vertices of the last simplex so that we
             // can check for duplicates and prevent cycling.
             // (pooled above)
-            int saveCount;
 
             simplex.GetClosestPoint(closestPoint);
             float distanceSqr1 = closestPoint.LengthSquared();
-            float distanceSqr2;
 
             // Main iteration loop
             int iter = 0;
@@ -724,7 +722,7 @@ namespace Box2D.Collision
             {
 
                 // Copy simplex so we can identify duplicates.
-                saveCount = simplex.Count;
+                int saveCount = simplex.Count;
                 for (int i = 0; i < saveCount; i++)
                 {
                     saveA[i] = vertices[i].IndexA;
@@ -759,7 +757,7 @@ namespace Box2D.Collision
 
                 // Compute closest point.
                 simplex.GetClosestPoint(closestPoint);
-                distanceSqr2 = closestPoint.LengthSquared();
+                float distanceSqr2 = closestPoint.LengthSquared();
 
                 // ensure progress
                 if (distanceSqr2 >= distanceSqr1)
@@ -795,12 +793,12 @@ namespace Box2D.Collision
 
                 Rot.MulTransUnsafe(transformA.q, d.NegateLocal(), temp);
                 vertex.IndexA = proxyA.GetSupport(temp);
-                Transform.mulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.WA);
+                Transform.mulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.Wa);
                 // Vec2 wBLocal;
                 Rot.MulTransUnsafe(transformB.q, d.NegateLocal(), temp);
                 vertex.IndexB = proxyB.GetSupport(temp);
-                Transform.mulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.WB);
-                vertex.W.Set(vertex.WB).SubLocal(vertex.WA);
+                Transform.mulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.Wb);
+                vertex.W.Set(vertex.Wb).SubLocal(vertex.Wa);
 
                 // Iteration count is equated to the number of support point calls.
                 ++iter;
