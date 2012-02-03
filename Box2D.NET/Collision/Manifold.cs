@@ -85,8 +85,8 @@ namespace Box2D.Collision
         /// </summary>
         public Manifold()
         {
-            Points = new ManifoldPoint[Settings.maxManifoldPoints];
-            for (int i = 0; i < Settings.maxManifoldPoints; i++)
+            Points = new ManifoldPoint[Settings.MAX_MANIFOLD_POINTS];
+            for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; i++)
             {
                 Points[i] = new ManifoldPoint();
             }
@@ -101,13 +101,13 @@ namespace Box2D.Collision
         /// <param name="other"></param>
         public Manifold(Manifold other)
         {
-            Points = new ManifoldPoint[Settings.maxManifoldPoints];
+            Points = new ManifoldPoint[Settings.MAX_MANIFOLD_POINTS];
             LocalNormal = other.LocalNormal.Clone();
             LocalPoint = other.LocalPoint.Clone();
             PointCount = other.PointCount;
             Type = other.Type;
             // djm: this is correct now
-            for (int i = 0; i < Settings.maxManifoldPoints; i++)
+            for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; i++)
             {
                 Points[i] = new ManifoldPoint(other.Points[i]);
             }

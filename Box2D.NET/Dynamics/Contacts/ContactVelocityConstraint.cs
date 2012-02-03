@@ -29,7 +29,7 @@ namespace Box2D.Dynamics.Contacts
 
     public class ContactVelocityConstraint
     {
-        public VelocityConstraintPoint[] points = new VelocityConstraintPoint[Settings.maxManifoldPoints];
+        public VelocityConstraintPoint[] points = new VelocityConstraintPoint[Settings.MAX_MANIFOLD_POINTS];
         public readonly Vec2 normal = new Vec2();
         public readonly Mat22 normalMass = new Mat22();
         public readonly Mat22 K = new Mat22();

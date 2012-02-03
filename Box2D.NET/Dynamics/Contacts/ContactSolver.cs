@@ -316,7 +316,7 @@ namespace Box2D.Dynamics.Contacts
                     Vec2.CrossToOutUnsafe(wA, vcp.rA, temp2);
                     temp.Set(vB).AddLocal(temp1).SubLocal(vA).SubLocal(temp2);
                     float vRel = Vec2.Dot(vc.normal, temp);
-                    if (vRel < -Settings.velocityThreshold)
+                    if (vRel < -Settings.VELOCITY_THRESHOLD)
                     {
                         vcp.velocityBias = (-vc.restitution) * vRel;
                     }
@@ -932,7 +932,7 @@ namespace Box2D.Dynamics.Contacts
                     minSeparation = MathUtils.Min(minSeparation, separation);
 
                     // Prevent large corrections and allow slop.
-                    float C = MathUtils.Clamp(Settings.baumgarte * (separation + Settings.linearSlop), -Settings.maxLinearCorrection, 0.0f);
+                    float C = MathUtils.Clamp(Settings.BAUMGARTE * (separation + Settings.LINEAR_SLOP), -Settings.MAX_LINEAR_CORRECTION, 0.0f);
 
                     // Compute the effective mass.
                     float rnA = Vec2.Cross(rA, normal);
@@ -963,7 +963,7 @@ namespace Box2D.Dynamics.Contacts
 
             // We can't expect minSpeparation >= -linearSlop because we don't
             // push the separation above -linearSlop.
-            return minSeparation >= (-3.0f) * Settings.linearSlop;
+            return minSeparation >= (-3.0f) * Settings.LINEAR_SLOP;
         }
 
         // Sequential position solver for position constraints.
@@ -1027,7 +1027,7 @@ namespace Box2D.Dynamics.Contacts
                     minSeparation = MathUtils.Min(minSeparation, separation);
 
                     // Prevent large corrections and allow slop.
-                    float C = MathUtils.Clamp(Settings.toiBaugarte * (separation + Settings.linearSlop), -Settings.maxLinearCorrection, 0.0f);
+                    float C = MathUtils.Clamp(Settings.TOI_BAUGARTE * (separation + Settings.LINEAR_SLOP), -Settings.MAX_LINEAR_CORRECTION, 0.0f);
 
                     // Compute the effective mass.
                     float rnA = Vec2.Cross(rA, normal);
@@ -1055,7 +1055,7 @@ namespace Box2D.Dynamics.Contacts
 
             // We can't expect minSpeparation >= -_linearSlop because we don't
             // push the separation above -_linearSlop.
-            return minSeparation >= (-1.5f) * Settings.linearSlop;
+            return minSeparation >= (-1.5f) * Settings.LINEAR_SLOP;
         }
 
         public class ContactSolverDef

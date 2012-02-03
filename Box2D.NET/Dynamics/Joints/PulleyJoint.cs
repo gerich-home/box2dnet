@@ -243,7 +243,7 @@ namespace Box2D.Dynamics.Joints
             float lengthA = m_uA.Length();
             float lengthB = m_uB.Length();
 
-            if (lengthA > 10f * Settings.linearSlop)
+            if (lengthA > 10f * Settings.LINEAR_SLOP)
             {
                 m_uA.MulLocal(1.0f / lengthA);
             }
@@ -252,7 +252,7 @@ namespace Box2D.Dynamics.Joints
                 m_uA.SetZero();
             }
 
-            if (lengthB > 10f * Settings.linearSlop)
+            if (lengthB > 10f * Settings.LINEAR_SLOP)
             {
                 m_uB.MulLocal(1.0f / lengthB);
             }
@@ -376,7 +376,7 @@ namespace Box2D.Dynamics.Joints
             float lengthA = uA.Length();
             float lengthB = uB.Length();
 
-            if (lengthA > 10.0f * Settings.linearSlop)
+            if (lengthA > 10.0f * Settings.LINEAR_SLOP)
             {
                 uA.MulLocal(1.0f / lengthA);
             }
@@ -385,7 +385,7 @@ namespace Box2D.Dynamics.Joints
                 uA.SetZero();
             }
 
-            if (lengthB > 10.0f * Settings.linearSlop)
+            if (lengthB > 10.0f * Settings.LINEAR_SLOP)
             {
                 uB.MulLocal(1.0f / lengthB);
             }
@@ -431,7 +431,7 @@ namespace Box2D.Dynamics.Joints
             pool.PushRot(2);
             pool.PushVec2(7);
 
-            return linearError < Settings.linearSlop;
+            return linearError < Settings.LINEAR_SLOP;
         }
     }
 }

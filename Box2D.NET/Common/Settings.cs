@@ -33,15 +33,21 @@ namespace Box2D.Common
     /// </summary>
     public class Settings
     {
-        /// <summary>A "close to zero" float epsilon value for use </summary>
+        /// <summary>
+        /// A "close to zero" float epsilon value for use
+        /// </summary>
         public const float EPSILON = 1.1920928955078125e-7f;
 
-        /// <summary>Pi.</summary>
+        /// <summary>
+        /// Pi
+        /// </summary>
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
         public static readonly float PI = (float)Math.PI;
 
         // JBox2D specific settings
-        /// <summary>needs to be final, or will slow down math methods</summary>
+        /// <summary>
+        /// needs to be final, or will slow down math methods
+        /// </summary>
         public const bool FAST_MATH = true;
         public const int CONTACT_STACK_INIT_SIZE = 10;
         public const bool SINCOS_LUT_ENABLED = true;
@@ -90,95 +96,95 @@ namespace Box2D.Common
         /// <summary>
         /// The maximum number of contact points between two convex shapes.
         /// </summary>
-        public const int maxManifoldPoints = 2;
+        public const int MAX_MANIFOLD_POINTS = 2;
 
         /// <summary>
         /// The maximum number of vertices on a convex polygon.
         /// </summary>
-        public const int maxPolygonVertices = 8;
+        public const int MAX_POLYGON_VERTICES = 8;
 
         /// <summary>
         /// This is used to fatten AABBs in the dynamic tree. This allows proxies to move by a small amount
         /// without triggering a tree adjustment. This is in meters.
         /// </summary>
-        public const float aabbExtension = 0.1f;
+        public const float AABB_EXTENSION = 0.1f;
 
         /// <summary>
         /// This is used to fatten AABBs in the dynamic tree. This is used to predict the future position
         /// based on the current displacement. This is a dimensionless multiplier.
         /// </summary>
-        public const float aabbMultiplier = 2.0f;
+        public const float AABB_MULTIPLIER = 2.0f;
 
         /// <summary>
         /// A small length used as a collision and constraint tolerance. Usually it is chosen to be
         /// numerically significant, but visually insignificant.
         /// </summary>
-        public const float linearSlop = 0.005f;
+        public const float LINEAR_SLOP = 0.005f;
 
         /// <summary>
         /// A small angle used as a collision and constraint tolerance. Usually it is chosen to be
         /// numerically significant, but visually insignificant.
         /// </summary>
-        public static readonly float angularSlop = (2.0f / 180.0f * PI);
+        public static readonly float ANGULAR_SLOP = (2.0f / 180.0f * PI);
 
         /// <summary>
         /// The radius of the polygon/edge shape skin. This should not be modified. Making this smaller
         /// means polygons will have and insufficient for continuous collision. Making it larger may create
         /// artifacts for vertex collision.
         /// </summary>
-        public static readonly float polygonRadius = (2.0f * linearSlop);
+        public static readonly float POLYGON_RADIUS = (2.0f * LINEAR_SLOP);
 
         /// <summary>
         /// Maximum number of sub-steps per contact in continuous physics simulation.
         /// </summary>
-        public const int maxSubSteps = 8;
+        public const int MAX_SUB_STEPS = 8;
 
         // Dynamics
 
         /// <summary>
         /// Maximum number of contacts to be handled to solve a TOI island.
         /// </summary>
-        public const int maxTOIContacts = 32;
+        public const int MAX_TOI_CONTACTS = 32;
 
         /// <summary>
         /// A velocity threshold for elastic collisions. Any collision with a relative linear velocity
         /// below this threshold will be treated as inelastic.
         /// </summary>
-        public const float velocityThreshold = 1.0f;
+        public const float VELOCITY_THRESHOLD = 1.0f;
 
         /// <summary>
         /// The maximum linear position correction used when solving constraints. This helps to prevent
         /// overshoot.
         /// </summary>
-        public const float maxLinearCorrection = 0.2f;
+        public const float MAX_LINEAR_CORRECTION = 0.2f;
 
         /// <summary>
         /// The maximum angular position correction used when solving constraints. This helps to prevent
         /// overshoot.
         /// </summary>
-        public static readonly float maxAngularCorrection = (8.0f / 180.0f * PI);
+        public static readonly float MAX_ANGULAR_CORRECTION = (8.0f / 180.0f * PI);
 
         /// <summary>
         /// The maximum linear velocity of a body. This limit is very large and is used to prevent
         /// numerical problems. You shouldn't need to adjust this.
         /// </summary>
-        public const float maxTranslation = 2.0f;
+        public const float MAX_TRANSLATION = 2.0f;
 
-        public static readonly float maxTranslationSquared = (maxTranslation * maxTranslation);
+        public static readonly float MAX_TRANSLATION_SQUARED = (MAX_TRANSLATION * MAX_TRANSLATION);
 
         /// <summary>
         /// The maximum angular velocity of a body. This limit is very large and is used to prevent
         /// numerical problems. You shouldn't need to adjust this.
         /// </summary>
-        public static readonly float maxRotation = (0.5f * PI);
-        public static float maxRotationSquared = (maxRotation * maxRotation);
+        public static readonly float MAX_ROTATION = (0.5f * PI);
+        public static float MaxRotationSquared = (MAX_ROTATION * MAX_ROTATION);
 
         /// <summary>
         /// This scale factor controls how fast overlap is resolved. Ideally this would be 1 so that
         /// overlap is removed in one time step. However using values close to 1 often lead to overshoot.
         /// </summary>
-        public const float baumgarte = 0.2f;
-        public const float toiBaugarte = 0.75f;
+        public const float BAUMGARTE = 0.2f;
+        public const float TOI_BAUGARTE = 0.75f;
 
 
         // Sleep
@@ -186,17 +192,17 @@ namespace Box2D.Common
         /// <summary>
         /// The time that a body must be still before it will go to sleep.
         /// </summary>
-        public const float timeToSleep = 0.5f;
+        public const float TIME_TO_SLEEP = 0.5f;
 
         /// <summary>
         /// A body cannot sleep if its linear velocity is above this tolerance.
         /// </summary>
-        public const float linearSleepTolerance = 0.01f;
+        public const float LINEAR_SLEEP_TOLERANCE = 0.01f;
 
         /// <summary>
         /// A body cannot sleep if its angular velocity is above this tolerance.
         /// </summary>
-        public static readonly float angularSleepTolerance = (2.0f / 180.0f * PI);
+        public static readonly float ANGULAR_SLEEP_TOLERANCE = (2.0f / 180.0f * PI);
 
         /// <summary>
         /// Friction mixing law. Feel free to customize this. TODO djm: add customization
@@ -204,7 +210,7 @@ namespace Box2D.Common
         /// <param name="friction1"></param>
         /// <param name="friction2"></param>
         /// <returns></returns>
-        public static float mixFriction(float friction1, float friction2)
+        public static float MixFriction(float friction1, float friction2)
         {
             return MathUtils.Sqrt(friction1 * friction2);
         }
@@ -215,7 +221,7 @@ namespace Box2D.Common
         /// <param name="restitution1"></param>
         /// <param name="restitution2"></param>
         /// <returns></returns>
-        public static float mixRestitution(float restitution1, float restitution2)
+        public static float MixRestitution(float restitution1, float restitution2)
         {
             return restitution1 > restitution2 ? restitution1 : restitution2;
         }

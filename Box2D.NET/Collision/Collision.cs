@@ -95,7 +95,7 @@ namespace Box2D.Collision
         public static void GetPointStates(PointState[] state1, PointState[] state2, Manifold manifold1, Manifold manifold2)
         {
 
-            for (int i = 0; i < Settings.maxManifoldPoints; i++)
+            for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; i++)
             {
                 state1[i] = PointState.NullState;
                 state2[i] = PointState.NullState;
@@ -835,7 +835,7 @@ namespace Box2D.Collision
             manifold.LocalPoint.Set(planePoint);
 
             int pointCount = 0;
-            for (int i = 0; i < Settings.maxManifoldPoints; ++i)
+            for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; ++i)
             {
                 float separation = Vec2.Dot(normal, clipPoints2[i].v) - frontOffset;
 
@@ -1080,8 +1080,8 @@ namespace Box2D.Collision
         /// </summary>
         internal class TempPolygon
         {
-            internal Vec2[] Vertices = new Vec2[Settings.maxPolygonVertices];
-            internal Vec2[] Normals = new Vec2[Settings.maxPolygonVertices];
+            internal Vec2[] Vertices = new Vec2[Settings.MAX_POLYGON_VERTICES];
+            internal Vec2[] Normals = new Vec2[Settings.MAX_POLYGON_VERTICES];
             internal int count;
 
             public TempPolygon()
@@ -1370,7 +1370,7 @@ namespace Box2D.Collision
                     Rot.MulToOutUnsafe(Xf.q, polygonB.Normals[i], PolygonB.Normals[i]);
                 }
 
-                Radius = 2.0f * Settings.polygonRadius;
+                Radius = 2.0f * Settings.POLYGON_RADIUS;
 
                 manifold.PointCount = 0;
 
@@ -1495,7 +1495,7 @@ namespace Box2D.Collision
                 // Clip to box side 1
                 np = ClipSegmentToLine(clipPoints1, ie, rf.SideNormal1, rf.SideOffset1, rf.I1);
 
-                if (np < Settings.maxManifoldPoints)
+                if (np < Settings.MAX_MANIFOLD_POINTS)
                 {
                     return;
                 }
@@ -1503,7 +1503,7 @@ namespace Box2D.Collision
                 // Clip to negative box side 1
                 np = ClipSegmentToLine(clipPoints2, clipPoints1, rf.SideNormal2, rf.SideOffset2, rf.I2);
 
-                if (np < Settings.maxManifoldPoints)
+                if (np < Settings.MAX_MANIFOLD_POINTS)
                 {
                     return;
                 }
@@ -1521,7 +1521,7 @@ namespace Box2D.Collision
                 }
 
                 int pointCount = 0;
-                for (int i = 0; i < Settings.maxManifoldPoints; ++i)
+                for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; ++i)
                 {
                     float separation;
 
@@ -1602,14 +1602,14 @@ namespace Box2D.Collision
                     // Adjacency
                     if (Vec2.Dot(n, perp) >= 0.0f)
                     {
-                        if (Vec2.Dot(temp.Set(n).SubLocal(UpperLimit), Normal) < -Settings.angularSlop)
+                        if (Vec2.Dot(temp.Set(n).SubLocal(UpperLimit), Normal) < -Settings.ANGULAR_SLOP)
                         {
                             continue;
                         }
                     }
                     else
                     {
-                        if (Vec2.Dot(temp.Set(n).SubLocal(LowerLimit), Normal) < -Settings.angularSlop)
+                        if (Vec2.Dot(temp.Set(n).SubLocal(LowerLimit), Normal) < -Settings.ANGULAR_SLOP)
                         {
                             continue;
                         }

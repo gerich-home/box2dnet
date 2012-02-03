@@ -446,7 +446,7 @@ namespace Box2D.Dynamics.Joints
             pool.PushRot(2);
             pool.PushMat33(1);
 
-            return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
+            return positionError <= Settings.LINEAR_SLOP && angularError <= Settings.ANGULAR_SLOP;
         }
     }
 }

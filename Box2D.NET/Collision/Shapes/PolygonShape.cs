@@ -58,17 +58,17 @@ namespace Box2D.Collision.Shapes
         {
 
             VertexCount = 0;
-            Vertices = new Vec2[Settings.maxPolygonVertices];
+            Vertices = new Vec2[Settings.MAX_POLYGON_VERTICES];
             for (int i = 0; i < Vertices.Length; i++)
             {
                 Vertices[i] = new Vec2();
             }
-            Normals = new Vec2[Settings.maxPolygonVertices];
+            Normals = new Vec2[Settings.MAX_POLYGON_VERTICES];
             for (int i = 0; i < Normals.Length; i++)
             {
                 Normals[i] = new Vec2();
             }
-            Radius = Settings.polygonRadius;
+            Radius = Settings.POLYGON_RADIUS;
             Centroid.SetZero();
         }
 
@@ -126,14 +126,14 @@ namespace Box2D.Collision.Shapes
         /// <warning>collinear points are handled but not removed. Collinear points may lead to poor stacking behavior.</warning>
         public void Set(Vec2[] verts, int num, Vec2Array vecPool, IntArray intPool)
         {
-            Debug.Assert(3 <= num && num <= Settings.maxPolygonVertices);
+            Debug.Assert(3 <= num && num <= Settings.MAX_POLYGON_VERTICES);
             if (num < 3)
             {
                 SetAsBox(1.0f, 1.0f);
                 return;
             }
 
-            int n = MathUtils.Min(num, Settings.maxPolygonVertices);
+            int n = MathUtils.Min(num, Settings.MAX_POLYGON_VERTICES);
 
             // Copy the vertices into a local buffer
             Vec2[] ps = (vecPool != null) ? vecPool.Get(n) : new Vec2[n];
@@ -158,7 +158,7 @@ namespace Box2D.Collision.Shapes
                 }
             }
 
-            int[] hull = (intPool != null) ? intPool.Get(Settings.maxPolygonVertices) : new int[Settings.maxPolygonVertices];
+            int[] hull = (intPool != null) ? intPool.Get(Settings.MAX_POLYGON_VERTICES) : new int[Settings.MAX_POLYGON_VERTICES];
             int m = 0;
             int ih = i0;
 

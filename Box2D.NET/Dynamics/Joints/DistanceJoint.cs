@@ -218,7 +218,7 @@ namespace Box2D.Dynamics.Joints
 
             // Handle singularity.
             float length = m_u.Length();
-            if (length > Settings.linearSlop)
+            if (length > Settings.LINEAR_SLOP)
             {
                 m_u.X *= 1.0f / length;
                 m_u.Y *= 1.0f / length;
@@ -358,7 +358,7 @@ namespace Box2D.Dynamics.Joints
 
             float length = u.Normalize();
             float C = length - m_length;
-            C = MathUtils.Clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+            C = MathUtils.Clamp(C, -Settings.MAX_LINEAR_CORRECTION, Settings.MAX_LINEAR_CORRECTION);
 
             float impulse = (-m_mass) * C;
             float Px = impulse * u.X;
@@ -379,7 +379,7 @@ namespace Box2D.Dynamics.Joints
             pool.PushVec2(3);
             pool.PushRot(2);
 
-            return MathUtils.Abs(C) < Settings.linearSlop;
+            return MathUtils.Abs(C) < Settings.LINEAR_SLOP;
         }
     }
 }

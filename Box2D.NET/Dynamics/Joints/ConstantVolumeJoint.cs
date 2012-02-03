@@ -183,11 +183,11 @@ namespace Box2D.Dynamics.Joints
                 delta.Set(toExtrude * (normals[i].X + normals[next].X), toExtrude * (normals[i].Y + normals[next].Y));
                 // sumdeltax += dx;
                 float norm = delta.Length();
-                if (norm > Settings.maxLinearCorrection)
+                if (norm > Settings.MAX_LINEAR_CORRECTION)
                 {
-                    delta.MulLocal(Settings.maxLinearCorrection / norm);
+                    delta.MulLocal(Settings.MAX_LINEAR_CORRECTION / norm);
                 }
-                if (norm > Settings.linearSlop)
+                if (norm > Settings.LINEAR_SLOP)
                 {
                     done = false;
                 }

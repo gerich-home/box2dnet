@@ -168,10 +168,10 @@ namespace Box2D.Collision.Broadphase
 
             // Fatten the aabb
             TreeNode node = m_nodes[proxyId];
-            node.AABB.LowerBound.X = aabb.LowerBound.X - Settings.aabbExtension;
-            node.AABB.LowerBound.Y = aabb.LowerBound.Y - Settings.aabbExtension;
-            node.AABB.UpperBound.X = aabb.UpperBound.X + Settings.aabbExtension;
-            node.AABB.UpperBound.Y = aabb.UpperBound.Y + Settings.aabbExtension;
+            node.AABB.LowerBound.X = aabb.LowerBound.X - Settings.AABB_EXTENSION;
+            node.AABB.LowerBound.Y = aabb.LowerBound.Y - Settings.AABB_EXTENSION;
+            node.AABB.UpperBound.X = aabb.UpperBound.X + Settings.AABB_EXTENSION;
+            node.AABB.UpperBound.Y = aabb.UpperBound.Y + Settings.AABB_EXTENSION;
             node.UserData = userData;
 
             InsertLeaf(proxyId);
@@ -214,15 +214,15 @@ namespace Box2D.Collision.Broadphase
             // Extend AABB
             Vec2 lowerBound = aabb.LowerBound;
             Vec2 upperBound = aabb.UpperBound;
-            lowerBound.X -= Settings.aabbExtension;
-            lowerBound.Y -= Settings.aabbExtension;
-            upperBound.X += Settings.aabbExtension;
-            upperBound.Y += Settings.aabbExtension;
+            lowerBound.X -= Settings.AABB_EXTENSION;
+            lowerBound.Y -= Settings.AABB_EXTENSION;
+            upperBound.X += Settings.AABB_EXTENSION;
+            upperBound.Y += Settings.AABB_EXTENSION;
 
 
             // Predict AABB displacement.
-            float dx = displacement.X * Settings.aabbMultiplier;
-            float dy = displacement.Y * Settings.aabbMultiplier;
+            float dx = displacement.X * Settings.AABB_MULTIPLIER;
+            float dy = displacement.Y * Settings.AABB_MULTIPLIER;
             if (dx < 0.0f)
             {
                 lowerBound.X += dx;

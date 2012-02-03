@@ -52,7 +52,7 @@ namespace Box2D.Collision.Shapes
             base(ShapeType.Chain)
         {
             Vertices = null;
-            Radius = Settings.polygonRadius;
+            Radius = Settings.POLYGON_RADIUS;
             Count = 0;
         }
 

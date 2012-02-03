@@ -30,7 +30,7 @@ namespace Box2D.Dynamics.Contacts
 
     public class ContactPositionConstraint
     {
-        internal Vec2[] localPoints = new Vec2[Settings.maxManifoldPoints];
+        internal Vec2[] localPoints = new Vec2[Settings.MAX_MANIFOLD_POINTS];
         internal readonly Vec2 localNormal = new Vec2();
         internal readonly Vec2 localPoint = new Vec2();
         internal int indexA;

@@ -550,7 +550,7 @@ namespace Box2D.Collision
 
             public DistanceProxy()
             {
-                Vertices = new Vec2[Settings.maxPolygonVertices];
+                Vertices = new Vec2[Settings.MAX_POLYGON_VERTICES];
                 for (int i = 0; i < Vertices.Length; i++)
                 {
                     Vertices[i] = new Vec2();

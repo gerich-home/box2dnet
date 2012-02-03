@@ -343,17 +343,17 @@ namespace Box2D.Dynamics
 				translation.X = v.X * h;
 				translation.Y = v.Y * h;
 
-				if (Vec2.Dot(translation, translation) > Settings.maxTranslationSquared)
+				if (Vec2.Dot(translation, translation) > Settings.MAX_TRANSLATION_SQUARED)
 				{
-					float ratio = Settings.maxTranslation / translation.Length();
+					float ratio = Settings.MAX_TRANSLATION / translation.Length();
 					v.X *= ratio;
 					v.Y *= ratio;
 				}
 
 				float rotation = h * w;
-				if (rotation * rotation > Settings.maxRotationSquared)
+				if (rotation * rotation > Settings.MaxRotationSquared)
 				{
-					float ratio = Settings.maxRotation / MathUtils.Abs(rotation);
+					float ratio = Settings.MAX_ROTATION / MathUtils.Abs(rotation);
 					w *= ratio;
 				}
 
@@ -407,8 +407,8 @@ namespace Box2D.Dynamics
 			{
 				float minSleepTime = Single.MaxValue;
 
-				const float linTolSqr = Settings.linearSleepTolerance * Settings.linearSleepTolerance;
-				float angTolSqr = Settings.angularSleepTolerance * Settings.angularSleepTolerance;
+				const float linTolSqr = Settings.LINEAR_SLEEP_TOLERANCE * Settings.LINEAR_SLEEP_TOLERANCE;
+				float angTolSqr = Settings.ANGULAR_SLEEP_TOLERANCE * Settings.ANGULAR_SLEEP_TOLERANCE;
 
 				for (int i = 0; i < BodyCount; ++i)
 				{
@@ -430,7 +430,7 @@ namespace Box2D.Dynamics
 					}
 				}
 
-				if (minSleepTime >= Settings.timeToSleep && positionSolved)
+				if (minSleepTime >= Settings.TIME_TO_SLEEP && positionSolved)
 				{
 					for (int i = 0; i < BodyCount; ++i)
 					{
@@ -540,16 +540,16 @@ namespace Box2D.Dynamics
 
 				// Check for large velocities
 				translation.Set(v).MulLocal(h);
-				if (Vec2.Dot(translation, translation) > Settings.maxTranslationSquared)
+				if (Vec2.Dot(translation, translation) > Settings.MAX_TRANSLATION_SQUARED)
 				{
-					float ratio = Settings.maxTranslation / translation.Length();
+					float ratio = Settings.MAX_TRANSLATION / translation.Length();
 					v.MulLocal(ratio);
 				}
 
 				float rotation = h * w;
-				if (rotation * rotation > Settings.maxRotationSquared)
+				if (rotation * rotation > Settings.MaxRotationSquared)
 				{
-					float ratio = Settings.maxRotation / MathUtils.Abs(rotation);
+					float ratio = Settings.MAX_ROTATION / MathUtils.Abs(rotation);
 					w *= ratio;
 				}
 

@@ -1154,7 +1154,7 @@ namespace Box2D.Dynamics
         private void SolveToi(TimeStep step)
         {
             Island island = toiIsland;
-            island.Init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, ContactManager.ContactListener);
+            island.Init(2 * Settings.MAX_TOI_CONTACTS, Settings.MAX_TOI_CONTACTS, 0, ContactManager.ContactListener);
             if (m_stepComplete)
             {
                 for (Body b = BodyList; b != null; b = b.Next)
@@ -1188,7 +1188,7 @@ namespace Box2D.Dynamics
                     }
 
                     // Prevent excessive sub-stepping.
-                    if (c.m_toiCount > Settings.maxSubSteps)
+                    if (c.m_toiCount > Settings.MAX_SUB_STEPS)
                     {
                         continue;
                     }
@@ -1577,8 +1577,8 @@ namespace Box2D.Dynamics
                     {
                         PolygonShape poly = (PolygonShape)fixture.Shape;
                         int vertexCount = poly.VertexCount;
-                        Debug.Assert(vertexCount <= Settings.maxPolygonVertices);
-                        Vec2[] vertices = tlvertices.Get(Settings.maxPolygonVertices);
+                        Debug.Assert(vertexCount <= Settings.MAX_POLYGON_VERTICES);
+                        Vec2[] vertices = tlvertices.Get(Settings.MAX_POLYGON_VERTICES);
 
                         for (int i = 0; i < vertexCount; ++i)
                         {

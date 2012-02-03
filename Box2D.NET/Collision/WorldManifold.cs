@@ -46,8 +46,8 @@ namespace Box2D.Collision
         public WorldManifold()
         {
             Normal = new Vec2();
-            Points = new Vec2[Settings.maxManifoldPoints];
-            for (int i = 0; i < Settings.maxManifoldPoints; i++)
+            Points = new Vec2[Settings.MAX_MANIFOLD_POINTS];
+            for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; i++)
             {
                 Points[i] = new Vec2();
             }

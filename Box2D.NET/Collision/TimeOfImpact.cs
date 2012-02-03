@@ -133,8 +133,8 @@ namespace Box2D.Collision
 
             float totalRadius = proxyA.Radius + proxyB.Radius;
             // djm: whats with all these constants?
-            float target = MathUtils.Max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
-            const float tolerance = 0.25f * Settings.linearSlop;
+            float target = MathUtils.Max(Settings.LINEAR_SLOP, totalRadius - 3.0f * Settings.LINEAR_SLOP);
+            const float tolerance = 0.25f * Settings.LINEAR_SLOP;
 
             Debug.Assert(target > tolerance);
 
@@ -298,7 +298,7 @@ namespace Box2D.Collision
 
                     ++pushBackIter;
 
-                    if (pushBackIter == Settings.maxPolygonVertices)
+                    if (pushBackIter == Settings.MAX_POLYGON_VERTICES)
                     {
                         break;
                     }

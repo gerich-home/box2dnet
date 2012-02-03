@@ -66,7 +66,7 @@ namespace Box2D.Collision.Shapes
         public EdgeShape() :
             base(ShapeType.Edge)
         {
-            Radius = Settings.polygonRadius;
+            Radius = Settings.POLYGON_RADIUS;
         }
 
         override public int ChildCount

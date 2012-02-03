@@ -171,7 +171,7 @@ namespace Box2D.Dynamics.Joints
             if (m_enableLimit && fixedRotation == false)
             {
                 float jointAngle = aB - aA - m_referenceAngle;
-                if (MathUtils.Abs(m_upperAngle - m_lowerAngle) < 2.0f * Settings.angularSlop)
+                if (MathUtils.Abs(m_upperAngle - m_lowerAngle) < 2.0f * Settings.ANGULAR_SLOP)
                 {
                     m_limitState = LimitState.EQUAL;
                 }
@@ -404,7 +404,7 @@ namespace Box2D.Dynamics.Joints
                 if (m_limitState == LimitState.EQUAL)
                 {
                     // Prevent large angular corrections
-                    float C = MathUtils.Clamp(angle - m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
+                    float C = MathUtils.Clamp(angle - m_lowerAngle, -Settings.MAX_ANGULAR_CORRECTION, Settings.MAX_ANGULAR_CORRECTION);
                     limitImpulse = (-m_motorMass) * C;
                     angularError = MathUtils.Abs(C);
                 }
@@ -414,7 +414,7 @@ namespace Box2D.Dynamics.Joints
                     angularError = -C;
 
                     // Prevent large angular corrections and allow some slop.
-                    C = MathUtils.Clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0f);
+                    C = MathUtils.Clamp(C + Settings.ANGULAR_SLOP, -Settings.MAX_ANGULAR_CORRECTION, 0.0f);
                     limitImpulse = (-m_motorMass) * C;
                 }
                 else if (m_limitState == LimitState.AT_UPPER)
@@ -423,7 +423,7 @@ namespace Box2D.Dynamics.Joints
                     angularError = C;
 
                     // Prevent large angular corrections and allow some slop.
-                    C = MathUtils.Clamp(C - Settings.angularSlop, 0.0f, Settings.maxAngularCorrection);
+                    C = MathUtils.Clamp(C - Settings.ANGULAR_SLOP, 0.0f, Settings.MAX_ANGULAR_CORRECTION);
                     limitImpulse = (-m_motorMass) * C;
                 }
 
@@ -475,7 +475,7 @@ namespace Box2D.Dynamics.Joints
 
             pool.PushRot(2);
 
-            return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
+            return positionError <= Settings.LINEAR_SLOP && angularError <= Settings.ANGULAR_SLOP;
         }
 
         public override void getAnchorA(Vec2 argOut)

@@ -494,7 +494,7 @@ namespace Box2D.Dynamics.Joints
             {
 
                 float jointTranslation = Vec2.Dot(m_axis, d);
-                if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.linearSlop)
+                if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
                 {
                     m_limitState = LimitState.EQUAL;
                 }
@@ -772,24 +772,24 @@ namespace Box2D.Dynamics.Joints
             if (m_enableLimit)
             {
                 float translation = Vec2.Dot(axis, d);
-                if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.linearSlop)
+                if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
                 {
                     // Prevent large angular corrections
-                    C2 = MathUtils.Clamp(translation, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+                    C2 = MathUtils.Clamp(translation, -Settings.MAX_LINEAR_CORRECTION, Settings.MAX_LINEAR_CORRECTION);
                     linearError = MathUtils.Max(linearError, MathUtils.Abs(translation));
                     active = true;
                 }
                 else if (translation <= m_lowerTranslation)
                 {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = MathUtils.Clamp(translation - m_lowerTranslation + Settings.linearSlop, -Settings.maxLinearCorrection, 0.0f);
+                    C2 = MathUtils.Clamp(translation - m_lowerTranslation + Settings.LINEAR_SLOP, -Settings.MAX_LINEAR_CORRECTION, 0.0f);
                     linearError = MathUtils.Max(linearError, m_lowerTranslation - translation);
                     active = true;
                 }
                 else if (translation >= m_upperTranslation)
                 {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = MathUtils.Clamp(translation - m_upperTranslation - Settings.linearSlop, 0.0f, Settings.maxLinearCorrection);
+                    C2 = MathUtils.Clamp(translation - m_upperTranslation - Settings.LINEAR_SLOP, 0.0f, Settings.MAX_LINEAR_CORRECTION);
                     linearError = MathUtils.Max(linearError, translation - m_upperTranslation);
                     active = true;
                 }
@@ -869,7 +869,7 @@ namespace Box2D.Dynamics.Joints
             pool.PushVec3(1);
             pool.PushRot(2);
 
-            return linearError <= Settings.linearSlop && angularError <= Settings.angularSlop;
+            return linearError <= Settings.LINEAR_SLOP && angularError <= Settings.ANGULAR_SLOP;
         }
     }
 }
