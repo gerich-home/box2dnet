@@ -38,55 +38,21 @@ namespace Box2D.Common
         /// <summary>
         /// Determine whether the transform flips the y axis
         /// </summary>
-        bool YFlip
-        {
-            get;
-            set;
-        }
+        bool YFlip { get; set; }
+
 
         /// <summary>
-        /// This is the half-width and half-height.
+        /// This is the half-width and half-height of the viewport.
         /// This should be the actual half-width and 
         /// half-height, not anything transformed or scaled.
         /// Not a copy.
         /// </summary>
-        /// <returns></returns>
-        Vec2 getExtents();
+        Vec2 Extents { get; set; }
 
         /// <summary>
-        /// This sets the half-width and half-height.
-        /// This should be the actual half-width and 
-        /// half-height, not anything transformed or scaled.
+        /// Center of the viewport. Not a copy.
         /// </summary>
-        /// <param name="argExtents"></param>
-        void setExtents(Vec2 argExtents);
-
-        /// <summary>
-        /// This sets the half-width and half-height of the
-        /// viewport. This should be the actual half-width and 
-        /// half-height, not anything transformed or scaled.
-        /// </summary>
-        /// <param name="argHalfWidth"></param>
-        /// <param name="argHalfHeight"></param>
-        void setExtents(float argHalfWidth, float argHalfHeight);
-
-        /// <summary>
-        /// Center of the viewport. Not a copy.</summary>
-        /// <returns></returns>
-        Vec2 getCenter();
-
-        /// <summary>
-        /// Sets the center of the viewport.
-        /// </summary>
-        /// <param name="argPos"></param>
-        void setCenter(Vec2 argPos);
-
-        /// <summary>
-        /// sets the center of the viewport.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        void setCenter(float x, float y);
+        Vec2 Center { get; set; }
 
         /// <summary>
         /// Sets the transform's center to the given x and y coordinates,
@@ -95,24 +61,24 @@ namespace Box2D.Common
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="scale"></param>
-        void setCamera(float x, float y, float scale);
+        void SetCamera(float x, float y, float scale);
 
         /// <summary>
         /// Transforms the given directional vector by the
         /// viewport transform (not positional)
         /// </summary>
-        /// <param name="argVec"></param>
-        /// <param name="argOut"></param>
-        void getWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen);
+        /// <param name="argWorld"></param>
+        /// <param name="argScreen"></param>
+        void GetWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen);
 
 
         /// <summary>
         /// Transforms the given directional screen vector back to
         /// the world direction.
         /// </summary>
-        /// <param name="argVec"></param>
-        /// <param name="argOut"></param>
-        void getScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld);
+        /// <param name="argScreen"></param>
+        /// <param name="argWorld"></param>
+        void GetScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld);
 
 
         /// <summary>
@@ -122,7 +88,7 @@ namespace Box2D.Common
         /// </summary>
         /// <param name="argWorld"></param>
         /// <param name="argScreen"></param>
-        void getWorldToScreen(Vec2 argWorld, Vec2 argScreen);
+        void GetWorldToScreen(Vec2 argWorld, Vec2 argScreen);
 
 
         /// <summary>
@@ -132,6 +98,6 @@ namespace Box2D.Common
         /// </summary>
         /// <param name="argScreen"></param>
         /// <param name="argWorld"></param>
-        void getScreenToWorld(Vec2 argScreen, Vec2 argWorld);
+        void GetScreenToWorld(Vec2 argScreen, Vec2 argWorld);
     }
 }

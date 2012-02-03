@@ -89,9 +89,9 @@ namespace Box2D.Common
             yFlip = vpt.yFlip;
         }
 
-        /// <seealso cref="IViewportTransform.setCamera(float, float, float)">
+        /// <seealso cref="IViewportTransform.SetCamera">
         /// </seealso>
-        public virtual void setCamera(float x, float y, float scale)
+        public virtual void SetCamera(float x, float y, float scale)
         {
             box.center.Set(x, y);
             Mat22.CreateScaleTransform(scale, box.R);
@@ -99,42 +99,21 @@ namespace Box2D.Common
 
         /// <seealso cref="IViewportTransform.getExtents()">
         /// </seealso>
-        public virtual Vec2 getExtents()
+        public virtual Vec2 Extents
         {
-            return box.extents;
+            get { return box.extents; }
+            set { box.extents.Set(value); }
         }
 
-        /// <seealso cref="IViewportTransform.setExtents(Vec2)">
+        /// <seealso cref="IViewportTransform.Center">
         /// </seealso>
-        public virtual void setExtents(Vec2 argExtents)
+        public virtual Vec2 Center
         {
-            box.extents.Set(argExtents);
+            get { return box.center; }
+            set { box.center.Set(value); }
         }
 
-        /// <seealso cref="IViewportTransform.setExtents(float, float)">
-        /// </seealso>
-        public virtual void setExtents(float argHalfWidth, float argHalfHeight)
-        {
-            box.extents.Set(argHalfWidth, argHalfHeight);
-        }
-
-        /// <seealso cref="IViewportTransform.getCenter()">
-        /// </seealso>
-        public virtual Vec2 getCenter()
-        {
-            return box.center;
-        }
-
-        /// <seealso cref="IViewportTransform.setCenter(Vec2)">
-        /// </seealso>
-        public virtual void setCenter(Vec2 argPos)
-        {
-            box.center.Set(argPos);
-        }
-
-        /// <seealso cref="IViewportTransform.setCenter(float, float)">
-        /// </seealso>
-        public virtual void setCenter(float x, float y)
+        public virtual void SetCenter(float x, float y)
         {
             box.center.Set(x, y);
         }
@@ -151,9 +130,9 @@ namespace Box2D.Common
         // djm pooling
         private readonly Mat22 inv = new Mat22();
 
-        /// <seealso cref="IViewportTransform.getScreenVectorToWorld(Vec2, Vec2)">
+        /// <seealso cref="IViewportTransform.GetScreenVectorToWorld">
         /// </seealso>
-        public virtual void getScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld)
+        public virtual void GetScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld)
         {
             inv.Set(box.R);
             inv.InvertLocal();
@@ -164,9 +143,9 @@ namespace Box2D.Common
             }
         }
 
-        /// <seealso cref="IViewportTransform.getWorldVectorToScreen(Vec2, Vec2)">
+        /// <seealso cref="IViewportTransform.GetWorldVectorToScreen">
         /// </seealso>
-        public virtual void getWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen)
+        public virtual void GetWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen)
         {
             box.R.MulToOut(argWorld, argScreen);
             if (yFlip)
@@ -175,9 +154,9 @@ namespace Box2D.Common
             }
         }
 
-        /// <seealso cref="IViewportTransform.getWorldToScreen(Vec2, Vec2)">
+        /// <seealso cref="IViewportTransform.GetWorldToScreen">
         /// </seealso>
-        public virtual void getWorldToScreen(Vec2 argWorld, Vec2 argScreen)
+        public virtual void GetWorldToScreen(Vec2 argWorld, Vec2 argScreen)
         {
             argScreen.Set(argWorld);
             argScreen.SubLocal(box.center);
@@ -191,9 +170,9 @@ namespace Box2D.Common
 
         private readonly Mat22 inv2 = new Mat22();
 
-        /// <seealso cref="IViewportTransform.getScreenToWorld(Vec2, Vec2)">
+        /// <seealso cref="IViewportTransform.GetScreenToWorld">
         /// </seealso>
-        public virtual void getScreenToWorld(Vec2 argScreen, Vec2 argWorld)
+        public virtual void GetScreenToWorld(Vec2 argScreen, Vec2 argWorld)
         {
             argWorld.Set(argScreen);
             argWorld.SubLocal(box.extents);

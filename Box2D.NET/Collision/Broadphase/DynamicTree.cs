@@ -1000,7 +1000,7 @@ namespace Box2D.Collision.Broadphase
             color.Set(1, (height - spot) * 1f / height, (height - spot) * 1f / height);
             argDraw.DrawPolygon(drawVecs, 4, color);
 
-            argDraw.ViewportTranform.getWorldToScreen(node.AABB.UpperBound, textVec);
+            argDraw.ViewportTranform.GetWorldToScreen(node.AABB.UpperBound, textVec);
             argDraw.DrawString(textVec.X, textVec.Y, nodeId + "-" + (spot + 1) + "/" + height, color);
 
             if (node.Child1 != TreeNode.NULL_NODE)
