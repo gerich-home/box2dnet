@@ -121,13 +121,13 @@ namespace Box2D.Collision
             Distance.DistanceProxy proxyA = input.ProxyA;
             Distance.DistanceProxy proxyB = input.ProxyB;
 
-            sweepA.set_Renamed(input.SweepA);
-            sweepB.set_Renamed(input.SweepB);
+            sweepA.Set(input.SweepA);
+            sweepB.Set(input.SweepB);
 
             // Large rotations can make the root finder fail, so we normalize the
             // sweep angles.
-            sweepA.normalize();
-            sweepB.normalize();
+            sweepA.Normalize();
+            sweepB.Normalize();
 
             float tMax = input.tMax;
 
@@ -150,8 +150,8 @@ namespace Box2D.Collision
             // This loop terminates when an axis is repeated (no progress is made).
             for (; ; )
             {
-                sweepA.getTransform(xfA, t1);
-                sweepB.getTransform(xfB, t1);
+                sweepA.GetTransform(xfA, t1);
+                sweepB.GetTransform(xfB, t1);
                 // System.out.printf("sweepA: %f, %f, sweepB: %f, %f\n",
                 // sweepA.c.x, sweepA.c.y, sweepB.c.x, sweepB.c.y);
                 // Get the distance between shapes. We can also use the results
@@ -374,8 +374,8 @@ namespace Box2D.Collision
             SweepA = sweepA;
             SweepB = sweepB;
 
-            SweepA.getTransform(xfa, t1);
-            SweepB.getTransform(xfb, t1);
+            SweepA.GetTransform(xfa, t1);
+            SweepB.GetTransform(xfb, t1);
 
             // log.debug("initializing separation.\n" +
             // "cache: "+cache.count+"-"+cache.metric+"-"+cache.indexA+"-"+cache.indexB+"\n"
@@ -464,8 +464,8 @@ namespace Box2D.Collision
         public float FindMinSeparation(int[] indexes, float t)
         {
 
-            SweepA.getTransform(xfa, t);
-            SweepB.getTransform(xfb, t);
+            SweepA.GetTransform(xfa, t);
+            SweepB.GetTransform(xfb, t);
 
             switch (Type)
             {
@@ -536,8 +536,8 @@ namespace Box2D.Collision
 
         public float Evaluate(int indexA, int indexB, float t)
         {
-            SweepA.getTransform(xfa, t);
-            SweepB.getTransform(xfb, t);
+            SweepA.GetTransform(xfa, t);
+            SweepB.GetTransform(xfb, t);
 
             switch (Type)
             {

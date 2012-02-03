@@ -1160,7 +1160,7 @@ namespace Box2D.Dynamics
                 for (Body b = BodyList; b != null; b = b.Next)
                 {
                     b.Flags &= ~Body.TypeFlags.Island;
-                    b.Sweep.alpha0 = 0.0f;
+                    b.Sweep.Alpha0 = 0.0f;
                 }
 
                 for (Contact c = ContactManager.ContactList; c != null; c = c.m_next)
@@ -1237,17 +1237,17 @@ namespace Box2D.Dynamics
 
                         // Compute the TOI for this contact.
                         // Put the sweeps onto the same time interval.
-                        float alpha0 = bA.Sweep.alpha0;
+                        float alpha0 = bA.Sweep.Alpha0;
 
-                        if (bA.Sweep.alpha0 < bB.Sweep.alpha0)
+                        if (bA.Sweep.Alpha0 < bB.Sweep.Alpha0)
                         {
-                            alpha0 = bB.Sweep.alpha0;
-                            bA.Sweep.advance(alpha0);
+                            alpha0 = bB.Sweep.Alpha0;
+                            bA.Sweep.Advance(alpha0);
                         }
-                        else if (bB.Sweep.alpha0 < bA.Sweep.alpha0)
+                        else if (bB.Sweep.Alpha0 < bA.Sweep.Alpha0)
                         {
-                            alpha0 = bA.Sweep.alpha0;
-                            bB.Sweep.advance(alpha0);
+                            alpha0 = bA.Sweep.Alpha0;
+                            bB.Sweep.Advance(alpha0);
                         }
 
                         Debug.Assert(alpha0 < 1.0f);
@@ -1259,8 +1259,8 @@ namespace Box2D.Dynamics
                         TimeOfImpact.TOIInput input = toiInput;
                         input.ProxyA.Set(fA.Shape, indexA);
                         input.ProxyB.Set(fB.Shape, indexB);
-                        input.SweepA.set_Renamed(bA.Sweep);
-                        input.SweepB.set_Renamed(bB.Sweep);
+                        input.SweepA.Set(bA.Sweep);
+                        input.SweepB.Set(bB.Sweep);
                         input.tMax = 1.0f;
 
                         Pool.GetTimeOfImpact().GetTimeOfImpact(toiOutput, input);
@@ -1301,8 +1301,8 @@ namespace Box2D.Dynamics
                 Body bA2 = fA2.Body;
                 Body bB2 = fB2.Body;
 
-                backup1.set_Renamed(bA2.Sweep);
-                backup2.set_Renamed(bB2.Sweep);
+                backup1.Set(bA2.Sweep);
+                backup2.Set(bB2.Sweep);
 
                 bA2.Advance(minAlpha);
                 bB2.Advance(minAlpha);
@@ -1317,8 +1317,8 @@ namespace Box2D.Dynamics
                 {
                     // Restore the sweeps.
                     minContact.Enabled = false;
-                    bA2.Sweep.set_Renamed(backup1);
-                    bB2.Sweep.set_Renamed(backup2);
+                    bA2.Sweep.Set(backup1);
+                    bB2.Sweep.Set(backup2);
                     bA2.SynchronizeTransform();
                     bB2.SynchronizeTransform();
                     continue;
@@ -1381,7 +1381,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Tentatively advance the body to the TOI.
-                            backup1.set_Renamed(other.Sweep);
+                            backup1.Set(other.Sweep);
                             if ((other.Flags & Body.TypeFlags.Island) == 0)
                             {
                                 other.Advance(minAlpha);
@@ -1393,7 +1393,7 @@ namespace Box2D.Dynamics
                             // Was the contact disabled by the user?
                             if (contact.Enabled == false)
                             {
-                                other.Sweep.set_Renamed(backup1);
+                                other.Sweep.Set(backup1);
                                 other.SynchronizeTransform();
                                 continue;
                             }
@@ -1401,7 +1401,7 @@ namespace Box2D.Dynamics
                             // Are there contact points?
                             if (contact.Touching == false)
                             {
-                                other.Sweep.set_Renamed(backup1);
+                                other.Sweep.Set(backup1);
                                 other.SynchronizeTransform();
                                 continue;
                             }

@@ -191,8 +191,8 @@ namespace Box2D.Dynamics.Joints
                 {
                     done = false;
                 }
-                bodies[next].Sweep.c.X += delta.X;
-                bodies[next].Sweep.c.Y += delta.Y;
+                bodies[next].Sweep.C.X += delta.X;
+                bodies[next].Sweep.C.Y += delta.Y;
                 bodies[next].SynchronizeTransform();
                 // bodies[next].m_linearVelocity.x += delta.x * step.inv_dt;
                 // bodies[next].m_linearVelocity.y += delta.y * step.inv_dt;

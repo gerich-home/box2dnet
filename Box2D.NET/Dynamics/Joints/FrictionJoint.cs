@@ -138,8 +138,8 @@ namespace Box2D.Dynamics.Joints
         {
             m_indexA = m_bodyA.IslandIndex;
             m_indexB = m_bodyB.IslandIndex;
-            m_localCenterA.Set(m_bodyA.Sweep.localCenter);
-            m_localCenterB.Set(m_bodyB.Sweep.localCenter);
+            m_localCenterA.Set(m_bodyA.Sweep.LocalCenter);
+            m_localCenterB.Set(m_bodyB.Sweep.LocalCenter);
             m_invMassA = m_bodyA.InvMass;
             m_invMassB = m_bodyB.InvMass;
             m_invIA = m_bodyA.InvI;

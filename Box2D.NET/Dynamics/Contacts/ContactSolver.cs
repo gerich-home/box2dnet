@@ -143,8 +143,8 @@ namespace Box2D.Dynamics.Contacts
                 pc.indexB = bodyB.IslandIndex;
                 pc.invMassA = bodyA.InvMass;
                 pc.invMassB = bodyB.InvMass;
-                pc.localCenterA.Set(bodyA.Sweep.localCenter);
-                pc.localCenterB.Set(bodyB.Sweep.localCenter);
+                pc.localCenterA.Set(bodyA.Sweep.LocalCenter);
+                pc.localCenterB.Set(bodyB.Sweep.LocalCenter);
                 pc.invIA = bodyA.InvI;
                 pc.invIB = bodyB.InvI;
                 pc.localNormal.Set(manifold.LocalNormal);

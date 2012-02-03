@@ -247,14 +247,14 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body b = Bodies[i];
-				Vec2 c = b.Sweep.c;
-				float a = b.Sweep.a;
+				Vec2 c = b.Sweep.C;
+				float a = b.Sweep.A;
 				Vec2 v = b.m_linearVelocity;
 				float w = b.m_angularVelocity;
 
 				// Store positions for continuous collision.
-				b.Sweep.c0.Set(b.Sweep.c);
-				b.Sweep.a0 = b.Sweep.a;
+				b.Sweep.C0.Set(b.Sweep.C);
+				b.Sweep.A0 = b.Sweep.A;
 
 				if (b.m_type == BodyType.Dynamic)
 				{
@@ -392,8 +392,8 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body body = Bodies[i];
-				body.Sweep.c.Set(Positions[i].c);
-				body.Sweep.a = Positions[i].a;
+				body.Sweep.C.Set(Positions[i].c);
+				body.Sweep.A = Positions[i].a;
 				body.m_linearVelocity.Set(Velocities[i].v);
 				body.m_angularVelocity = Velocities[i].w;
 				body.SynchronizeTransform();
@@ -453,8 +453,8 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body b = Bodies[i];
-				Positions[i].c.Set(b.Sweep.c);
-				Positions[i].a = b.Sweep.a;
+				Positions[i].c.Set(b.Sweep.C);
+				Positions[i].a = b.Sweep.A;
 				Velocities[i].v.Set(b.m_linearVelocity);
 				Velocities[i].w = b.m_angularVelocity;
 			}
@@ -510,10 +510,10 @@ namespace Box2D.Dynamics
 			// #endif
 
 			// Leap of faith to new safe state.
-			Bodies[toiIndexA].Sweep.c0.Set(Positions[toiIndexA].c);
-			Bodies[toiIndexA].Sweep.a0 = Positions[toiIndexA].a;
-			Bodies[toiIndexB].Sweep.c0.Set(Positions[toiIndexB].c);
-			Bodies[toiIndexB].Sweep.a0 = Positions[toiIndexB].a;
+			Bodies[toiIndexA].Sweep.C0.Set(Positions[toiIndexA].c);
+			Bodies[toiIndexA].Sweep.A0 = Positions[toiIndexA].a;
+			Bodies[toiIndexB].Sweep.C0.Set(Positions[toiIndexB].c);
+			Bodies[toiIndexB].Sweep.A0 = Positions[toiIndexB].a;
 
 			// No warm starting is needed for TOI events because warm
 			// starting impulses were applied in the discrete solver.
@@ -565,8 +565,8 @@ namespace Box2D.Dynamics
 
 				// Sync bodies
 				Body body = Bodies[i];
-				body.Sweep.c.Set(c);
-				body.Sweep.a = a;
+				body.Sweep.C.Set(c);
+				body.Sweep.A = a;
 				body.m_linearVelocity.Set(v);
 				body.m_angularVelocity = w;
 				body.SynchronizeTransform();

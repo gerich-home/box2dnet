@@ -247,14 +247,14 @@ namespace Box2D.Dynamics.Joints
                 Vec2 temp2 = pc[7];
                 Vec2 temp3 = pc[8];
 
-                temp.Set(m_localAnchorA).SubLocal(bA.Sweep.localCenter);
+                temp.Set(m_localAnchorA).SubLocal(bA.Sweep.LocalCenter);
                 Rot.MulToOutUnsafe(bA.Xf.q, temp, rA);
 
-                temp.Set(m_localAnchorB).SubLocal(bB.Sweep.localCenter);
+                temp.Set(m_localAnchorB).SubLocal(bB.Sweep.LocalCenter);
                 Rot.MulToOutUnsafe(bB.Xf.q, temp, rB);
 
-                p1.Set(bA.Sweep.c).AddLocal(rA);
-                p2.Set(bB.Sweep.c).AddLocal(rB);
+                p1.Set(bA.Sweep.C).AddLocal(rA);
+                p2.Set(bB.Sweep.C).AddLocal(rB);
 
                 d.Set(p2).SubLocal(p1);
                 Rot.MulToOutUnsafe(bA.Xf.q, m_localXAxisA, axis);
@@ -415,8 +415,8 @@ namespace Box2D.Dynamics.Joints
         {
             m_indexA = m_bodyA.IslandIndex;
             m_indexB = m_bodyB.IslandIndex;
-            m_localCenterA.Set(m_bodyA.Sweep.localCenter);
-            m_localCenterB.Set(m_bodyB.Sweep.localCenter);
+            m_localCenterA.Set(m_bodyA.Sweep.LocalCenter);
+            m_localCenterB.Set(m_bodyB.Sweep.LocalCenter);
             m_invMassA = m_bodyA.InvMass;
             m_invMassB = m_bodyB.InvMass;
             m_invIA = m_bodyA.InvI;

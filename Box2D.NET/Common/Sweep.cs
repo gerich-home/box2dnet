@@ -36,58 +36,58 @@ namespace Box2D.Common
     [Serializable]
     public class Sweep
     {
-        private const long serialVersionUID = 1L;
-
         /// <summary>
         /// Local center of mass position
         /// </summary>
-        public readonly Vec2 localCenter;
+        public readonly Vec2 LocalCenter;
 
         /// <summary>
         /// Center world positions
         /// </summary>
-        public readonly Vec2 c0;
-        public readonly Vec2 c;
+        public readonly Vec2 C0;
+        public readonly Vec2 C;
 
         /// <summary>
         /// World angles
         /// </summary>
-        public float a0, a;
+        public float A0;
+
+        /// <summary>
+        /// World angles
+        /// </summary>
+        public float A;
 
         /// <summary>
         /// Fraction of the current time step in the range [0,1] c0 and a0 are the positions at alpha0.
         /// </summary>
-        public float alpha0;
+        public float Alpha0;
 
         public override String ToString()
         {
-            String s = "Sweep:\nlocalCenter: " + localCenter + "\n";
-            s += ("c0: " + c0 + ", c: " + c + "\n");
-            s += ("a0: " + a0 + ", a: " + a + "\n");
-            return s;
+            return string.Format("Sweep:\nlocalCenter: {0}\nc0: {1}, c: {2}\na0: {3}, a: {4}\n", LocalCenter, C0, C, A0, A);
         }
 
         public Sweep()
         {
-            localCenter = new Vec2();
-            c0 = new Vec2();
-            c = new Vec2();
+            LocalCenter = new Vec2();
+            C0 = new Vec2();
+            C = new Vec2();
         }
 
-        public void normalize()
+        public void Normalize()
         {
-            float d = MathUtils.TWO_PI * MathUtils.Floor(a0 / MathUtils.TWO_PI);
-            a0 -= d;
-            a -= d;
+            float d = MathUtils.TWO_PI * MathUtils.Floor(A0 / MathUtils.TWO_PI);
+            A0 -= d;
+            A -= d;
         }
 
-        public Sweep set_Renamed(Sweep argCloneFrom)
+        public Sweep Set(Sweep argCloneFrom)
         {
-            localCenter.Set(argCloneFrom.localCenter);
-            c0.Set(argCloneFrom.c0);
-            c.Set(argCloneFrom.c);
-            a0 = argCloneFrom.a0;
-            a = argCloneFrom.a;
+            LocalCenter.Set(argCloneFrom.LocalCenter);
+            C0.Set(argCloneFrom.C0);
+            C.Set(argCloneFrom.C);
+            A0 = argCloneFrom.A0;
+            A = argCloneFrom.A;
             return this;
         }
 
@@ -95,8 +95,8 @@ namespace Box2D.Common
         /// Get the interpolated transform at a specific time.
         /// </summary>
         /// <param name="xf">the result is placed here - must not be null</param>
-        /// <param name="t">the normalized time in [0,1].</param>
-        public void getTransform(Transform xf, float beta)
+        /// <param name="beta">the normalized time in [0,1].</param>
+        public void GetTransform(Transform xf, float beta)
         {
             Debug.Assert(xf != null);
             // if (xf == null)
@@ -109,24 +109,24 @@ namespace Box2D.Common
             * xf.R.set(a); }
             */
 
-            xf.p.X = (1.0f - beta) * c0.X + beta * c.X;
-            xf.p.Y = (1.0f - beta) * c0.Y + beta * c.Y;
+            xf.p.X = (1.0f - beta) * C0.X + beta * C.X;
+            xf.p.Y = (1.0f - beta) * C0.Y + beta * C.Y;
             // float angle = (1.0f - alpha) * a0 + alpha * a;
             // xf.R.set(angle);
-            xf.q.Set((1.0f - beta) * a0 + beta * a);
+            xf.q.Set((1.0f - beta) * A0 + beta * A);
 
             // Shift to origin
             //xf->p -= b2Mul(xf->q, localCenter);
             Rot q = xf.q;
-            xf.p.X -= (q.Cos * localCenter.X - q.Sin * localCenter.Y);
-            xf.p.Y -= (q.Sin * localCenter.X + q.Cos * localCenter.Y);
+            xf.p.X -= (q.Cos * LocalCenter.X - q.Sin * LocalCenter.Y);
+            xf.p.Y -= (q.Sin * LocalCenter.X + q.Cos * LocalCenter.Y);
         }
 
         /// <summary>
         /// Advance the sweep forward, yielding a new initial state.
         /// </summary>
         /// <param name="alpha">the new initial time.</param>
-        public void advance(float alpha)
+        public void Advance(float alpha)
         {
             //    assert (alpha0 < 1f);
             //    // c0 = (1.0f - t) * c0 + t*c;
@@ -135,9 +135,9 @@ namespace Box2D.Common
             //    c0.y = (1.0f - beta) * c0.y + beta * c.y;
             //    a0 = (1.0f - beta) * a0 + beta * a;
             //    alpha0 = alpha;
-            c0.X = (1.0f - alpha) * c0.X + alpha * c.X;
-            c0.Y = (1.0f - alpha) * c0.Y + alpha * c.Y;
-            a0 = (1.0f - alpha) * a0 + alpha * a;
+            C0.X = (1.0f - alpha) * C0.X + alpha * C.X;
+            C0.Y = (1.0f - alpha) * C0.Y + alpha * C.Y;
+            A0 = (1.0f - alpha) * A0 + alpha * A;
         }
     }
 }
