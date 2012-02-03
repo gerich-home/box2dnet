@@ -42,7 +42,7 @@ namespace Box2D.Dynamics
     /// <author>daniel</author>
     public class Fixture
     {
-        public float m_density;
+        private float m_density;
 
         public FixtureProxy[] Proxies;
         public int ProxyCount;

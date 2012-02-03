@@ -198,7 +198,7 @@ namespace Box2D.Dynamics
             fixture.Body = this;
 
             // Adjust mass properties if needed.
-            if (fixture.m_density > 0.0f)
+            if (fixture.Density > 0.0f)
             {
                 ResetMassData();
             }
@@ -966,7 +966,7 @@ namespace Box2D.Dynamics
             MassData massData = pmd;
             for (Fixture f = FixtureList; f != null; f = f.Next)
             {
-                if (f.m_density == 0.0f)
+                if (f.Density == 0.0f)
                 {
                     continue;
                 }
