@@ -39,7 +39,7 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Dump lots of debug information.
         /// </summary>
-        private const bool m_debug = false;
+        private const bool DEBUG = false;
 
         /// <summary>
         /// Local position of the shape centroid in parent body frame.
@@ -297,7 +297,7 @@ namespace Box2D.Collision.Shapes
             Rot.MulTransUnsafe(xf.q, pLocal, temp);
             pLocal.Set(temp);
 
-            if (m_debug)
+            if (DEBUG)
             {
                 Console.Out.WriteLine("--testPoint debug--");
                 Console.Out.WriteLine("Vertices: ");
