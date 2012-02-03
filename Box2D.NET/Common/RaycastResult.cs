@@ -29,14 +29,14 @@ namespace Box2D.Common
 
     public class RaycastResult
     {
-        public float lambda = 0.0f;
+        public float Lambda;
 
-        public readonly Vec2 normal = new Vec2();
+        public readonly Vec2 Normal = new Vec2();
 
-        public virtual RaycastResult set_Renamed(RaycastResult argOther)
+        public virtual RaycastResult Set(RaycastResult argOther)
         {
-            lambda = argOther.lambda;
-            normal.Set(argOther.normal);
+            Lambda = argOther.Lambda;
+            Normal.Set(argOther.Normal);
             return this;
         }
     }
