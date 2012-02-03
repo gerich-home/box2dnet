@@ -54,8 +54,8 @@ namespace Box2D.Dynamics
 
 
         // statistics gathering
-        public int ActiveContacts = 0;
-        public int ContactPoolCount = 0;
+        public int ActiveContacts;
+        public int ContactPoolCount;
 
         protected internal int Flags;
 
@@ -193,10 +193,8 @@ namespace Box2D.Dynamics
                     return c;
                 }
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public void PushContact(Contact contact)
@@ -404,7 +402,7 @@ namespace Box2D.Dynamics
         /// destroy a joint. This may cause the connected bodies to begin colliding.
         /// </summary>
         /// <warning>This function is locked during callbacks.</warning>
-        /// <param name="joint"></param>
+        /// <param name="j"></param>
         public void DestroyJoint(Joint j)
         {
             Debug.Assert(Locked == false);
@@ -658,16 +656,16 @@ namespace Box2D.Dynamics
             if ((flags & DebugDraw.DrawFlags.Pair) == DebugDraw.DrawFlags.Pair)
             {
                 color.Set(0.3f, 0.9f, 0.9f);
-                for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
-                {
-                    // Fixture fixtureA = c.getFixtureA();
-                    // Fixture fixtureB = c.getFixtureB();
-                    //
-                    // fixtureA.getAABB(childIndex).getCenterToOut(cA);
-                    // fixtureB.getAABB().getCenterToOut(cB);
-                    //
-                    // m_debugDraw.drawSegment(cA, cB, color);
-                }
+                //for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
+                //{
+                //    Fixture fixtureA = c.getFixtureA();
+                //    Fixture fixtureB = c.getFixtureB();
+
+                //    fixtureA.getAABB(childIndex).getCenterToOut(cA);
+                //    fixtureB.getAABB().getCenterToOut(cB);
+
+                //    m_debugDraw.drawSegment(cA, cB, color);
+                //}
             }
 
             if ((flags & DebugDraw.DrawFlags.AABB) == DebugDraw.DrawFlags.AABB)
@@ -1076,7 +1074,7 @@ namespace Box2D.Dynamics
                     // Search all joints connect to this body.
                     for (JointEdge je = b.JointList; je != null; je = je.next)
                     {
-                        if (je.joint.m_islandFlag == true)
+                        if (je.joint.m_islandFlag)
                         {
                             continue;
                         }
@@ -1193,7 +1191,7 @@ namespace Box2D.Dynamics
                         continue;
                     }
 
-                    float alpha = 1.0f;
+                    float alpha;
                     if ((c.m_flags & Contact.TOI_FLAG) != 0)
                     {
                         // This contact has a valid cached TOI.
@@ -1522,7 +1520,7 @@ namespace Box2D.Dynamics
         // NOTE this corresponds to the liquid test, so the debugdraw can draw
         // the liquid particles correctly. They should be the same.
         private const int LIQUID_INT = 1234598372;
-        private const float liquidLength = .12f;
+        private const float LIQUID_LENGTH = .12f;
         private float averageLinearVel = -1;
         private readonly Vec2 liquidOffset = new Vec2();
         private readonly Vec2 circCenterMoved = new Vec2();
@@ -1561,7 +1559,7 @@ namespace Box2D.Dynamics
                             {
                                 averageLinearVel = .98f * averageLinearVel + .02f * linVelLength;
                             }
-                            liquidOffset.MulLocal(liquidLength / averageLinearVel / 2);
+                            liquidOffset.MulLocal(LIQUID_LENGTH / averageLinearVel / 2);
                             circCenterMoved.Set(center).AddLocal(liquidOffset);
                             center.SubLocal(liquidOffset);
                             DebugDraw.DrawSegment(center, circCenterMoved, liquidColor);
@@ -1616,10 +1614,6 @@ namespace Box2D.Dynamics
                         }
                     }
                     break;
-
-                default:
-                    break;
-
             }
         }
     }
