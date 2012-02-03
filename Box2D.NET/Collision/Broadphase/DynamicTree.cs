@@ -997,7 +997,7 @@ namespace Box2D.Collision.Broadphase
             TreeNode node = m_nodes[nodeId];
             node.AABB.GetVertices(drawVecs);
 
-            color.set_Renamed(1, (height - spot) * 1f / height, (height - spot) * 1f / height);
+            color.Set(1, (height - spot) * 1f / height, (height - spot) * 1f / height);
             argDraw.DrawPolygon(drawVecs, 4, color);
 
             argDraw.ViewportTranform.getWorldToScreen(node.AABB.UpperBound, textVec);

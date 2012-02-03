@@ -56,41 +56,41 @@ namespace Box2D.Common
     public class Color3f
     {
 
-        public static readonly Color3f WHITE = new Color3f(1, 1, 1);
-        public static readonly Color3f BLACK = new Color3f(0, 0, 0);
-        public static readonly Color3f BLUE = new Color3f(0, 0, 1);
-        public static readonly Color3f GREEN = new Color3f(0, 1, 0);
-        public static readonly Color3f RED = new Color3f(1, 0, 0);
+        public static readonly Color3f White = new Color3f(1, 1, 1);
+        public static readonly Color3f Black = new Color3f(0, 0, 0);
+        public static readonly Color3f Blue = new Color3f(0, 0, 1);
+        public static readonly Color3f Green = new Color3f(0, 1, 0);
+        public static readonly Color3f Red = new Color3f(1, 0, 0);
 
-        public float x;
-        public float y;
-        public float z;
+        public float X;
+        public float Y;
+        public float Z;
 
 
         public Color3f()
         {
-            x = y = z = 0;
+            X = Y = Z = 0;
         }
 
         public Color3f(float r, float g, float b)
         {
-            x = r;
-            y = g;
-            z = b;
+            X = r;
+            Y = g;
+            Z = b;
         }
 
-        public virtual void set_Renamed(float r, float g, float b)
+        public virtual void Set(float r, float g, float b)
         {
-            x = r;
-            y = g;
-            z = b;
+            X = r;
+            Y = g;
+            Z = b;
         }
 
-        public virtual void set_Renamed(Color3f argColor)
+        public virtual void Set(Color3f argColor)
         {
-            x = argColor.x;
-            y = argColor.y;
-            z = argColor.z;
+            X = argColor.X;
+            Y = argColor.Y;
+            Z = argColor.Z;
         }
     }
 }

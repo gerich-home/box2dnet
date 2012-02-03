@@ -620,27 +620,27 @@ namespace Box2D.Dynamics
                     {
                         if (b.Active == false)
                         {
-                            color.set_Renamed(0.5f, 0.5f, 0.3f);
+                            color.Set(0.5f, 0.5f, 0.3f);
                             DrawShape(f, xf, color);
                         }
                         else if (b.Type == BodyType.Static)
                         {
-                            color.set_Renamed(0.5f, 0.9f, 0.3f);
+                            color.Set(0.5f, 0.9f, 0.3f);
                             DrawShape(f, xf, color);
                         }
                         else if (b.Type == BodyType.Kinematic)
                         {
-                            color.set_Renamed(0.5f, 0.5f, 0.9f);
+                            color.Set(0.5f, 0.5f, 0.9f);
                             DrawShape(f, xf, color);
                         }
                         else if (b.Awake == false)
                         {
-                            color.set_Renamed(0.5f, 0.5f, 0.5f);
+                            color.Set(0.5f, 0.5f, 0.5f);
                             DrawShape(f, xf, color);
                         }
                         else
                         {
-                            color.set_Renamed(0.9f, 0.7f, 0.7f);
+                            color.Set(0.9f, 0.7f, 0.7f);
                             DrawShape(f, xf, color);
                         }
                     }
@@ -657,7 +657,7 @@ namespace Box2D.Dynamics
 
             if ((flags & DebugDraw.DrawFlags.Pair) == DebugDraw.DrawFlags.Pair)
             {
-                color.set_Renamed(0.3f, 0.9f, 0.9f);
+                color.Set(0.3f, 0.9f, 0.9f);
                 for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
                 {
                     // Fixture fixtureA = c.getFixtureA();
@@ -672,7 +672,7 @@ namespace Box2D.Dynamics
 
             if ((flags & DebugDraw.DrawFlags.AABB) == DebugDraw.DrawFlags.AABB)
             {
-                color.set_Renamed(0.9f, 0.3f, 0.9f);
+                color.Set(0.9f, 0.3f, 0.9f);
 
                 for (Body b = BodyList; b != null; b = b.Next)
                 {
@@ -1482,7 +1482,7 @@ namespace Box2D.Dynamics
             joint.getAnchorA(p1);
             joint.getAnchorB(p2);
 
-            color.set_Renamed(0.5f, 0.8f, 0.8f);
+            color.Set(0.5f, 0.8f, 0.8f);
 
             switch (joint.Type)
             {
