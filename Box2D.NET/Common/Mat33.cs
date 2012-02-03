@@ -35,75 +35,73 @@ namespace Box2D.Common
     [Serializable]
     public class Mat33
     {
-        private const long serialVersionUID = 2L;
+        public static readonly Mat33 Identity = new Mat33(new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1));
 
-        public static readonly Mat33 IDENTITY = new Mat33(new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1));
-
-        public readonly Vec3 ex;
-        public readonly Vec3 ey;
-        public readonly Vec3 ez;
+        public readonly Vec3 Ex;
+        public readonly Vec3 Ey;
+        public readonly Vec3 Ez;
 
         public Mat33()
         {
-            ex = new Vec3();
-            ey = new Vec3();
-            ez = new Vec3();
+            Ex = new Vec3();
+            Ey = new Vec3();
+            Ez = new Vec3();
         }
 
         public Mat33(Vec3 argCol1, Vec3 argCol2, Vec3 argCol3)
         {
-            ex = argCol1.Clone();
-            ey = argCol2.Clone();
-            ez = argCol3.Clone();
+            Ex = argCol1.Clone();
+            Ey = argCol2.Clone();
+            Ez = argCol3.Clone();
         }
 
-        public virtual void setZero()
+        public virtual void SetZero()
         {
-            ex.setZero();
-            ey.setZero();
-            ez.setZero();
+            Ex.setZero();
+            Ey.setZero();
+            Ez.setZero();
         }
 
         // / Multiply a matrix times a vector.
-        public static Vec3 mul(Mat33 A, Vec3 v)
+        public static Vec3 Mul(Mat33 a, Vec3 v)
         {
-            return new Vec3(v.x * A.ex.x + v.y * A.ey.x + v.z + A.ez.x, v.x * A.ex.y + v.y * A.ey.y + v.z * A.ez.y, v.x * A.ex.z + v.y * A.ey.z + v.z * A.ez.z);
+            return new Vec3(v.x * a.Ex.x + v.y * a.Ey.x + v.z + a.Ez.x, v.x * a.Ex.y + v.y * a.Ey.y + v.z * a.Ez.y, v.x * a.Ex.z + v.y * a.Ey.z + v.z * a.Ez.z);
         }
 
-        public static Vec2 mul22(Mat33 A, Vec2 v)
+        public static Vec2 Mul22(Mat33 a, Vec2 v)
         {
-            return new Vec2(A.ex.x * v.X + A.ey.x * v.Y, A.ex.y * v.X + A.ey.y * v.Y);
+            return new Vec2(a.Ex.x * v.X + a.Ey.x * v.Y, a.Ex.y * v.X + a.Ey.y * v.Y);
         }
 
-        public static void mul22ToOut(Mat33 A, Vec2 v, Vec2 out_Renamed)
+        public static void Mul22ToOut(Mat33 a, Vec2 v, Vec2 result)
         {
-            float tempx = A.ex.x * v.X + A.ey.x * v.Y;
-            out_Renamed.Y = A.ex.y * v.X + A.ey.y * v.Y;
-            out_Renamed.X = tempx;
+            float tempx = a.Ex.x * v.X + a.Ey.x * v.Y;
+            result.Y = a.Ex.y * v.X + a.Ey.y * v.Y;
+            result.X = tempx;
         }
 
-        public static void mul22ToOutUnsafe(Mat33 A, Vec2 v, Vec2 out_Renamed)
+        public static void Mul22ToOutUnsafe(Mat33 a, Vec2 v, Vec2 result)
         {
-            Debug.Assert(v != out_Renamed);
-            out_Renamed.Y = A.ex.y * v.X + A.ey.y * v.Y;
-            out_Renamed.X = A.ex.x * v.X + A.ey.x * v.Y;
+            Debug.Assert(v != result);
+            result.Y = a.Ex.y * v.X + a.Ey.y * v.Y;
+            result.X = a.Ex.x * v.X + a.Ey.x * v.Y;
         }
 
-        public static void mulToOut(Mat33 A, Vec3 v, Vec3 out_Renamed)
+        public static void MulToOut(Mat33 a, Vec3 v, Vec3 result)
         {
-            float tempy = v.x * A.ex.y + v.y * A.ey.y + v.z * A.ez.y;
-            float tempz = v.x * A.ex.z + v.y * A.ey.z + v.z * A.ez.z;
-            out_Renamed.x = v.x * A.ex.x + v.y * A.ey.x + v.z * A.ez.x;
-            out_Renamed.y = tempy;
-            out_Renamed.z = tempz;
+            float tempy = v.x * a.Ex.y + v.y * a.Ey.y + v.z * a.Ez.y;
+            float tempz = v.x * a.Ex.z + v.y * a.Ey.z + v.z * a.Ez.z;
+            result.x = v.x * a.Ex.x + v.y * a.Ey.x + v.z * a.Ez.x;
+            result.y = tempy;
+            result.z = tempz;
         }
 
-        public static void mulToOutUnsafe(Mat33 A, Vec3 v, Vec3 out_Renamed)
+        public static void MulToOutUnsafe(Mat33 a, Vec3 v, Vec3 result)
         {
-            Debug.Assert(out_Renamed != v);
-            out_Renamed.x = v.x * A.ex.x + v.y * A.ey.x + v.z * A.ez.x;
-            out_Renamed.y = v.x * A.ex.y + v.y * A.ey.y + v.z * A.ez.y;
-            out_Renamed.z = v.x * A.ex.z + v.y * A.ey.z + v.z * A.ez.z;
+            Debug.Assert(result != v);
+            result.x = v.x * a.Ex.x + v.y * a.Ey.x + v.z * a.Ez.x;
+            result.y = v.x * a.Ex.y + v.y * a.Ey.y + v.z * a.Ez.y;
+            result.z = v.x * a.Ex.z + v.y * a.Ey.z + v.z * a.Ez.z;
         }
 
         /// <summary>
@@ -112,10 +110,10 @@ namespace Box2D.Common
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
-        public Vec2 solve22(Vec2 b)
+        public Vec2 Solve22(Vec2 b)
         {
             Vec2 x = new Vec2();
-            solve22ToOut(b, x);
+            Solve22ToOut(b, x);
             return x;
         }
 
@@ -124,20 +122,21 @@ namespace Box2D.Common
         /// in one-shot cases.
         /// </summary>
         /// <param name="b"></param>
+        /// <param name="result"></param>
         /// <returns></returns>
-        public void solve22ToOut(Vec2 b, Vec2 out_Renamed)
+        public void Solve22ToOut(Vec2 b, Vec2 result)
         {
-            float a11 = ex.x;
-            float a12 = ey.x;
-            float a21 = ex.y;
-            float a22 = ey.y;
+            float a11 = Ex.x;
+            float a12 = Ey.x;
+            float a21 = Ex.y;
+            float a22 = Ey.y;
             float det = a11 * a22 - a12 * a21;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
-            out_Renamed.X = det * (a22 * b.X - a12 * b.Y);
-            out_Renamed.Y = det * (a11 * b.Y - a21 * b.X);
+            result.X = det * (a22 * b.X - a12 * b.Y);
+            result.Y = det * (a11 * b.Y - a21 * b.X);
         }
 
         // djm pooling from below
@@ -147,10 +146,10 @@ namespace Box2D.Common
         /// </summary>
         /// <param name="b"></param>
         /// <returns></returns>
-        public Vec3 solve33(Vec3 b)
+        public Vec3 Solve33(Vec3 b)
         {
             Vec3 x = new Vec3();
-            solve33ToOut(b, x);
+            Solve33ToOut(b, x);
             return x;
         }
 
@@ -159,83 +158,83 @@ namespace Box2D.Common
         /// in one-shot cases.
         /// </summary>
         /// <param name="b"></param>
-        /// <param name="out">the result</param>
-        public void solve33ToOut(Vec3 b, Vec3 out_Renamed)
+        /// <param name="result">the result</param>
+        public void Solve33ToOut(Vec3 b, Vec3 result)
         {
-            Debug.Assert(b != out_Renamed);
-            Vec3.crossToOutUnsafe(ey, ez, out_Renamed);
-            float det = Vec3.dot(ex, out_Renamed);
+            Debug.Assert(b != result);
+            Vec3.crossToOutUnsafe(Ey, Ez, result);
+            float det = Vec3.dot(Ex, result);
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
-            Vec3.crossToOutUnsafe(ey, ez, out_Renamed);
-            float x = det * Vec3.dot(b, out_Renamed);
-            Vec3.crossToOutUnsafe(b, ez, out_Renamed);
-            float y = det * Vec3.dot(ex, out_Renamed);
-            Vec3.crossToOutUnsafe(ey, b, out_Renamed);
-            float z = det * Vec3.dot(ex, out_Renamed);
-            out_Renamed.x = x;
-            out_Renamed.y = y;
-            out_Renamed.z = z;
+            Vec3.crossToOutUnsafe(Ey, Ez, result);
+            float x = det * Vec3.dot(b, result);
+            Vec3.crossToOutUnsafe(b, Ez, result);
+            float y = det * Vec3.dot(Ex, result);
+            Vec3.crossToOutUnsafe(Ey, b, result);
+            float z = det * Vec3.dot(Ex, result);
+            result.x = x;
+            result.y = y;
+            result.z = z;
         }
 
-        public virtual void getInverse22(Mat33 M)
+        public virtual void GetInverse22(Mat33 m)
         {
-            float a = ex.x, b = ey.x, c = ex.y, d = ey.y;
+            float a = Ex.x, b = Ey.x, c = Ex.y, d = Ey.y;
             float det = a * d - b * c;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
 
-            M.ex.x = det * d;
-            M.ey.x = (-det) * b;
-            M.ex.z = 0.0f;
-            M.ex.y = (-det) * c;
-            M.ey.y = det * a;
-            M.ey.z = 0.0f;
-            M.ez.x = 0.0f;
-            M.ez.y = 0.0f;
-            M.ez.z = 0.0f;
+            m.Ex.x = det * d;
+            m.Ey.x = (-det) * b;
+            m.Ex.z = 0.0f;
+            m.Ex.y = (-det) * c;
+            m.Ey.y = det * a;
+            m.Ey.z = 0.0f;
+            m.Ez.x = 0.0f;
+            m.Ez.y = 0.0f;
+            m.Ez.z = 0.0f;
         }
 
         // / Returns the zero matrix if singular.
-        public virtual void getSymInverse33(Mat33 M)
+        public virtual void GetSymInverse33(Mat33 m)
         {
-            float bx = ey.y * ez.z - ey.z * ez.y;
-            float by = ey.z * ez.x - ey.x * ez.z;
-            float bz = ey.x * ez.y - ey.y * ez.x;
-            float det = ex.x * bx + ex.y * by + ex.z * bz;
+            float bx = Ey.y * Ez.z - Ey.z * Ez.y;
+            float by = Ey.z * Ez.x - Ey.x * Ez.z;
+            float bz = Ey.x * Ez.y - Ey.y * Ez.x;
+            float det = Ex.x * bx + Ex.y * by + Ex.z * bz;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
 
-            float a11 = ex.x, a12 = ey.x, a13 = ez.x;
-            float a22 = ey.y, a23 = ez.y;
-            float a33 = ez.z;
+            float a11 = Ex.x, a12 = Ey.x, a13 = Ez.x;
+            float a22 = Ey.y, a23 = Ez.y;
+            float a33 = Ez.z;
 
-            M.ex.x = det * (a22 * a33 - a23 * a23);
-            M.ex.y = det * (a13 * a23 - a12 * a33);
-            M.ex.z = det * (a12 * a23 - a13 * a22);
+            m.Ex.x = det * (a22 * a33 - a23 * a23);
+            m.Ex.y = det * (a13 * a23 - a12 * a33);
+            m.Ex.z = det * (a12 * a23 - a13 * a22);
 
-            M.ey.x = M.ex.y;
-            M.ey.y = det * (a11 * a33 - a13 * a13);
-            M.ey.z = det * (a13 * a12 - a11 * a23);
+            m.Ey.x = m.Ex.y;
+            m.Ey.y = det * (a11 * a33 - a13 * a13);
+            m.Ey.z = det * (a13 * a12 - a11 * a23);
 
-            M.ez.x = M.ex.z;
-            M.ez.y = M.ey.z;
-            M.ez.z = det * (a11 * a22 - a12 * a12);
+            m.Ez.x = m.Ex.z;
+            m.Ez.y = m.Ey.z;
+            m.Ez.z = det * (a11 * a22 - a12 * a12);
         }
 
         public override int GetHashCode()
         {
-            int prime = 31;
+            const int prime = 31;
             int result = 1;
-            result = prime * result + ((ex == null) ? 0 : ex.GetHashCode());
-            result = prime * result + ((ey == null) ? 0 : ey.GetHashCode());
-            result = prime * result + ((ez == null) ? 0 : ez.GetHashCode());
+            result = prime * result + ((Ex == null) ? 0 : Ex.GetHashCode());
+            result = prime * result + ((Ey == null) ? 0 : Ey.GetHashCode());
+            result = prime * result + ((Ez == null) ? 0 : Ez.GetHashCode());
             return result;
         }
 
@@ -245,21 +244,21 @@ namespace Box2D.Common
             if (obj == null) return false;
             if (obj is Mat33) return false;
             Mat33 other = (Mat33)obj;
-            if (ex == null)
+            if (Ex == null)
             {
-                if (other.ex != null) return false;
+                if (other.Ex != null) return false;
             }
-            else if (!ex.Equals(other.ex)) return false;
-            if (ey == null)
+            else if (!Ex.Equals(other.Ex)) return false;
+            if (Ey == null)
             {
-                if (other.ey != null) return false;
+                if (other.Ey != null) return false;
             }
-            else if (!ey.Equals(other.ey)) return false;
-            if (ez == null)
+            else if (!Ey.Equals(other.Ey)) return false;
+            if (Ez == null)
             {
-                if (other.ez != null) return false;
+                if (other.Ez != null) return false;
             }
-            else if (!ez.Equals(other.ez)) return false;
+            else if (!Ez.Equals(other.Ez)) return false;
             return true;
         }
     }

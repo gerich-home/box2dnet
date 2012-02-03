@@ -147,15 +147,15 @@ namespace Box2D.Dynamics.Joints
 
             bool fixedRotation = (iA + iB == 0.0f);
 
-            m_mass.ex.x = mA + mB + m_rA.Y * m_rA.Y * iA + m_rB.Y * m_rB.Y * iB;
-            m_mass.ey.x = (-m_rA.Y) * m_rA.X * iA - m_rB.Y * m_rB.X * iB;
-            m_mass.ez.x = (-m_rA.Y) * iA - m_rB.Y * iB;
-            m_mass.ex.y = m_mass.ey.x;
-            m_mass.ey.y = mA + mB + m_rA.X * m_rA.X * iA + m_rB.X * m_rB.X * iB;
-            m_mass.ez.y = m_rA.X * iA + m_rB.X * iB;
-            m_mass.ex.z = m_mass.ez.x;
-            m_mass.ey.z = m_mass.ez.y;
-            m_mass.ez.z = iA + iB;
+            m_mass.Ex.x = mA + mB + m_rA.Y * m_rA.Y * iA + m_rB.Y * m_rB.Y * iB;
+            m_mass.Ey.x = (-m_rA.Y) * m_rA.X * iA - m_rB.Y * m_rB.X * iB;
+            m_mass.Ez.x = (-m_rA.Y) * iA - m_rB.Y * iB;
+            m_mass.Ex.y = m_mass.Ey.x;
+            m_mass.Ey.y = mA + mB + m_rA.X * m_rA.X * iA + m_rB.X * m_rB.X * iB;
+            m_mass.Ez.y = m_rA.X * iA + m_rB.X * iB;
+            m_mass.Ex.z = m_mass.Ez.x;
+            m_mass.Ey.z = m_mass.Ez.y;
+            m_mass.Ez.z = iA + iB;
 
             m_motorMass = iA + iB;
             if (m_motorMass > 0.0f)
@@ -279,7 +279,7 @@ namespace Box2D.Dynamics.Joints
                 Cdot.set_Renamed(Cdot1.X, Cdot1.Y, Cdot2);
 
                 Vec3 impulse = pool.PopVec3();
-                m_mass.solve33ToOut(Cdot, impulse);
+                m_mass.Solve33ToOut(Cdot, impulse);
                 impulse.negateLocal();
 
                 if (m_limitState == LimitState.EQUAL)
@@ -293,8 +293,8 @@ namespace Box2D.Dynamics.Joints
                     {
                         //UPGRADE_NOTE: Final was removed from the declaration of 'rhs '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
                         Vec2 rhs = pool.PopVec2();
-                        rhs.Set(m_mass.ez.x, m_mass.ez.y).MulLocal(m_impulse.z).SubLocal(Cdot1);
-                        m_mass.solve22ToOut(rhs, temp);
+                        rhs.Set(m_mass.Ez.x, m_mass.Ez.y).MulLocal(m_impulse.z).SubLocal(Cdot1);
+                        m_mass.Solve22ToOut(rhs, temp);
                         impulse.x = temp.X;
                         impulse.y = temp.Y;
                         impulse.z = -m_impulse.z;
@@ -314,8 +314,8 @@ namespace Box2D.Dynamics.Joints
                     if (newImpulse > 0.0f)
                     {
                         Vec2 rhs = pool.PopVec2();
-                        rhs.Set(m_mass.ez.x, m_mass.ez.y).MulLocal(m_impulse.z).SubLocal(Cdot1);
-                        m_mass.solve22ToOut(rhs, temp);
+                        rhs.Set(m_mass.Ez.x, m_mass.Ez.y).MulLocal(m_impulse.z).SubLocal(Cdot1);
+                        m_mass.Solve22ToOut(rhs, temp);
                         impulse.x = temp.X;
                         impulse.y = temp.Y;
                         impulse.z = -m_impulse.z;
@@ -354,7 +354,7 @@ namespace Box2D.Dynamics.Joints
                 Vec2.CrossToOutUnsafe(wA, m_rA, temp);
                 Vec2.CrossToOutUnsafe(wB, m_rB, Cdot);
                 Cdot.AddLocal(vB).SubLocal(vA).SubLocal(temp);
-                m_mass.solve22ToOut(Cdot.NegateLocal(), impulse); // just leave negated
+                m_mass.Solve22ToOut(Cdot.NegateLocal(), impulse); // just leave negated
 
                 m_impulse.x += impulse.X;
                 m_impulse.y += impulse.Y;

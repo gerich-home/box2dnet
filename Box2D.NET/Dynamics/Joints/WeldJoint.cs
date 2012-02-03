@@ -201,19 +201,19 @@ namespace Box2D.Dynamics.Joints
 
             Mat33 K = pool.PopMat33();
 
-            K.ex.x = mA + mB + m_rA.Y * m_rA.Y * iA + m_rB.Y * m_rB.Y * iB;
-            K.ey.x = (-m_rA.Y) * m_rA.X * iA - m_rB.Y * m_rB.X * iB;
-            K.ez.x = (-m_rA.Y) * iA - m_rB.Y * iB;
-            K.ex.y = K.ey.x;
-            K.ey.y = mA + mB + m_rA.X * m_rA.X * iA + m_rB.X * m_rB.X * iB;
-            K.ez.y = m_rA.X * iA + m_rB.X * iB;
-            K.ex.z = K.ez.x;
-            K.ey.z = K.ez.y;
-            K.ez.z = iA + iB;
+            K.Ex.x = mA + mB + m_rA.Y * m_rA.Y * iA + m_rB.Y * m_rB.Y * iB;
+            K.Ey.x = (-m_rA.Y) * m_rA.X * iA - m_rB.Y * m_rB.X * iB;
+            K.Ez.x = (-m_rA.Y) * iA - m_rB.Y * iB;
+            K.Ex.y = K.Ey.x;
+            K.Ey.y = mA + mB + m_rA.X * m_rA.X * iA + m_rB.X * m_rB.X * iB;
+            K.Ez.y = m_rA.X * iA + m_rB.X * iB;
+            K.Ex.z = K.Ez.x;
+            K.Ey.z = K.Ez.y;
+            K.Ez.z = iA + iB;
 
             if (m_frequencyHz > 0.0f)
             {
-                K.getInverse22(m_mass);
+                K.GetInverse22(m_mass);
 
                 float invM = iA + iB;
                 float m = invM > 0.0f ? 1.0f / invM : 0.0f;
@@ -236,11 +236,11 @@ namespace Box2D.Dynamics.Joints
                 m_bias = C * h * k * m_gamma;
 
                 invM += m_gamma;
-                m_mass.ez.z = invM != 0.0f ? 1.0f / invM : 0.0f;
+                m_mass.Ez.z = invM != 0.0f ? 1.0f / invM : 0.0f;
             }
             else
             {
-                K.getSymInverse33(m_mass);
+                K.GetSymInverse33(m_mass);
                 m_gamma = 0.0f;
                 m_bias = 0.0f;
             }
@@ -296,7 +296,7 @@ namespace Box2D.Dynamics.Joints
             {
                 float Cdot2 = wB - wA;
 
-                float impulse2 = (-m_mass.ez.z) * (Cdot2 + m_bias + m_gamma * m_impulse.z);
+                float impulse2 = (-m_mass.Ez.z) * (Cdot2 + m_bias + m_gamma * m_impulse.z);
                 m_impulse.z += impulse2;
 
                 wA -= iA * impulse2;
@@ -307,7 +307,7 @@ namespace Box2D.Dynamics.Joints
                 Cdot1.AddLocal(vB).SubLocal(vA).SubLocal(temp);
 
                 Vec2 impulse1 = P;
-                Mat33.mul22ToOutUnsafe(m_mass, Cdot1, impulse1);
+                Mat33.Mul22ToOutUnsafe(m_mass, Cdot1, impulse1);
                 impulse1.NegateLocal();
 
                 m_impulse.x += impulse1.X;
@@ -332,7 +332,7 @@ namespace Box2D.Dynamics.Joints
                 Cdot.set_Renamed(Cdot1.X, Cdot1.Y, Cdot2);
 
                 Vec3 impulse = pool.PopVec3();
-                Mat33.mulToOutUnsafe(m_mass, Cdot, impulse);
+                Mat33.MulToOutUnsafe(m_mass, Cdot, impulse);
                 impulse.negateLocal();
                 m_impulse.addLocal(impulse);
 
@@ -384,15 +384,15 @@ namespace Box2D.Dynamics.Joints
             Vec2 C1 = pool.PopVec2();
             Vec2 P = pool.PopVec2();
 
-            K.ex.x = mA + mB + rA.Y * rA.Y * iA + rB.Y * rB.Y * iB;
-            K.ey.x = (-rA.Y) * rA.X * iA - rB.Y * rB.X * iB;
-            K.ez.x = (-rA.Y) * iA - rB.Y * iB;
-            K.ex.y = K.ey.x;
-            K.ey.y = mA + mB + rA.X * rA.X * iA + rB.X * rB.X * iB;
-            K.ez.y = rA.X * iA + rB.X * iB;
-            K.ex.z = K.ez.x;
-            K.ey.z = K.ez.y;
-            K.ez.z = iA + iB;
+            K.Ex.x = mA + mB + rA.Y * rA.Y * iA + rB.Y * rB.Y * iB;
+            K.Ey.x = (-rA.Y) * rA.X * iA - rB.Y * rB.X * iB;
+            K.Ez.x = (-rA.Y) * iA - rB.Y * iB;
+            K.Ex.y = K.Ey.x;
+            K.Ey.y = mA + mB + rA.X * rA.X * iA + rB.X * rB.X * iB;
+            K.Ez.y = rA.X * iA + rB.X * iB;
+            K.Ex.z = K.Ez.x;
+            K.Ey.z = K.Ez.y;
+            K.Ez.z = iA + iB;
 
             if (m_frequencyHz > 0.0f)
             {
@@ -401,7 +401,7 @@ namespace Box2D.Dynamics.Joints
                 positionError = C1.Length();
                 angularError = 0.0f;
 
-                K.solve22ToOut(C1, P);
+                K.Solve22ToOut(C1, P);
                 P.NegateLocal();
 
                 cA.X -= mA * P.X;
@@ -424,7 +424,7 @@ namespace Box2D.Dynamics.Joints
                 Vec3 impulse = pool.PopVec3();
                 C.set_Renamed(C1.X, C1.Y, C2);
 
-                K.solve33ToOut(C, impulse);
+                K.Solve33ToOut(C, impulse);
                 impulse.negateLocal();
                 P.Set(impulse.x, impulse.y);
 

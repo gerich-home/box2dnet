@@ -484,9 +484,9 @@ namespace Box2D.Dynamics.Joints
                 float k23 = iA * m_a1 + iB * m_a2;
                 float k33 = mA + mB + iA * m_a1 * m_a1 + iB * m_a2 * m_a2;
 
-                m_K.ex.set_Renamed(k11, k12, k13);
-                m_K.ey.set_Renamed(k12, k22, k23);
-                m_K.ez.set_Renamed(k13, k23, k33);
+                m_K.Ex.set_Renamed(k11, k12, k13);
+                m_K.Ey.set_Renamed(k12, k22, k23);
+                m_K.Ez.set_Renamed(k13, k23, k33);
             }
 
             // Compute motor and limit terms.
@@ -629,7 +629,7 @@ namespace Box2D.Dynamics.Joints
                 Vec3 df = pool.PopVec3();
 
                 f1.set_Renamed(m_impulse);
-                m_K.solve33ToOut(Cdot.negateLocal(), df);
+                m_K.Solve33ToOut(Cdot.negateLocal(), df);
                 //Cdot.negateLocal(); not used anymore
                 m_impulse.addLocal(df);
 
@@ -647,11 +647,11 @@ namespace Box2D.Dynamics.Joints
                 Vec2 b = pool.PopVec2();
                 Vec2 f2r = pool.PopVec2();
 
-                temp.Set(m_K.ez.x, m_K.ez.y).MulLocal(m_impulse.z - f1.z);
+                temp.Set(m_K.Ez.x, m_K.Ez.y).MulLocal(m_impulse.z - f1.z);
                 b.Set(Cdot1).NegateLocal().SubLocal(temp);
 
                 temp.Set(f1.x, f1.y);
-                m_K.solve22ToOut(b, f2r);
+                m_K.Solve22ToOut(b, f2r);
                 f2r.AddLocal(temp);
                 m_impulse.x = f2r.X;
                 m_impulse.y = f2r.Y;
@@ -680,7 +680,7 @@ namespace Box2D.Dynamics.Joints
             {
                 // Limit is inactive, just solve the prismatic constraint in block form.
                 Vec2 df = pool.PopVec2();
-                m_K.solve22ToOut(Cdot1.NegateLocal(), df);
+                m_K.Solve22ToOut(Cdot1.NegateLocal(), df);
                 Cdot1.NegateLocal();
 
                 m_impulse.x += df.X;
@@ -708,7 +708,7 @@ namespace Box2D.Dynamics.Joints
                 if (MathUtils.abs(Cdot1.X) > 0.01f || MathUtils.abs(Cdot1.Y) > 0.01f)
                 {
                     // djm note: what's happening here?
-                    Mat33.mul22ToOutUnsafe(m_K, df, temp);
+                    Mat33.Mul22ToOutUnsafe(m_K, df, temp);
                     Cdot1.X += 0.0f;
                 }
 
@@ -810,16 +810,16 @@ namespace Box2D.Dynamics.Joints
                 float k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2;
 
                 Mat33 K = pool.PopMat33();
-                K.ex.set_Renamed(k11, k12, k13);
-                K.ey.set_Renamed(k12, k22, k23);
-                K.ez.set_Renamed(k13, k23, k33);
+                K.Ex.set_Renamed(k11, k12, k13);
+                K.Ey.set_Renamed(k12, k22, k23);
+                K.Ez.set_Renamed(k13, k23, k33);
 
                 Vec3 C = pool.PopVec3();
                 C.x = C1.X;
                 C.y = C1.Y;
                 C.z = C2;
 
-                K.solve33ToOut(C.negateLocal(), impulse);
+                K.Solve33ToOut(C.negateLocal(), impulse);
                 pool.PushVec3(1);
                 pool.PushMat33(1);
             }
