@@ -40,7 +40,7 @@ namespace Box2D.Dynamics
         public Contact ContactList;
         public int ContactCount;
         public ContactFilter ContactFilter;
-        public ContactListener ContactListener;
+        public IContactListener ContactListener;
 
         private readonly World pool;
 

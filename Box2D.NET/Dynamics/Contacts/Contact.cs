@@ -297,7 +297,7 @@ namespace Box2D.Dynamics.Contacts
         // djm pooling
         private readonly Manifold oldManifold = new Manifold();
 
-        public virtual void update(ContactListener listener)
+        public virtual void update(IContactListener listener)
         {
 
             oldManifold.Set(m_manifold);

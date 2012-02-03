@@ -108,8 +108,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Callbacks\ContactFilter.cs" />
     <Compile Include="Callbacks\ContactImpulse.cs" />
-    <Compile Include="Callbacks\ContactListener.cs" />
     <Compile Include="Callbacks\DebugDraw.cs" />
+    <Compile Include="Callbacks\IContactListener.cs" />
     <Compile Include="Callbacks\IDestructionListener.cs" />
     <Compile Include="Callbacks\IPairCallback.cs" />
     <Compile Include="Callbacks\IQueryCallback.cs" />

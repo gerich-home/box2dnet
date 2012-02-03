@@ -157,7 +157,7 @@ namespace Box2D.Dynamics
 	public class Island
 	{
 
-		public ContactListener Listener;
+		public IContactListener Listener;
 
 		public Body[] Bodies;
 		public Contact[] Contacts;
@@ -174,7 +174,7 @@ namespace Box2D.Dynamics
 		public int ContactCapacity;
 		public int JointCapacity;
 
-	    public virtual void Init(int bodyCapacity, int contactCapacity, int jointCapacity, ContactListener listener)
+	    public virtual void Init(int bodyCapacity, int contactCapacity, int jointCapacity, IContactListener listener)
 		{
 			// Console.WriteLine("Initializing Island");
 			BodyCapacity = bodyCapacity;

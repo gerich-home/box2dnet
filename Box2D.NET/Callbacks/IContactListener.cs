@@ -41,7 +41,7 @@ namespace Box2D.Callbacks
     /// </summary>
     /// <warning>You cannot create/destroy Box2D entities inside these callbacks.</warning>
     /// <author>Daniel Murphy</author>
-    public interface ContactListener
+    public interface IContactListener
     {
         /// <summary>
         /// Called when two fixtures begin to touch.

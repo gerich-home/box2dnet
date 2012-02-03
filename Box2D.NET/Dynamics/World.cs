@@ -773,7 +773,7 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Register a contact event listener. The listener is owned by you and must remain in scope.
         /// </summary>
-        virtual public ContactListener ContactListener
+        virtual public IContactListener ContactListener
         {
             set
             {
