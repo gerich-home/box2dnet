@@ -569,9 +569,6 @@ namespace Box2D.Collision.Broadphase
             m_nodeCount--;
         }
 
-        private readonly Vec2 center = new Vec2();
-        private readonly Vec2 delta1 = new Vec2();
-        private readonly Vec2 delta2 = new Vec2();
         private readonly AABB combinedAABB = new AABB();
 
         private void InsertLeaf(int leaf)
