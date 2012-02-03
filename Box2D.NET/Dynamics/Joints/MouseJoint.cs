@@ -182,7 +182,7 @@ namespace Box2D.Dynamics.Joints
             float mass = m_bodyB.Mass;
 
             // Frequency
-            float omega = 2.0f * MathUtils.Pi * m_frequencyHz;
+            float omega = 2.0f * MathUtils.PI * m_frequencyHz;
 
             // Damping coefficient
             float d = 2.0f * mass * m_dampingRatio * omega;

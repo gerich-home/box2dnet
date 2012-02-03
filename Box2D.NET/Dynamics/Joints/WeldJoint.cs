@@ -221,7 +221,7 @@ namespace Box2D.Dynamics.Joints
                 float C = aB - aA - m_referenceAngle;
 
                 // Frequency
-                float omega = 2.0f * MathUtils.Pi * m_frequencyHz;
+                float omega = 2.0f * MathUtils.PI * m_frequencyHz;
 
                 // Damping coefficient
                 float d = 2.0f * m * m_dampingRatio * omega;
