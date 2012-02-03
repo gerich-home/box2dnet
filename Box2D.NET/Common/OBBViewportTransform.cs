@@ -29,160 +29,131 @@ namespace Box2D.Common
     /// Orientated bounding box viewport transform
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public class OBBViewportTransform : IViewportTransform
+    public sealed class OBBViewportTransform : IViewportTransform
     {
         /// <summary>
         /// Gets or sets the transform of the viewport, transforms around the center.
         /// </summary>
-        virtual public Mat22 Transform
+        public Mat22 Transform
         {
             get
             {
-                return box.R;
+                return Box.R;
             }
             set
             {
-                box.R.Set(value);
+                Box.R.Set(value);
             }
         }
 
-        //UPGRADE_NOTE: Respective javadoc comments were merged.  It should be changed in order to comply with .NET documentation conventions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1199'"
-        /// <seealso cref="IViewportTransform.isYFlip()">
-        /// </seealso>
-        /// <seealso cref="IViewportTransform.setYFlip(boolean)">
-        /// </seealso>
-        virtual public bool YFlip
-        {
-            get
-            {
-                return yFlip;
-            }
-            set
-            {
-                this.yFlip = value;
-            }
-        }
+        public bool YFlip { get; set; }
 
         public class OBB
         {
             public readonly Mat22 R = new Mat22();
-            public readonly Vec2 center = new Vec2();
-            public readonly Vec2 extents = new Vec2();
+            public readonly Vec2 Center = new Vec2();
+            public readonly Vec2 Extents = new Vec2();
         }
 
-        protected readonly internal OBB box = new OBB();
-        private bool yFlip = false;
+        readonly internal OBB Box = new OBB();
         private readonly Mat22 yFlipMat = new Mat22(1, 0, 0, -1);
         private readonly Mat22 yFlipMatInv;
 
         public OBBViewportTransform()
         {
+            YFlip = false;
             yFlipMatInv = yFlipMat.Invert();
-            box.R.SetIdentity();
+            Box.R.SetIdentity();
         }
 
-        public virtual void set_Renamed(OBBViewportTransform vpt)
+        public void Set(OBBViewportTransform vpt)
         {
-            box.center.Set(vpt.box.center);
-            box.extents.Set(vpt.box.extents);
-            box.R.Set(vpt.box.R);
-            yFlip = vpt.yFlip;
+            Box.Center.Set(vpt.Box.Center);
+            Box.Extents.Set(vpt.Box.Extents);
+            Box.R.Set(vpt.Box.R);
+            YFlip = vpt.YFlip;
         }
 
-        /// <seealso cref="IViewportTransform.SetCamera">
-        /// </seealso>
-        public virtual void SetCamera(float x, float y, float scale)
+        public void SetCamera(float x, float y, float scale)
         {
-            box.center.Set(x, y);
-            Mat22.CreateScaleTransform(scale, box.R);
+            Box.Center.Set(x, y);
+            Mat22.CreateScaleTransform(scale, Box.R);
         }
 
-        /// <seealso cref="IViewportTransform.getExtents()">
-        /// </seealso>
-        public virtual Vec2 Extents
+        public Vec2 Extents
         {
-            get { return box.extents; }
-            set { box.extents.Set(value); }
+            get { return Box.Extents; }
+            set { Box.Extents.Set(value); }
         }
 
-        /// <seealso cref="IViewportTransform.Center">
-        /// </seealso>
-        public virtual Vec2 Center
+        public Vec2 Center
         {
-            get { return box.center; }
-            set { box.center.Set(value); }
+            get { return Box.Center; }
+            set { Box.Center.Set(value); }
         }
 
-        public virtual void SetCenter(float x, float y)
+        public void SetCenter(float x, float y)
         {
-            box.center.Set(x, y);
+            Box.Center.Set(x, y);
         }
 
         /// <summary>
         /// Multiplies the obb transform by the given transform
         /// </summary>
         /// <param name="argTransform"></param>
-        public virtual void mulByTransform(Mat22 argTransform)
+        public void MulByTransform(Mat22 argTransform)
         {
-            box.R.MulLocal(argTransform);
+            Box.R.MulLocal(argTransform);
         }
 
         // djm pooling
         private readonly Mat22 inv = new Mat22();
 
-        /// <seealso cref="IViewportTransform.GetScreenVectorToWorld">
-        /// </seealso>
-        public virtual void GetScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld)
+        public void GetScreenVectorToWorld(Vec2 argScreen, Vec2 argWorld)
         {
-            inv.Set(box.R);
+            inv.Set(Box.R);
             inv.InvertLocal();
             inv.MulToOut(argScreen, argWorld);
-            if (yFlip)
+            if (YFlip)
             {
                 yFlipMatInv.MulToOut(argWorld, argWorld);
             }
         }
 
-        /// <seealso cref="IViewportTransform.GetWorldVectorToScreen">
-        /// </seealso>
-        public virtual void GetWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen)
+        public void GetWorldVectorToScreen(Vec2 argWorld, Vec2 argScreen)
         {
-            box.R.MulToOut(argWorld, argScreen);
-            if (yFlip)
+            Box.R.MulToOut(argWorld, argScreen);
+            if (YFlip)
             {
                 yFlipMatInv.MulToOut(argScreen, argScreen);
             }
         }
 
-        /// <seealso cref="IViewportTransform.GetWorldToScreen">
-        /// </seealso>
-        public virtual void GetWorldToScreen(Vec2 argWorld, Vec2 argScreen)
+        public void GetWorldToScreen(Vec2 argWorld, Vec2 argScreen)
         {
             argScreen.Set(argWorld);
-            argScreen.SubLocal(box.center);
-            box.R.MulToOut(argScreen, argScreen);
-            if (yFlip)
+            argScreen.SubLocal(Box.Center);
+            Box.R.MulToOut(argScreen, argScreen);
+            if (YFlip)
             {
                 yFlipMat.MulToOut(argScreen, argScreen);
             }
-            argScreen.AddLocal(box.extents);
+            argScreen.AddLocal(Box.Extents);
         }
 
         private readonly Mat22 inv2 = new Mat22();
 
-        /// <seealso cref="IViewportTransform.GetScreenToWorld">
-        /// </seealso>
-        public virtual void GetScreenToWorld(Vec2 argScreen, Vec2 argWorld)
+        public void GetScreenToWorld(Vec2 argScreen, Vec2 argWorld)
         {
             argWorld.Set(argScreen);
-            argWorld.SubLocal(box.extents);
-            box.R.InvertToOut(inv2);
+            argWorld.SubLocal(Box.Extents);
+            Box.R.InvertToOut(inv2);
             inv2.MulToOut(argWorld, argWorld);
-            if (yFlip)
+            if (YFlip)
             {
                 yFlipMatInv.MulToOut(argWorld, argWorld);
             }
-            argWorld.AddLocal(box.center);
+            argWorld.AddLocal(Box.Center);
         }
     }
 }
