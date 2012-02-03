@@ -76,7 +76,7 @@ namespace Box2D.Callbacks
             DynamicTree = 0x0020,
         }
 
-        public virtual DrawFlags Flags { get; set; }
+        public DrawFlags Flags { get; set; }
 
         public virtual IViewportTransform ViewportTranform { get; private set; }
 
