@@ -56,11 +56,11 @@ namespace Box2D.Common
     public class Color3f
     {
 
-        public static readonly Color3f White = new Color3f(1, 1, 1);
-        public static readonly Color3f Black = new Color3f(0, 0, 0);
-        public static readonly Color3f Blue = new Color3f(0, 0, 1);
-        public static readonly Color3f Green = new Color3f(0, 1, 0);
-        public static readonly Color3f Red = new Color3f(1, 0, 0);
+        public static readonly Color3f WHITE = new Color3f(1, 1, 1);
+        public static readonly Color3f BLACK = new Color3f(0, 0, 0);
+        public static readonly Color3f BLUE = new Color3f(0, 0, 1);
+        public static readonly Color3f GREEN = new Color3f(0, 1, 0);
+        public static readonly Color3f RED = new Color3f(1, 0, 0);
 
         public float X;
         public float Y;
