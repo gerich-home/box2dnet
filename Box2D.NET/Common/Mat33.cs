@@ -57,51 +57,51 @@ namespace Box2D.Common
 
         public void SetZero()
         {
-            Ex.setZero();
-            Ey.setZero();
-            Ez.setZero();
+            Ex.SetZero();
+            Ey.SetZero();
+            Ez.SetZero();
         }
 
         // / Multiply a matrix times a vector.
         public static Vec3 Mul(Mat33 a, Vec3 v)
         {
-            return new Vec3(v.x * a.Ex.x + v.y * a.Ey.x + v.z + a.Ez.x, v.x * a.Ex.y + v.y * a.Ey.y + v.z * a.Ez.y, v.x * a.Ex.z + v.y * a.Ey.z + v.z * a.Ez.z);
+            return new Vec3(v.X * a.Ex.X + v.Y * a.Ey.X + v.Z + a.Ez.X, v.X * a.Ex.Y + v.Y * a.Ey.Y + v.Z * a.Ez.Y, v.X * a.Ex.Z + v.Y * a.Ey.Z + v.Z * a.Ez.Z);
         }
 
         public static Vec2 Mul22(Mat33 a, Vec2 v)
         {
-            return new Vec2(a.Ex.x * v.X + a.Ey.x * v.Y, a.Ex.y * v.X + a.Ey.y * v.Y);
+            return new Vec2(a.Ex.X * v.X + a.Ey.X * v.Y, a.Ex.Y * v.X + a.Ey.Y * v.Y);
         }
 
         public static void Mul22ToOut(Mat33 a, Vec2 v, Vec2 result)
         {
-            float tempx = a.Ex.x * v.X + a.Ey.x * v.Y;
-            result.Y = a.Ex.y * v.X + a.Ey.y * v.Y;
+            float tempx = a.Ex.X * v.X + a.Ey.X * v.Y;
+            result.Y = a.Ex.Y * v.X + a.Ey.Y * v.Y;
             result.X = tempx;
         }
 
         public static void Mul22ToOutUnsafe(Mat33 a, Vec2 v, Vec2 result)
         {
             Debug.Assert(v != result);
-            result.Y = a.Ex.y * v.X + a.Ey.y * v.Y;
-            result.X = a.Ex.x * v.X + a.Ey.x * v.Y;
+            result.Y = a.Ex.Y * v.X + a.Ey.Y * v.Y;
+            result.X = a.Ex.X * v.X + a.Ey.X * v.Y;
         }
 
         public static void MulToOut(Mat33 a, Vec3 v, Vec3 result)
         {
-            float tempy = v.x * a.Ex.y + v.y * a.Ey.y + v.z * a.Ez.y;
-            float tempz = v.x * a.Ex.z + v.y * a.Ey.z + v.z * a.Ez.z;
-            result.x = v.x * a.Ex.x + v.y * a.Ey.x + v.z * a.Ez.x;
-            result.y = tempy;
-            result.z = tempz;
+            float tempy = v.X * a.Ex.Y + v.Y * a.Ey.Y + v.Z * a.Ez.Y;
+            float tempz = v.X * a.Ex.Z + v.Y * a.Ey.Z + v.Z * a.Ez.Z;
+            result.X = v.X * a.Ex.X + v.Y * a.Ey.X + v.Z * a.Ez.X;
+            result.Y = tempy;
+            result.Z = tempz;
         }
 
         public static void MulToOutUnsafe(Mat33 a, Vec3 v, Vec3 result)
         {
             Debug.Assert(result != v);
-            result.x = v.x * a.Ex.x + v.y * a.Ey.x + v.z * a.Ez.x;
-            result.y = v.x * a.Ex.y + v.y * a.Ey.y + v.z * a.Ez.y;
-            result.z = v.x * a.Ex.z + v.y * a.Ey.z + v.z * a.Ez.z;
+            result.X = v.X * a.Ex.X + v.Y * a.Ey.X + v.Z * a.Ez.X;
+            result.Y = v.X * a.Ex.Y + v.Y * a.Ey.Y + v.Z * a.Ez.Y;
+            result.Z = v.X * a.Ex.Z + v.Y * a.Ey.Z + v.Z * a.Ez.Z;
         }
 
         /// <summary>
@@ -126,10 +126,10 @@ namespace Box2D.Common
         /// <returns></returns>
         public void Solve22ToOut(Vec2 b, Vec2 result)
         {
-            float a11 = Ex.x;
-            float a12 = Ey.x;
-            float a21 = Ex.y;
-            float a22 = Ey.y;
+            float a11 = Ex.X;
+            float a12 = Ey.X;
+            float a21 = Ex.Y;
+            float a22 = Ey.Y;
             float det = a11 * a22 - a12 * a21;
             if (det != 0.0f)
             {
@@ -162,70 +162,70 @@ namespace Box2D.Common
         public void Solve33ToOut(Vec3 b, Vec3 result)
         {
             Debug.Assert(b != result);
-            Vec3.crossToOutUnsafe(Ey, Ez, result);
-            float det = Vec3.dot(Ex, result);
+            Vec3.CrossToOutUnsafe(Ey, Ez, result);
+            float det = Vec3.Dot(Ex, result);
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
-            Vec3.crossToOutUnsafe(Ey, Ez, result);
-            float x = det * Vec3.dot(b, result);
-            Vec3.crossToOutUnsafe(b, Ez, result);
-            float y = det * Vec3.dot(Ex, result);
-            Vec3.crossToOutUnsafe(Ey, b, result);
-            float z = det * Vec3.dot(Ex, result);
-            result.x = x;
-            result.y = y;
-            result.z = z;
+            Vec3.CrossToOutUnsafe(Ey, Ez, result);
+            float x = det * Vec3.Dot(b, result);
+            Vec3.CrossToOutUnsafe(b, Ez, result);
+            float y = det * Vec3.Dot(Ex, result);
+            Vec3.CrossToOutUnsafe(Ey, b, result);
+            float z = det * Vec3.Dot(Ex, result);
+            result.X = x;
+            result.Y = y;
+            result.Z = z;
         }
 
         public void GetInverse22(Mat33 m)
         {
-            float a = Ex.x, b = Ey.x, c = Ex.y, d = Ey.y;
+            float a = Ex.X, b = Ey.X, c = Ex.Y, d = Ey.Y;
             float det = a * d - b * c;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
 
-            m.Ex.x = det * d;
-            m.Ey.x = (-det) * b;
-            m.Ex.z = 0.0f;
-            m.Ex.y = (-det) * c;
-            m.Ey.y = det * a;
-            m.Ey.z = 0.0f;
-            m.Ez.x = 0.0f;
-            m.Ez.y = 0.0f;
-            m.Ez.z = 0.0f;
+            m.Ex.X = det * d;
+            m.Ey.X = (-det) * b;
+            m.Ex.Z = 0.0f;
+            m.Ex.Y = (-det) * c;
+            m.Ey.Y = det * a;
+            m.Ey.Z = 0.0f;
+            m.Ez.X = 0.0f;
+            m.Ez.Y = 0.0f;
+            m.Ez.Z = 0.0f;
         }
 
         // / Returns the zero matrix if singular.
         public void GetSymInverse33(Mat33 m)
         {
-            float bx = Ey.y * Ez.z - Ey.z * Ez.y;
-            float by = Ey.z * Ez.x - Ey.x * Ez.z;
-            float bz = Ey.x * Ez.y - Ey.y * Ez.x;
-            float det = Ex.x * bx + Ex.y * by + Ex.z * bz;
+            float bx = Ey.Y * Ez.Z - Ey.Z * Ez.Y;
+            float by = Ey.Z * Ez.X - Ey.X * Ez.Z;
+            float bz = Ey.X * Ez.Y - Ey.Y * Ez.X;
+            float det = Ex.X * bx + Ex.Y * by + Ex.Z * bz;
             if (det != 0.0f)
             {
                 det = 1.0f / det;
             }
 
-            float a11 = Ex.x, a12 = Ey.x, a13 = Ez.x;
-            float a22 = Ey.y, a23 = Ez.y;
-            float a33 = Ez.z;
+            float a11 = Ex.X, a12 = Ey.X, a13 = Ez.X;
+            float a22 = Ey.Y, a23 = Ez.Y;
+            float a33 = Ez.Z;
 
-            m.Ex.x = det * (a22 * a33 - a23 * a23);
-            m.Ex.y = det * (a13 * a23 - a12 * a33);
-            m.Ex.z = det * (a12 * a23 - a13 * a22);
+            m.Ex.X = det * (a22 * a33 - a23 * a23);
+            m.Ex.Y = det * (a13 * a23 - a12 * a33);
+            m.Ex.Z = det * (a12 * a23 - a13 * a22);
 
-            m.Ey.x = m.Ex.y;
-            m.Ey.y = det * (a11 * a33 - a13 * a13);
-            m.Ey.z = det * (a13 * a12 - a11 * a23);
+            m.Ey.X = m.Ex.Y;
+            m.Ey.Y = det * (a11 * a33 - a13 * a13);
+            m.Ey.Z = det * (a13 * a12 - a11 * a23);
 
-            m.Ez.x = m.Ex.z;
-            m.Ez.y = m.Ey.z;
-            m.Ez.z = det * (a11 * a22 - a12 * a12);
+            m.Ez.X = m.Ex.Z;
+            m.Ez.Y = m.Ey.Z;
+            m.Ez.Z = det * (a11 * a22 - a12 * a12);
         }
 
         public override int GetHashCode()

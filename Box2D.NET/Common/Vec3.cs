@@ -32,102 +32,102 @@ namespace Box2D.Common
     [Serializable]
     public class Vec3
     {
-        private const long serialVersionUID = 1L;
-
-        public float x, y, z;
+        public float X;
+        public float Y;
+        public float Z;
 
         public Vec3()
         {
-            x = y = z = 0f;
+            X = Y = Z = 0f;
         }
 
         public Vec3(float argX, float argY, float argZ)
         {
-            x = argX;
-            y = argY;
-            z = argZ;
+            X = argX;
+            Y = argY;
+            Z = argZ;
         }
 
         public Vec3(Vec3 argCopy)
         {
-            x = argCopy.x;
-            y = argCopy.y;
-            z = argCopy.z;
+            X = argCopy.X;
+            Y = argCopy.Y;
+            Z = argCopy.Z;
         }
 
-        public Vec3 set_Renamed(Vec3 argVec)
+        public Vec3 Set(Vec3 argVec)
         {
-            x = argVec.x;
-            y = argVec.y;
-            z = argVec.z;
+            X = argVec.X;
+            Y = argVec.Y;
+            Z = argVec.Z;
             return this;
         }
 
-        public Vec3 set_Renamed(float argX, float argY, float argZ)
+        public Vec3 Set(float argX, float argY, float argZ)
         {
-            x = argX;
-            y = argY;
-            z = argZ;
+            X = argX;
+            Y = argY;
+            Z = argZ;
             return this;
         }
 
-        public Vec3 addLocal(Vec3 argVec)
+        public Vec3 AddLocal(Vec3 argVec)
         {
-            x += argVec.x;
-            y += argVec.y;
-            z += argVec.z;
+            X += argVec.X;
+            Y += argVec.Y;
+            Z += argVec.Z;
             return this;
         }
 
-        public Vec3 add(Vec3 argVec)
+        public Vec3 Add(Vec3 argVec)
         {
-            return new Vec3(x + argVec.x, y + argVec.y, z + argVec.z);
+            return new Vec3(X + argVec.X, Y + argVec.Y, Z + argVec.Z);
         }
 
-        public Vec3 subLocal(Vec3 argVec)
+        public Vec3 SubLocal(Vec3 argVec)
         {
-            x -= argVec.x;
-            y -= argVec.y;
-            z -= argVec.z;
+            X -= argVec.X;
+            Y -= argVec.Y;
+            Z -= argVec.Z;
             return this;
         }
 
-        public Vec3 sub(Vec3 argVec)
+        public Vec3 Sub(Vec3 argVec)
         {
-            return new Vec3(x - argVec.x, y - argVec.y, z - argVec.z);
+            return new Vec3(X - argVec.X, Y - argVec.Y, Z - argVec.Z);
         }
 
-        public Vec3 mulLocal(float argScalar)
+        public Vec3 MulLocal(float argScalar)
         {
-            x *= argScalar;
-            y *= argScalar;
-            z *= argScalar;
+            X *= argScalar;
+            Y *= argScalar;
+            Z *= argScalar;
             return this;
         }
 
-        public Vec3 mul(float argScalar)
+        public Vec3 Mul(float argScalar)
         {
-            return new Vec3(x * argScalar, y * argScalar, z * argScalar);
+            return new Vec3(X * argScalar, Y * argScalar, Z * argScalar);
         }
 
-        public Vec3 negate()
+        public Vec3 Negate()
         {
-            return new Vec3(-x, -y, -z);
+            return new Vec3(-X, -Y, -Z);
         }
 
-        public Vec3 negateLocal()
+        public Vec3 NegateLocal()
         {
-            x = -x;
-            y = -y;
-            z = -z;
+            X = -X;
+            Y = -Y;
+            Z = -Z;
             return this;
         }
 
-        public void setZero()
+        public void SetZero()
         {
-            x = 0;
-            y = 0;
-            z = 0;
+            X = 0;
+            Y = 0;
+            Z = 0;
         }
 
         public Vec3 Clone()
@@ -137,7 +137,7 @@ namespace Box2D.Common
 
         public override String ToString()
         {
-            return "(" + x + "," + y + "," + z + ")";
+            return string.Format("({0},{1},{2})", X, Y, Z);
         }
 
         private static int FloatToIntBits(float number)
@@ -147,11 +147,11 @@ namespace Box2D.Common
 
         public override int GetHashCode()
         {
-            int prime = 31;
+            const int prime = 31;
             int result = 1;
-            result = prime * result + FloatToIntBits(x);
-            result = prime * result + FloatToIntBits(y);
-            result = prime * result + FloatToIntBits(z);
+            result = prime * result + FloatToIntBits(X);
+            result = prime * result + FloatToIntBits(Y);
+            result = prime * result + FloatToIntBits(Z);
             return result;
         }
 
@@ -164,41 +164,41 @@ namespace Box2D.Common
             if (GetType() != obj.GetType())
                 return false;
             Vec3 other = (Vec3)obj;
-            if (FloatToIntBits(x) != FloatToIntBits(other.x))
+            if (FloatToIntBits(X) != FloatToIntBits(other.X))
                 return false;
-            if (FloatToIntBits(y) != FloatToIntBits(other.y))
+            if (FloatToIntBits(Y) != FloatToIntBits(other.Y))
                 return false;
-            if (FloatToIntBits(z) != FloatToIntBits(other.z))
+            if (FloatToIntBits(Z) != FloatToIntBits(other.Z))
                 return false;
             return true;
         }
 
-        public static float dot(Vec3 a, Vec3 b)
+        public static float Dot(Vec3 a, Vec3 b)
         {
-            return a.x * b.x + a.y * b.y + a.z * b.z;
+            return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
         }
 
-        public static Vec3 cross(Vec3 a, Vec3 b)
+        public static Vec3 Cross(Vec3 a, Vec3 b)
         {
-            return new Vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+            return new Vec3(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X);
         }
 
-        public static void crossToOut(Vec3 a, Vec3 b, Vec3 out_Renamed)
+        public static void CrossToOut(Vec3 a, Vec3 b, Vec3 result)
         {
-            float tempy = a.z * b.x - a.x * b.z;
-            float tempz = a.x * b.y - a.y * b.x;
-            out_Renamed.x = a.y * b.z - a.z * b.y;
-            out_Renamed.y = tempy;
-            out_Renamed.z = tempz;
+            float tempy = a.Z * b.X - a.X * b.Z;
+            float tempz = a.X * b.Y - a.Y * b.X;
+            result.X = a.Y * b.Z - a.Z * b.Y;
+            result.Y = tempy;
+            result.Z = tempz;
         }
 
-        public static void crossToOutUnsafe(Vec3 a, Vec3 b, Vec3 out_Renamed)
+        public static void CrossToOutUnsafe(Vec3 a, Vec3 b, Vec3 result)
         {
-            Debug.Assert(out_Renamed != b);
-            Debug.Assert(out_Renamed != a);
-            out_Renamed.x = a.y * b.z - a.z * b.y;
-            out_Renamed.y = a.z * b.x - a.x * b.z;
-            out_Renamed.z = a.x * b.y - a.y * b.x;
+            Debug.Assert(result != b);
+            Debug.Assert(result != a);
+            result.X = a.Y * b.Z - a.Z * b.Y;
+            result.Y = a.Z * b.X - a.X * b.Z;
+            result.Z = a.X * b.Y - a.Y * b.X;
         }
     }
 }
