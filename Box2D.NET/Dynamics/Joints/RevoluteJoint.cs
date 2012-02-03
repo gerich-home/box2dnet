@@ -498,7 +498,7 @@ namespace Box2D.Dynamics.Joints
             return inv_dt * m_impulse.z;
         }
 
-        virtual public float JointAngle
+        public float JointAngle
         {
             get
             {
@@ -508,7 +508,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float JointSpeed
+        public float JointSpeed
         {
             get
             {
@@ -518,7 +518,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public bool MotorEnabled
+        public bool MotorEnabled
         {
             get
             {
@@ -526,19 +526,19 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public virtual void enableMotor(bool flag)
+        public void enableMotor(bool flag)
         {
             m_bodyA.Awake = true;
             m_bodyB.Awake = true;
             m_enableMotor = flag;
         }
 
-        public virtual float getMotorTorque(float inv_dt)
+        public float getMotorTorque(float inv_dt)
         {
             return m_motorImpulse * inv_dt;
         }
 
-        virtual public float MotorSpeed
+        public float MotorSpeed
         {
             set
             {
@@ -548,7 +548,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float MaxMotorTorque
+        public float MaxMotorTorque
         {
             set
             {
@@ -558,7 +558,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public bool LimitEnabled
+        public bool LimitEnabled
         {
             get
             {
@@ -566,7 +566,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public virtual void enableLimit(bool flag)
+        public void enableLimit(bool flag)
         {
             if (flag != m_enableLimit)
             {
@@ -577,7 +577,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float LowerLimit
+        public float LowerLimit
         {
             get
             {
@@ -585,7 +585,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float UpperLimit
+        public float UpperLimit
         {
             get
             {
@@ -593,7 +593,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public virtual void setLimits(float lower, float upper)
+        public void setLimits(float lower, float upper)
         {
             Debug.Assert(lower <= upper);
             if (lower != m_lowerAngle || upper != m_upperAngle)

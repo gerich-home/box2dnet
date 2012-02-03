@@ -101,7 +101,7 @@ namespace Box2D.Dynamics.Joints
             m_bias = 0.0f;
         }
 
-        virtual public float Frequency
+        public float Frequency
         {
             get
             {
@@ -113,7 +113,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float Length
+        public float Length
         {
             get
             {
@@ -125,7 +125,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float DampingRatio
+        public float DampingRatio
         {
             get
             {
@@ -137,7 +137,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public Vec2 LocalAnchorA
+        public Vec2 LocalAnchorA
         {
             get
             {
@@ -145,7 +145,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public Vec2 LocalAnchorB
+        public Vec2 LocalAnchorB
         {
             get
             {

@@ -101,7 +101,7 @@ namespace Box2D.Dynamics.Joints
             return invDt * 0.0f;
         }
 
-        virtual public Vec2 Target
+        public Vec2 Target
         {
             get
             {
@@ -120,7 +120,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Gets or sets the maximum force in Newtons.
         /// </summary>
-        virtual public float MaxForce
+        public float MaxForce
         {
             get
             {
@@ -135,7 +135,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Gets or sets the frequency in Hertz.
         /// </summary>
-        virtual public float Frequency
+        public float Frequency
         {
             get
             {
@@ -150,7 +150,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Gets or sets the damping ratio (dimensionless).
         /// </summary>
-        virtual public float DampingRatio
+        public float DampingRatio
         {
             get
             {

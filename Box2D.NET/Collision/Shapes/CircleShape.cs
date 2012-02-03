@@ -96,7 +96,7 @@ namespace Box2D.Collision.Shapes
         /// Get the vertex count.
         /// </summary>
         /// <returns></returns>
-        virtual public int VertexCount
+        public int VertexCount
         {
             get
             {

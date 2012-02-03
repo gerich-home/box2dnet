@@ -34,7 +34,7 @@ namespace Box2D.Collision
     public class AABB
     {
         /// <summary>Verify that the bounds are sorted </summary>
-        virtual public bool Valid
+        public bool Valid
         {
             get
             {
@@ -57,7 +57,7 @@ namespace Box2D.Collision
         /// Get the center of the AABB
         /// </summary>
         /// <returns></returns>
-        virtual public Vec2 Center
+        public Vec2 Center
         {
             get
             {
@@ -72,7 +72,7 @@ namespace Box2D.Collision
         /// Get the extents of the AABB (half-widths).
         /// </summary>
         /// <returns></returns>
-        virtual public Vec2 Extents
+        public Vec2 Extents
         {
             get
             {
@@ -87,7 +87,7 @@ namespace Box2D.Collision
         /// Gets the perimeter length
         /// </summary>
         /// <returns></returns>
-        virtual public float Perimeter
+        public float Perimeter
         {
             get
             {

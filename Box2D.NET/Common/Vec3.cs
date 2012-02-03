@@ -55,7 +55,7 @@ namespace Box2D.Common
             z = argCopy.z;
         }
 
-        public virtual Vec3 set_Renamed(Vec3 argVec)
+        public Vec3 set_Renamed(Vec3 argVec)
         {
             x = argVec.x;
             y = argVec.y;
@@ -63,7 +63,7 @@ namespace Box2D.Common
             return this;
         }
 
-        public virtual Vec3 set_Renamed(float argX, float argY, float argZ)
+        public Vec3 set_Renamed(float argX, float argY, float argZ)
         {
             x = argX;
             y = argY;
@@ -71,7 +71,7 @@ namespace Box2D.Common
             return this;
         }
 
-        public virtual Vec3 addLocal(Vec3 argVec)
+        public Vec3 addLocal(Vec3 argVec)
         {
             x += argVec.x;
             y += argVec.y;
@@ -79,12 +79,12 @@ namespace Box2D.Common
             return this;
         }
 
-        public virtual Vec3 add(Vec3 argVec)
+        public Vec3 add(Vec3 argVec)
         {
             return new Vec3(x + argVec.x, y + argVec.y, z + argVec.z);
         }
 
-        public virtual Vec3 subLocal(Vec3 argVec)
+        public Vec3 subLocal(Vec3 argVec)
         {
             x -= argVec.x;
             y -= argVec.y;
@@ -92,12 +92,12 @@ namespace Box2D.Common
             return this;
         }
 
-        public virtual Vec3 sub(Vec3 argVec)
+        public Vec3 sub(Vec3 argVec)
         {
             return new Vec3(x - argVec.x, y - argVec.y, z - argVec.z);
         }
 
-        public virtual Vec3 mulLocal(float argScalar)
+        public Vec3 mulLocal(float argScalar)
         {
             x *= argScalar;
             y *= argScalar;
@@ -105,17 +105,17 @@ namespace Box2D.Common
             return this;
         }
 
-        public virtual Vec3 mul(float argScalar)
+        public Vec3 mul(float argScalar)
         {
             return new Vec3(x * argScalar, y * argScalar, z * argScalar);
         }
 
-        public virtual Vec3 negate()
+        public Vec3 negate()
         {
             return new Vec3(-x, -y, -z);
         }
 
-        public virtual Vec3 negateLocal()
+        public Vec3 negateLocal()
         {
             x = -x;
             y = -y;
@@ -123,7 +123,7 @@ namespace Box2D.Common
             return this;
         }
 
-        public virtual void setZero()
+        public void setZero()
         {
             x = 0;
             y = 0;

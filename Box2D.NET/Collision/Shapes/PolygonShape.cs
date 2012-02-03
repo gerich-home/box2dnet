@@ -34,7 +34,7 @@ namespace Box2D.Collision.Shapes
     /// A convex polygon shape. Polygons have a maximum number of vertices equal to _maxPolygonVertices.
     /// In most cases you should not need many vertices for a convex polygon.
     /// </summary>
-    public sealed class PolygonShape : Shape
+    public class PolygonShape : Shape
     {
         /// <summary>
         /// Dump lots of debug information.

@@ -35,7 +35,7 @@ namespace Box2D.Pooling.Arrays
     {
         private readonly Dictionary<int, float[]> map = new Dictionary<int, float[]>();
 
-        public virtual float[] Get(int argLength)
+        public float[] Get(int argLength)
         {
             Debug.Assert(argLength > 0);
 
@@ -48,7 +48,7 @@ namespace Box2D.Pooling.Arrays
             return map[argLength];
         }
 
-        protected internal virtual float[] GetInitializedArray(int argLength)
+        protected internal float[] GetInitializedArray(int argLength)
         {
             return new float[argLength];
         }

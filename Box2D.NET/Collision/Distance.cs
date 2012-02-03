@@ -46,7 +46,7 @@ namespace Box2D.Collision
         /// GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
         /// </summary>
         //UPGRADE_NOTE: The access modifier for this class or class field has been changed in order to prevent compilation errors due to the visibility level. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1296'"
-        private sealed class SimplexVertex
+        private class SimplexVertex
         {
             public readonly Vec2 WA = new Vec2(); // support point in shapeA
             public readonly Vec2 WB = new Vec2(); // support point in shapeB
@@ -70,7 +70,7 @@ namespace Box2D.Collision
         /// Used to warm start Distance. Set count to zero on first call.
         /// </summary>
         /// <author>daniel</author>
-        public sealed class SimplexCache
+        public class SimplexCache
         {
             /// <summary>
             /// length or area
@@ -109,7 +109,7 @@ namespace Box2D.Collision
             }
         }
 
-        private sealed class Simplex
+        private class Simplex
         {
             private readonly SimplexVertex m_v1 = new SimplexVertex();
             private readonly SimplexVertex m_v2 = new SimplexVertex();
@@ -536,7 +536,7 @@ namespace Box2D.Collision
         /// just do assignments with m_vertices, instead of copying stuff over
         /// </summary>
         /// <author>daniel</author>
-        public sealed class DistanceProxy
+        public class DistanceProxy
         {
             /// <summary>
             ///  Get the vertex count.

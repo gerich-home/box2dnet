@@ -365,7 +365,7 @@ namespace Box2D.Common
         /// <summary>
         /// True if the vector represents a pair of valid, non-infinite floating point numbers.
         /// </summary>
-        virtual public bool Valid
+        public bool Valid
         {
             get
             {

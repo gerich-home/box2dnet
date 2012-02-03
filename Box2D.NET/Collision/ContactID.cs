@@ -66,7 +66,7 @@ namespace Box2D.Collision
         public sbyte TypeA;
         public sbyte TypeB;
 
-        virtual public int Key
+        public int Key
         {
             get
             {
@@ -75,7 +75,7 @@ namespace Box2D.Collision
             }
         }
 
-        public virtual bool IsEqual(ContactID cid)
+        public bool IsEqual(ContactID cid)
         {
             return Key == cid.Key;
         }
@@ -89,7 +89,7 @@ namespace Box2D.Collision
             Set(c);
         }
 
-        public virtual void Set(ContactID c)
+        public void Set(ContactID c)
         {
             IndexA = c.IndexA;
             IndexB = c.IndexA;
@@ -97,7 +97,7 @@ namespace Box2D.Collision
             TypeB = c.TypeB;
         }
 
-        public virtual void Flip()
+        public void Flip()
         {
             sbyte tempA = IndexA;
             IndexA = IndexB;
@@ -110,7 +110,7 @@ namespace Box2D.Collision
         /// <summary>
         ///  zeros out the data
         /// </summary>
-        public virtual void Zero()
+        public void Zero()
         {
             IndexA = 0;
             IndexB = 0;

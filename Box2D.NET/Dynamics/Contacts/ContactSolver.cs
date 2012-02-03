@@ -188,7 +188,7 @@ namespace Box2D.Dynamics.Contacts
         private readonly Vec2 P = new Vec2();
         private readonly Vec2 temp = new Vec2();
 
-        public virtual void warmStart()
+        public void warmStart()
         {
             // Warm start.
             for (int i = 0; i < m_count; ++i)
@@ -819,7 +819,7 @@ namespace Box2D.Dynamics.Contacts
             }
         }
 
-        public virtual void storeImpulses()
+        public void storeImpulses()
         {
             for (int i = 0; i < m_count; i++)
             {
@@ -967,7 +967,7 @@ namespace Box2D.Dynamics.Contacts
         }
 
         // Sequential position solver for position constraints.
-        public virtual bool solveTOIPositionConstraints(int toiIndexA, int toiIndexB)
+        public bool solveTOIPositionConstraints(int toiIndexA, int toiIndexB)
         {
             float minSeparation = 0.0f;
 
@@ -1084,7 +1084,7 @@ namespace Box2D.Dynamics.Contacts
         private readonly Vec2 planePoint = new Vec2();
         private readonly Vec2 clipPoint = new Vec2();
 
-        public virtual void initialize(ContactPositionConstraint pc, Transform xfA, Transform xfB, int index)
+        public void initialize(ContactPositionConstraint pc, Transform xfA, Transform xfB, int index)
         {
             Debug.Assert(pc.pointCount > 0);
 

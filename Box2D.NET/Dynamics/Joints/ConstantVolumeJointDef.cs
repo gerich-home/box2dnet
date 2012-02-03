@@ -56,7 +56,7 @@ namespace Box2D.Dynamics.Joints
         /// Adds a body to the group
         /// </summary>
         /// <param name="argBody"></param>
-        public virtual void addBody(Body argBody)
+        public void addBody(Body argBody)
         {
             bodies.Add(argBody);
             if (bodies.Count == 1)
@@ -73,7 +73,7 @@ namespace Box2D.Dynamics.Joints
         /// Adds a body and the pre-made distance joint.
         /// Should only be used for deserialization.
         /// </summary>
-        public virtual void addBodyAndJoint(Body argBody, DistanceJoint argJoint)
+        public void addBodyAndJoint(Body argBody, DistanceJoint argJoint)
         {
             addBody(argBody);
             if (joints == null)

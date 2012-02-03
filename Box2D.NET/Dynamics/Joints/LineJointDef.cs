@@ -88,7 +88,7 @@ namespace Box2D.Dynamics.Joints
             motorSpeed = 0f;
         }
 
-        public virtual void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
+        public void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
         {
             bodyA = b1;
             bodyB = b2;

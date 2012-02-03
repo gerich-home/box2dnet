@@ -29,7 +29,7 @@ namespace Box2D.Common
     /// Orientated bounding box viewport transform
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public sealed class OBBViewportTransform : IViewportTransform
+    public class OBBViewportTransform : IViewportTransform
     {
         /// <summary>
         /// Gets or sets the transform of the viewport, transforms around the center.

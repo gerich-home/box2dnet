@@ -37,7 +37,7 @@ namespace Box2D.Pooling.Arrays
     {
         private readonly Dictionary<int, Vec2[]> map = new Dictionary<int, Vec2[]>();
 
-        public virtual Vec2[] Get(int argLength)
+        public Vec2[] Get(int argLength)
         {
             Debug.Assert(argLength > 0);
 
@@ -50,7 +50,7 @@ namespace Box2D.Pooling.Arrays
             return map[argLength];
         }
 
-        protected internal virtual Vec2[] GetInitializedArray(int argLength)
+        protected internal Vec2[] GetInitializedArray(int argLength)
         {
             var ray = new Vec2[argLength];
             for (int i = 0; i < ray.Length; i++)

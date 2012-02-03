@@ -867,7 +867,7 @@ namespace Box2D.Collision
 
         // Compute contact points for edge versus circle.
         // This accounts for edge connectivity.
-        public virtual void CollideEdgeAndCircle(Manifold manifold, EdgeShape edgeA, Transform xfA, CircleShape circleB, Transform xfB)
+        public void CollideEdgeAndCircle(Manifold manifold, EdgeShape edgeA, Transform xfA, CircleShape circleB, Transform xfB)
         {
             manifold.PointCount = 0;
 
@@ -1003,7 +1003,7 @@ namespace Box2D.Collision
 
         private readonly EPCollider collider = new EPCollider();
 
-        public virtual void CollideEdgeAndPolygon(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
+        public void CollideEdgeAndPolygon(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
         {
             collider.Collide(manifold, edgeA, xfA, polygonB, xfB);
         }
@@ -1031,7 +1031,7 @@ namespace Box2D.Collision
                 id = new ContactID();
             }
 
-            public virtual void Set(ClipVertex cv)
+            public void Set(ClipVertex cv)
             {
                 v.Set(cv.v);
                 id.Set(cv.id);
@@ -1166,7 +1166,7 @@ namespace Box2D.Collision
             private readonly EPAxis edgeAxis = new EPAxis();
             private readonly EPAxis polygonAxis = new EPAxis();
 
-            public virtual void Collide(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
+            public void Collide(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
             {
 
                 Transform.mulTransToOutUnsafe(xfA, xfB, Xf);
@@ -1554,7 +1554,7 @@ namespace Box2D.Collision
             }
 
 
-            public virtual void ComputeEdgeSeparation(EPAxis axis)
+            public void ComputeEdgeSeparation(EPAxis axis)
             {
                 axis.type = EPAxis.Type.EdgeA;
                 axis.Index = Front ? 0 : 1;
@@ -1573,7 +1573,7 @@ namespace Box2D.Collision
             private readonly Vec2 perp = new Vec2();
             private readonly Vec2 n = new Vec2();
 
-            public virtual void ComputePolygonSeparation(EPAxis axis)
+            public void ComputePolygonSeparation(EPAxis axis)
             {
                 axis.type = EPAxis.Type.Unknown;
                 axis.Index = -1;

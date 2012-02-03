@@ -46,13 +46,13 @@ namespace Box2D.Collision.Broadphase
 	    /// Get the number of proxies.
 	    /// </summary>
 	    /// <returns></returns>
-	    public virtual int ProxyCount { get; private set; }
+	    public int ProxyCount { get; private set; }
 
 	    /// <summary>
 		/// Get the height of the embedded tree.
 		/// </summary>
 		/// <returns></returns>
-		virtual public int TreeHeight
+		public int TreeHeight
 		{
 			get
 			{
@@ -60,7 +60,7 @@ namespace Box2D.Collision.Broadphase
 			}
 		}
 
-		virtual public int TreeBalance
+		public int TreeBalance
 		{
 			get
 			{
@@ -68,7 +68,7 @@ namespace Box2D.Collision.Broadphase
 			}
 		}
 
-		virtual public float TreeQuality
+		public float TreeQuality
 		{
 			get
 			{
@@ -150,22 +150,22 @@ namespace Box2D.Collision.Broadphase
 			}
 		}
 
-		public virtual void TouchProxy(int proxyId)
+		public void TouchProxy(int proxyId)
 		{
 			BufferMove(proxyId);
 		}
 
-		public virtual object GetUserData(int proxyId)
+		public object GetUserData(int proxyId)
 		{
 			return m_tree.GetUserData(proxyId);
 		}
 
-		public virtual AABB GetFatAABB(int proxyId)
+		public AABB GetFatAABB(int proxyId)
 		{
 			return m_tree.GetFatAABB(proxyId);
 		}
 
-		public virtual bool TestOverlap(int proxyIdA, int proxyIdB)
+		public bool TestOverlap(int proxyIdA, int proxyIdB)
 		{
 			// return AABB.testOverlap(proxyA.aabb, proxyB.aabb);
 			var a = m_tree.GetFatAABB(proxyIdA);
@@ -183,7 +183,7 @@ namespace Box2D.Collision.Broadphase
 			return true;
 		}
 
-		public virtual void DrawTree(DebugDraw argDraw)
+		public void DrawTree(DebugDraw argDraw)
 		{
 			m_tree.DrawTree(argDraw);
 		}

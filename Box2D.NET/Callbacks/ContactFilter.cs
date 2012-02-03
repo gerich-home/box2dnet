@@ -46,7 +46,7 @@ namespace Box2D.Callbacks
         /// <param name="fixtureA"></param>
         /// <param name="fixtureB"></param>
         /// <returns></returns>
-        public virtual bool ShouldCollide(Fixture fixtureA, Fixture fixtureB)
+        public bool ShouldCollide(Fixture fixtureA, Fixture fixtureB)
         {
             var filterA = fixtureA.FilterData;
             var filterB = fixtureB.FilterData;

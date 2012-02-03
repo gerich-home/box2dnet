@@ -41,18 +41,18 @@ namespace Box2D.Pooling.Stacks
             size = initialSize;
         }
 
-        public virtual void Reset()
+        public void Reset()
         {
             position = 0;
         }
 
-        public virtual int Pop()
+        public int Pop()
         {
             Debug.Assert(position > 0);
             return stack[--position];
         }
 
-        public virtual void Push(int i)
+        public void Push(int i)
         {
             if (position == size)
             {
@@ -64,7 +64,7 @@ namespace Box2D.Pooling.Stacks
             stack[position++] = i;
         }
 
-        virtual public int Count
+        public int Count
         {
             get
             {

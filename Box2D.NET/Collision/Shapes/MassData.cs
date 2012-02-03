@@ -92,7 +92,7 @@ namespace Box2D.Collision.Shapes
             Center = md.Center.Clone();
         }
 
-        public virtual void Set(MassData md)
+        public void Set(MassData md)
         {
             Mass = md.Mass;
             I = md.I;
@@ -102,7 +102,7 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Return a copy of this object.
         /// </summary>
-        public virtual MassData Clone()
+        public MassData Clone()
         {
             return new MassData(this);
         }

@@ -119,7 +119,7 @@
 //            return 0.0f;
 //        }
 
-//        virtual public float JointTranslation
+//        public float JointTranslation
 //        {
 //            get
 //            {
@@ -140,7 +140,7 @@
 //            }
 //        }
 
-//        virtual public float JointSpeed
+//        public float JointSpeed
 //        {
 //            get
 //            {
@@ -185,7 +185,7 @@
 //            }
 //        }
 
-//        virtual public bool LimitEnabled
+//        public bool LimitEnabled
 //        {
 //            get
 //            {
@@ -193,7 +193,7 @@
 //            }
 //        }
 
-//        virtual public float LowerLimit
+//        public float LowerLimit
 //        {
 //            get
 //            {
@@ -201,7 +201,7 @@
 //            }
 //        }
 
-//        virtual public float UpperLimit
+//        public float UpperLimit
 //        {
 //            get
 //            {
@@ -209,7 +209,7 @@
 //            }
 //        }
 
-//        virtual public bool MotorEnabled
+//        public bool MotorEnabled
 //        {
 //            get
 //            {
@@ -217,7 +217,7 @@
 //            }
 //        }
 
-//        virtual public float MotorSpeed
+//        public float MotorSpeed
 //        {
 //            get
 //            {
@@ -231,7 +231,7 @@
 //            }
 //        }
 
-//        virtual public float MaxMotorForce
+//        public float MaxMotorForce
 //        {
 //            get
 //            {
@@ -245,7 +245,7 @@
 //            }
 //        }
 
-//        virtual public float MotorForce
+//        public float MotorForce
 //        {
 //            get
 //            {
@@ -253,14 +253,14 @@
 //            }
 //        }
 
-//        public virtual void EnableLimit(bool flag)
+//        public void EnableLimit(bool flag)
 //        {
 //            m_bodyA.Awake = true;
 //            m_bodyB.Awake = true;
 //            m_enableLimit = flag;
 //        }
 
-//        public virtual void setLimits(float lower, float upper)
+//        public void setLimits(float lower, float upper)
 //        {
 //            Debug.Assert(lower <= upper);
 //            m_bodyA.Awake = true;
@@ -269,7 +269,7 @@
 //            m_upperTranslation = upper;
 //        }
 
-//        public virtual void EnableMotor(bool flag)
+//        public void EnableMotor(bool flag)
 //        {
 //            m_bodyA.Awake = true;
 //            m_bodyB.Awake = true;
@@ -277,7 +277,7 @@
 //        }
 
 //        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.initVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
-//        public virtual void initVelocityConstraints(TimeStep step)
+//        public void initVelocityConstraints(TimeStep step)
 //        {
 //            Body b1 = m_bodyA;
 //            Body b2 = m_bodyB;
@@ -414,7 +414,7 @@
 //        }
 
 //        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solveVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
-//        public virtual void solveVelocityConstraints(TimeStep step)
+//        public void solveVelocityConstraints(TimeStep step)
 //        {
 //            Body b1 = m_bodyA;
 //            Body b2 = m_bodyB;
@@ -549,7 +549,7 @@
 //        }
 
 //        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solvePositionConstraints(float)"></seealso>
-//        public virtual bool solvePositionConstraints(float baumgarte)
+//        public bool solvePositionConstraints(float baumgarte)
 //        {
 //            Body b1 = m_bodyA;
 //            Body b2 = m_bodyB;

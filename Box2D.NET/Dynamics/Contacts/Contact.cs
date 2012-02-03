@@ -129,7 +129,7 @@ namespace Box2D.Dynamics.Contacts
         /// <summary>
         /// Get the contact manifold. Do not set the point count to zero. Instead call Disable.
         /// </summary>
-        virtual public Manifold Manifold
+        public Manifold Manifold
         {
             get
             {
@@ -141,7 +141,7 @@ namespace Box2D.Dynamics.Contacts
         /// Is this contact touching
         /// </summary>
         /// <returns></returns>
-        virtual public bool Touching
+        public bool Touching
         {
             get
             {
@@ -154,7 +154,7 @@ namespace Box2D.Dynamics.Contacts
         /// This can be used inside the pre-solve contact listener.
         /// The contact is only disabled for the current time step (or sub-step in continuous collisions).
         /// </summary>
-        virtual public bool Enabled
+        public bool Enabled
         {
             get
             {
@@ -177,7 +177,7 @@ namespace Box2D.Dynamics.Contacts
         /// Get the next contact in the world's contact list.
         /// </summary>
         /// <returns></returns>
-        virtual public Contact Next
+        public Contact Next
         {
             get
             {
@@ -189,7 +189,7 @@ namespace Box2D.Dynamics.Contacts
         /// Get the first fixture in this contact.
         /// </summary>
         /// <returns></returns>
-        virtual public Fixture FixtureA
+        public Fixture FixtureA
         {
             get
             {
@@ -197,7 +197,7 @@ namespace Box2D.Dynamics.Contacts
             }
         }
 
-        virtual public int ChildIndexA
+        public int ChildIndexA
         {
             get
             {
@@ -209,7 +209,7 @@ namespace Box2D.Dynamics.Contacts
         /// Get the second fixture in this contact.
         /// </summary>
         /// <returns></returns>
-        virtual public Fixture FixtureB
+        public Fixture FixtureB
         {
             get
             {
@@ -217,7 +217,7 @@ namespace Box2D.Dynamics.Contacts
             }
         }
 
-        virtual public int ChildIndexB
+        public int ChildIndexB
         {
             get
             {
@@ -225,7 +225,7 @@ namespace Box2D.Dynamics.Contacts
             }
         }
 
-        virtual public float Friction
+        public float Friction
         {
             get
             {
@@ -237,7 +237,7 @@ namespace Box2D.Dynamics.Contacts
             }
         }
 
-        virtual public float Restitution
+        public float Restitution
         {
             get
             {
@@ -249,7 +249,7 @@ namespace Box2D.Dynamics.Contacts
             }
         }
 
-        virtual public float TangentSpeed
+        public float TangentSpeed
         {
             get
             {
@@ -264,7 +264,7 @@ namespace Box2D.Dynamics.Contacts
         /// <summary>
         /// Get the world manifold.
         /// </summary>
-        public virtual void getWorldManifold(WorldManifold worldManifold)
+        public void getWorldManifold(WorldManifold worldManifold)
         {
             Body bodyA = m_fixtureA.Body;
             Body bodyB = m_fixtureB.Body;
@@ -274,12 +274,12 @@ namespace Box2D.Dynamics.Contacts
             worldManifold.Initialize(m_manifold, bodyA.GetTransform(), shapeA.Radius, bodyB.GetTransform(), shapeB.Radius);
         }
 
-        public virtual void resetFriction()
+        public void resetFriction()
         {
             m_friction = mixFriction(m_fixtureA.Friction, m_fixtureB.Friction);
         }
 
-        public virtual void resetRestitution()
+        public void resetRestitution()
         {
             m_restitution = mixRestitution(m_fixtureA.Restitution, m_fixtureB.Restitution);
         }
@@ -289,7 +289,7 @@ namespace Box2D.Dynamics.Contacts
         /// <summary>
         /// Flag this contact for filtering. Filtering will occur the next time step.
         /// </summary>
-        public virtual void flagForFiltering()
+        public void flagForFiltering()
         {
             m_flags |= FILTER_FLAG;
         }
@@ -297,7 +297,7 @@ namespace Box2D.Dynamics.Contacts
         // djm pooling
         private readonly Manifold oldManifold = new Manifold();
 
-        public virtual void update(IContactListener listener)
+        public void update(IContactListener listener)
         {
 
             oldManifold.Set(m_manifold);

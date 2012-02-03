@@ -104,7 +104,7 @@ namespace Box2D.Common
         /// <summary>
         /// Return a clone of this matrix. djm fixed double allocation
         /// </summary>
-        public virtual Mat22 Clone()
+        public Mat22 Clone()
         {
             return new Mat22(Ex, Ey);
         }
@@ -149,7 +149,7 @@ namespace Box2D.Common
         /// Extract the angle from this matrix (assumed to be a rotation matrix).
         /// </summary>
         /// <returns></returns>
-        virtual public float Angle
+        public float Angle
         {
             get
             {

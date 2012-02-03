@@ -138,7 +138,7 @@ namespace Box2D.Dynamics.Joints
         /// get the type of the concrete joint.
         /// </summary>
         /// <returns></returns>
-        virtual public JointType Type
+        public JointType Type
         {
             get
             {
@@ -149,7 +149,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// get the first body attached to this joint.
         /// </summary>
-        virtual public Body BodyA
+        public Body BodyA
         {
             get
             {
@@ -161,7 +161,7 @@ namespace Box2D.Dynamics.Joints
         /// get the second body attached to this joint.
         /// </summary>
         /// <returns></returns>
-        virtual public Body BodyB
+        public Body BodyB
         {
             get
             {
@@ -172,7 +172,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// get the next joint the world joint list.
         /// </summary>
-        virtual public Joint Next
+        public Joint Next
         {
             get
             {
@@ -183,7 +183,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// gets or sets the user data pointer.
         /// </summary>
-        virtual public object UserData
+        public object UserData
         {
             get
             {
@@ -200,7 +200,7 @@ namespace Box2D.Dynamics.Joints
         /// Note: modifying the collide connect flag won't work correctly because
         /// the flag is only checked when fixture AABBs begin to overlap.
         /// </summary>
-        virtual public bool CollideConnected
+        public bool CollideConnected
         {
             get
             {
@@ -239,7 +239,7 @@ namespace Box2D.Dynamics.Joints
         /// Short-cut function to determine if either body is inactive.
         /// </summary>
         /// <returns></returns>
-        public virtual bool IsActive()
+        public bool IsActive()
         {
             return m_bodyA.Active && m_bodyB.Active;
         }

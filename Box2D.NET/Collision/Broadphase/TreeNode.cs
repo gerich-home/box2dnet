@@ -40,7 +40,7 @@ namespace Box2D.Collision.Broadphase
         protected internal int Child2;
         protected internal int Height;
 
-        virtual public bool Leaf
+        public bool Leaf
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Box2D.Collision.Broadphase
             }
         }
 
-        public virtual object UserData { get; set; }
+        public object UserData { get; set; }
 
         /// <summary>
         /// Should never be constructed outside the engine

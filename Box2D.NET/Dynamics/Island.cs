@@ -174,7 +174,7 @@ namespace Box2D.Dynamics
 		public int ContactCapacity;
 		public int JointCapacity;
 
-	    public virtual void Init(int bodyCapacity, int contactCapacity, int jointCapacity, IContactListener listener)
+	    public void Init(int bodyCapacity, int contactCapacity, int jointCapacity, IContactListener listener)
 		{
 			// Console.WriteLine("Initializing Island");
 			BodyCapacity = bodyCapacity;
@@ -224,7 +224,7 @@ namespace Box2D.Dynamics
 			}
 		}
 
-		public virtual void Clear()
+		public void Clear()
 		{
 			BodyCount = 0;
 			ContactCount = 0;
@@ -237,7 +237,7 @@ namespace Box2D.Dynamics
 		private readonly SolverData solverData = new SolverData();
 		private readonly ContactSolver.ContactSolverDef solverDef = new ContactSolver.ContactSolverDef();
 
-		public virtual void Solve(Profile profile, TimeStep step, Vec2 gravity, bool allowSleep)
+		public void Solve(Profile profile, TimeStep step, Vec2 gravity, bool allowSleep)
 		{
 			// Console.WriteLine("Solving Island");
 
@@ -444,7 +444,7 @@ namespace Box2D.Dynamics
 		private readonly ContactSolver toiContactSolver = new ContactSolver();
 		private readonly ContactSolver.ContactSolverDef toiSolverDef = new ContactSolver.ContactSolverDef();
 
-		public virtual void SolveToi(TimeStep subStep, int toiIndexA, int toiIndexB)
+		public void SolveToi(TimeStep subStep, int toiIndexA, int toiIndexB)
 		{
 			Debug.Assert(toiIndexA < BodyCount);
 			Debug.Assert(toiIndexB < BodyCount);
@@ -575,7 +575,7 @@ namespace Box2D.Dynamics
 			Report(toiContactSolver.m_velocityConstraints);
 		}
 
-		public virtual void Add(Body body)
+		public void Add(Body body)
 		{
 			Debug.Assert(BodyCount < BodyCapacity);
 			body.IslandIndex = BodyCount;
@@ -583,13 +583,13 @@ namespace Box2D.Dynamics
 			++BodyCount;
 		}
 
-		public virtual void Add(Contact contact)
+		public void Add(Contact contact)
 		{
 			Debug.Assert(ContactCount < ContactCapacity);
 			Contacts[ContactCount++] = contact;
 		}
 
-		public virtual void Add(Joint joint)
+		public void Add(Joint joint)
 		{
 			Debug.Assert(JointCount < JointCapacity);
 			Joints[JointCount++] = joint;
@@ -597,7 +597,7 @@ namespace Box2D.Dynamics
 
 		private readonly ContactImpulse impulse = new ContactImpulse();
 
-		public virtual void Report(ContactVelocityConstraint[] constraints)
+		public void Report(ContactVelocityConstraint[] constraints)
 		{
 			if (Listener == null)
 			{

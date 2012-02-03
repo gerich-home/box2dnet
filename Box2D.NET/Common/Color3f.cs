@@ -79,14 +79,14 @@ namespace Box2D.Common
             Z = b;
         }
 
-        public virtual void Set(float r, float g, float b)
+        public void Set(float r, float g, float b)
         {
             X = r;
             Y = g;
             Z = b;
         }
 
-        public virtual void Set(Color3f argColor)
+        public void Set(Color3f argColor)
         {
             X = argColor.X;
             Y = argColor.Y;

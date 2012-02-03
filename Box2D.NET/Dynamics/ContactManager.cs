@@ -59,7 +59,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="proxyUserDataA"></param>
         /// <param name="proxyUserDataB"></param>
-        public virtual void AddPair(object proxyUserDataA, object proxyUserDataB)
+        public void AddPair(object proxyUserDataA, object proxyUserDataB)
         {
             FixtureProxy proxyA = (FixtureProxy)proxyUserDataA;
             FixtureProxy proxyB = (FixtureProxy)proxyUserDataB;
@@ -175,12 +175,12 @@ namespace Box2D.Dynamics
             ++ContactCount;
         }
 
-        public virtual void FindNewContacts()
+        public void FindNewContacts()
         {
             BroadPhase.UpdatePairs(this);
         }
 
-        public virtual void Destroy(Contact c)
+        public void Destroy(Contact c)
         {
             Fixture fixtureA = c.FixtureA;
             Fixture fixtureB = c.FixtureB;
@@ -249,7 +249,7 @@ namespace Box2D.Dynamics
         /// This is the top level collision call for the time step. Here all the narrow phase collision is
         /// processed for the world contact list.
         /// </summary>
-        public virtual void Collide()
+        public void Collide()
         {
             // Update awake contacts.
             Contact c = ContactList;

@@ -72,7 +72,7 @@ namespace Box2D.Dynamics.Joints
         /// <param name="bA"></param>
         /// <param name="bB"></param>
         /// <param name="anchor"></param>
-        public virtual void initialize(Body bA, Body bB, Vec2 anchor)
+        public void initialize(Body bA, Body bB, Vec2 anchor)
         {
             bodyA = bA;
             bodyB = bB;

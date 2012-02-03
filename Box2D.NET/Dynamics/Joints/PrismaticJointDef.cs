@@ -107,7 +107,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Initialize the bodies, anchors, axis, and reference angle using the world anchor and world axis.
         /// </summary>
-        public virtual void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
+        public void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
         {
             bodyA = b1;
             bodyB = b2;

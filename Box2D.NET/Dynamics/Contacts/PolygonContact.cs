@@ -38,7 +38,7 @@ namespace Box2D.Dynamics.Contacts
         {
         }
 
-        public virtual void init(Fixture fixtureA, Fixture fixtureB)
+        public void init(Fixture fixtureA, Fixture fixtureB)
         {
             base.init(fixtureA, 0, fixtureB, 0);
             Debug.Assert(m_fixtureA.Type == ShapeType.Polygon);

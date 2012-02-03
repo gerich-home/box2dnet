@@ -33,7 +33,7 @@ namespace Box2D.Common
     /// <author>Daniel</author>
     public class Timer
     {
-        virtual public float Milliseconds
+        public float Milliseconds
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Box2D.Common
             reset();
         }
 
-        public virtual void reset()
+        public void reset()
         {
             resetTime = DateTime.Now;
         }

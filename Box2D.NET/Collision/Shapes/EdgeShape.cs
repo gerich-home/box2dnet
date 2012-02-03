@@ -77,7 +77,7 @@ namespace Box2D.Collision.Shapes
             }
         }
 
-        public virtual void Set(Vec2 v1, Vec2 v2)
+        public void Set(Vec2 v1, Vec2 v2)
         {
             Vertex1.Set(v1);
             Vertex2.Set(v2);

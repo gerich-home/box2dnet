@@ -44,7 +44,7 @@ namespace Box2D.Collision.Broadphase
         /// Compute the height of the binary tree in O(N) time. Should not be called often.
         /// </summary>
         /// <returns></returns>
-        virtual public int Height
+        public int Height
         {
             get
             {
@@ -61,7 +61,7 @@ namespace Box2D.Collision.Broadphase
         /// two children of a node.
         /// </summary>
         /// <returns></returns>
-        virtual public int MaxBalance
+        public int MaxBalance
         {
             get
             {
@@ -90,7 +90,7 @@ namespace Box2D.Collision.Broadphase
         /// Get the ratio of the sum of the node areas to the root area.
         /// </summary>
         /// <returns></returns>
-        virtual public float AreaRatio
+        public float AreaRatio
         {
             get
             {
@@ -119,7 +119,7 @@ namespace Box2D.Collision.Broadphase
             }
         }
 
-        public virtual int InsertionCount { get; private set; }
+        public int InsertionCount { get; private set; }
 
         public const int MAX_STACK_SIZE = 64;
 
@@ -319,7 +319,7 @@ namespace Box2D.Collision.Broadphase
         /// </summary>
         /// <param name="input">the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</param>
         /// <param name="callback">a callback class that is called for each proxy that is hit by the ray.</param>
-        public virtual void Raycast(ITreeRayCastCallback callback, RayCastInput input)
+        public void Raycast(ITreeRayCastCallback callback, RayCastInput input)
         {
             Vec2 p1 = input.P1;
             Vec2 p2 = input.P2;
@@ -427,7 +427,7 @@ namespace Box2D.Collision.Broadphase
         /// <summary>
         /// Validate this tree. For testing.
         /// </summary>
-        public virtual void Validate()
+        public void Validate()
         {
             ValidateStructure(m_root);
             ValidateMetrics(m_root);
@@ -449,7 +449,7 @@ namespace Box2D.Collision.Broadphase
         /// <summary>
         /// Build an optimal tree. Very expensive. For testing.
         /// </summary>
-        public virtual void RebuildBottomUp()
+        public void RebuildBottomUp()
         {
             var nodes = new int[m_nodeCount];
             int count = 0;
@@ -976,7 +976,7 @@ namespace Box2D.Collision.Broadphase
             ValidateMetrics(child2);
         }
 
-        public virtual void DrawTree(DebugDraw argDraw)
+        public void DrawTree(DebugDraw argDraw)
         {
             if (m_root == TreeNode.NULL_NODE)
             {
@@ -989,7 +989,7 @@ namespace Box2D.Collision.Broadphase
         private readonly Color3f color = new Color3f();
         private readonly Vec2 textVec = new Vec2();
 
-        public virtual void DrawTree(DebugDraw argDraw, int nodeId, int spot, int height)
+        public void DrawTree(DebugDraw argDraw, int nodeId, int spot, int height)
         {
             TreeNode node = m_nodes[nodeId];
             node.AABB.GetVertices(drawVecs);

@@ -117,7 +117,7 @@ namespace Box2D.Collision
         /// copies this manifold from the given one
         /// </summary>
         /// <param name="cp">manifold to copy from</param>
-        public virtual void Set(Manifold cp)
+        public void Set(Manifold cp)
         {
             for (int i = 0; i < cp.PointCount; i++)
             {

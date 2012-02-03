@@ -67,7 +67,7 @@ namespace Box2D.Dynamics
         /// Get the type of the child shape. You can use this to down cast to the concrete shape.
         /// </summary>
         /// <returns>the shape type.</returns>
-        virtual public ShapeType Type
+        public ShapeType Type
         {
             get
             {
@@ -80,12 +80,12 @@ namespace Box2D.Dynamics
         /// of vertices because this will crash some collision caching mechanisms.
         /// </summary>
         /// <returns></returns>
-        public virtual Shape Shape { get; set; }
+        public Shape Shape { get; set; }
 
         /// <summary>
         /// Is this fixture a sensor (non-solid)?
         /// </summary>
-        virtual public bool Sensor
+        public bool Sensor
         {
             get
             {
@@ -107,7 +107,7 @@ namespace Box2D.Dynamics
         /// frequently. This will not update contacts until the next time step when either parent body is
         /// awake. This automatically calls refilter.
         /// </summary>
-        virtual public Filter FilterData
+        public Filter FilterData
         {
             get
             {
@@ -125,15 +125,15 @@ namespace Box2D.Dynamics
         /// Get the parent body of this fixture. This is NULL if the fixture is not attached.
         /// </summary>
         /// <returns>the parent body.</returns>
-        public virtual Body Body { get; set; }
+        public Body Body { get; set; }
 
         /// <summary>
         /// Get the next fixture in the parent body's fixture list.
         /// </summary>
         /// <returns>the next shape.</returns>
-        public virtual Fixture Next { get; set; }
+        public Fixture Next { get; set; }
 
-        virtual public float Density
+        public float Density
         {
             get
             {
@@ -150,26 +150,26 @@ namespace Box2D.Dynamics
         /// Gets or sets the user data that was assigned in the fixture definition. Use this to store your
         /// application specific data.
         /// </summary>
-        public virtual object UserData { get; set; }
+        public object UserData { get; set; }
 
         /// <summary>
         /// Gets or sets the coefficient of friction.
         /// Setter will not change the friction of existing contacts.
         /// </summary>
-        public virtual float Friction { get; set; }
+        public float Friction { get; set; }
 
         /// <summary>
         /// Gets or sets the coefficient of restitution.
         /// Setter will not change the restitution of existing
         /// contacts.
         /// </summary>
-        public virtual float Restitution { get; set; }
+        public float Restitution { get; set; }
 
         /// <summary>
         /// Call this if you want to establish collision that was previously disabled by
         /// ContactFilter::ShouldCollide.
         /// </summary>
-        public virtual void Refilter()
+        public void Refilter()
         {
             if (Body == null)
             {
@@ -210,7 +210,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="p">a point in world coordinates.</param>
         /// <returns></returns>
-        public virtual bool TestPoint(Vec2 p)
+        public bool TestPoint(Vec2 p)
         {
             return Shape.TestPoint(Body.Xf, p);
         }
@@ -221,7 +221,7 @@ namespace Box2D.Dynamics
         /// <param name="output">the ray-cast results.</param>
         /// <param name="input">the ray-cast input parameters.</param>
         /// <param name="childIndex"></param>
-        public virtual bool Raycast(RayCastOutput output, RayCastInput input, int childIndex)
+        public bool Raycast(RayCastOutput output, RayCastInput input, int childIndex)
         {
             return Shape.Raycast(output, input, Body.Xf, childIndex);
         }
@@ -231,7 +231,7 @@ namespace Box2D.Dynamics
         /// rotational inertia is about the shape's origin.
         /// </summary>
         /// <returns></returns>
-        public virtual void GetMassData(MassData massData)
+        public void GetMassData(MassData massData)
         {
             Shape.ComputeMass(massData, m_density);
         }
@@ -241,7 +241,7 @@ namespace Box2D.Dynamics
         /// AABB, compute it using the shape and the body transform.
         /// </summary>
         /// <returns></returns>
-        public virtual AABB GetAABB(int childIndex)
+        public AABB GetAABB(int childIndex)
         {
             Debug.Assert(childIndex >= 0 && childIndex < ProxyCount);
             return Proxies[childIndex].AABB;
@@ -251,7 +251,7 @@ namespace Box2D.Dynamics
         /// Dump this fixture to the log file.
         /// </summary>
         /// <param name="bodyIndex"></param>
-        public virtual void Dump(int bodyIndex)
+        public void Dump(int bodyIndex)
         {
 
         }
@@ -260,7 +260,7 @@ namespace Box2D.Dynamics
         // We need separation create/destroy functions from the constructor/destructor because
         // the destructor cannot access the allocator (no destructor arguments allowed by C++).
 
-        public virtual void Create(Body body, FixtureDef def)
+        public void Create(Body body, FixtureDef def)
         {
             UserData = def.UserData;
             Friction = def.Friction;
@@ -308,7 +308,7 @@ namespace Box2D.Dynamics
             m_density = def.Density;
         }
 
-        public virtual void Destroy()
+        public void Destroy()
         {
             // The proxies must be destroyed before calling this.
             Debug.Assert(ProxyCount == 0);
@@ -323,7 +323,7 @@ namespace Box2D.Dynamics
         }
 
         // These support body activation/deactivation.
-        public virtual void CreateProxies(BroadPhase broadPhase, Transform xf)
+        public void CreateProxies(BroadPhase broadPhase, Transform xf)
         {
             Debug.Assert(ProxyCount == 0);
 
@@ -344,7 +344,7 @@ namespace Box2D.Dynamics
         /// Internal method
         /// </summary>
         /// <param name="broadPhase"></param>
-        public virtual void DestroyProxies(BroadPhase broadPhase)
+        public void DestroyProxies(BroadPhase broadPhase)
         {
             // Destroy proxies in the broad-phase.
             for (int i = 0; i < ProxyCount; ++i)
@@ -367,7 +367,7 @@ namespace Box2D.Dynamics
         /// <param name="broadPhase"></param>
         /// <param name="transform1"></param>
         /// <param name="transform2"></param>
-        protected internal virtual void Synchronize(BroadPhase broadPhase, Transform transform1, Transform transform2)
+        protected internal void Synchronize(BroadPhase broadPhase, Transform transform1, Transform transform2)
         {
             if (ProxyCount == 0)
             {

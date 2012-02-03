@@ -123,7 +123,7 @@ namespace Box2D.Dynamics
             InitializeRegisters();
         }
 
-        virtual public bool AllowSleep
+        public bool AllowSleep
         {
             get
             {
@@ -170,7 +170,7 @@ namespace Box2D.Dynamics
             AddType(Pool.GetChainPolyContactStack(), ShapeType.Chain, ShapeType.Polygon);
         }
 
-        public virtual Contact PopContact(Fixture fixtureA, int indexA, Fixture fixtureB, int indexB)
+        public Contact PopContact(Fixture fixtureA, int indexA, Fixture fixtureB, int indexB)
         {
             ShapeType type1 = fixtureA.Type;
             ShapeType type2 = fixtureB.Type;
@@ -199,7 +199,7 @@ namespace Box2D.Dynamics
             }
         }
 
-        public virtual void PushContact(Contact contact)
+        public void PushContact(Contact contact)
         {
 
             if (contact.m_manifold.PointCount > 0)
@@ -221,7 +221,7 @@ namespace Box2D.Dynamics
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="def"></param>
         /// <returns></returns>
-        public virtual Body CreateBody(BodyDef def)
+        public Body CreateBody(BodyDef def)
         {
             Debug.Assert(Locked == false);
             if (Locked)
@@ -251,7 +251,7 @@ namespace Box2D.Dynamics
         /// <warning>This automatically deletes all associated shapes and joints.</warning>
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="body"></param>
-        public virtual void DestroyBody(Body body)
+        public void DestroyBody(Body body)
         {
             Debug.Assert(BodyCount > 0);
             Debug.Assert(Locked == false);
@@ -334,7 +334,7 @@ namespace Box2D.Dynamics
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="def"></param>
         /// <returns></returns>
-        public virtual Joint CreateJoint(JointDef def)
+        public Joint CreateJoint(JointDef def)
         {
             Debug.Assert(Locked == false);
             if (Locked)
@@ -405,7 +405,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <warning>This function is locked during callbacks.</warning>
         /// <param name="joint"></param>
-        public virtual void DestroyJoint(Joint j)
+        public void DestroyJoint(Joint j)
         {
             Debug.Assert(Locked == false);
             if (Locked)
@@ -511,7 +511,7 @@ namespace Box2D.Dynamics
         /// <param name="dt">the amount of time to simulate, this should not vary.</param>
         /// <param name="velocityIterations">for the velocity constraint solver.</param>
         /// <param name="positionIterations">for the position constraint solver.</param>
-        public virtual void Step(float dt, int velocityIterations, int positionIterations)
+        public void Step(float dt, int velocityIterations, int positionIterations)
         {
             stepTimer.reset();
             // log.debug("Starting step");
@@ -586,7 +586,7 @@ namespace Box2D.Dynamics
         /// <seealso>
         ///   <cref>setAutoClearForces</cref>
         /// </seealso>
-        public virtual void ClearForces()
+        public void ClearForces()
         {
             for (Body body = BodyList; body != null; body = body.Next)
             {
@@ -602,7 +602,7 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Call this to draw shapes and other debug draw data.
         /// </summary>
-        public virtual void DrawDebugData()
+        public void DrawDebugData()
         {
             if (DebugDraw == null)
             {
@@ -723,7 +723,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <param name="callback">a user implemented callback class.</param>
         /// <param name="aabb">the query box.</param>
-        public virtual void QueryAABB(IQueryCallback callback, AABB aabb)
+        public void QueryAABB(IQueryCallback callback, AABB aabb)
         {
             wqwrapper.BroadPhase = ContactManager.BroadPhase;
             wqwrapper.Callback = callback;
@@ -741,7 +741,7 @@ namespace Box2D.Dynamics
         /// <param name="callback">a user implemented callback class.</param>
         /// <param name="point1">the ray starting point</param>
         /// <param name="point2">the ray ending point</param>
-        public virtual void Raycast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
+        public void Raycast(IRayCastCallback callback, Vec2 point1, Vec2 point2)
         {
             wrcwrapper.BroadPhase = ContactManager.BroadPhase;
             wrcwrapper.Callback = callback;
@@ -751,18 +751,18 @@ namespace Box2D.Dynamics
             ContactManager.BroadPhase.Raycast(wrcwrapper, input);
         }
 
-        public virtual IWorldPool Pool { get; private set; }
+        public IWorldPool Pool { get; private set; }
 
         /// <summary>
         /// Register a destruction listener. The listener is owned by you and must remain in scope.
         /// </summary>
-        public virtual IDestructionListener DestructionListener { private get; set; }
+        public IDestructionListener DestructionListener { private get; set; }
 
         /// <summary>
         /// Register a contact filter to provide specific control over collision. Otherwise the default
         /// filter is used (_defaultFilter). The listener is owned by you and must remain in scope.
         /// </summary>
-        virtual public ContactFilter ContactFilter
+        public ContactFilter ContactFilter
         {
             set
             {
@@ -773,7 +773,7 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Register a contact event listener. The listener is owned by you and must remain in scope.
         /// </summary>
-        virtual public IContactListener ContactListener
+        public IContactListener ContactListener
         {
             set
             {
@@ -785,21 +785,21 @@ namespace Box2D.Dynamics
         /// Register a routine for debug drawing. The debug draw functions are called inside with
         /// World.DrawDebugData method. The debug draw object is owned by you and must remain in scope.
         /// </summary>
-        public virtual DebugDraw DebugDraw { private get; set; }
+        public DebugDraw DebugDraw { private get; set; }
 
         /// <summary>
         /// Get the world body list. With the returned body, use Body.getNext to get the next body in the
         /// world list. A null body indicates the end of the list.
         /// </summary>
         /// <returns>the head of the world body list.</returns>
-        public virtual Body BodyList { get; private set; }
+        public Body BodyList { get; private set; }
 
         /// <summary>
         /// Get the world joint list. With the returned joint, use Joint.getNext to get the next joint in
         /// the world list. A null joint indicates the end of the list.
         /// </summary>
         /// <returns>the head of the world joint list.</returns>
-        public virtual Joint JointList { get; private set; }
+        public Joint JointList { get; private set; }
 
         /// <summary>
         /// Get the world contact list. With the returned contact, use Contact.getNext to get the next
@@ -807,7 +807,7 @@ namespace Box2D.Dynamics
         /// </summary>
         /// <returns>the head of the world contact list.</returns>
         /// <warning>contacts are created and destroyed in the middle of a time step. Use ContactListener to avoid missing contacts.</warning>
-        virtual public Contact ContactList
+        public Contact ContactList
         {
             get
             {
@@ -815,23 +815,23 @@ namespace Box2D.Dynamics
             }
         }
 
-        public virtual bool SleepingAllowed { get; set; }
+        public bool SleepingAllowed { get; set; }
 
         /// <summary>
         /// Enable/disable warm starting. For testing.
         /// </summary>
-        public virtual bool WarmStarting { get; set; }
+        public bool WarmStarting { get; set; }
 
         /// <summary>
         /// Enable/disable continuous physics. For testing.
         /// </summary>
-        public virtual bool ContinuousPhysics { get; set; }
+        public bool ContinuousPhysics { get; set; }
 
         /// <summary>
         /// Get the number of broad-phase proxies.
         /// </summary>
         /// <returns></returns>
-        virtual public int ProxyCount
+        public int ProxyCount
         {
             get
             {
@@ -843,19 +843,19 @@ namespace Box2D.Dynamics
         /// Get the number of bodies.
         /// </summary>
         /// <returns></returns>
-        public virtual int BodyCount { get; private set; }
+        public int BodyCount { get; private set; }
 
         /// <summary>
         /// Get the number of joints.
         /// </summary>
         /// <returns></returns>
-        public virtual int JointCount { get; private set; }
+        public int JointCount { get; private set; }
 
         /// <summary>
         /// Get the number of contacts (each may have 0 or more contact points).
         /// </summary>
         /// <returns></returns>
-        virtual public int ContactCount
+        public int ContactCount
         {
             get
             {
@@ -867,7 +867,7 @@ namespace Box2D.Dynamics
         /// Gets the height of the dynamic tree
         /// </summary>
         /// <returns></returns>
-        virtual public int TreeHeight
+        public int TreeHeight
         {
             get
             {
@@ -879,7 +879,7 @@ namespace Box2D.Dynamics
         /// Gets the balance of the dynamic tree
         /// </summary>
         /// <returns></returns>
-        virtual public int TreeBalance
+        public int TreeBalance
         {
             get
             {
@@ -891,7 +891,7 @@ namespace Box2D.Dynamics
         /// Gets the quality of the dynamic tree
         /// </summary>
         /// <returns></returns>
-        virtual public float TreeQuality
+        public float TreeQuality
         {
             get
             {
@@ -902,7 +902,7 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Gets or sets the global gravity vector.
         /// </summary>
-        virtual public Vec2 Gravity
+        public Vec2 Gravity
         {
             get
             {
@@ -918,7 +918,7 @@ namespace Box2D.Dynamics
         /// Is the world locked (in the middle of a time step).
         /// </summary>
         /// <returns></returns>
-        virtual public bool Locked
+        public bool Locked
         {
             get
             {
@@ -929,7 +929,7 @@ namespace Box2D.Dynamics
         /// <summary>
         /// Gets or sets the flag that controls automatic clearing of forces after each time step.
         /// </summary>
-        virtual public bool AutoClearForces
+        public bool AutoClearForces
         {
             get
             {
@@ -952,9 +952,9 @@ namespace Box2D.Dynamics
         /// Get the contact manager for testing purposes
         /// </summary>
         /// <returns></returns>
-        public virtual ContactManager ContactManager { get; protected internal set; }
+        public ContactManager ContactManager { get; protected internal set; }
 
-        public virtual Profile Profile { get; private set; }
+        public Profile Profile { get; private set; }
 
         private readonly Island island = new Island();
         private Body[] stack = new Body[10]; // TODO djm find a good initial stack number;
@@ -1627,7 +1627,7 @@ namespace Box2D.Dynamics
 
     class WorldQueryWrapper : ITreeCallback
     {
-        public virtual bool TreeCallback(int nodeId)
+        public bool TreeCallback(int nodeId)
         {
             FixtureProxy proxy = (FixtureProxy)BroadPhase.GetUserData(nodeId);
             return Callback.ReportFixture(proxy.Fixture);
@@ -1647,7 +1647,7 @@ namespace Box2D.Dynamics
         private readonly Vec2 temp = new Vec2();
         private readonly Vec2 point = new Vec2();
 
-        public virtual float RaycastCallback(RayCastInput input, int nodeId)
+        public float RaycastCallback(RayCastInput input, int nodeId)
         {
             Object userData = BroadPhase.GetUserData(nodeId);
             FixtureProxy proxy = (FixtureProxy)userData;

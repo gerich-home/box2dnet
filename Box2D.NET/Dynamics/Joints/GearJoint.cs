@@ -196,7 +196,7 @@
 //            return inv_dt * L;
 //        }
 
-//        virtual public float Ratio
+//        public float Ratio
 //        {
 //            get
 //            {
@@ -208,7 +208,7 @@
 //            }
 //        }
 
-//        virtual public Joint Joint1
+//        public Joint Joint1
 //        {
 //            get
 //            {
@@ -216,7 +216,7 @@
 //            }
 //        }
 
-//        virtual public Joint Joint2
+//        public Joint Joint2
 //        {
 //            get
 //            {
@@ -225,7 +225,7 @@
 //        }
 
 //        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.initVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
-//        public virtual void initVelocityConstraints(TimeStep step)
+//        public void initVelocityConstraints(TimeStep step)
 //        {
 //            Body g1 = m_ground1;
 //            Body g2 = m_ground2;
@@ -301,7 +301,7 @@
 //        }
 
 //        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solveVelocityConstraints(org.jbox2d.dynamics.TimeStep)"></seealso>
-//        public virtual void solveVelocityConstraints(TimeStep step)
+//        public void solveVelocityConstraints(TimeStep step)
 //        {
 //            Body b1 = m_bodyA;
 //            Body b2 = m_bodyB;
@@ -324,7 +324,7 @@
 //        }
 
 //        /// <seealso cref="org.jbox2d.dynamics.joints.Joint.solvePositionConstraints(float)"></seealso>
-//        public virtual bool solvePositionConstraints(float baumgarte)
+//        public bool solvePositionConstraints(float baumgarte)
 //        {
 //            float linearError = 0.0f;
 

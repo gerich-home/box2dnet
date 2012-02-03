@@ -42,13 +42,13 @@ namespace Box2D.Collision.Shapes
         /// Get the type of this shape. You can use this to down cast to the concrete shape.
         /// </summary>
         /// <returns>the shape type.</returns>
-        public virtual ShapeType Type { get; private set; }
+        public ShapeType Type { get; private set; }
 
         /// <summary>
         /// Gets or sets the radius of the underlying shape. This can refer to different things depending on the shape
         /// implementation
         /// </summary>
-        public virtual float Radius { get; set; }
+        public float Radius { get; set; }
 
         /// <summary>
         /// Get the number of child primitives

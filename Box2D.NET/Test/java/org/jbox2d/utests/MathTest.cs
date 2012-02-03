@@ -37,7 +37,7 @@
 //        private static readonly int MAX = (int) (System.Single.MaxValue / 1000);
 //        private const int RAND_ITERS = 100;
 		
-//        public virtual void  testFastMath()
+//        public void  testFastMath()
 //        {
 //            System.Random r = new System.Random();
 //            for (int i = 0; i < RAND_ITERS; i++)
@@ -82,7 +82,7 @@
 //            }
 //        }
 		
-//        public virtual void  testVec2()
+//        public void  testVec2()
 //        {
 //            Vec2 v = new Vec2();
 //            v.x = 0;
@@ -99,7 +99,7 @@
 //            // TODO write tests for the rest of common lib
 //        }
 		
-//        public virtual void  testMat22Unsafes()
+//        public void  testMat22Unsafes()
 //        {
 //            Vec2 v1 = new Vec2(10, - 1.3f);
 //            Mat22 m1 = new Mat22(1, 34, - 3, 3);

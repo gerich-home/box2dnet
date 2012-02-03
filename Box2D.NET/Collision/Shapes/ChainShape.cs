@@ -67,7 +67,7 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Get a child edge.
         /// </summary>
-        public virtual void GetChildEdge(EdgeShape edge, int index)
+        public void GetChildEdge(EdgeShape edge, int index)
         {
             Debug.Assert(0 <= index && index < Count - 1);
             edge.Radius = Radius;
@@ -165,7 +165,7 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="vertices">an array of vertices, these are copied</param>
         /// <param name="count">the vertex count</param>
-        public virtual void CreateLoop(Vec2[] vertices, int count)
+        public void CreateLoop(Vec2[] vertices, int count)
         {
             Debug.Assert(Vertices == null && Count == 0);
             Debug.Assert(count >= 3);
@@ -187,7 +187,7 @@ namespace Box2D.Collision.Shapes
         /// </summary>
         /// <param name="vertices">an array of vertices, these are copied</param>
         /// <param name="count">the vertex count</param>
-        public virtual void CreateChain(Vec2[] vertices, int count)
+        public void CreateChain(Vec2[] vertices, int count)
         {
             Debug.Assert(Vertices == null && Count == 0);
             Debug.Assert(count >= 2);
@@ -204,7 +204,7 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops.
         /// </summary>
-        virtual public Vec2 PrevVertex
+        public Vec2 PrevVertex
         {
             set
             {
@@ -215,7 +215,7 @@ namespace Box2D.Collision.Shapes
         /// <summary>
         /// Establish connectivity to a vertex that follows the last vertex. Don't call this for loops.
         /// </summary>
-        virtual public Vec2 NextVertex
+        public Vec2 NextVertex
         {
             set
             {

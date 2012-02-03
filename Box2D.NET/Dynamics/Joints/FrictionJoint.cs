@@ -72,7 +72,7 @@ namespace Box2D.Dynamics.Joints
             m_maxTorque = def.maxTorque;
         }
 
-        virtual public Vec2 LocalAnchorA
+        public Vec2 LocalAnchorA
         {
             get
             {
@@ -80,7 +80,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public Vec2 LocalAnchorB
+        public Vec2 LocalAnchorB
         {
             get
             {
@@ -108,7 +108,7 @@ namespace Box2D.Dynamics.Joints
             return inv_dt * m_angularImpulse;
         }
 
-        virtual public float MaxForce
+        public float MaxForce
         {
             get
             {
@@ -120,7 +120,7 @@ namespace Box2D.Dynamics.Joints
                 m_maxForce = value;
             }
         }
-        virtual public float MaxTorque
+        public float MaxTorque
         {
             get
             {

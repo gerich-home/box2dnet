@@ -78,7 +78,7 @@ namespace Box2D.Callbacks
 
         public DrawFlags Flags { get; set; }
 
-        public virtual IViewportTransform ViewportTranform { get; private set; }
+        public IViewportTransform ViewportTranform { get; private set; }
 
 
         protected DebugDraw(IViewportTransform viewport)
@@ -87,12 +87,12 @@ namespace Box2D.Callbacks
             ViewportTranform = viewport;
         }
 
-        public virtual void AppendFlags(DrawFlags flags)
+        public void AppendFlags(DrawFlags flags)
         {
             Flags |= flags;
         }
 
-        public virtual void ClearFlags(DrawFlags flags)
+        public void ClearFlags(DrawFlags flags)
         {
             Flags &= ~flags;
         }
@@ -105,7 +105,7 @@ namespace Box2D.Callbacks
         /// <param name="vertices"></param>
         /// <param name="vertexCount"></param>
         /// <param name="color"></param>
-        public virtual void DrawPolygon(Vec2[] vertices, int vertexCount, Color3f color)
+        public void DrawPolygon(Vec2[] vertices, int vertexCount, Color3f color)
         {
             if (vertexCount == 1)
             {
@@ -183,7 +183,7 @@ namespace Box2D.Callbacks
         /// <param name="y"></param>
         /// <param name="scale"></param>
         /// <seealso cref="IViewportTransform.SetCamera"></seealso>
-        public virtual void SetCamera(float x, float y, float scale)
+        public void SetCamera(float x, float y, float scale)
         {
             ViewportTranform.SetCamera(x, y, scale);
         }
@@ -192,7 +192,7 @@ namespace Box2D.Callbacks
         /// <param name="argScreen"></param>
         /// <param name="argWorld"></param>
         /// <seealso cref="IViewportTransform.GetScreenToWorld"></seealso>
-        public virtual void GetScreenToWorldToOut(Vec2 argScreen, Vec2 argWorld)
+        public void GetScreenToWorldToOut(Vec2 argScreen, Vec2 argWorld)
         {
             ViewportTranform.GetScreenToWorld(argScreen, argWorld);
         }
@@ -200,7 +200,7 @@ namespace Box2D.Callbacks
         /// <param name="argWorld"></param>
         /// <param name="argScreen"></param>
         /// <seealso cref="IViewportTransform.GetWorldToScreen"></seealso>
-        public virtual void GetWorldToScreenToOut(Vec2 argWorld, Vec2 argScreen)
+        public void GetWorldToScreenToOut(Vec2 argWorld, Vec2 argScreen)
         {
             ViewportTranform.GetWorldToScreen(argWorld, argScreen);
         }
@@ -212,7 +212,7 @@ namespace Box2D.Callbacks
         /// <param name="worldX"></param>
         /// <param name="worldY"></param>
         /// <param name="argScreen"></param>
-        public virtual void GetWorldToScreenToOut(float worldX, float worldY, Vec2 argScreen)
+        public void GetWorldToScreenToOut(float worldX, float worldY, Vec2 argScreen)
         {
             argScreen.Set(worldX, worldY);
             ViewportTranform.GetWorldToScreen(argScreen, argScreen);
@@ -223,7 +223,7 @@ namespace Box2D.Callbacks
         /// the screen coordinates.
         /// </summary>
         /// <param name="argWorld"></param>
-        public virtual Vec2 GetWorldToScreen(Vec2 argWorld)
+        public Vec2 GetWorldToScreen(Vec2 argWorld)
         {
             var screen = new Vec2();
             ViewportTranform.GetWorldToScreen(argWorld, screen);
@@ -236,7 +236,7 @@ namespace Box2D.Callbacks
         /// </summary>
         /// <param name="worldX"></param>
         /// <param name="worldY"></param>
-        public virtual Vec2 GetWorldToScreen(float worldX, float worldY)
+        public Vec2 GetWorldToScreen(float worldX, float worldY)
         {
             var argScreen = new Vec2(worldX, worldY);
             ViewportTranform.GetWorldToScreen(argScreen, argScreen);
@@ -250,7 +250,7 @@ namespace Box2D.Callbacks
         /// <param name="screenX"></param>
         /// <param name="screenY"></param>
         /// <param name="argWorld"></param>
-        public virtual void GetScreenToWorldToOut(float screenX, float screenY, Vec2 argWorld)
+        public void GetScreenToWorldToOut(float screenX, float screenY, Vec2 argWorld)
         {
             argWorld.Set(screenX, screenY);
             ViewportTranform.GetScreenToWorld(argWorld, argWorld);
@@ -261,7 +261,7 @@ namespace Box2D.Callbacks
         /// the world coordinates
         /// </summary>
         /// <param name="argScreen"></param>
-        public virtual Vec2 GetScreenToWorld(Vec2 argScreen)
+        public Vec2 GetScreenToWorld(Vec2 argScreen)
         {
             var world = new Vec2();
             ViewportTranform.GetScreenToWorld(argScreen, world);
@@ -274,7 +274,7 @@ namespace Box2D.Callbacks
         /// </summary>
         /// <param name="screenX"></param>
         /// <param name="screenY"></param>
-        public virtual Vec2 GetScreenToWorld(float screenX, float screenY)
+        public Vec2 GetScreenToWorld(float screenX, float screenY)
         {
             var screen = new Vec2(screenX, screenY);
             ViewportTranform.GetScreenToWorld(screen, screen);

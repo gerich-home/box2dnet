@@ -42,7 +42,7 @@ namespace Box2D.Collision
             Fraction = 0;
         }
 
-        public virtual void Set(RayCastOutput rco)
+        public void Set(RayCastOutput rco)
         {
             Normal.Set(rco.Normal);
             Fraction = rco.Fraction;

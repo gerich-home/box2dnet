@@ -33,7 +33,7 @@ namespace Box2D.Common
     /// </summary>
     /// <author>Daniel</author>
     [Serializable]
-    public sealed class Rot
+    public class Rot
     {
         public Rot()
         {

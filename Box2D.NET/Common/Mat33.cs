@@ -55,7 +55,7 @@ namespace Box2D.Common
             Ez = argCol3.Clone();
         }
 
-        public virtual void SetZero()
+        public void SetZero()
         {
             Ex.setZero();
             Ey.setZero();
@@ -179,7 +179,7 @@ namespace Box2D.Common
             result.z = z;
         }
 
-        public virtual void GetInverse22(Mat33 m)
+        public void GetInverse22(Mat33 m)
         {
             float a = Ex.x, b = Ey.x, c = Ex.y, d = Ey.y;
             float det = a * d - b * c;
@@ -200,7 +200,7 @@ namespace Box2D.Common
         }
 
         // / Returns the zero matrix if singular.
-        public virtual void GetSymInverse33(Mat33 m)
+        public void GetSymInverse33(Mat33 m)
         {
             float bx = Ey.y * Ez.z - Ey.z * Ez.y;
             float by = Ey.z * Ez.x - Ey.x * Ez.z;

@@ -103,7 +103,7 @@ namespace Box2D.Dynamics.Joints
         /// <param name="b2">Second body</param>
         /// <param name="anchor1">World anchor on first body</param>
         /// <param name="anchor2">World anchor on second body</param>
-        public virtual void initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
+        public void initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
         {
             bodyA = b1;
             bodyB = b2;

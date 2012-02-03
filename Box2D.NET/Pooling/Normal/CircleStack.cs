@@ -104,7 +104,7 @@ namespace Box2D.Pooling.Normal
             return container;
         }
 
-        public virtual void Push(int argNum)
+        public void Push(int argNum)
         {
         }
     }

@@ -86,7 +86,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Initialize the bodies, anchors, lengths, max lengths, and ratio using the world anchors.
         /// </summary>
-        public virtual void initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
+        public void initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
         {
             bodyA = b1;
             bodyB = b2;

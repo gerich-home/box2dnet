@@ -57,7 +57,7 @@ namespace Box2D.Dynamics
             GroupIndex = 0;
         }
 
-        public virtual void Set(Filter argOther)
+        public void Set(Filter argOther)
         {
             CategoryBits = argOther.CategoryBits;
             MaskBits = argOther.MaskBits;

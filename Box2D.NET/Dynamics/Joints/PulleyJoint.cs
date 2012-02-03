@@ -91,7 +91,7 @@ namespace Box2D.Dynamics.Joints
         }
 
 
-        virtual public float LengthA
+        public float LengthA
         {
             get
             {
@@ -99,7 +99,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float LengthB
+        public float LengthB
         {
             get
             {
@@ -107,7 +107,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float CurrentLengthA
+        public float CurrentLengthA
         {
             get
             {
@@ -120,7 +120,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float CurrentLengthB
+        public float CurrentLengthB
         {
             get
             {
@@ -153,7 +153,7 @@ namespace Box2D.Dynamics.Joints
             return 0f;
         }
 
-        virtual public Vec2 GroundAnchorA
+        public Vec2 GroundAnchorA
         {
             get
             {
@@ -161,7 +161,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public Vec2 GroundAnchorB
+        public Vec2 GroundAnchorB
         {
             get
             {
@@ -169,7 +169,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float Length1
+        public float Length1
         {
             get
             {
@@ -183,7 +183,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float Length2
+        public float Length2
         {
             get
             {
@@ -197,7 +197,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public float Ratio
+        public float Ratio
         {
             get
             {

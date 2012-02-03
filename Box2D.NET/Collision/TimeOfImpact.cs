@@ -364,7 +364,7 @@ namespace Box2D.Collision
 
         // TODO_ERIN might not need to return the separation
 
-        public virtual float Initialize(Distance.SimplexCache cache, Distance.DistanceProxy proxyA, Sweep sweepA, Distance.DistanceProxy proxyB, Sweep sweepB, float t1)
+        public float Initialize(Distance.SimplexCache cache, Distance.DistanceProxy proxyA, Sweep sweepA, Distance.DistanceProxy proxyB, Sweep sweepB, float t1)
         {
             ProxyA = proxyA;
             ProxyB = proxyB;
@@ -461,7 +461,7 @@ namespace Box2D.Collision
         private readonly Vec2 axisB = new Vec2();
 
         // float FindMinSeparation(int* indexA, int* indexB, float t) const
-        public virtual float FindMinSeparation(int[] indexes, float t)
+        public float FindMinSeparation(int[] indexes, float t)
         {
 
             SweepA.getTransform(xfa, t);
@@ -534,7 +534,7 @@ namespace Box2D.Collision
             }
         }
 
-        public virtual float Evaluate(int indexA, int indexB, float t)
+        public float Evaluate(int indexA, int indexB, float t)
         {
             SweepA.getTransform(xfa, t);
             SweepB.getTransform(xfb, t);

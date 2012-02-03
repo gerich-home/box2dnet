@@ -112,7 +112,7 @@ namespace Box2D.Collision
         ///  Sets this manifold point form the given one
         /// </summary>
         /// <param name="cp">the point to copy from</param>
-        public virtual void Set(ManifoldPoint cp)
+        public void Set(ManifoldPoint cp)
         {
             LocalPoint.Set(cp.LocalPoint);
             NormalImpulse = cp.NormalImpulse;

@@ -32,7 +32,7 @@ namespace Box2D.Dynamics
     /// A rigid body. These are created via World.createBody.
     /// </summary>
     /// <author>Daniel Murphy</author>
-    public sealed class Body
+    public class Body
     {
         [Flags]
         public enum TypeFlags

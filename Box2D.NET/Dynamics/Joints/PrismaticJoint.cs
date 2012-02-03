@@ -166,7 +166,7 @@ namespace Box2D.Dynamics.Joints
             m_perp = new Vec2();
         }
 
-        virtual public Vec2 LocalAnchorA
+        public Vec2 LocalAnchorA
         {
             get
             {
@@ -174,7 +174,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public Vec2 LocalAnchorB
+        public Vec2 LocalAnchorB
         {
             get
             {
@@ -229,7 +229,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Get the current joint translation speed, usually in meters per second.
         /// </summary>
-        virtual public float JointSpeed
+        public float JointSpeed
         {
             get
             {
@@ -282,7 +282,7 @@ namespace Box2D.Dynamics.Joints
         /// Is the joint limit enabled?
         /// </summary>
         /// <returns></returns>
-        virtual public bool LimitEnabled
+        public bool LimitEnabled
         {
             get
             {
@@ -295,7 +295,7 @@ namespace Box2D.Dynamics.Joints
         /// Enable/disable the joint limit.
         /// </summary>
         /// <param name="flag"></param>
-        public virtual void enableLimit(bool flag)
+        public void enableLimit(bool flag)
         {
             if (flag != m_enableLimit)
             {
@@ -310,7 +310,7 @@ namespace Box2D.Dynamics.Joints
         /// Get the lower joint limit, usually in meters.
         /// </summary>
         /// <returns></returns>
-        virtual public float LowerLimit
+        public float LowerLimit
         {
             get
             {
@@ -321,7 +321,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Get the upper joint limit, usually in meters.</summary>
         /// <returns></returns>
-        virtual public float UpperLimit
+        public float UpperLimit
         {
             get
             {
@@ -334,7 +334,7 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         /// <param name="lower"></param>
         /// <param name="upper"></param>
-        public virtual void setLimits(float lower, float upper)
+        public void setLimits(float lower, float upper)
         {
             Debug.Assert(lower <= upper);
             if (lower != m_lowerTranslation || upper != m_upperTranslation)
@@ -351,7 +351,7 @@ namespace Box2D.Dynamics.Joints
         /// Is the joint motor enabled?
         /// </summary>
         /// <returns></returns>
-        virtual public bool MotorEnabled
+        public bool MotorEnabled
         {
             get
             {
@@ -363,7 +363,7 @@ namespace Box2D.Dynamics.Joints
         /// Enable/disable the joint motor.
         /// </summary>
         /// <param name="flag"></param>
-        public virtual void enableMotor(bool flag)
+        public void enableMotor(bool flag)
         {
             m_bodyA.Awake = true;
             m_bodyB.Awake = true;
@@ -373,7 +373,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Gets or sets the motor speed, usually in meters per second.
         /// </summary>
-        virtual public float MotorSpeed
+        public float MotorSpeed
         {
             get
             {
@@ -391,7 +391,7 @@ namespace Box2D.Dynamics.Joints
         /// Set the maximum motor force, usually in N.
         /// </summary>
         /// <param name="force"></param>
-        virtual public float MaxMotorForce
+        public float MaxMotorForce
         {
             set
             {
@@ -406,7 +406,7 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         /// <param name="inv_dt"></param>
         /// <returns></returns>
-        public virtual float getMotorForce(float inv_dt)
+        public float getMotorForce(float inv_dt)
         {
             return m_motorImpulse * inv_dt;
         }

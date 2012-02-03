@@ -48,7 +48,7 @@ namespace Box2D.Dynamics.Joints
         public readonly float frequencyHz;
         public readonly float dampingRatio;
 
-        virtual public Body[] Bodies
+        public Body[] Bodies
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        virtual public DistanceJoint[] Joints
+        public DistanceJoint[] Joints
         {
             get
             {
@@ -80,7 +80,7 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public virtual void inflate(float factor)
+        public void inflate(float factor)
         {
             targetVolume *= factor;
         }
@@ -153,7 +153,7 @@ namespace Box2D.Dynamics.Joints
         /// Apply the position correction to the particles.
         /// </summary>
         /// <param name="step"></param>
-        public virtual bool constrainEdges(TimeStep step)
+        public bool constrainEdges(TimeStep step)
         {
             float perimeter = 0.0f;
             for (int i = 0; i < bodies.Length; ++i)

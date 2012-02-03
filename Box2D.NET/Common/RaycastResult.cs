@@ -33,7 +33,7 @@ namespace Box2D.Common
 
         public readonly Vec2 Normal = new Vec2();
 
-        public virtual RaycastResult Set(RaycastResult argOther)
+        public RaycastResult Set(RaycastResult argOther)
         {
             Lambda = argOther.Lambda;
             Normal.Set(argOther.Normal);
