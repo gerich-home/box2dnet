@@ -118,8 +118,8 @@ namespace Box2D.Collision.Shapes
         public override bool TestPoint(Transform transform, Vec2 p)
         {
             Vec2 center = pool1;
-            Rot.MulToOutUnsafe(transform.q, P, center);
-            center.AddLocal(transform.p);
+            Rot.MulToOutUnsafe(transform.Q, P, center);
+            center.AddLocal(transform.P);
 
             Vec2 d = center.SubLocal(p).NegateLocal();
             return Vec2.Dot(d, d) <= Radius * Radius;
@@ -135,8 +135,8 @@ namespace Box2D.Collision.Shapes
             Vec2 s = pool2;
             Vec2 r = pool3;
 
-            Rot.MulToOutUnsafe(transform.q, P, position);
-            position.AddLocal(transform.p);
+            Rot.MulToOutUnsafe(transform.Q, P, position);
+            position.AddLocal(transform.P);
             s.Set(input.P1).SubLocal(position);
             float b = Vec2.Dot(s, s) - Radius * Radius;
 
@@ -172,8 +172,8 @@ namespace Box2D.Collision.Shapes
         public override void ComputeAABB(AABB aabb, Transform transform, int childIndex)
         {
             Vec2 p = pool1;
-            Rot.MulToOutUnsafe(transform.q, P, p);
-            p.AddLocal(transform.p);
+            Rot.MulToOutUnsafe(transform.Q, P, p);
+            p.AddLocal(transform.P);
 
             aabb.LowerBound.X = p.X - Radius;
             aabb.LowerBound.Y = p.Y - Radius;

@@ -93,10 +93,10 @@ namespace Box2D.Collision.Shapes
         {
 
             // Put the ray into the edge's frame of reference.
-            Vec2 p1 = pool0.Set(input.P1).SubLocal(xf.p);
-            Rot.MulTrans(xf.q, p1, p1);
-            Vec2 p2 = pool1.Set(input.P2).SubLocal(xf.p);
-            Rot.MulTrans(xf.q, p1, p1);
+            Vec2 p1 = pool0.Set(input.P1).SubLocal(xf.P);
+            Rot.MulTrans(xf.Q, p1, p1);
+            Vec2 p2 = pool1.Set(input.P2).SubLocal(xf.P);
+            Rot.MulTrans(xf.Q, p1, p1);
             Vec2 d = p2.SubLocal(p1); // we don't use p2 later
 
             Vec2 v1 = Vertex1;
@@ -165,8 +165,8 @@ namespace Box2D.Collision.Shapes
             Vec2 v1 = pool1;
             Vec2 v2 = pool2;
 
-            Transform.mulToOutUnsafe(xf, Vertex1, v1);
-            Transform.mulToOutUnsafe(xf, Vertex2, v2);
+            Transform.MulToOutUnsafe(xf, Vertex1, v1);
+            Transform.MulToOutUnsafe(xf, Vertex2, v2);
 
             Vec2.MinToOut(v1, v2, aabb.LowerBound);
             Vec2.MaxToOut(v1, v2, aabb.UpperBound);

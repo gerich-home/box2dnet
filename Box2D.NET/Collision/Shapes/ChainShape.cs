@@ -135,8 +135,8 @@ namespace Box2D.Collision.Shapes
 
             Vec2 v1 = pool1;
             Vec2 v2 = pool2;
-            Transform.mulToOutUnsafe(xf, Vertices[i1], v1);
-            Transform.mulToOutUnsafe(xf, Vertices[i2], v2);
+            Transform.MulToOutUnsafe(xf, Vertices[i1], v1);
+            Transform.MulToOutUnsafe(xf, Vertices[i2], v2);
 
             Vec2.MinToOut(v1, v2, aabb.LowerBound);
             Vec2.MaxToOut(v1, v2, aabb.UpperBound);

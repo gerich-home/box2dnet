@@ -275,12 +275,12 @@ namespace Box2D.Dynamics.Contacts
 
                 Debug.Assert(manifold.PointCount > 0);
 
-                xfA.q.Set(aA);
-                xfB.q.Set(aB);
-                Rot.MulToOutUnsafe(xfA.q, localCenterA, temp);
-                xfA.p.Set(cA).SubLocal(temp);
-                Rot.MulToOutUnsafe(xfB.q, localCenterB, temp);
-                xfB.p.Set(cB).SubLocal(temp);
+                xfA.Q.Set(aA);
+                xfB.Q.Set(aB);
+                Rot.MulToOutUnsafe(xfA.Q, localCenterA, temp);
+                xfA.P.Set(cA).SubLocal(temp);
+                Rot.MulToOutUnsafe(xfB.Q, localCenterB, temp);
+                xfB.P.Set(cB).SubLocal(temp);
 
                 worldManifold.Initialize(manifold, xfA, radiusA, xfB, radiusB);
 
@@ -911,12 +911,12 @@ namespace Box2D.Dynamics.Contacts
                 // Solve normal constraints
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    xfA.q.Set(aA);
-                    xfB.q.Set(aB);
-                    Rot.MulToOutUnsafe(xfA.q, localCenterA, xfA.p);
-                    xfA.p.NegateLocal().AddLocal(cA);
-                    Rot.MulToOutUnsafe(xfB.q, localCenterB, xfB.p);
-                    xfB.p.NegateLocal().AddLocal(cB);
+                    xfA.Q.Set(aA);
+                    xfB.Q.Set(aB);
+                    Rot.MulToOutUnsafe(xfA.Q, localCenterA, xfA.P);
+                    xfA.P.NegateLocal().AddLocal(cA);
+                    Rot.MulToOutUnsafe(xfB.Q, localCenterB, xfB.P);
+                    xfB.P.NegateLocal().AddLocal(cB);
 
                     PositionSolverManifold psm = psolver;
                     psm.initialize(pc, xfA, xfB, j);
@@ -1006,12 +1006,12 @@ namespace Box2D.Dynamics.Contacts
                 // Solve normal constraints
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    xfA.q.Set(aA);
-                    xfB.q.Set(aB);
-                    Rot.MulToOutUnsafe(xfA.q, localCenterA, xfA.p);
-                    xfA.p.NegateLocal().AddLocal(cA);
-                    Rot.MulToOutUnsafe(xfB.q, localCenterB, xfB.p);
-                    xfB.p.NegateLocal().AddLocal(cB);
+                    xfA.Q.Set(aA);
+                    xfB.Q.Set(aB);
+                    Rot.MulToOutUnsafe(xfA.Q, localCenterA, xfA.P);
+                    xfA.P.NegateLocal().AddLocal(cA);
+                    Rot.MulToOutUnsafe(xfB.Q, localCenterB, xfB.P);
+                    xfB.P.NegateLocal().AddLocal(cB);
 
                     PositionSolverManifold psm = psolver;
                     psm.initialize(pc, xfA, xfB, j);
@@ -1093,8 +1093,8 @@ namespace Box2D.Dynamics.Contacts
 
                 case Manifold.ManifoldType.Circles:
                     {
-                        Transform.mulToOutUnsafe(xfA, pc.localPoint, pointA);
-                        Transform.mulToOutUnsafe(xfB, pc.localPoints[0], pointB);
+                        Transform.MulToOutUnsafe(xfA, pc.localPoint, pointA);
+                        Transform.MulToOutUnsafe(xfB, pc.localPoints[0], pointB);
                         normal.Set(pointB).SubLocal(pointA);
                         normal.Normalize();
 
@@ -1107,10 +1107,10 @@ namespace Box2D.Dynamics.Contacts
 
                 case Manifold.ManifoldType.FaceA:
                     {
-                        Rot.MulToOutUnsafe(xfA.q, pc.localNormal, normal);
-                        Transform.mulToOutUnsafe(xfA, pc.localPoint, planePoint);
+                        Rot.MulToOutUnsafe(xfA.Q, pc.localNormal, normal);
+                        Transform.MulToOutUnsafe(xfA, pc.localPoint, planePoint);
 
-                        Transform.mulToOutUnsafe(xfB, pc.localPoints[index], clipPoint);
+                        Transform.MulToOutUnsafe(xfB, pc.localPoints[index], clipPoint);
                         temp.Set(clipPoint).SubLocal(planePoint);
                         separation = Vec2.Dot(temp, normal) - pc.radiusA - pc.radiusB;
                         point.Set(clipPoint);
@@ -1120,10 +1120,10 @@ namespace Box2D.Dynamics.Contacts
 
                 case Manifold.ManifoldType.FaceB:
                     {
-                        Rot.MulToOutUnsafe(xfB.q, pc.localNormal, normal);
-                        Transform.mulToOutUnsafe(xfB, pc.localPoint, planePoint);
+                        Rot.MulToOutUnsafe(xfB.Q, pc.localNormal, normal);
+                        Transform.MulToOutUnsafe(xfB, pc.localPoint, planePoint);
 
-                        Transform.mulToOutUnsafe(xfA, pc.localPoints[index], clipPoint);
+                        Transform.MulToOutUnsafe(xfA, pc.localPoints[index], clipPoint);
                         temp.Set(clipPoint).SubLocal(planePoint);
                         separation = Vec2.Dot(temp, normal) - pc.radiusA - pc.radiusB;
                         point.Set(clipPoint);

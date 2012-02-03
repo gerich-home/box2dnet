@@ -391,8 +391,8 @@ namespace Box2D.Collision
                 */
                 localPointA.Set(ProxyA.GetVertex(cache.IndexA[0]));
                 localPointB.Set(ProxyB.GetVertex(cache.IndexB[0]));
-                Transform.mulToOutUnsafe(xfa, localPointA, pointA);
-                Transform.mulToOutUnsafe(xfb, localPointB, pointB);
+                Transform.MulToOutUnsafe(xfa, localPointA, pointA);
+                Transform.MulToOutUnsafe(xfb, localPointB, pointB);
                 Axis.Set(pointB).SubLocal(pointA);
                 float s = Axis.Normalize();
                 return s;
@@ -409,13 +409,13 @@ namespace Box2D.Collision
                 Vec2.CrossToOutUnsafe(temp, 1f, Axis);
                 Axis.Normalize();
 
-                Rot.MulToOutUnsafe(xfb.q, Axis, normal);
+                Rot.MulToOutUnsafe(xfb.Q, Axis, normal);
 
                 LocalPoint.Set(localPointB1).AddLocal(localPointB2).MulLocal(.5f);
-                Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
+                Transform.MulToOutUnsafe(xfb, LocalPoint, pointB);
 
                 localPointA.Set(proxyA.GetVertex(cache.IndexA[0]));
-                Transform.mulToOutUnsafe(xfa, localPointA, pointA);
+                Transform.MulToOutUnsafe(xfa, localPointA, pointA);
 
                 temp.Set(pointA).SubLocal(pointB);
                 float s = Vec2.Dot(temp, normal);
@@ -438,13 +438,13 @@ namespace Box2D.Collision
                 Vec2.CrossToOutUnsafe(temp, 1.0f, Axis);
                 Axis.Normalize();
 
-                Rot.MulToOutUnsafe(xfa.q, Axis, normal);
+                Rot.MulToOutUnsafe(xfa.Q, Axis, normal);
 
                 LocalPoint.Set(localPointA1).AddLocal(localPointA2).MulLocal(.5f);
-                Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
+                Transform.MulToOutUnsafe(xfa, LocalPoint, pointA);
 
                 localPointB.Set(ProxyB.GetVertex(cache.IndexB[0]));
-                Transform.mulToOutUnsafe(xfb, localPointB, pointB);
+                Transform.MulToOutUnsafe(xfb, localPointB, pointB);
 
                 temp.Set(pointB).SubLocal(pointA);
                 float s = Vec2.Dot(temp, normal);
@@ -472,8 +472,8 @@ namespace Box2D.Collision
 
                 case Type.Points:
                     {
-                        Rot.MulTransUnsafe(xfa.q, Axis, axisA);
-                        Rot.MulTransUnsafe(xfb.q, Axis.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfa.Q, Axis, axisA);
+                        Rot.MulTransUnsafe(xfb.Q, Axis.NegateLocal(), axisB);
                         Axis.NegateLocal();
 
                         indexes[0] = ProxyA.GetSupport(axisA);
@@ -482,8 +482,8 @@ namespace Box2D.Collision
                         localPointA.Set(ProxyA.GetVertex(indexes[0]));
                         localPointB.Set(ProxyB.GetVertex(indexes[1]));
 
-                        Transform.mulToOutUnsafe(xfa, localPointA, pointA);
-                        Transform.mulToOutUnsafe(xfb, localPointB, pointB);
+                        Transform.MulToOutUnsafe(xfa, localPointA, pointA);
+                        Transform.MulToOutUnsafe(xfb, localPointB, pointB);
 
                         float separation = Vec2.Dot(pointB.SubLocal(pointA), Axis);
                         return separation;
@@ -491,17 +491,17 @@ namespace Box2D.Collision
 
                 case Type.FaceA:
                     {
-                        Rot.MulToOutUnsafe(xfa.q, Axis, normal);
-                        Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
+                        Rot.MulToOutUnsafe(xfa.Q, Axis, normal);
+                        Transform.MulToOutUnsafe(xfa, LocalPoint, pointA);
 
-                        Rot.MulTransUnsafe(xfb.q, normal.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfb.Q, normal.NegateLocal(), axisB);
                         normal.NegateLocal();
 
                         indexes[0] = -1;
                         indexes[1] = ProxyB.GetSupport(axisB);
 
                         localPointB.Set(ProxyB.GetVertex(indexes[1]));
-                        Transform.mulToOutUnsafe(xfb, localPointB, pointB);
+                        Transform.MulToOutUnsafe(xfb, localPointB, pointB);
 
                         float separation = Vec2.Dot(pointB.SubLocal(pointA), normal);
                         return separation;
@@ -509,17 +509,17 @@ namespace Box2D.Collision
 
                 case Type.FaceB:
                     {
-                        Rot.MulToOutUnsafe(xfb.q, Axis, normal);
-                        Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
+                        Rot.MulToOutUnsafe(xfb.Q, Axis, normal);
+                        Transform.MulToOutUnsafe(xfb, LocalPoint, pointB);
 
-                        Rot.MulTransUnsafe(xfa.q, normal.NegateLocal(), axisA);
+                        Rot.MulTransUnsafe(xfa.Q, normal.NegateLocal(), axisA);
                         normal.NegateLocal();
 
                         indexes[1] = -1;
                         indexes[0] = ProxyA.GetSupport(axisA);
 
                         localPointA.Set(ProxyA.GetVertex(indexes[0]));
-                        Transform.mulToOutUnsafe(xfa, localPointA, pointA);
+                        Transform.MulToOutUnsafe(xfa, localPointA, pointA);
 
                         float separation = Vec2.Dot(pointA.SubLocal(pointB), normal);
                         return separation;
@@ -544,15 +544,15 @@ namespace Box2D.Collision
 
                 case Type.Points:
                     {
-                        Rot.MulTransUnsafe(xfa.q, Axis, axisA);
-                        Rot.MulTransUnsafe(xfb.q, Axis.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfa.Q, Axis, axisA);
+                        Rot.MulTransUnsafe(xfb.Q, Axis.NegateLocal(), axisB);
                         Axis.NegateLocal();
 
                         localPointA.Set(ProxyA.GetVertex(indexA));
                         localPointB.Set(ProxyB.GetVertex(indexB));
 
-                        Transform.mulToOutUnsafe(xfa, localPointA, pointA);
-                        Transform.mulToOutUnsafe(xfb, localPointB, pointB);
+                        Transform.MulToOutUnsafe(xfa, localPointA, pointA);
+                        Transform.MulToOutUnsafe(xfb, localPointB, pointB);
 
                         float separation = Vec2.Dot(pointB.SubLocal(pointA), Axis);
                         return separation;
@@ -561,14 +561,14 @@ namespace Box2D.Collision
                 case Type.FaceA:
                     {
                         // System.out.printf("We're faceA\n");
-                        Rot.MulToOutUnsafe(xfa.q, Axis, normal);
-                        Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
+                        Rot.MulToOutUnsafe(xfa.Q, Axis, normal);
+                        Transform.MulToOutUnsafe(xfa, LocalPoint, pointA);
 
-                        Rot.MulTransUnsafe(xfb.q, normal.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfb.Q, normal.NegateLocal(), axisB);
                         normal.NegateLocal();
 
                         localPointB.Set(ProxyB.GetVertex(indexB));
-                        Transform.mulToOutUnsafe(xfb, localPointB, pointB);
+                        Transform.MulToOutUnsafe(xfb, localPointB, pointB);
                         float separation = Vec2.Dot(pointB.SubLocal(pointA), normal);
                         return separation;
                     }
@@ -576,14 +576,14 @@ namespace Box2D.Collision
                 case Type.FaceB:
                     {
                         // System.out.printf("We're faceB\n");
-                        Rot.MulToOutUnsafe(xfb.q, Axis, normal);
-                        Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
+                        Rot.MulToOutUnsafe(xfb.Q, Axis, normal);
+                        Transform.MulToOutUnsafe(xfb, LocalPoint, pointB);
 
-                        Rot.MulTransUnsafe(xfa.q, normal.NegateLocal(), axisA);
+                        Rot.MulTransUnsafe(xfa.Q, normal.NegateLocal(), axisA);
                         normal.NegateLocal();
 
                         localPointA.Set(ProxyA.GetVertex(indexA));
-                        Transform.mulToOutUnsafe(xfa, localPointA, pointA);
+                        Transform.MulToOutUnsafe(xfa, localPointA, pointA);
 
                         float separation = Vec2.Dot(pointA.SubLocal(pointB), normal);
                         return separation;

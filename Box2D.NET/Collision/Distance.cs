@@ -174,8 +174,8 @@ namespace Box2D.Collision
                     v.IndexB = cache.IndexB[i];
                     Vec2 wALocal = proxyA.GetVertex(v.IndexA);
                     Vec2 wBLocal = proxyB.GetVertex(v.IndexB);
-                    Transform.mulToOutUnsafe(transformA, wALocal, v.Wa);
-                    Transform.mulToOutUnsafe(transformB, wBLocal, v.Wb);
+                    Transform.MulToOutUnsafe(transformA, wALocal, v.Wa);
+                    Transform.MulToOutUnsafe(transformB, wBLocal, v.Wb);
                     v.W.Set(v.Wb).SubLocal(v.Wa);
                     v.A = 0.0f;
                 }
@@ -201,8 +201,8 @@ namespace Box2D.Collision
                     v.IndexB = 0;
                     Vec2 wALocal = proxyA.GetVertex(0);
                     Vec2 wBLocal = proxyB.GetVertex(0);
-                    Transform.mulToOutUnsafe(transformA, wALocal, v.Wa);
-                    Transform.mulToOutUnsafe(transformB, wBLocal, v.Wb);
+                    Transform.MulToOutUnsafe(transformA, wALocal, v.Wa);
+                    Transform.MulToOutUnsafe(transformB, wBLocal, v.Wb);
                     v.W.Set(v.Wb).SubLocal(v.Wa);
                     Count = 1;
                 }
@@ -791,13 +791,13 @@ namespace Box2D.Collision
                 // Compute a tentative new simplex vertex using support points.
                 SimplexVertex vertex = vertices[simplex.Count];
 
-                Rot.MulTransUnsafe(transformA.q, d.NegateLocal(), temp);
+                Rot.MulTransUnsafe(transformA.Q, d.NegateLocal(), temp);
                 vertex.IndexA = proxyA.GetSupport(temp);
-                Transform.mulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.Wa);
+                Transform.MulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.Wa);
                 // Vec2 wBLocal;
-                Rot.MulTransUnsafe(transformB.q, d.NegateLocal(), temp);
+                Rot.MulTransUnsafe(transformB.Q, d.NegateLocal(), temp);
                 vertex.IndexB = proxyB.GetSupport(temp);
-                Transform.mulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.Wb);
+                Transform.MulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.Wb);
                 vertex.W.Set(vertex.Wb).SubLocal(vertex.Wa);
 
                 // Iteration count is equated to the number of support point calls.

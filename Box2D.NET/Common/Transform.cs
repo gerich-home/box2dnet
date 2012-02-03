@@ -37,40 +37,50 @@ namespace Box2D.Common
     [Serializable]
     public class Transform
     {
-        private const long serialVersionUID = 1L;
+        /// <summary>
+        /// The translation caused by the transform
+        /// </summary>
+        public readonly Vec2 P;
 
-        /// <summary>The translation caused by the transform </summary>
-        public readonly Vec2 p;
+        /// <summary>
+        /// A matrix representing a rotation 
+        /// </summary>
+        public readonly Rot Q;
 
-        /// <summary>A matrix representing a rotation </summary>
-        public readonly Rot q;
-
-        /// <summary>The default constructor. </summary>
+        /// <summary>
+        /// The default constructor.
+        /// </summary>
         public Transform()
         {
-            p = new Vec2();
-            q = new Rot();
+            P = new Vec2();
+            Q = new Rot();
         }
 
-        /// <summary>Initialize as a copy of another transform. </summary>
+        /// <summary>
+        /// Initialize as a copy of another transform.
+        /// </summary>
         public Transform(Transform xf)
         {
-            p = xf.p.Clone();
-            q = xf.q.Clone();
+            P = xf.P.Clone();
+            Q = xf.Q.Clone();
         }
 
-        /// <summary>Initialize using a position vector and a rotation matrix. </summary>
-        public Transform(Vec2 _position, Rot _R)
+        /// <summary>
+        /// Initialize using a position vector and a rotation matrix.
+        /// </summary>
+        public Transform(Vec2 position, Rot r)
         {
-            p = _position.Clone();
-            q = _R.Clone();
+            P = position.Clone();
+            Q = r.Clone();
         }
 
-        /// <summary>Set this to equal another transform. </summary>
-        public Transform set_Renamed(Transform xf)
+        /// <summary>
+        /// Set this to equal another transform.
+        /// </summary>
+        public Transform Set(Transform xf)
         {
-            p.Set(xf.p);
-            q.Set(xf.q);
+            P.Set(xf.P);
+            Q.Set(xf.Q);
             return this;
         }
 
@@ -79,124 +89,122 @@ namespace Box2D.Common
         /// </summary>
         /// <param name="p"></param>
         /// <param name="angle"></param>
-        public void set_Renamed(Vec2 p, float angle)
+        public void Set(Vec2 p, float angle)
         {
-            this.p.Set(p);
-            q.Set(angle);
+            this.P.Set(p);
+            Q.Set(angle);
         }
 
-        /// <summary>Set this to the identity transform. </summary>
-        public void setIdentity()
+        /// <summary>
+        /// Set this to the identity transform.
+        /// </summary>
+        public void SetIdentity()
         {
-            p.SetZero();
-            q.SetIdentity();
+            P.SetZero();
+            Q.SetIdentity();
         }
 
-        public static Vec2 mul(Transform T, Vec2 v)
+        public static Vec2 Mul(Transform T, Vec2 v)
         {
-            return new Vec2((T.q.Cos * v.X - T.q.Sin * v.Y) + T.p.X, (T.q.Sin * v.X + T.q.Cos * v.Y) + T.p.Y);
+            return new Vec2((T.Q.Cos * v.X - T.Q.Sin * v.Y) + T.P.X, (T.Q.Sin * v.X + T.Q.Cos * v.Y) + T.P.Y);
         }
 
-        public static void mulToOut(Transform T, Vec2 v, Vec2 out_Renamed)
+        public static void MulToOut(Transform T, Vec2 v, Vec2 result)
         {
-            float tempy = (T.q.Sin * v.X + T.q.Cos * v.Y) + T.p.Y;
-            out_Renamed.X = (T.q.Cos * v.X - T.q.Sin * v.Y) + T.p.X;
-            out_Renamed.Y = tempy;
+            float tempy = (T.Q.Sin * v.X + T.Q.Cos * v.Y) + T.P.Y;
+            result.X = (T.Q.Cos * v.X - T.Q.Sin * v.Y) + T.P.X;
+            result.Y = tempy;
         }
 
-        public static void mulToOutUnsafe(Transform T, Vec2 v, Vec2 out_Renamed)
+        public static void MulToOutUnsafe(Transform T, Vec2 v, Vec2 result)
         {
-            Debug.Assert(v != out_Renamed);
-            out_Renamed.X = (T.q.Cos * v.X - T.q.Sin * v.Y) + T.p.X;
-            out_Renamed.Y = (T.q.Sin * v.X + T.q.Cos * v.Y) + T.p.Y;
+            Debug.Assert(v != result);
+            result.X = (T.Q.Cos * v.X - T.Q.Sin * v.Y) + T.P.X;
+            result.Y = (T.Q.Sin * v.X + T.Q.Cos * v.Y) + T.P.Y;
         }
 
-        public static Vec2 mulTrans(Transform T, Vec2 v)
+        public static Vec2 MulTrans(Transform T, Vec2 v)
         {
-            float px = v.X - T.p.X;
-            float py = v.Y - T.p.Y;
-            return new Vec2((T.q.Cos * px + T.q.Sin * py), ((-T.q.Sin) * px + T.q.Cos * py));
+            float px = v.X - T.P.X;
+            float py = v.Y - T.P.Y;
+            return new Vec2((T.Q.Cos * px + T.Q.Sin * py), ((-T.Q.Sin) * px + T.Q.Cos * py));
         }
 
-        public static void mulTransToOut(Transform T, Vec2 v, Vec2 out_Renamed)
+        public static void MulTransToOut(Transform T, Vec2 v, Vec2 result)
         {
-            float px = v.X - T.p.X;
-            float py = v.Y - T.p.Y;
-            float tempy = ((-T.q.Sin) * px + T.q.Cos * py);
-            out_Renamed.X = (T.q.Cos * px + T.q.Sin * py);
-            out_Renamed.Y = tempy;
+            float px = v.X - T.P.X;
+            float py = v.Y - T.P.Y;
+            float tempy = ((-T.Q.Sin) * px + T.Q.Cos * py);
+            result.X = (T.Q.Cos * px + T.Q.Sin * py);
+            result.Y = tempy;
         }
 
-        public static void mulTransToOutUnsafe(Transform T, Vec2 v, Vec2 out_Renamed)
+        public static void MulTransToOutUnsafe(Transform T, Vec2 v, Vec2 result)
         {
-            Debug.Assert(v != out_Renamed);
-            float px = v.X - T.p.X;
-            float py = v.Y - T.p.Y;
-            out_Renamed.X = (T.q.Cos * px + T.q.Sin * py);
-            out_Renamed.Y = (-T.q.Sin * px + T.q.Cos * py);
+            Debug.Assert(v != result);
+            float px = v.X - T.P.X;
+            float py = v.Y - T.P.Y;
+            result.X = (T.Q.Cos * px + T.Q.Sin * py);
+            result.Y = (-T.Q.Sin * px + T.Q.Cos * py);
         }
 
-        public static Transform mul(Transform A, Transform B)
+        public static Transform Mul(Transform A, Transform B)
         {
             Transform C = new Transform();
-            Rot.MulUnsafe(A.q, B.q, C.q);
-            Rot.MulToOutUnsafe(A.q, B.p, C.p);
-            C.p.AddLocal(A.p);
+            Rot.MulUnsafe(A.Q, B.Q, C.Q);
+            Rot.MulToOutUnsafe(A.Q, B.P, C.P);
+            C.P.AddLocal(A.P);
             return C;
         }
 
-        public static void mulToOut(Transform A, Transform B, Transform out_Renamed)
+        public static void MulToOut(Transform A, Transform B, Transform result)
         {
-            Debug.Assert(out_Renamed != A);
-            Rot.Mul(A.q, B.q, out_Renamed.q);
-            Rot.MulToOut(A.q, B.p, out_Renamed.p);
-            out_Renamed.p.AddLocal(A.p);
+            Debug.Assert(result != A);
+            Rot.Mul(A.Q, B.Q, result.Q);
+            Rot.MulToOut(A.Q, B.P, result.P);
+            result.P.AddLocal(A.P);
         }
 
-        public static void mulToOutUnsafe(Transform A, Transform B, Transform out_Renamed)
+        public static void MulToOutUnsafe(Transform A, Transform B, Transform result)
         {
-            Debug.Assert(out_Renamed != B);
-            Debug.Assert(out_Renamed != A);
-            Rot.MulUnsafe(A.q, B.q, out_Renamed.q);
-            Rot.MulToOutUnsafe(A.q, B.p, out_Renamed.p);
-            out_Renamed.p.AddLocal(A.p);
+            Debug.Assert(result != B);
+            Debug.Assert(result != A);
+            Rot.MulUnsafe(A.Q, B.Q, result.Q);
+            Rot.MulToOutUnsafe(A.Q, B.P, result.P);
+            result.P.AddLocal(A.P);
         }
 
-        private static Vec2 pool = new Vec2();
+        private static readonly Vec2 pool = new Vec2();
 
-        public static Transform mulTrans(Transform A, Transform B)
+        public static Transform MulTrans(Transform A, Transform B)
         {
             Transform C = new Transform();
-            Rot.MulTransUnsafe(A.q, B.q, C.q);
-            pool.Set(B.p).SubLocal(A.p);
-            Rot.MulTransUnsafe(A.q, pool, C.p);
+            Rot.MulTransUnsafe(A.Q, B.Q, C.Q);
+            pool.Set(B.P).SubLocal(A.P);
+            Rot.MulTransUnsafe(A.Q, pool, C.P);
             return C;
         }
 
-        public static void mulTransToOut(Transform A, Transform B, Transform out_Renamed)
+        public static void MulTransToOut(Transform A, Transform B, Transform result)
         {
-            Debug.Assert(out_Renamed != A);
-            Rot.MulTrans(A.q, B.q, out_Renamed.q);
-            pool.Set(B.p).SubLocal(A.p);
-            Rot.MulTrans(A.q, pool, out_Renamed.p);
+            Debug.Assert(result != A);
+            Rot.MulTrans(A.Q, B.Q, result.Q);
+            pool.Set(B.P).SubLocal(A.P);
+            Rot.MulTrans(A.Q, pool, result.P);
         }
 
-        public static void mulTransToOutUnsafe(Transform A, Transform B, Transform out_Renamed)
+        public static void MulTransToOutUnsafe(Transform A, Transform B, Transform result)
         {
-            Debug.Assert(out_Renamed != A);
-            Debug.Assert(out_Renamed != B);
-            Rot.MulTransUnsafe(A.q, B.q, out_Renamed.q);
-            pool.Set(B.p).SubLocal(A.p);
-            Rot.MulTransUnsafe(A.q, pool, out_Renamed.p);
+            Debug.Assert(result != A);
+            Debug.Assert(result != B);
+            Rot.MulTransUnsafe(A.Q, B.Q, result.Q);
+            pool.Set(B.P).SubLocal(A.P);
+            Rot.MulTransUnsafe(A.Q, pool, result.P);
         }
 
         public override String ToString()
         {
-            String s = "XForm:\n";
-            s += ("Position: " + p + "\n");
-            //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.Object.toString' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
-            s += ("R: \n" + q + "\n");
-            return s;
+            return string.Format("XForm:\n" + "Position: {0}\n" + "R: \n{1}\n", P, Q);
         }
     }
 }

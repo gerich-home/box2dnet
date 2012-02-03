@@ -388,8 +388,8 @@ namespace Box2D.Dynamics
                 proxy.AABB.LowerBound.Y = aabb1.LowerBound.Y < aab.LowerBound.Y ? aabb1.LowerBound.Y : aab.LowerBound.Y;
                 proxy.AABB.UpperBound.X = aabb1.UpperBound.X > aab.UpperBound.X ? aabb1.UpperBound.X : aab.UpperBound.X;
                 proxy.AABB.UpperBound.Y = aabb1.UpperBound.Y > aab.UpperBound.Y ? aabb1.UpperBound.Y : aab.UpperBound.Y;
-                displacement.X = transform2.p.X - transform1.p.X;
-                displacement.Y = transform2.p.Y - transform1.p.Y;
+                displacement.X = transform2.P.X - transform1.P.X;
+                displacement.Y = transform2.P.Y - transform1.P.Y;
 
                 broadPhase.MoveProxy(proxy.ProxyId, proxy.AABB, displacement);
             }

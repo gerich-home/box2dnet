@@ -114,12 +114,12 @@ namespace Box2D.Dynamics
 
             World = world;
 
-            Xf.p.Set(bd.Position);
-            Xf.q.Set(bd.Angle);
+            Xf.P.Set(bd.Position);
+            Xf.Q.Set(bd.Angle);
 
             Sweep.LocalCenter.SetZero();
-            Sweep.C0.Set(Xf.p);
-            Sweep.C.Set(Xf.p);
+            Sweep.C0.Set(Xf.P);
+            Sweep.C.Set(Xf.P);
             Sweep.A0 = bd.Angle;
             Sweep.A = bd.Angle;
             Sweep.Alpha0 = 0.0f;
@@ -324,11 +324,11 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            Xf.q.Set(angle);
-            Xf.p.Set(position);
+            Xf.Q.Set(angle);
+            Xf.P.Set(position);
 
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
-            Transform.mulToOutUnsafe(Xf, Sweep.LocalCenter, Sweep.C);
+            Transform.MulToOutUnsafe(Xf, Sweep.LocalCenter, Sweep.C);
             Sweep.A = angle;
 
             Sweep.C0.Set(Sweep.C);
@@ -360,7 +360,7 @@ namespace Box2D.Dynamics
         {
             get
             {
-                return Xf.p;
+                return Xf.P;
             }
         }
 
@@ -919,7 +919,7 @@ namespace Box2D.Dynamics
             oldCenter.Set(Sweep.C);
             Sweep.LocalCenter.Set(massData.Center);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
-            Transform.mulToOutUnsafe(Xf, Sweep.LocalCenter, Sweep.C0);
+            Transform.MulToOutUnsafe(Xf, Sweep.LocalCenter, Sweep.C0);
             Sweep.C.Set(Sweep.C0);
 
             // Update center of mass velocity.
@@ -952,8 +952,8 @@ namespace Box2D.Dynamics
             if (m_type == BodyType.Static || m_type == BodyType.Kinematic)
             {
                 // m_sweep.c0 = m_sweep.c = m_xf.position;
-                Sweep.C0.Set(Xf.p);
-                Sweep.C.Set(Xf.p);
+                Sweep.C0.Set(Xf.P);
+                Sweep.C.Set(Xf.P);
                 Sweep.A0 = Sweep.A;
                 return;
             }
@@ -1010,7 +1010,7 @@ namespace Box2D.Dynamics
             oldCenter.Set(Sweep.C);
             Sweep.LocalCenter.Set(localCenter);
             // m_sweep.c0 = m_sweep.c = Mul(m_xf, m_sweep.localCenter);
-            Transform.mulToOutUnsafe(Xf, Sweep.LocalCenter, Sweep.C0);
+            Transform.MulToOutUnsafe(Xf, Sweep.LocalCenter, Sweep.C0);
             Sweep.C.Set(Sweep.C0);
 
             // Update center of mass velocity.
@@ -1038,7 +1038,7 @@ namespace Box2D.Dynamics
 
         public void GetWorldPointToOut(Vec2 localPoint, Vec2 result)
         {
-            Transform.mulToOut(Xf, localPoint, result);
+            Transform.MulToOut(Xf, localPoint, result);
         }
 
         /// <summary>
@@ -1055,12 +1055,12 @@ namespace Box2D.Dynamics
 
         public void GetWorldVectorToOut(Vec2 localVector, Vec2 result)
         {
-            Rot.MulToOut(Xf.q, localVector, result);
+            Rot.MulToOut(Xf.Q, localVector, result);
         }
 
         public void GetWorldVectorToOutUnsafe(Vec2 localVector, Vec2 result)
         {
-            Rot.MulToOutUnsafe(Xf.q, localVector, result);
+            Rot.MulToOutUnsafe(Xf.Q, localVector, result);
         }
 
         /// <summary>
@@ -1077,7 +1077,7 @@ namespace Box2D.Dynamics
 
         public void GetLocalPointToOut(Vec2 worldPoint, Vec2 result)
         {
-            Transform.mulTransToOut(Xf, worldPoint, result);
+            Transform.MulTransToOut(Xf, worldPoint, result);
         }
 
         /// <summary>
@@ -1094,12 +1094,12 @@ namespace Box2D.Dynamics
 
         public void GetLocalVectorToOut(Vec2 worldVector, Vec2 result)
         {
-            Rot.MulTrans(Xf.q, worldVector, result);
+            Rot.MulTrans(Xf.Q, worldVector, result);
         }
 
         public void GetLocalVectorToOutUnsafe(Vec2 worldVector, Vec2 result)
         {
-            Rot.MulTransUnsafe(Xf.q, worldVector, result);
+            Rot.MulTransUnsafe(Xf.Q, worldVector, result);
         }
 
         /// <summary>
@@ -1151,10 +1151,10 @@ namespace Box2D.Dynamics
             // Rot.mulToOutUnsafe(xf1.q, m_sweep.localCenter, xf1.p);
             // xf1.p.mulLocal(-1).addLocal(m_sweep.c0);
             // inlined:
-            xf1.q.Sin = MathUtils.Sin(Sweep.A0);
-            xf1.q.Cos = MathUtils.Cos(Sweep.A0);
-            xf1.p.X = Sweep.C0.X - xf1.q.Cos * Sweep.LocalCenter.X + xf1.q.Sin * Sweep.LocalCenter.Y;
-            xf1.p.Y = Sweep.C0.Y - xf1.q.Sin * Sweep.LocalCenter.X - xf1.q.Cos * Sweep.LocalCenter.Y;
+            xf1.Q.Sin = MathUtils.Sin(Sweep.A0);
+            xf1.Q.Cos = MathUtils.Cos(Sweep.A0);
+            xf1.P.X = Sweep.C0.X - xf1.Q.Cos * Sweep.LocalCenter.X + xf1.Q.Sin * Sweep.LocalCenter.Y;
+            xf1.P.Y = Sweep.C0.Y - xf1.Q.Sin * Sweep.LocalCenter.X - xf1.Q.Cos * Sweep.LocalCenter.Y;
             // end inline
 
             for (Fixture f = FixtureList; f != null; f = f.Next)
@@ -1171,12 +1171,12 @@ namespace Box2D.Dynamics
             // Rot.mulToOutUnsafe(m_xf.q, m_sweep.localCenter, m_xf.p);
             // m_xf.p.mulLocal(-1).addLocal(m_sweep.c);
             //
-            Xf.q.Sin = MathUtils.Sin(Sweep.A);
-            Xf.q.Cos = MathUtils.Cos(Sweep.A);
-            Rot q = Xf.q;
+            Xf.Q.Sin = MathUtils.Sin(Sweep.A);
+            Xf.Q.Cos = MathUtils.Cos(Sweep.A);
+            Rot q = Xf.Q;
             Vec2 v = Sweep.LocalCenter;
-            Xf.p.X = Sweep.C.X - q.Cos * v.X + q.Sin * v.Y;
-            Xf.p.Y = Sweep.C.Y - q.Sin * v.X - q.Cos * v.Y;
+            Xf.P.X = Sweep.C.X - q.Cos * v.X + q.Sin * v.Y;
+            Xf.P.Y = Sweep.C.Y - q.Sin * v.X - q.Cos * v.Y;
         }
 
         /// <summary>
@@ -1214,10 +1214,10 @@ namespace Box2D.Dynamics
             Sweep.Advance(t);
             Sweep.C.Set(Sweep.C0);
             Sweep.A = Sweep.A0;
-            Xf.q.Set(Sweep.A);
+            Xf.Q.Set(Sweep.A);
             // m_xf.position = m_sweep.c - Mul(m_xf.R, m_sweep.localCenter);
-            Rot.MulToOutUnsafe(Xf.q, Sweep.LocalCenter, Xf.p);
-            Xf.p.MulLocal(-1).AddLocal(Sweep.C);
+            Rot.MulToOutUnsafe(Xf.Q, Sweep.LocalCenter, Xf.P);
+            Xf.P.MulLocal(-1).AddLocal(Sweep.C);
         }
     }
 }

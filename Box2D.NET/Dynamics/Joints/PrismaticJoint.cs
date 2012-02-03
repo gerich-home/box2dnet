@@ -248,16 +248,16 @@ namespace Box2D.Dynamics.Joints
                 Vec2 temp3 = pc[8];
 
                 temp.Set(m_localAnchorA).SubLocal(bA.Sweep.LocalCenter);
-                Rot.MulToOutUnsafe(bA.Xf.q, temp, rA);
+                Rot.MulToOutUnsafe(bA.Xf.Q, temp, rA);
 
                 temp.Set(m_localAnchorB).SubLocal(bB.Sweep.LocalCenter);
-                Rot.MulToOutUnsafe(bB.Xf.q, temp, rB);
+                Rot.MulToOutUnsafe(bB.Xf.Q, temp, rB);
 
                 p1.Set(bA.Sweep.C).AddLocal(rA);
                 p2.Set(bB.Sweep.C).AddLocal(rB);
 
                 d.Set(p2).SubLocal(p1);
-                Rot.MulToOutUnsafe(bA.Xf.q, m_localXAxisA, axis);
+                Rot.MulToOutUnsafe(bA.Xf.Q, m_localXAxisA, axis);
 
                 Vec2 vA = bA.m_linearVelocity;
                 Vec2 vB = bB.m_linearVelocity;

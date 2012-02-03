@@ -69,7 +69,7 @@ namespace Box2D.Dynamics.Joints
             Debug.Assert(def.dampingRatio >= 0);
 
             m_targetA.Set(def.target);
-            Transform.mulTransToOutUnsafe(m_bodyB.GetTransform(), m_targetA, m_localAnchorB);
+            Transform.MulTransToOutUnsafe(m_bodyB.GetTransform(), m_targetA, m_localAnchorB);
 
             m_maxForce = def.maxForce;
             m_impulse.SetZero();

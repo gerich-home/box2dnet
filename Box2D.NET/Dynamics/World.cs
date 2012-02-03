@@ -615,7 +615,7 @@ namespace Box2D.Dynamics
             {
                 for (Body b = BodyList; b != null; b = b.Next)
                 {
-                    xf.set_Renamed(b.GetTransform());
+                    xf.Set(b.GetTransform());
                     for (Fixture f = b.FixtureList; f != null; f = f.Next)
                     {
                         if (b.Active == false)
@@ -704,8 +704,8 @@ namespace Box2D.Dynamics
             {
                 for (Body b = BodyList; b != null; b = b.Next)
                 {
-                    xf.set_Renamed(b.GetTransform());
-                    xf.p.Set(b.WorldCenter);
+                    xf.Set(b.GetTransform());
+                    xf.P.Set(b.WorldCenter);
                     DebugDraw.DrawTransform(xf);
                 }
             }
@@ -1475,8 +1475,8 @@ namespace Box2D.Dynamics
             Body bodyB = joint.BodyB;
             Transform xf1 = bodyA.GetTransform();
             Transform xf2 = bodyB.GetTransform();
-            Vec2 x1 = xf1.p;
-            Vec2 x2 = xf2.p;
+            Vec2 x1 = xf1.P;
+            Vec2 x2 = xf2.P;
             Vec2 p1 = Pool.PopVec2();
             Vec2 p2 = Pool.PopVec2();
             joint.getAnchorA(p1);
@@ -1544,9 +1544,9 @@ namespace Box2D.Dynamics
                         CircleShape circle = (CircleShape)fixture.Shape;
 
                         // Vec2 center = Mul(xf, circle.m_p);
-                        Transform.mulToOutUnsafe(xf, circle.P, center);
+                        Transform.MulToOutUnsafe(xf, circle.P, center);
                         float radius = circle.Radius;
-                        xf.q.GetXAxis(axis);
+                        xf.Q.GetXAxis(axis);
 
                         if (fixture.UserData != null && fixture.UserData.Equals(LIQUID_INT))
                         {
@@ -1583,7 +1583,7 @@ namespace Box2D.Dynamics
                         for (int i = 0; i < vertexCount; ++i)
                         {
                             // vertices[i] = Mul(xf, poly.m_vertices[i]);
-                            Transform.mulToOutUnsafe(xf, poly.Vertices[i], vertices[i]);
+                            Transform.MulToOutUnsafe(xf, poly.Vertices[i], vertices[i]);
                         }
 
                         DebugDraw.DrawSolidPolygon(vertices, vertexCount, color);
@@ -1593,8 +1593,8 @@ namespace Box2D.Dynamics
                 case ShapeType.Edge:
                     {
                         EdgeShape edge = (EdgeShape)fixture.Shape;
-                        Transform.mulToOutUnsafe(xf, edge.Vertex1, v1);
-                        Transform.mulToOutUnsafe(xf, edge.Vertex2, v2);
+                        Transform.MulToOutUnsafe(xf, edge.Vertex1, v1);
+                        Transform.MulToOutUnsafe(xf, edge.Vertex2, v2);
                         DebugDraw.DrawSegment(v1, v2, color);
                     }
                     break;
@@ -1606,10 +1606,10 @@ namespace Box2D.Dynamics
                         int count = chain.Count;
                         Vec2[] vertices = chain.Vertices;
 
-                        Transform.mulToOutUnsafe(xf, vertices[0], v1);
+                        Transform.MulToOutUnsafe(xf, vertices[0], v1);
                         for (int i = 1; i < count; ++i)
                         {
-                            Transform.mulToOutUnsafe(xf, vertices[i], v2);
+                            Transform.MulToOutUnsafe(xf, vertices[i], v2);
                             DebugDraw.DrawSegment(v1, v2, color);
                             DebugDraw.DrawCircle(v1, 0.05f, color);
                             v1.Set(v2);

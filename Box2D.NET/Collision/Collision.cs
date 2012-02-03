@@ -72,8 +72,8 @@ namespace Box2D.Collision
         {
             input.ProxyA.Set(shapeA, indexA);
             input.ProxyB.Set(shapeB, indexB);
-            input.TransformA.set_Renamed(xfA);
-            input.TransformB.set_Renamed(xfB);
+            input.TransformA.Set(xfA);
+            input.TransformB.Set(xfB);
             input.UseRadii = true;
 
             cache.Count = 0;
@@ -204,8 +204,8 @@ namespace Box2D.Collision
             manifold.PointCount = 0;
 
             // before inline:
-            Transform.mulToOut(xfA, circle1.P, P_A);
-            Transform.mulToOut(xfB, circle2.P, P_B);
+            Transform.MulToOut(xfA, circle1.P, P_A);
+            Transform.MulToOut(xfB, circle2.P, P_B);
             D.Set(P_B).SubLocal(P_A);
             float distSqr = D.X * D.X + D.Y * D.Y;
 
@@ -258,8 +258,8 @@ namespace Box2D.Collision
 
             // Compute circle position in the frame of the polygon.
             // before inline:
-            Transform.mulToOut(xfB, circle.P, C);
-            Transform.mulTransToOut(xfA, C, C_LOCAL);
+            Transform.MulToOut(xfB, circle.P, C);
+            Transform.MulTransToOut(xfA, C, C_LOCAL);
 
             float cLocalx = C_LOCAL.X;
             float cLocaly = C_LOCAL.Y;
@@ -476,9 +476,9 @@ namespace Box2D.Collision
             // Convert normal from poly1's frame into poly2's frame.
             // before inline:
             // Vec2 normal1World = Mul(xf1.R, normals1[edge1]);
-            Rot.MulToOutUnsafe(xf1.q, normals1[edge1], normal1World);
+            Rot.MulToOutUnsafe(xf1.Q, normals1[edge1], normal1World);
             // Vec2 normal1 = MulT(xf2.R, normal1World);
-            Rot.MulTransUnsafe(xf2.q, normal1World, normal1);
+            Rot.MulTransUnsafe(xf2.Q, normal1World, normal1);
             float normal1X = normal1.X;
             float normal1Y = normal1.Y;
             // after inline:
@@ -510,8 +510,8 @@ namespace Box2D.Collision
             // Vec2 v1 = Mul(xf1, vertices1[edge1]);
             // Vec2 v2 = Mul(xf2, vertices2[index]);
             // before inline:
-            Transform.mulToOut(xf1, vertices1[edge1], v1);
-            Transform.mulToOut(xf2, vertices2[index], v2);
+            Transform.MulToOut(xf1, vertices1[edge1], v1);
+            Transform.MulToOut(xf2, vertices2[index], v2);
 
             float separation = Vec2.Dot(v2.SubLocal(v1), normal1World);
             return separation;
@@ -549,11 +549,11 @@ namespace Box2D.Collision
 
             // Vector pointing from the centroid of poly1 to the centroid of poly2.
             // before inline:
-            Transform.mulToOutUnsafe(xf2, poly2.Centroid, D);
-            Transform.mulToOutUnsafe(xf1, poly1.Centroid, temp);
+            Transform.MulToOutUnsafe(xf2, poly2.Centroid, D);
+            Transform.MulToOutUnsafe(xf1, poly1.Centroid, temp);
             D.SubLocal(temp);
 
-            Rot.MulTransUnsafe(xf1.q, D, dLocal1);
+            Rot.MulTransUnsafe(xf1.Q, D, dLocal1);
             float dLocal1X = dLocal1.X;
             float dLocal1Y = dLocal1.Y;
             // after inline:
@@ -661,9 +661,9 @@ namespace Box2D.Collision
             Debug.Assert(0 <= edge1 && edge1 < count1);
 
             // Get the normal of the reference edge in poly2's frame.
-            Rot.MulToOutUnsafe(xf1.q, normals1[edge1], normal1); // temporary
+            Rot.MulToOutUnsafe(xf1.Q, normals1[edge1], normal1); // temporary
             // Vec2 normal1 = MulT(xf2.R, Mul(xf1.R, normals1[edge1]));
-            Rot.MulTrans(xf2.q, normal1, normal1);
+            Rot.MulTrans(xf2.Q, normal1, normal1);
 
             // Find the incident edge on poly2.
             int index = 0;
@@ -682,13 +682,13 @@ namespace Box2D.Collision
             int i1 = index;
             int i2 = i1 + 1 < count2 ? i1 + 1 : 0;
 
-            Transform.mulToOutUnsafe(xf2, vertices2[i1], c[0].V); // = Mul(xf2, vertices2[i1]);
+            Transform.MulToOutUnsafe(xf2, vertices2[i1], c[0].V); // = Mul(xf2, vertices2[i1]);
             c[0].Id.IndexA = (sbyte)edge1;
             c[0].Id.IndexB = (sbyte)i1;
             c[0].Id.TypeA = (sbyte)ContactID.Type.Face;
             c[0].Id.TypeB = (sbyte)ContactID.Type.Vertex;
 
-            Transform.mulToOutUnsafe(xf2, vertices2[i2], c[1].V); // = Mul(xf2, vertices2[i2]);
+            Transform.MulToOutUnsafe(xf2, vertices2[i2], c[1].V); // = Mul(xf2, vertices2[i2]);
             c[1].Id.IndexA = (sbyte)edge1;
             c[1].Id.IndexB = (sbyte)i2;
             c[1].Id.TypeA = (sbyte)ContactID.Type.Face;
@@ -788,13 +788,13 @@ namespace Box2D.Collision
             planePoint.Set(v11).AddLocal(v12).MulLocal(.5f); // Vec2 planePoint = 0.5f * (v11
             // + v12);
 
-            Rot.MulToOutUnsafe(xf1.q, localTangent, tangent); // Vec2 sideNormal = Mul(xf1.R, v12
+            Rot.MulToOutUnsafe(xf1.Q, localTangent, tangent); // Vec2 sideNormal = Mul(xf1.R, v12
             // - v11);
             Vec2.CrossToOutUnsafe(tangent, 1f, normal); // Vec2 frontNormal = Vec2.cross(sideNormal,
             // 1.0f);
 
-            Transform.mulToOut(xf1, v11, v11);
-            Transform.mulToOut(xf1, v12, v12);
+            Transform.MulToOut(xf1, v11, v11);
+            Transform.MulToOut(xf1, v12, v12);
             // v11 = Mul(xf1, v11);
             // v12 = Mul(xf1, v12);
 
@@ -841,7 +841,7 @@ namespace Box2D.Collision
                 if (separation <= totalRadius)
                 {
                     ManifoldPoint cp = manifold.Points[pointCount];
-                    Transform.mulTransToOut(xf2, clipPoints2[i].V, cp.LocalPoint);
+                    Transform.MulTransToOut(xf2, clipPoints2[i].V, cp.LocalPoint);
                     // cp.m_localPoint = MulT(xf2, clipPoints2[i].v);
                     cp.Id.Set(clipPoints2[i].Id);
                     if (flip)
@@ -873,8 +873,8 @@ namespace Box2D.Collision
 
             // Compute circle in frame of edge
             // Vec2 Q = MulT(xfA, Mul(xfB, circleB.m_p));
-            Transform.mulToOutUnsafe(xfB, circleB.P, temp);
-            Transform.mulTransToOutUnsafe(xfA, temp, q);
+            Transform.MulToOutUnsafe(xfB, circleB.P, temp);
+            Transform.MulTransToOutUnsafe(xfA, temp, q);
 
             Vec2 A = edgeA.Vertex1;
             Vec2 B = edgeA.Vertex2;
@@ -1165,8 +1165,8 @@ namespace Box2D.Collision
             public void Collide(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
             {
 
-                Transform.mulTransToOutUnsafe(xfA, xfB, xf);
-                Transform.mulToOutUnsafe(xf, polygonB.Centroid, centroidB);
+                Transform.MulTransToOutUnsafe(xfA, xfB, xf);
+                Transform.MulToOutUnsafe(xf, polygonB.Centroid, centroidB);
 
                 v0 = edgeA.Vertex0;
                 v1 = edgeA.Vertex1;
@@ -1362,8 +1362,8 @@ namespace Box2D.Collision
                 this.polygonB.Count = polygonB.VertexCount;
                 for (int i = 0; i < polygonB.VertexCount; ++i)
                 {
-                    Transform.mulToOutUnsafe(xf, polygonB.Vertices[i], this.polygonB.Vertices[i]);
-                    Rot.MulToOutUnsafe(xf.q, polygonB.Normals[i], this.polygonB.Normals[i]);
+                    Transform.MulToOutUnsafe(xf, polygonB.Vertices[i], this.polygonB.Vertices[i]);
+                    Rot.MulToOutUnsafe(xf.Q, polygonB.Normals[i], this.polygonB.Normals[i]);
                 }
 
                 radius = 2.0f * Settings.POLYGON_RADIUS;
@@ -1528,7 +1528,7 @@ namespace Box2D.Collision
                         if (primaryAxis.Type == EPAxis.EPAxisType.EdgeA)
                         {
                             // cp.localPoint = MulT(m_xf, clipPoints2[i].v);
-                            Transform.mulTransToOutUnsafe(xf, clipPoints2[i].V, cp.LocalPoint);
+                            Transform.MulTransToOutUnsafe(xf, clipPoints2[i].V, cp.LocalPoint);
                             cp.Id.Set(clipPoints2[i].Id);
                         }
                         else
