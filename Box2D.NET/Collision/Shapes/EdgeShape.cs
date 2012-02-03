@@ -187,13 +187,13 @@ namespace Box2D.Collision.Shapes
         public override Shape Clone()
         {
             EdgeShape edge = new EdgeShape();
-            edge.Radius = this.Radius;
-            edge.HasVertex0 = this.HasVertex0;
-            edge.HasVertex3 = this.HasVertex3;
-            edge.Vertex0.Set(this.Vertex0);
-            edge.Vertex1.Set(this.Vertex1);
-            edge.Vertex2.Set(this.Vertex2);
-            edge.Vertex3.Set(this.Vertex3);
+            edge.Radius = Radius;
+            edge.HasVertex0 = HasVertex0;
+            edge.HasVertex3 = HasVertex3;
+            edge.Vertex0.Set(Vertex0);
+            edge.Vertex1.Set(Vertex1);
+            edge.Vertex2.Set(Vertex2);
+            edge.Vertex3.Set(Vertex3);
             return edge;
         }
     }
