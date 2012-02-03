@@ -241,7 +241,7 @@ namespace Box2D.Dynamics.Joints
                 float C = length - m_length;
 
                 // Frequency
-                float omega = 2.0f * MathUtils.PI * m_frequencyHz;
+                float omega = 2.0f * MathUtils.Pi * m_frequencyHz;
 
                 // Damping coefficient
                 float d = 2.0f * m_mass * m_dampingRatio * omega;
@@ -358,7 +358,7 @@ namespace Box2D.Dynamics.Joints
 
             float length = u.Normalize();
             float C = length - m_length;
-            C = MathUtils.clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+            C = MathUtils.Clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
 
             float impulse = (-m_mass) * C;
             float Px = impulse * u.X;
@@ -379,7 +379,7 @@ namespace Box2D.Dynamics.Joints
             pool.PushVec2(3);
             pool.PushRot(2);
 
-            return MathUtils.abs(C) < Settings.linearSlop;
+            return MathUtils.Abs(C) < Settings.linearSlop;
         }
     }
 }

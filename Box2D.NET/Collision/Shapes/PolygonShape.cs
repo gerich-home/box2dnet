@@ -133,7 +133,7 @@ namespace Box2D.Collision.Shapes
                 return;
             }
 
-            int n = MathUtils.min(num, Settings.maxPolygonVertices);
+            int n = MathUtils.Min(num, Settings.maxPolygonVertices);
 
             // Copy the vertices into a local buffer
             Vec2[] ps = (vecPool != null) ? vecPool.Get(n) : new Vec2[n];

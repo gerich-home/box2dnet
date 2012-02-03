@@ -141,7 +141,7 @@ namespace Box2D.Collision
 
 
                         case 2:
-                            return MathUtils.distance(m_v1.W, m_v2.W);
+                            return MathUtils.Distance(m_v1.W, m_v2.W);
 
 
                         case 3:
@@ -827,11 +827,11 @@ namespace Box2D.Collision
                 ++simplex.Count;
             }
 
-            GJK_MAX_ITERS = MathUtils.max(GJK_MAX_ITERS, iter);
+            GJK_MAX_ITERS = MathUtils.Max(GJK_MAX_ITERS, iter);
 
             // Prepare output.
             simplex.GetWitnessPoints(output.PointA, output.PointB);
-            output.Distance = MathUtils.distance(output.PointA, output.PointB);
+            output.Distance = MathUtils.Distance(output.PointA, output.PointB);
             output.Iterations = iter;
 
             // Cache the simplex.

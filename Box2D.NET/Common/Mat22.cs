@@ -115,8 +115,8 @@ namespace Box2D.Common
         /// <param name="angle">Rotation (in radians) that matrix represents.</param>
         public void Set(float angle)
         {
-            float c = MathUtils.cos(angle);
-            float s = MathUtils.sin(angle);
+            float c = MathUtils.Cos(angle);
+            float s = MathUtils.Sin(angle);
             Ex.X = c;
             Ey.X = -s;
             Ex.Y = s;
@@ -153,7 +153,7 @@ namespace Box2D.Common
         {
             get
             {
-                return MathUtils.atan2(Ex.Y, Ex.X);
+                return MathUtils.Atan2(Ex.Y, Ex.X);
             }
         }
 
@@ -234,7 +234,7 @@ namespace Box2D.Common
         /// <returns>Absolute value matrix</returns>
         public Mat22 Abs()
         {
-            return new Mat22(MathUtils.abs(Ex.X), MathUtils.abs(Ey.X), MathUtils.abs(Ex.Y), MathUtils.abs(Ey.Y));
+            return new Mat22(MathUtils.Abs(Ex.X), MathUtils.Abs(Ey.X), MathUtils.Abs(Ex.Y), MathUtils.Abs(Ey.Y));
         }
 
         /* djm: added */
@@ -256,10 +256,10 @@ namespace Box2D.Common
         /* djm created */
         public static void AbsToOut(Mat22 r, Mat22 result)
         {
-            result.Ex.X = MathUtils.abs(r.Ex.X);
-            result.Ex.Y = MathUtils.abs(r.Ex.Y);
-            result.Ey.X = MathUtils.abs(r.Ey.X);
-            result.Ey.Y = MathUtils.abs(r.Ey.Y);
+            result.Ex.X = MathUtils.Abs(r.Ex.X);
+            result.Ex.Y = MathUtils.Abs(r.Ex.Y);
+            result.Ey.X = MathUtils.Abs(r.Ey.X);
+            result.Ey.Y = MathUtils.Abs(r.Ey.Y);
         }
 
         /// <summary>
@@ -589,8 +589,8 @@ namespace Box2D.Common
         public static Mat22 CreateRotationalTransform(float angle)
         {
             Mat22 mat = new Mat22();
-            float c = MathUtils.cos(angle);
-            float s = MathUtils.sin(angle);
+            float c = MathUtils.Cos(angle);
+            float s = MathUtils.Sin(angle);
             mat.Ex.X = c;
             mat.Ey.X = -s;
             mat.Ex.Y = s;
@@ -600,8 +600,8 @@ namespace Box2D.Common
 
         public static void CreateRotationalTransform(float angle, Mat22 result)
         {
-            float c = MathUtils.cos(angle);
-            float s = MathUtils.sin(angle);
+            float c = MathUtils.Cos(angle);
+            float s = MathUtils.Sin(angle);
             result.Ex.X = c;
             result.Ey.X = -s;
             result.Ex.Y = s;

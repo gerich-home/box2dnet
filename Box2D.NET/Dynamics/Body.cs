@@ -1151,8 +1151,8 @@ namespace Box2D.Dynamics
             // Rot.mulToOutUnsafe(xf1.q, m_sweep.localCenter, xf1.p);
             // xf1.p.mulLocal(-1).addLocal(m_sweep.c0);
             // inlined:
-            xf1.q.s = MathUtils.sin(Sweep.a0);
-            xf1.q.c = MathUtils.cos(Sweep.a0);
+            xf1.q.s = MathUtils.Sin(Sweep.a0);
+            xf1.q.c = MathUtils.Cos(Sweep.a0);
             xf1.p.X = Sweep.c0.X - xf1.q.c * Sweep.localCenter.X + xf1.q.s * Sweep.localCenter.Y;
             xf1.p.Y = Sweep.c0.Y - xf1.q.s * Sweep.localCenter.X - xf1.q.c * Sweep.localCenter.Y;
             // end inline
@@ -1171,8 +1171,8 @@ namespace Box2D.Dynamics
             // Rot.mulToOutUnsafe(m_xf.q, m_sweep.localCenter, m_xf.p);
             // m_xf.p.mulLocal(-1).addLocal(m_sweep.c);
             //
-            Xf.q.s = MathUtils.sin(Sweep.a);
-            Xf.q.c = MathUtils.cos(Sweep.a);
+            Xf.q.s = MathUtils.Sin(Sweep.a);
+            Xf.q.c = MathUtils.Cos(Sweep.a);
             Rot q = Xf.q;
             Vec2 v = Sweep.localCenter;
             Xf.p.X = Sweep.c.X - q.c * v.X + q.s * v.Y;

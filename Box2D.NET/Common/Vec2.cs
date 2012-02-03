@@ -184,7 +184,7 @@ namespace Box2D.Common
         /// </summary>
         public float Length()
         {
-            return MathUtils.sqrt(X * X + Y * Y);
+            return MathUtils.Sqrt(X * X + Y * Y);
         }
 
         /// <summary>
@@ -217,13 +217,13 @@ namespace Box2D.Common
         /// </summary>
         public Vec2 Abs()
         {
-            return new Vec2(MathUtils.abs(X), MathUtils.abs(Y));
+            return new Vec2(MathUtils.Abs(X), MathUtils.Abs(Y));
         }
 
         public void AbsLocal()
         {
-            X = MathUtils.abs(X);
-            Y = MathUtils.abs(Y);
+            X = MathUtils.Abs(X);
+            Y = MathUtils.Abs(Y);
         }
 
         /// <summary>
@@ -245,13 +245,13 @@ namespace Box2D.Common
 
         public static Vec2 Abs(Vec2 a)
         {
-            return new Vec2(MathUtils.abs(a.X), MathUtils.abs(a.Y));
+            return new Vec2(MathUtils.Abs(a.X), MathUtils.Abs(a.Y));
         }
 
         public static void AbsToOut(Vec2 a, Vec2 result)
         {
-            result.X = MathUtils.abs(a.X);
-            result.Y = MathUtils.abs(a.Y);
+            result.X = MathUtils.Abs(a.X);
+            result.Y = MathUtils.Abs(a.Y);
         }
 
         public static float Dot(Vec2 a, Vec2 b)

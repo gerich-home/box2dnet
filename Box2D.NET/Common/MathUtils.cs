@@ -50,50 +50,56 @@ using System;
 namespace Box2D.Common
 {
 
-    /// <summary> A few math methods that don't fit very well anywhere else.</summary>
+    /// <summary> 
+    /// A few math methods that don't fit very well anywhere else.
+    /// </summary>
     public class MathUtils
     {
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-        public static readonly float PI = (float)Math.PI;
+        public static readonly float Pi = (float)Math.PI;
         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-        public static readonly float TWOPI = (float)(Math.PI * 2);
-        public static readonly float INV_PI = 1f / PI;
-        public static readonly float HALF_PI = PI / 2;
-        public static readonly float QUARTER_PI = PI / 4;
-        public static readonly float THREE_HALVES_PI = TWOPI - HALF_PI;
+        public static readonly float TwoPi = (float)(Math.PI * 2);
+        public static readonly float InvPi = 1f / Pi;
+        public static readonly float HalfPi = Pi / 2;
+        public static readonly float QuaterPi = Pi / 4;
+        public static readonly float ThreeHalvesPi = TwoPi - HalfPi;
 
-        /// <summary> Degrees to radians conversion factor</summary>
-        public static readonly float DEG2RAD = PI / 180;
+        /// <summary> 
+        /// Degrees to radians conversion factor
+        /// </summary>
+        public static readonly float Deg2Rad = Pi / 180;
 
-        /// <summary> Radians to degrees conversion factor</summary>
-        public static readonly float RAD2DEG = 180 / PI;
+        /// <summary> 
+        /// Radians to degrees conversion factor
+        /// </summary>
+        public static readonly float Rad2Deg = 180 / Pi;
 
-        private const float SHIFT23 = 1 << 23;
-        private static readonly float INV_SHIFT23 = 1.0f / SHIFT23;
+        private const float Shift23 = 1 << 23;
+        private const float InvShift23 = 1.0f/Shift23;
 
-        public static readonly float[] sinLUT_Renamed_Field;
-        public static readonly float[] cosLUT;
+        private static readonly float[] sinLut;
+        private static readonly float[] cosLut;
 
         static MathUtils()
         {
-            sinLUT_Renamed_Field = new float[Settings.SINCOS_LUT_LENGTH];
-            cosLUT = new float[Settings.SINCOS_LUT_LENGTH];
+            sinLut = new float[Settings.SINCOS_LUT_LENGTH];
+            cosLut = new float[Settings.SINCOS_LUT_LENGTH];
             {
                 for (int i = 0; i < Settings.SINCOS_LUT_LENGTH; i++)
                 {
                     //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                    sinLUT_Renamed_Field[i] = (float)Math.Sin(i * Settings.SINCOS_LUT_PRECISION);
+                    sinLut[i] = (float)Math.Sin(i * Settings.SINCOS_LUT_PRECISION);
                     //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                    cosLUT[i] = (float)Math.Cos(i * Settings.SINCOS_LUT_PRECISION);
+                    cosLut[i] = (float)Math.Cos(i * Settings.SINCOS_LUT_PRECISION);
                 }
             }
         }
 
-        public static float sin(float x)
+        public static float Sin(float x)
         {
             if (Settings.SINCOS_LUT_ENABLED)
             {
-                return sinLUT(x);
+                return SinLut(x);
             }
             else
             {
@@ -102,13 +108,13 @@ namespace Box2D.Common
             }
         }
 
-        public static float sinLUT(float x)
+        public static float SinLut(float x)
         {
-            x %= TWOPI;
+            x %= TwoPi;
 
             while (x < 0)
             {
-                x += TWOPI;
+                x += TwoPi;
             }
 
             if (Settings.SINCOS_LUT_LERP)
@@ -127,28 +133,28 @@ namespace Box2D.Common
                 // the next index is 0
                 if (index == Settings.SINCOS_LUT_LENGTH - 1)
                 {
-                    return ((1 - x) * sinLUT_Renamed_Field[index] + x * sinLUT_Renamed_Field[0]);
+                    return ((1 - x) * sinLut[index] + x * sinLut[0]);
                 }
                 else
                 {
-                    return ((1 - x) * sinLUT_Renamed_Field[index] + x * sinLUT_Renamed_Field[index + 1]);
+                    return ((1 - x) * sinLut[index] + x * sinLut[index + 1]);
                 }
             }
             else
             {
-                return sinLUT_Renamed_Field[round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
+                return sinLut[Round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
             }
         }
 
-        public static float cos(float x)
+        public static float Cos(float x)
         {
             if (Settings.SINCOS_LUT_ENABLED)
             {
-                x %= TWOPI;
+                x %= TwoPi;
 
                 while (x < 0)
                 {
-                    x += TWOPI;
+                    x += TwoPi;
                 }
 
                 if (Settings.SINCOS_LUT_LERP)
@@ -167,16 +173,16 @@ namespace Box2D.Common
                     // the next index is 0
                     if (index == Settings.SINCOS_LUT_LENGTH - 1)
                     {
-                        return ((1 - x) * cosLUT[index] + x * cosLUT[0]);
+                        return ((1 - x) * cosLut[index] + x * cosLut[0]);
                     }
                     else
                     {
-                        return ((1 - x) * cosLUT[index] + x * cosLUT[index + 1]);
+                        return ((1 - x) * cosLut[index] + x * cosLut[index + 1]);
                     }
                 }
                 else
                 {
-                    return cosLUT[round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
+                    return cosLut[Round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
                 }
             }
             else
@@ -186,7 +192,7 @@ namespace Box2D.Common
             }
         }
 
-        public static float abs(float x)
+        public static float Abs(float x)
         {
             if (Settings.FAST_MATH)
             {
@@ -198,7 +204,7 @@ namespace Box2D.Common
             }
         }
 
-        public static int abs(int x)
+        public static int Abs(int x)
         {
             int y = x >> 31;
             return (x ^ y) - y;
@@ -223,7 +229,7 @@ namespace Box2D.Common
             }
         }
 
-        public static int ceil(float x)
+        public static int Ceil(float x)
         {
             if (Settings.FAST_MATH)
             {
@@ -242,7 +248,7 @@ namespace Box2D.Common
             }
         }
 
-        public static int round(float x)
+        public static int Round(float x)
         {
             if (Settings.FAST_MATH)
             {
@@ -260,7 +266,7 @@ namespace Box2D.Common
         /// </summary>
         /// <param name="x"></param>
         /// <returns>power^2 value</returns>
-        public static int ceilPowerOf2(int x)
+        public static int CeilPowerOf2(int x)
         {
             int pow2 = 1;
             while (pow2 < x)
@@ -270,40 +276,42 @@ namespace Box2D.Common
             return pow2;
         }
 
-        public static float max(float a, float b)
+        public static float Max(float a, float b)
         {
             return a > b ? a : b;
         }
 
-        public static int max(int a, int b)
+        public static int Max(int a, int b)
         {
             return a > b ? a : b;
         }
 
-        public static float min(float a, float b)
+        public static float Min(float a, float b)
         {
             return a < b ? a : b;
         }
 
-        public static int min(int a, int b)
+        public static int Min(int a, int b)
         {
             return a < b ? a : b;
         }
 
-        public static float map(float val, float fromMin, float fromMax, float toMin, float toMax)
+        public static float Map(float val, float fromMin, float fromMax, float toMin, float toMax)
         {
             float mult = (val - fromMin) / (fromMax - fromMin);
             float res = toMin + mult * (toMax - toMin);
             return res;
         }
 
-        /// <summary>Returns the closest value to 'a' that is in between 'low' and 'high'</summary>
-        public static float clamp(float a, float low, float high)
+        /// <summary>
+        /// Returns the closest value to 'a' that is in between 'low' and 'high'
+        /// </summary>
+        public static float Clamp(float a, float low, float high)
         {
-            return max(low, min(a, high));
+            return Max(low, Min(a, high));
         }
 
-        public static Vec2 clamp(Vec2 a, Vec2 low, Vec2 high)
+        public static Vec2 Clamp(Vec2 a, Vec2 low, Vec2 high)
         {
             Vec2 min = new Vec2();
             min.X = a.X < high.X ? a.X : high.X;
@@ -313,7 +321,7 @@ namespace Box2D.Common
             return min;
         }
 
-        public static void clampToOut(Vec2 a, Vec2 low, Vec2 high, Vec2 dest)
+        public static void ClampToOut(Vec2 a, Vec2 low, Vec2 high, Vec2 dest)
         {
             dest.X = a.X < high.X ? a.X : high.X;
             dest.Y = a.Y < high.Y ? a.Y : high.Y;
@@ -328,7 +336,7 @@ namespace Box2D.Common
         /// the same most significant 1 as x, but all 1's below it. Adding 1 to that
         /// value yields the next largest power of 2.
         /// </summary>
-        public static int nextPowerOfTwo(int x)
+        public static int NextPowerOfTwo(int x)
         {
             x |= x >> 1;
             x |= x >> 2;
@@ -338,7 +346,7 @@ namespace Box2D.Common
             return x + 1;
         }
 
-        public static bool isPowerOfTwo(int x)
+        public static bool IsPowerOfTwo(int x)
         {
             return x > 0 && (x & x - 1) == 0;
         }
@@ -348,11 +356,11 @@ namespace Box2D.Common
             return BitConverter.ToInt32(BitConverter.GetBytes(number), 0);
         }
 
-        public static float fastPow(float a, float b)
+        public static float FastPow(float a, float b)
         {
             //UPGRADE_TODO: Method 'java.lang.Float.floatToRawIntBits' was converted to 'System.Convert.ToInt32' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javalangFloatfloatToRawIntBits_float'"
             float x = Convert.ToInt32(a);
-            x *= INV_SHIFT23;
+            x *= InvShift23;
             x -= 127;
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
             float y = x - (x >= 0 ? (int)x : (int)x - 1);
@@ -361,14 +369,14 @@ namespace Box2D.Common
             y = b - (b >= 0 ? (int)b : (int)b - 1);
             y = (y - y * y) * 0.33971f;
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            return FloatToIntBits((int)((b + 127 - y) * SHIFT23));
+            return FloatToIntBits((int)((b + 127 - y) * Shift23));
         }
 
-        public static float atan2(float y, float x)
+        public static float Atan2(float y, float x)
         {
             if (Settings.FAST_MATH)
             {
-                return fastAtan2(y, x);
+                return FastAtan2(y, x);
             }
             else
             {
@@ -377,47 +385,47 @@ namespace Box2D.Common
             }
         }
 
-        public static float fastAtan2(float y, float x)
+        public static float FastAtan2(float y, float x)
         {
             if (x == 0.0f)
             {
                 if (y > 0.0f)
-                    return HALF_PI;
+                    return HalfPi;
                 if (y == 0.0f)
                     return 0.0f;
-                return -HALF_PI;
+                return -HalfPi;
             }
             float atan;
             float z = y / x;
-            if (abs(z) < 1.0f)
+            if (Abs(z) < 1.0f)
             {
                 atan = z / (1.0f + 0.28f * z * z);
                 if (x < 0.0f)
                 {
                     if (y < 0.0f)
-                        return atan - PI;
-                    return atan + PI;
+                        return atan - Pi;
+                    return atan + Pi;
                 }
             }
             else
             {
-                atan = HALF_PI - z / (z * z + 0.28f);
+                atan = HalfPi - z / (z * z + 0.28f);
                 if (y < 0.0f)
-                    return atan - PI;
+                    return atan - Pi;
             }
             return atan;
         }
 
-        public static float reduceAngle(float theta)
+        public static float ReduceAngle(float theta)
         {
-            theta %= TWOPI;
-            if (abs(theta) > PI)
+            theta %= TwoPi;
+            if (Abs(theta) > Pi)
             {
-                theta = theta - TWOPI;
+                theta = theta - TwoPi;
             }
-            if (abs(theta) > HALF_PI)
+            if (Abs(theta) > HalfPi)
             {
-                theta = PI - theta;
+                theta = Pi - theta;
             }
             return theta;
         }
@@ -430,7 +438,7 @@ namespace Box2D.Common
         /// <param name="b">a number</param>
         /// <returns>a^b</returns>
         // UNTESTED
-        public static float pow(float a, float b)
+        public static float Pow(float a, float b)
         {
             // adapted from: http://www.dctsystems.co.uk/Software/power.html
             if (Settings.FAST_MATH)
@@ -453,33 +461,33 @@ namespace Box2D.Common
             }
         }
 
-        public static float randomFloat(float argLow, float argHigh)
+        public static float RandomFloat(float argLow, float argHigh)
         {
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
             return (float)SupportClass.Random.NextDouble() * (argHigh - argLow) + argLow;
         }
 
-        public static float randomFloat(Random r, float argLow, float argHigh)
+        public static float RandomFloat(Random r, float argLow, float argHigh)
         {
             return (float)r.NextDouble() * (argHigh - argLow) + argLow;
         }
 
-        public static float sqrt(float x)
+        public static float Sqrt(float x)
         {
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
             return (float)Math.Sqrt(x);
         }
 
-        public static float distanceSquared(Vec2 v1, Vec2 v2)
+        public static float DistanceSquared(Vec2 v1, Vec2 v2)
         {
             float dx = (v1.X - v2.X);
             float dy = (v1.Y - v2.Y);
             return dx * dx + dy * dy;
         }
 
-        public static float distance(Vec2 v1, Vec2 v2)
+        public static float Distance(Vec2 v1, Vec2 v2)
         {
-            return sqrt(distanceSquared(v1, v2));
+            return Sqrt(DistanceSquared(v1, v2));
         }
     }
     // SINCOS accuracy and speed chart

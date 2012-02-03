@@ -133,7 +133,7 @@ namespace Box2D.Collision
 
             float totalRadius = proxyA.Radius + proxyB.Radius;
             // djm: whats with all these constants?
-            float target = MathUtils.max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
+            float target = MathUtils.Max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
             const float tolerance = 0.25f * Settings.linearSlop;
 
             Debug.Assert(target > tolerance);
@@ -265,7 +265,7 @@ namespace Box2D.Collision
 
                         float s = fcn.Evaluate(indexes[0], indexes[1], t);
 
-                        if (MathUtils.abs(s - target) < tolerance)
+                        if (MathUtils.Abs(s - target) < tolerance)
                         {
                             // t2 holds a tentative value for t1
                             t2 = t;
@@ -294,7 +294,7 @@ namespace Box2D.Collision
                         }
                     }
 
-                    ToiMaxRootIters = MathUtils.max(ToiMaxRootIters, rootIterCount);
+                    ToiMaxRootIters = MathUtils.Max(ToiMaxRootIters, rootIterCount);
 
                     ++pushBackIter;
 
@@ -324,7 +324,7 @@ namespace Box2D.Collision
             }
 
             // System.out.printf("final sweeps: %f, %f, %f; %f, %f, %f", input.s)
-            ToiMaxIters = MathUtils.max(ToiMaxIters, iter);
+            ToiMaxIters = MathUtils.Max(ToiMaxIters, iter);
         }
     }
 

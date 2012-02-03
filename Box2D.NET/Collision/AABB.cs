@@ -271,7 +271,7 @@ namespace Box2D.Collision
                 }
 
                 // Pull the max down
-                tmax = MathUtils.min(tmax, t2);
+                tmax = MathUtils.Min(tmax, t2);
 
                 if (tmin > tmax)
                 {
@@ -315,7 +315,7 @@ namespace Box2D.Collision
                 }
 
                 // Pull the max down
-                tmax = MathUtils.min(tmax, t2);
+                tmax = MathUtils.Min(tmax, t2);
 
                 if (tmin > tmax)
                 {

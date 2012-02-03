@@ -248,7 +248,7 @@ namespace Box2D.Dynamics.Joints
 
                 float oldImpulse = m_angularImpulse;
                 float maxImpulse = h * m_maxTorque;
-                m_angularImpulse = MathUtils.clamp(m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+                m_angularImpulse = MathUtils.Clamp(m_angularImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = m_angularImpulse - oldImpulse;
 
                 wA -= iA * impulse;

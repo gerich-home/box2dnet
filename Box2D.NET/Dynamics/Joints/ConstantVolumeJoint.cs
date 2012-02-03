@@ -161,7 +161,7 @@ namespace Box2D.Dynamics.Joints
                 int next = (i == bodies.Length - 1) ? 0 : i + 1;
                 float dx = bodies[next].WorldCenter.X - bodies[i].WorldCenter.X;
                 float dy = bodies[next].WorldCenter.Y - bodies[i].WorldCenter.Y;
-                float dist = MathUtils.sqrt(dx * dx + dy * dy);
+                float dist = MathUtils.Sqrt(dx * dx + dy * dy);
                 if (dist < Settings.EPSILON)
                 {
                     dist = 1.0f;

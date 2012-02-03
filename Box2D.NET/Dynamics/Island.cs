@@ -272,8 +272,8 @@ namespace Box2D.Dynamics
 					// v2 = exp(-c * dt) * v1
 					// Taylor expansion:
 					// v2 = (1.0f - c * dt) * v1
-					v.MulLocal(MathUtils.clamp(1.0f - h * b.LinearDamping, 0.0f, 1.0f));
-					w *= MathUtils.clamp(1.0f - h * b.AngularDamping, 0.0f, 1.0f);
+					v.MulLocal(MathUtils.Clamp(1.0f - h * b.LinearDamping, 0.0f, 1.0f));
+					w *= MathUtils.Clamp(1.0f - h * b.AngularDamping, 0.0f, 1.0f);
 				}
 				//Debug.Assert (v.x == 0);
 
@@ -353,7 +353,7 @@ namespace Box2D.Dynamics
 				float rotation = h * w;
 				if (rotation * rotation > Settings.maxRotationSquared)
 				{
-					float ratio = Settings.maxRotation / MathUtils.abs(rotation);
+					float ratio = Settings.maxRotation / MathUtils.Abs(rotation);
 					w *= ratio;
 				}
 
@@ -426,7 +426,7 @@ namespace Box2D.Dynamics
 					else
 					{
 						b.SleepTime += h;
-						minSleepTime = MathUtils.min(minSleepTime, b.SleepTime);
+						minSleepTime = MathUtils.Min(minSleepTime, b.SleepTime);
 					}
 				}
 
@@ -549,7 +549,7 @@ namespace Box2D.Dynamics
 				float rotation = h * w;
 				if (rotation * rotation > Settings.maxRotationSquared)
 				{
-					float ratio = Settings.maxRotation / MathUtils.abs(rotation);
+					float ratio = Settings.maxRotation / MathUtils.Abs(rotation);
 					w *= ratio;
 				}
 

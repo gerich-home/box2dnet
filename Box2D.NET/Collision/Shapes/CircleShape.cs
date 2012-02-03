@@ -153,7 +153,7 @@ namespace Box2D.Collision.Shapes
             }
 
             // Find the point of intersection of the line with the circle.
-            float a = -(c + MathUtils.sqrt(sigma));
+            float a = -(c + MathUtils.Sqrt(sigma));
 
             // Is the intersection point on the segment?
             if (0.0f <= a && a <= input.MaxFraction * rr)

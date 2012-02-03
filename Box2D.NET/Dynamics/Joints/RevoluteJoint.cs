@@ -171,7 +171,7 @@ namespace Box2D.Dynamics.Joints
             if (m_enableLimit && fixedRotation == false)
             {
                 float jointAngle = aB - aA - m_referenceAngle;
-                if (MathUtils.abs(m_upperAngle - m_lowerAngle) < 2.0f * Settings.angularSlop)
+                if (MathUtils.Abs(m_upperAngle - m_lowerAngle) < 2.0f * Settings.angularSlop)
                 {
                     m_limitState = LimitState.EQUAL;
                 }
@@ -257,7 +257,7 @@ namespace Box2D.Dynamics.Joints
                 float impulse = (-m_motorMass) * Cdot;
                 float oldImpulse = m_motorImpulse;
                 float maxImpulse = data.Step.Dt * m_maxMotorTorque;
-                m_motorImpulse = MathUtils.clamp(m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                m_motorImpulse = MathUtils.Clamp(m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = m_motorImpulse - oldImpulse;
 
                 wA -= iA * impulse;
@@ -404,9 +404,9 @@ namespace Box2D.Dynamics.Joints
                 if (m_limitState == LimitState.EQUAL)
                 {
                     // Prevent large angular corrections
-                    float C = MathUtils.clamp(angle - m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
+                    float C = MathUtils.Clamp(angle - m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
                     limitImpulse = (-m_motorMass) * C;
-                    angularError = MathUtils.abs(C);
+                    angularError = MathUtils.Abs(C);
                 }
                 else if (m_limitState == LimitState.AT_LOWER)
                 {
@@ -414,7 +414,7 @@ namespace Box2D.Dynamics.Joints
                     angularError = -C;
 
                     // Prevent large angular corrections and allow some slop.
-                    C = MathUtils.clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0f);
+                    C = MathUtils.Clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0f);
                     limitImpulse = (-m_motorMass) * C;
                 }
                 else if (m_limitState == LimitState.AT_UPPER)
@@ -423,7 +423,7 @@ namespace Box2D.Dynamics.Joints
                     angularError = C;
 
                     // Prevent large angular corrections and allow some slop.
-                    C = MathUtils.clamp(C - Settings.angularSlop, 0.0f, Settings.maxAngularCorrection);
+                    C = MathUtils.Clamp(C - Settings.angularSlop, 0.0f, Settings.maxAngularCorrection);
                     limitImpulse = (-m_motorMass) * C;
                 }
 

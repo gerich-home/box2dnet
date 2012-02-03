@@ -221,7 +221,7 @@ namespace Box2D.Dynamics.Joints
                 float C = aB - aA - m_referenceAngle;
 
                 // Frequency
-                float omega = 2.0f * MathUtils.PI * m_frequencyHz;
+                float omega = 2.0f * MathUtils.Pi * m_frequencyHz;
 
                 // Damping coefficient
                 float d = 2.0f * m * m_dampingRatio * omega;
@@ -418,7 +418,7 @@ namespace Box2D.Dynamics.Joints
                 float C2 = aB - aA - m_referenceAngle;
 
                 positionError = C1.Length();
-                angularError = MathUtils.abs(C2);
+                angularError = MathUtils.Abs(C2);
 
                 Vec3 C = pool.PopVec3();
                 Vec3 impulse = pool.PopVec3();

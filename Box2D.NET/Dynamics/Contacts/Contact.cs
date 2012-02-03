@@ -401,7 +401,7 @@ namespace Box2D.Dynamics.Contacts
         /// <returns></returns>
         public static float mixFriction(float friction1, float friction2)
         {
-            return MathUtils.sqrt(friction1 * friction2);
+            return MathUtils.Sqrt(friction1 * friction2);
         }
 
         /// <summary>

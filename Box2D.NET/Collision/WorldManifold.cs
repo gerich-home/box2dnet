@@ -99,7 +99,7 @@ namespace Box2D.Collision
                         Transform.mulToOut(xfA, manifold.LocalPoint, pointA);
                         Transform.mulToOut(xfB, manifold.Points[0].LocalPoint, pointB);
 
-                        if (MathUtils.distanceSquared(pointA, pointB) > Settings.EPSILON * Settings.EPSILON)
+                        if (MathUtils.DistanceSquared(pointA, pointB) > Settings.EPSILON * Settings.EPSILON)
                         {
                             Normal.X = pointB.X - pointA.X;
                             Normal.Y = pointB.Y - pointA.Y;

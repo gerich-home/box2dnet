@@ -1588,7 +1588,7 @@ namespace Box2D.Collision
 
                     float s1 = Vec2.Dot(n, temp.Set(PolygonB.Vertices[i]).SubLocal(V1));
                     float s2 = Vec2.Dot(n, temp.Set(PolygonB.Vertices[i]).SubLocal(V2));
-                    float s = MathUtils.min(s1, s2);
+                    float s = MathUtils.Min(s1, s2);
 
                     if (s > Radius)
                     {

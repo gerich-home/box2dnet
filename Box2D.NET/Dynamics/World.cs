@@ -1269,7 +1269,7 @@ namespace Box2D.Dynamics
                         float beta = toiOutput.T;
                         if (toiOutput.State == TimeOfImpact.TOIOutputState.Touching)
                         {
-                            alpha = MathUtils.min(alpha0 + (1.0f - alpha0) * beta, 1.0f);
+                            alpha = MathUtils.Min(alpha0 + (1.0f - alpha0) * beta, 1.0f);
                         }
                         else
                         {

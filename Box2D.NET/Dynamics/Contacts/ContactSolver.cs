@@ -82,7 +82,7 @@ namespace Box2D.Dynamics.Contacts
             if (m_positionConstraints.Length < m_count)
             {
                 ContactPositionConstraint[] old = m_positionConstraints;
-                m_positionConstraints = new ContactPositionConstraint[MathUtils.max(old.Length * 2, m_count)];
+                m_positionConstraints = new ContactPositionConstraint[MathUtils.Max(old.Length * 2, m_count)];
                 Array.Copy(old, 0, m_positionConstraints, 0, old.Length);
                 for (int i = old.Length; i < m_positionConstraints.Length; i++)
                 {
@@ -93,7 +93,7 @@ namespace Box2D.Dynamics.Contacts
             if (m_velocityConstraints.Length < m_count)
             {
                 ContactVelocityConstraint[] old = m_velocityConstraints;
-                m_velocityConstraints = new ContactVelocityConstraint[MathUtils.max(old.Length * 2, m_count)];
+                m_velocityConstraints = new ContactVelocityConstraint[MathUtils.Max(old.Length * 2, m_count)];
                 Array.Copy(old, 0, m_velocityConstraints, 0, old.Length);
                 for (int i = old.Length; i < m_velocityConstraints.Length; i++)
                 {
@@ -412,7 +412,7 @@ namespace Box2D.Dynamics.Contacts
 
                     // Clamp the accumulated force
                     float maxFriction = friction * vcp.normalImpulse;
-                    float newImpulse = MathUtils.clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
+                    float newImpulse = MathUtils.Clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
                     lambda = newImpulse - vcp.tangentImpulse;
                     vcp.tangentImpulse = newImpulse;
 
@@ -618,8 +618,8 @@ namespace Box2D.Dynamics.Contacts
                                 vn1 = Vec2.Dot(_dv1, normal);
                                 vn2 = Vec2.Dot(_dv2, normal);
 
-                                Debug.Assert(MathUtils.abs(vn1 - cp1.velocityBias) < k_errorTol);
-                                Debug.Assert(MathUtils.abs(vn2 - cp2.velocityBias) < k_errorTol);
+                                Debug.Assert(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
+                                Debug.Assert(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
                             }
                             break;
                         }
@@ -686,7 +686,7 @@ namespace Box2D.Dynamics.Contacts
                                 // Compute normal velocity
                                 vn1 = Vec2.Dot(_dv1, normal);
 
-                                Debug.Assert(MathUtils.abs(vn1 - cp1.velocityBias) < k_errorTol);
+                                Debug.Assert(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
                             }
                             break;
                         }
@@ -752,7 +752,7 @@ namespace Box2D.Dynamics.Contacts
                                 // Compute normal velocity
                                 vn2 = Vec2.Dot(_dv2, normal);
 
-                                Debug.Assert(MathUtils.abs(vn2 - cp2.velocityBias) < k_errorTol);
+                                Debug.Assert(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
                             }
                             break;
                         }
@@ -929,10 +929,10 @@ namespace Box2D.Dynamics.Contacts
                     rB.Set(point).SubLocal(cB);
 
                     // Track max constraint error.
-                    minSeparation = MathUtils.min(minSeparation, separation);
+                    minSeparation = MathUtils.Min(minSeparation, separation);
 
                     // Prevent large corrections and allow slop.
-                    float C = MathUtils.clamp(Settings.baumgarte * (separation + Settings.linearSlop), -Settings.maxLinearCorrection, 0.0f);
+                    float C = MathUtils.Clamp(Settings.baumgarte * (separation + Settings.linearSlop), -Settings.maxLinearCorrection, 0.0f);
 
                     // Compute the effective mass.
                     float rnA = Vec2.Cross(rA, normal);
@@ -1024,10 +1024,10 @@ namespace Box2D.Dynamics.Contacts
                     rB.Set(point).SubLocal(cB);
 
                     // Track max constraint error.
-                    minSeparation = MathUtils.min(minSeparation, separation);
+                    minSeparation = MathUtils.Min(minSeparation, separation);
 
                     // Prevent large corrections and allow slop.
-                    float C = MathUtils.clamp(Settings.toiBaugarte * (separation + Settings.linearSlop), -Settings.maxLinearCorrection, 0.0f);
+                    float C = MathUtils.Clamp(Settings.toiBaugarte * (separation + Settings.linearSlop), -Settings.maxLinearCorrection, 0.0f);
 
                     // Compute the effective mass.
                     float rnA = Vec2.Cross(rA, normal);

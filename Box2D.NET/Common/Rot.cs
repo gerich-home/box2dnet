@@ -75,15 +75,15 @@ namespace Box2D.Common
         {
             get
             {
-                return MathUtils.atan2(s, c);
+                return MathUtils.Atan2(s, c);
             }
 
         }
 
         public virtual Rot set_Renamed(float angle)
         {
-            s = MathUtils.sin(angle);
-            c = MathUtils.cos(angle);
+            s = MathUtils.Sin(angle);
+            c = MathUtils.Cos(angle);
             return this;
         }
 

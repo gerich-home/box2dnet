@@ -290,7 +290,7 @@ namespace Box2D.Dynamics
             if (Proxies.Length < childCount)
             {
                 FixtureProxy[] old = Proxies;
-                int newLen = MathUtils.max(old.Length * 2, childCount);
+                int newLen = MathUtils.Max(old.Length * 2, childCount);
                 Proxies = new FixtureProxy[newLen];
                 Array.Copy(old, 0, Proxies, 0, old.Length);
                 for (int i = 0; i < newLen; i++)

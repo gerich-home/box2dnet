@@ -409,7 +409,7 @@ namespace Box2D.Dynamics.Joints
             }
 
             float C = m_constant - lengthA - m_ratio * lengthB;
-            float linearError = MathUtils.abs(C);
+            float linearError = MathUtils.Abs(C);
 
             float impulse = (-mass) * C;
 

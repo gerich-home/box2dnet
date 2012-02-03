@@ -78,8 +78,8 @@ namespace Box2D.Collision.Broadphase
 
                     int child1 = node.Child1;
                     int child2 = node.Child2;
-                    int balance = MathUtils.abs(m_nodes[child2].Height - m_nodes[child1].Height);
-                    maxBalance = MathUtils.max(maxBalance, balance);
+                    int balance = MathUtils.Abs(m_nodes[child2].Height - m_nodes[child1].Height);
+                    maxBalance = MathUtils.Max(maxBalance, balance);
                 }
 
                 return maxBalance;
@@ -364,7 +364,7 @@ namespace Box2D.Collision.Broadphase
                 node.AABB.GetCenterToOut(c);
                 node.AABB.GetExtentsToOut(h);
                 temp.Set(p1).SubLocal(c);
-                float separation = MathUtils.abs(Vec2.Dot(v, temp)) - Vec2.Dot(absV, h);
+                float separation = MathUtils.Abs(Vec2.Dot(v, temp)) - Vec2.Dot(absV, h);
                 if (separation > 0.0f)
                 {
                     continue;
@@ -421,7 +421,7 @@ namespace Box2D.Collision.Broadphase
             }
             int height1 = ComputeHeight(node.Child1);
             int height2 = ComputeHeight(node.Child2);
-            return 1 + MathUtils.max(height1, height2);
+            return 1 + MathUtils.Max(height1, height2);
         }
 
         /// <summary>
@@ -507,7 +507,7 @@ namespace Box2D.Collision.Broadphase
                 TreeNode parent = m_nodes[parentIndex];
                 parent.Child1 = index1;
                 parent.Child2 = index2;
-                parent.Height = 1 + MathUtils.max(child1.Height, child2.Height);
+                parent.Height = 1 + MathUtils.Max(child1.Height, child2.Height);
                 parent.AABB.Combine(child1.AABB, child2.AABB);
                 parent.Parent = TreeNode.NULL_NODE;
 
@@ -693,7 +693,7 @@ namespace Box2D.Collision.Broadphase
                 Debug.Assert(child1 != TreeNode.NULL_NODE);
                 Debug.Assert(child2 != TreeNode.NULL_NODE);
 
-                m_nodes[index].Height = 1 + MathUtils.max(m_nodes[child1].Height, m_nodes[child2].Height);
+                m_nodes[index].Height = 1 + MathUtils.Max(m_nodes[child1].Height, m_nodes[child2].Height);
                 m_nodes[index].AABB.Combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
 
                 index = m_nodes[index].Parent;
@@ -746,7 +746,7 @@ namespace Box2D.Collision.Broadphase
                     int child2 = m_nodes[index].Child2;
 
                     m_nodes[index].AABB.Combine(m_nodes[child1].AABB, m_nodes[child2].AABB);
-                    m_nodes[index].Height = 1 + MathUtils.max(m_nodes[child1].Height, m_nodes[child2].Height);
+                    m_nodes[index].Height = 1 + MathUtils.Max(m_nodes[child1].Height, m_nodes[child2].Height);
 
                     index = m_nodes[index].Parent;
                 }
@@ -825,8 +825,8 @@ namespace Box2D.Collision.Broadphase
                     A.AABB.Combine(B.AABB, G.AABB);
                     C.AABB.Combine(A.AABB, F.AABB);
 
-                    A.Height = 1 + MathUtils.max(B.Height, G.Height);
-                    C.Height = 1 + MathUtils.max(A.Height, F.Height);
+                    A.Height = 1 + MathUtils.Max(B.Height, G.Height);
+                    C.Height = 1 + MathUtils.Max(A.Height, F.Height);
                 }
                 else
                 {
@@ -836,8 +836,8 @@ namespace Box2D.Collision.Broadphase
                     A.AABB.Combine(B.AABB, F.AABB);
                     C.AABB.Combine(A.AABB, G.AABB);
 
-                    A.Height = 1 + MathUtils.max(B.Height, F.Height);
-                    C.Height = 1 + MathUtils.max(A.Height, G.Height);
+                    A.Height = 1 + MathUtils.Max(B.Height, F.Height);
+                    C.Height = 1 + MathUtils.Max(A.Height, G.Height);
                 }
 
                 return iC;
@@ -885,8 +885,8 @@ namespace Box2D.Collision.Broadphase
                     A.AABB.Combine(C.AABB, E.AABB);
                     B.AABB.Combine(A.AABB, D.AABB);
 
-                    A.Height = 1 + MathUtils.max(C.Height, E.Height);
-                    B.Height = 1 + MathUtils.max(A.Height, D.Height);
+                    A.Height = 1 + MathUtils.Max(C.Height, E.Height);
+                    B.Height = 1 + MathUtils.Max(A.Height, D.Height);
                 }
                 else
                 {
@@ -896,8 +896,8 @@ namespace Box2D.Collision.Broadphase
                     A.AABB.Combine(C.AABB, D.AABB);
                     B.AABB.Combine(A.AABB, E.AABB);
 
-                    A.Height = 1 + MathUtils.max(C.Height, D.Height);
-                    B.Height = 1 + MathUtils.max(A.Height, E.Height);
+                    A.Height = 1 + MathUtils.Max(C.Height, D.Height);
+                    B.Height = 1 + MathUtils.Max(A.Height, E.Height);
                 }
 
                 return iB;
@@ -966,7 +966,7 @@ namespace Box2D.Collision.Broadphase
 
             int height1 = m_nodes[child1].Height;
             int height2 = m_nodes[child2].Height;
-            int height = 1 + MathUtils.max(height1, height2);
+            int height = 1 + MathUtils.Max(height1, height2);
             Debug.Assert(node.Height == height);
 
             var aabb = new AABB();

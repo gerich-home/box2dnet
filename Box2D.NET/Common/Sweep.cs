@@ -76,7 +76,7 @@ namespace Box2D.Common
 
         public void normalize()
         {
-            float d = MathUtils.TWOPI * MathUtils.floor(a0 / MathUtils.TWOPI);
+            float d = MathUtils.TwoPi * MathUtils.floor(a0 / MathUtils.TwoPi);
             a0 -= d;
             a -= d;
         }
