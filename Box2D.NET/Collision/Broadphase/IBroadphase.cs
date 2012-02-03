@@ -29,25 +29,13 @@ namespace Box2D.Collision.Broadphase
 
     public interface IBroadphase
     {
-        int ProxyCount
-        {
-            get;
-        }
+        int ProxyCount { get; }
 
-        int TreeHeight
-        {
-            get;
-        }
+        int TreeHeight { get; }
 
-        int TreeBalance
-        {
-            get;
-        }
+        int TreeBalance { get; }
 
-        float TreeQuality
-        {
-            get;
-        }
+        float TreeQuality { get; }
 
         int CreateProxy(AABB aabb, object userData);
 
