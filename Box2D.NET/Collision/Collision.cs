@@ -39,7 +39,7 @@ namespace Box2D.Collision
     /// <author>Daniel Murphy</author>
     public class Collision
     {
-        public static readonly int NullFeature = Int32.MaxValue;
+        public static readonly int NULL_FEATURE = Int32.MaxValue;
 
         private readonly IWorldPool pool;
 
@@ -152,8 +152,8 @@ namespace Box2D.Collision
             int numOut = 0;
 
             // Calculate the distance of end points to the line
-            float distance0 = Vec2.Dot(normal, vIn[0].v) - offset;
-            float distance1 = Vec2.Dot(normal, vIn[1].v) - offset;
+            float distance0 = Vec2.Dot(normal, vIn[0].V) - offset;
+            float distance1 = Vec2.Dot(normal, vIn[1].V) - offset;
 
             // If the points are behind the plane
             if (distance0 <= 0.0f)
@@ -171,13 +171,13 @@ namespace Box2D.Collision
                 // Find intersection point of edge and plane
                 float interp = distance0 / (distance0 - distance1);
                 // vOut[numOut].v = vIn[0].v + interp * (vIn[1].v - vIn[0].v);
-                vOut[numOut].v.Set(vIn[1].v).SubLocal(vIn[0].v).MulLocal(interp).AddLocal(vIn[0].v);
+                vOut[numOut].V.Set(vIn[1].V).SubLocal(vIn[0].V).MulLocal(interp).AddLocal(vIn[0].V);
 
                 // VertexA is hitting edgeB.
-                vOut[numOut].id.IndexA = (sbyte)vertexIndexA;
-                vOut[numOut].id.IndexB = vIn[0].id.IndexB;
-                vOut[numOut].id.TypeA = (sbyte)ContactID.Type.Vertex;
-                vOut[numOut].id.TypeB = (sbyte)ContactID.Type.Face;
+                vOut[numOut].Id.IndexA = (sbyte)vertexIndexA;
+                vOut[numOut].Id.IndexB = vIn[0].Id.IndexB;
+                vOut[numOut].Id.TypeA = (sbyte)ContactID.Type.Vertex;
+                vOut[numOut].Id.TypeB = (sbyte)ContactID.Type.Face;
                 ++numOut;
             }
 
@@ -187,9 +187,9 @@ namespace Box2D.Collision
         // #### COLLISION STUFF (not from collision.h or collision.cpp) ####
 
         // djm pooling
-        private static readonly Vec2 pA = new Vec2();
-        private static readonly Vec2 pB = new Vec2();
-        private static readonly Vec2 d = new Vec2();
+        private static readonly Vec2 P_A = new Vec2();
+        private static readonly Vec2 P_B = new Vec2();
+        private static readonly Vec2 D = new Vec2();
 
         /// <summary>
         /// Compute the collision manifold between two circles.
@@ -204,10 +204,10 @@ namespace Box2D.Collision
             manifold.PointCount = 0;
 
             // before inline:
-            Transform.mulToOut(xfA, circle1.P, pA);
-            Transform.mulToOut(xfB, circle2.P, pB);
-            d.Set(pB).SubLocal(pA);
-            float distSqr = d.X * d.X + d.Y * d.Y;
+            Transform.mulToOut(xfA, circle1.P, P_A);
+            Transform.mulToOut(xfB, circle2.P, P_B);
+            D.Set(P_B).SubLocal(P_A);
+            float distSqr = D.X * D.X + D.Y * D.Y;
 
             // after inline:
             // final Vec2 v = circle1.m_p;
@@ -240,8 +240,8 @@ namespace Box2D.Collision
         }
 
         // djm pooling, and from above
-        private static readonly Vec2 c = new Vec2();
-        private static readonly Vec2 cLocal = new Vec2();
+        private static readonly Vec2 C = new Vec2();
+        private static readonly Vec2 C_LOCAL = new Vec2();
 
         /// <summary>
         /// Compute the collision manifold between a polygon and a circle.
@@ -258,11 +258,11 @@ namespace Box2D.Collision
 
             // Compute circle position in the frame of the polygon.
             // before inline:
-            Transform.mulToOut(xfB, circle.P, c);
-            Transform.mulTransToOut(xfA, c, cLocal);
+            Transform.mulToOut(xfB, circle.P, C);
+            Transform.mulTransToOut(xfA, C, C_LOCAL);
 
-            float cLocalx = cLocal.X;
-            float cLocaly = cLocal.Y;
+            float cLocalx = C_LOCAL.X;
+            float cLocaly = C_LOCAL.Y;
             // after inline:
             // final float cy = xfB.p.y + xfB.q.ex.y * v.x + xfB.q.ey.y * v.y;
             // final float cx = xfB.p.x + xfB.q.ex.x * v.x + xfB.q.ey.x * v.y;
@@ -479,8 +479,8 @@ namespace Box2D.Collision
             Rot.MulToOutUnsafe(xf1.q, normals1[edge1], normal1World);
             // Vec2 normal1 = MulT(xf2.R, normal1World);
             Rot.MulTransUnsafe(xf2.q, normal1World, normal1);
-            float normal1x = normal1.X;
-            float normal1y = normal1.Y;
+            float normal1X = normal1.X;
+            float normal1Y = normal1.Y;
             // after inline:
             // R.mulToOut(v,out);
             // final Mat22 R = xf1.q;
@@ -499,7 +499,7 @@ namespace Box2D.Collision
             for (int i = 0; i < count2; ++i)
             {
                 Vec2 a = vertices2[i];
-                float dot = a.X * normal1x + a.Y * normal1y;
+                float dot = a.X * normal1X + a.Y * normal1Y;
                 if (dot < minDot)
                 {
                     minDot = dot;
@@ -549,13 +549,13 @@ namespace Box2D.Collision
 
             // Vector pointing from the centroid of poly1 to the centroid of poly2.
             // before inline:
-            Transform.mulToOutUnsafe(xf2, poly2.Centroid, d);
+            Transform.mulToOutUnsafe(xf2, poly2.Centroid, D);
             Transform.mulToOutUnsafe(xf1, poly1.Centroid, temp);
-            d.SubLocal(temp);
+            D.SubLocal(temp);
 
-            Rot.MulTransUnsafe(xf1.q, d, dLocal1);
-            float dLocal1x = dLocal1.X;
-            float dLocal1y = dLocal1.Y;
+            Rot.MulTransUnsafe(xf1.q, D, dLocal1);
+            float dLocal1X = dLocal1.X;
+            float dLocal1Y = dLocal1.Y;
             // after inline:
             // final float predy = xf2.p.y + xf2.q.ex.y * v.x + xf2.q.ey.y * v.y;
             // final float predx = xf2.p.x + xf2.q.ex.x * v.x + xf2.q.ey.x * v.y;
@@ -572,13 +572,12 @@ namespace Box2D.Collision
 
             // Find edge normal on poly1 that has the largest projection onto d.
             int edge = 0;
-            float dot;
             //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
             float maxDot = Single.Epsilon;
             for (int i = 0; i < count1; i++)
             {
                 Vec2 normal = normals1[i];
-                dot = normal.X * dLocal1x + normal.Y * dLocal1y;
+                float dot = normal.X * dLocal1X + normal.Y * dLocal1Y;
                 if (dot > maxDot)
                 {
                     maxDot = dot;
@@ -683,17 +682,17 @@ namespace Box2D.Collision
             int i1 = index;
             int i2 = i1 + 1 < count2 ? i1 + 1 : 0;
 
-            Transform.mulToOutUnsafe(xf2, vertices2[i1], c[0].v); // = Mul(xf2, vertices2[i1]);
-            c[0].id.IndexA = (sbyte)edge1;
-            c[0].id.IndexB = (sbyte)i1;
-            c[0].id.TypeA = (sbyte)ContactID.Type.Face;
-            c[0].id.TypeB = (sbyte)ContactID.Type.Vertex;
+            Transform.mulToOutUnsafe(xf2, vertices2[i1], c[0].V); // = Mul(xf2, vertices2[i1]);
+            c[0].Id.IndexA = (sbyte)edge1;
+            c[0].Id.IndexB = (sbyte)i1;
+            c[0].Id.TypeA = (sbyte)ContactID.Type.Face;
+            c[0].Id.TypeB = (sbyte)ContactID.Type.Vertex;
 
-            Transform.mulToOutUnsafe(xf2, vertices2[i2], c[1].v); // = Mul(xf2, vertices2[i2]);
-            c[1].id.IndexA = (sbyte)edge1;
-            c[1].id.IndexB = (sbyte)i2;
-            c[1].id.TypeA = (sbyte)ContactID.Type.Face;
-            c[1].id.TypeB = (sbyte)ContactID.Type.Vertex;
+            Transform.mulToOutUnsafe(xf2, vertices2[i2], c[1].V); // = Mul(xf2, vertices2[i2]);
+            c[1].Id.IndexA = (sbyte)edge1;
+            c[1].Id.IndexB = (sbyte)i2;
+            c[1].Id.TypeA = (sbyte)ContactID.Type.Face;
+            c[1].Id.TypeB = (sbyte)ContactID.Type.Vertex;
         }
 
         private readonly EdgeResults results1 = new EdgeResults();
@@ -837,14 +836,14 @@ namespace Box2D.Collision
             int pointCount = 0;
             for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; ++i)
             {
-                float separation = Vec2.Dot(normal, clipPoints2[i].v) - frontOffset;
+                float separation = Vec2.Dot(normal, clipPoints2[i].V) - frontOffset;
 
                 if (separation <= totalRadius)
                 {
                     ManifoldPoint cp = manifold.Points[pointCount];
-                    Transform.mulTransToOut(xf2, clipPoints2[i].v, cp.LocalPoint);
+                    Transform.mulTransToOut(xf2, clipPoints2[i].V, cp.LocalPoint);
                     // cp.m_localPoint = MulT(xf2, clipPoints2[i].v);
-                    cp.Id.Set(clipPoints2[i].id);
+                    cp.Id.Set(clipPoints2[i].Id);
                     if (flip)
                     {
                         // Swap features
@@ -858,11 +857,11 @@ namespace Box2D.Collision
         }
 
 
-        private readonly Vec2 Q = new Vec2();
+        private readonly Vec2 q = new Vec2();
         private readonly Vec2 e = new Vec2();
         private readonly ContactID cf = new ContactID();
         private readonly Vec2 e1 = new Vec2();
-        private readonly Vec2 P = new Vec2();
+        private readonly Vec2 p = new Vec2();
         private readonly Vec2 n = new Vec2();
 
         // Compute contact points for edge versus circle.
@@ -875,15 +874,15 @@ namespace Box2D.Collision
             // Compute circle in frame of edge
             // Vec2 Q = MulT(xfA, Mul(xfB, circleB.m_p));
             Transform.mulToOutUnsafe(xfB, circleB.P, temp);
-            Transform.mulTransToOutUnsafe(xfA, temp, Q);
+            Transform.mulTransToOutUnsafe(xfA, temp, q);
 
             Vec2 A = edgeA.Vertex1;
             Vec2 B = edgeA.Vertex2;
             e.Set(B).SubLocal(A);
 
             // Barycentric coordinates
-            float u = Vec2.Dot(e, temp.Set(B).SubLocal(Q));
-            float v = Vec2.Dot(e, temp.Set(Q).SubLocal(A));
+            float u = Vec2.Dot(e, temp.Set(B).SubLocal(q));
+            float v = Vec2.Dot(e, temp.Set(q).SubLocal(A));
 
             float radius = edgeA.Radius + circleB.Radius;
 
@@ -894,9 +893,9 @@ namespace Box2D.Collision
             // Region A
             if (v <= 0.0f)
             {
-                Vec2 _P = A;
-                d.Set(Q).SubLocal(_P);
-                float dd = Vec2.Dot(d, d);
+                Vec2 P = A;
+                D.Set(q).SubLocal(P);
+                float dd = Vec2.Dot(D, D);
                 if (dd > radius * radius)
                 {
                     return;
@@ -908,7 +907,7 @@ namespace Box2D.Collision
                     Vec2 A1 = edgeA.Vertex0;
                     Vec2 B1 = A;
                     e1.Set(B1).SubLocal(A1);
-                    float u1 = Vec2.Dot(e1, temp.Set(B1).SubLocal(Q));
+                    float u1 = Vec2.Dot(e1, temp.Set(B1).SubLocal(q));
 
                     // Is the circle in Region AB of the previous edge?
                     if (u1 > 0.0f)
@@ -922,7 +921,7 @@ namespace Box2D.Collision
                 manifold.PointCount = 1;
                 manifold.Type = Manifold.ManifoldType.Circles;
                 manifold.LocalNormal.SetZero();
-                manifold.LocalPoint.Set(_P);
+                manifold.LocalPoint.Set(P);
                 // manifold.points[0].id.key = 0;
                 manifold.Points[0].Id.Set(cf);
                 manifold.Points[0].LocalPoint.Set(circleB.P);
@@ -932,9 +931,9 @@ namespace Box2D.Collision
             // Region B
             if (u <= 0.0f)
             {
-                Vec2 _P = B;
-                d.Set(Q).SubLocal(_P);
-                float dd = Vec2.Dot(d, d);
+                Vec2 P = B;
+                D.Set(q).SubLocal(P);
+                float dd = Vec2.Dot(D, D);
                 if (dd > radius * radius)
                 {
                     return;
@@ -947,7 +946,7 @@ namespace Box2D.Collision
                     Vec2 A2 = B;
                     Vec2 e2 = e1;
                     e2.Set(B2).SubLocal(A2);
-                    float v2 = Vec2.Dot(e2, temp.Set(Q).SubLocal(A2));
+                    float v2 = Vec2.Dot(e2, temp.Set(q).SubLocal(A2));
 
                     // Is the circle in Region AB of the next edge?
                     if (v2 > 0.0f)
@@ -961,7 +960,7 @@ namespace Box2D.Collision
                 manifold.PointCount = 1;
                 manifold.Type = Manifold.ManifoldType.Circles;
                 manifold.LocalNormal.SetZero();
-                manifold.LocalPoint.Set(_P);
+                manifold.LocalPoint.Set(P);
                 // manifold.points[0].id.key = 0;
                 manifold.Points[0].Id.Set(cf);
                 manifold.Points[0].LocalPoint.Set(circleB.P);
@@ -973,10 +972,10 @@ namespace Box2D.Collision
             Debug.Assert(den > 0.0f);
 
             // Vec2 P = (1.0f / den) * (u * A + v * B);
-            P.Set(A).MulLocal(u).AddLocal(temp.Set(B).MulLocal(v));
-            P.MulLocal(1.0f / den);
-            d.Set(Q).SubLocal(P);
-            float dd2 = Vec2.Dot(d, d);
+            p.Set(A).MulLocal(u).AddLocal(temp.Set(B).MulLocal(v));
+            p.MulLocal(1.0f / den);
+            D.Set(q).SubLocal(p);
+            float dd2 = Vec2.Dot(D, D);
             if (dd2 > radius * radius)
             {
                 return;
@@ -984,7 +983,7 @@ namespace Box2D.Collision
 
             n.X = -e.Y;
             n.Y = e.X;
-            if (Vec2.Dot(n, temp.Set(Q).SubLocal(A)) < 0.0f)
+            if (Vec2.Dot(n, temp.Set(q).SubLocal(A)) < 0.0f)
             {
                 n.Set(-n.X, -n.Y);
             }
@@ -1022,19 +1021,19 @@ namespace Box2D.Collision
         /// </summary>
         public class ClipVertex
         {
-            public readonly Vec2 v;
-            public readonly ContactID id;
+            public readonly Vec2 V;
+            public readonly ContactID Id;
 
             public ClipVertex()
             {
-                v = new Vec2();
-                id = new ContactID();
+                V = new Vec2();
+                Id = new ContactID();
             }
 
             public void Set(ClipVertex cv)
             {
-                v.Set(cv.v);
-                id.Set(cv.id);
+                V.Set(cv.V);
+                Id.Set(cv.Id);
             }
         }
 
@@ -1061,16 +1060,16 @@ namespace Box2D.Collision
         ///  This structure is used to keep track of the best separating axis.
         /// </summary>
         //UPGRADE_NOTE: The access modifier for this class or class field has been changed in order to prevent compilation errors due to the visibility level. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1296'"
-        public class EPAxis
+        private class EPAxis
         {
-            internal enum Type
+            internal enum EPAxisType
             {
                 Unknown,
                 EdgeA,
                 EdgeB
             }
 
-            internal Type type;
+            internal EPAxisType Type;
             internal int Index;
             internal float Separation;
         }
@@ -1078,11 +1077,11 @@ namespace Box2D.Collision
         /// <summary>
         /// This holds polygon B expressed in frame A.
         /// </summary>
-        internal class TempPolygon
+        private class TempPolygon
         {
             internal Vec2[] Vertices = new Vec2[Settings.MAX_POLYGON_VERTICES];
             internal Vec2[] Normals = new Vec2[Settings.MAX_POLYGON_VERTICES];
-            internal int count;
+            internal int Count;
 
             public TempPolygon()
             {
@@ -1097,7 +1096,7 @@ namespace Box2D.Collision
         /// <summary>
         ///  Reference face used for clipping
         /// </summary>
-        internal class ReferenceFace
+        private class ReferenceFace
         {
             internal int I1;
             internal int I2;
@@ -1115,7 +1114,7 @@ namespace Box2D.Collision
         /// <summary> 
         /// This class collides and edge and a polygon, taking into account edge adjacency.
         /// </summary>
-        internal class EPCollider
+        private class EPCollider
         {
             internal enum VertexType
             {
@@ -1124,26 +1123,23 @@ namespace Box2D.Collision
                 Convex
             }
 
-            internal readonly TempPolygon PolygonB = new TempPolygon();
+            private readonly TempPolygon polygonB = new TempPolygon();
 
-            internal readonly Transform Xf = new Transform();
-            internal readonly Vec2 CentroidB = new Vec2();
-            internal Vec2 V0 = new Vec2();
-            internal Vec2 V1 = new Vec2();
-            internal Vec2 V2 = new Vec2();
-            internal Vec2 V3 = new Vec2();
-            internal readonly Vec2 Normal0 = new Vec2();
-            internal readonly Vec2 Normal1 = new Vec2();
-            internal readonly Vec2 Normal2 = new Vec2();
-            internal readonly Vec2 Normal = new Vec2();
+            private readonly Transform xf = new Transform();
+            private readonly Vec2 centroidB = new Vec2();
+            private Vec2 v0 = new Vec2();
+            private Vec2 v1 = new Vec2();
+            private Vec2 v2 = new Vec2();
+            private Vec2 v3 = new Vec2();
+            private readonly Vec2 normal0 = new Vec2();
+            private readonly Vec2 normal1 = new Vec2();
+            private readonly Vec2 normal2 = new Vec2();
+            private readonly Vec2 normal = new Vec2();
 
-            internal VertexType Type1;
-            internal VertexType Type2;
-
-            internal readonly Vec2 LowerLimit = new Vec2();
-            internal readonly Vec2 UpperLimit = new Vec2();
-            internal float Radius;
-            internal bool Front;
+            private readonly Vec2 lowerLimit = new Vec2();
+            private readonly Vec2 upperLimit = new Vec2();
+            private float radius;
+            private bool front;
 
             public EPCollider()
             {
@@ -1169,42 +1165,42 @@ namespace Box2D.Collision
             public void Collide(Manifold manifold, EdgeShape edgeA, Transform xfA, PolygonShape polygonB, Transform xfB)
             {
 
-                Transform.mulTransToOutUnsafe(xfA, xfB, Xf);
-                Transform.mulToOutUnsafe(Xf, polygonB.Centroid, CentroidB);
+                Transform.mulTransToOutUnsafe(xfA, xfB, xf);
+                Transform.mulToOutUnsafe(xf, polygonB.Centroid, centroidB);
 
-                V0 = edgeA.Vertex0;
-                V1 = edgeA.Vertex1;
-                V2 = edgeA.Vertex2;
-                V3 = edgeA.Vertex3;
+                v0 = edgeA.Vertex0;
+                v1 = edgeA.Vertex1;
+                v2 = edgeA.Vertex2;
+                v3 = edgeA.Vertex3;
 
                 bool hasVertex0 = edgeA.HasVertex0;
                 bool hasVertex3 = edgeA.HasVertex3;
 
-                edge1.Set(V2).SubLocal(V1);
+                edge1.Set(v2).SubLocal(v1);
                 edge1.Normalize();
-                Normal1.Set(edge1.Y, -edge1.X);
-                float offset1 = Vec2.Dot(Normal1, temp.Set(CentroidB).SubLocal(V1));
+                normal1.Set(edge1.Y, -edge1.X);
+                float offset1 = Vec2.Dot(normal1, temp.Set(centroidB).SubLocal(v1));
                 float offset0 = 0.0f, offset2 = 0.0f;
                 bool convex1 = false, convex2 = false;
 
                 // Is there a preceding edge?
                 if (hasVertex0)
                 {
-                    edge0.Set(V1).SubLocal(V0);
+                    edge0.Set(v1).SubLocal(v0);
                     edge0.Normalize();
-                    Normal0.Set(edge0.Y, -edge0.X);
+                    normal0.Set(edge0.Y, -edge0.X);
                     convex1 = Vec2.Cross(edge0, edge1) >= 0.0f;
-                    offset0 = Vec2.Dot(Normal0, temp.Set(CentroidB).SubLocal(V0));
+                    offset0 = Vec2.Dot(normal0, temp.Set(centroidB).SubLocal(v0));
                 }
 
                 // Is there a following edge?
                 if (hasVertex3)
                 {
-                    edge2.Set(V3).SubLocal(V2);
+                    edge2.Set(v3).SubLocal(v2);
                     edge2.Normalize();
-                    Normal2.Set(edge2.Y, -edge2.X);
+                    normal2.Set(edge2.Y, -edge2.X);
                     convex2 = Vec2.Cross(edge1, edge2) > 0.0f;
-                    offset2 = Vec2.Dot(Normal2, temp.Set(CentroidB).SubLocal(V2));
+                    offset2 = Vec2.Dot(normal2, temp.Set(centroidB).SubLocal(v2));
                 }
 
                 // Determine front or back collision. Determine collision normal limits.
@@ -1212,66 +1208,66 @@ namespace Box2D.Collision
                 {
                     if (convex1 && convex2)
                     {
-                        Front = offset0 >= 0.0f || offset1 >= 0.0f || offset2 >= 0.0f;
-                        if (Front)
+                        front = offset0 >= 0.0f || offset1 >= 0.0f || offset2 >= 0.0f;
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal0);
-                            UpperLimit.Set(Normal2);
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal0);
+                            upperLimit.Set(normal2);
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal1).NegateLocal();
-                            UpperLimit.Set(Normal1).NegateLocal();
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal1).NegateLocal();
+                            upperLimit.Set(normal1).NegateLocal();
                         }
                     }
                     else if (convex1)
                     {
-                        Front = offset0 >= 0.0f || (offset1 >= 0.0f && offset2 >= 0.0f);
-                        if (Front)
+                        front = offset0 >= 0.0f || (offset1 >= 0.0f && offset2 >= 0.0f);
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal0);
-                            UpperLimit.Set(Normal1);
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal0);
+                            upperLimit.Set(normal1);
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal2).NegateLocal();
-                            UpperLimit.Set(Normal1).NegateLocal();
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal2).NegateLocal();
+                            upperLimit.Set(normal1).NegateLocal();
                         }
                     }
                     else if (convex2)
                     {
-                        Front = offset2 >= 0.0f || (offset0 >= 0.0f && offset1 >= 0.0f);
-                        if (Front)
+                        front = offset2 >= 0.0f || (offset0 >= 0.0f && offset1 >= 0.0f);
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal1);
-                            UpperLimit.Set(Normal2);
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal1);
+                            upperLimit.Set(normal2);
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal1).NegateLocal();
-                            UpperLimit.Set(Normal0).NegateLocal();
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal1).NegateLocal();
+                            upperLimit.Set(normal0).NegateLocal();
                         }
                     }
                     else
                     {
-                        Front = offset0 >= 0.0f && offset1 >= 0.0f && offset2 >= 0.0f;
-                        if (Front)
+                        front = offset0 >= 0.0f && offset1 >= 0.0f && offset2 >= 0.0f;
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal1);
-                            UpperLimit.Set(Normal1);
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal1);
+                            upperLimit.Set(normal1);
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal2).NegateLocal();
-                            UpperLimit.Set(Normal0).NegateLocal();
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal2).NegateLocal();
+                            upperLimit.Set(normal0).NegateLocal();
                         }
                     }
                 }
@@ -1279,34 +1275,34 @@ namespace Box2D.Collision
                 {
                     if (convex1)
                     {
-                        Front = offset0 >= 0.0f || offset1 >= 0.0f;
-                        if (Front)
+                        front = offset0 >= 0.0f || offset1 >= 0.0f;
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal0);
-                            UpperLimit.Set(Normal1).NegateLocal();
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal0);
+                            upperLimit.Set(normal1).NegateLocal();
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal1);
-                            UpperLimit.Set(Normal1).NegateLocal();
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal1);
+                            upperLimit.Set(normal1).NegateLocal();
                         }
                     }
                     else
                     {
-                        Front = offset0 >= 0.0f && offset1 >= 0.0f;
-                        if (Front)
+                        front = offset0 >= 0.0f && offset1 >= 0.0f;
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal1);
-                            UpperLimit.Set(Normal1).NegateLocal();
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal1);
+                            upperLimit.Set(normal1).NegateLocal();
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal1);
-                            UpperLimit.Set(Normal0).NegateLocal();
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal1);
+                            upperLimit.Set(normal0).NegateLocal();
                         }
                     }
                 }
@@ -1314,81 +1310,81 @@ namespace Box2D.Collision
                 {
                     if (convex2)
                     {
-                        Front = offset1 >= 0.0f || offset2 >= 0.0f;
-                        if (Front)
+                        front = offset1 >= 0.0f || offset2 >= 0.0f;
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal1).NegateLocal();
-                            UpperLimit.Set(Normal2);
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal1).NegateLocal();
+                            upperLimit.Set(normal2);
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal1).NegateLocal();
-                            UpperLimit.Set(Normal1);
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal1).NegateLocal();
+                            upperLimit.Set(normal1);
                         }
                     }
                     else
                     {
-                        Front = offset1 >= 0.0f && offset2 >= 0.0f;
-                        if (Front)
+                        front = offset1 >= 0.0f && offset2 >= 0.0f;
+                        if (front)
                         {
-                            Normal.Set(Normal1);
-                            LowerLimit.Set(Normal1).NegateLocal();
-                            UpperLimit.Set(Normal1);
+                            normal.Set(normal1);
+                            lowerLimit.Set(normal1).NegateLocal();
+                            upperLimit.Set(normal1);
                         }
                         else
                         {
-                            Normal.Set(Normal1).NegateLocal();
-                            LowerLimit.Set(Normal2).NegateLocal();
-                            UpperLimit.Set(Normal1);
+                            normal.Set(normal1).NegateLocal();
+                            lowerLimit.Set(normal2).NegateLocal();
+                            upperLimit.Set(normal1);
                         }
                     }
                 }
                 else
                 {
-                    Front = offset1 >= 0.0f;
-                    if (Front)
+                    front = offset1 >= 0.0f;
+                    if (front)
                     {
-                        Normal.Set(Normal1);
-                        LowerLimit.Set(Normal1).NegateLocal();
-                        UpperLimit.Set(Normal1).NegateLocal();
+                        normal.Set(normal1);
+                        lowerLimit.Set(normal1).NegateLocal();
+                        upperLimit.Set(normal1).NegateLocal();
                     }
                     else
                     {
-                        Normal.Set(Normal1).NegateLocal();
-                        LowerLimit.Set(Normal1);
-                        UpperLimit.Set(Normal1);
+                        normal.Set(normal1).NegateLocal();
+                        lowerLimit.Set(normal1);
+                        upperLimit.Set(normal1);
                     }
                 }
 
                 // Get polygonB in frameA
-                PolygonB.count = polygonB.VertexCount;
+                this.polygonB.Count = polygonB.VertexCount;
                 for (int i = 0; i < polygonB.VertexCount; ++i)
                 {
-                    Transform.mulToOutUnsafe(Xf, polygonB.Vertices[i], PolygonB.Vertices[i]);
-                    Rot.MulToOutUnsafe(Xf.q, polygonB.Normals[i], PolygonB.Normals[i]);
+                    Transform.mulToOutUnsafe(xf, polygonB.Vertices[i], this.polygonB.Vertices[i]);
+                    Rot.MulToOutUnsafe(xf.q, polygonB.Normals[i], this.polygonB.Normals[i]);
                 }
 
-                Radius = 2.0f * Settings.POLYGON_RADIUS;
+                radius = 2.0f * Settings.POLYGON_RADIUS;
 
                 manifold.PointCount = 0;
 
                 ComputeEdgeSeparation(edgeAxis);
 
                 // If no valid normal can be found than this edge should not collide.
-                if (edgeAxis.type == EPAxis.Type.Unknown)
+                if (edgeAxis.Type == EPAxis.EPAxisType.Unknown)
                 {
                     return;
                 }
 
-                if (edgeAxis.Separation > Radius)
+                if (edgeAxis.Separation > radius)
                 {
                     return;
                 }
 
                 ComputePolygonSeparation(polygonAxis);
-                if (polygonAxis.type != EPAxis.Type.Unknown && polygonAxis.Separation > Radius)
+                if (polygonAxis.Type != EPAxis.EPAxisType.Unknown && polygonAxis.Separation > radius)
                 {
                     return;
                 }
@@ -1398,7 +1394,7 @@ namespace Box2D.Collision
                 const float k_absoluteTol = 0.001f;
 
                 EPAxis primaryAxis;
-                if (polygonAxis.type == EPAxis.Type.Unknown)
+                if (polygonAxis.Type == EPAxis.EPAxisType.Unknown)
                 {
                     primaryAxis = edgeAxis;
                 }
@@ -1412,16 +1408,16 @@ namespace Box2D.Collision
                 }
 
                 // ClipVertex[] ie = new ClipVertex[2];
-                if (primaryAxis.type == EPAxis.Type.EdgeA)
+                if (primaryAxis.Type == EPAxis.EPAxisType.EdgeA)
                 {
                     manifold.Type = Manifold.ManifoldType.FaceA;
 
                     // Search for the polygon normal that is most anti-parallel to the edge normal.
                     int bestIndex = 0;
-                    float bestValue = Vec2.Dot(Normal, PolygonB.Normals[0]);
-                    for (int i = 1; i < PolygonB.count; ++i)
+                    float bestValue = Vec2.Dot(normal, this.polygonB.Normals[0]);
+                    for (int i = 1; i < this.polygonB.Count; ++i)
                     {
-                        float value = Vec2.Dot(Normal, PolygonB.Normals[i]);
+                        float value = Vec2.Dot(normal, this.polygonB.Normals[i]);
                         if (value < bestValue)
                         {
                             bestValue = value;
@@ -1430,58 +1426,58 @@ namespace Box2D.Collision
                     }
 
                     int i1 = bestIndex;
-                    int i2 = i1 + 1 < PolygonB.count ? i1 + 1 : 0;
+                    int i2 = i1 + 1 < this.polygonB.Count ? i1 + 1 : 0;
 
-                    ie[0].v.Set(PolygonB.Vertices[i1]);
-                    ie[0].id.IndexA = 0;
-                    ie[0].id.IndexB = (sbyte)i1;
-                    ie[0].id.TypeA = (sbyte)ContactID.Type.Face;
-                    ie[0].id.TypeB = (sbyte)ContactID.Type.Vertex;
+                    ie[0].V.Set(this.polygonB.Vertices[i1]);
+                    ie[0].Id.IndexA = 0;
+                    ie[0].Id.IndexB = (sbyte)i1;
+                    ie[0].Id.TypeA = (sbyte)ContactID.Type.Face;
+                    ie[0].Id.TypeB = (sbyte)ContactID.Type.Vertex;
 
-                    ie[1].v.Set(PolygonB.Vertices[i2]);
-                    ie[1].id.IndexA = 0;
-                    ie[1].id.IndexB = (sbyte)i2;
-                    ie[1].id.TypeA = (sbyte)ContactID.Type.Face;
-                    ie[1].id.TypeB = (sbyte)ContactID.Type.Vertex;
+                    ie[1].V.Set(this.polygonB.Vertices[i2]);
+                    ie[1].Id.IndexA = 0;
+                    ie[1].Id.IndexB = (sbyte)i2;
+                    ie[1].Id.TypeA = (sbyte)ContactID.Type.Face;
+                    ie[1].Id.TypeB = (sbyte)ContactID.Type.Vertex;
 
-                    if (Front)
+                    if (front)
                     {
                         rf.I1 = 0;
                         rf.I2 = 1;
-                        rf.V1.Set(V1);
-                        rf.V2.Set(V2);
-                        rf.Normal.Set(Normal1);
+                        rf.V1.Set(v1);
+                        rf.V2.Set(v2);
+                        rf.Normal.Set(normal1);
                     }
                     else
                     {
                         rf.I1 = 1;
                         rf.I2 = 0;
-                        rf.V1.Set(V2);
-                        rf.V2.Set(V1);
-                        rf.Normal.Set(Normal1).NegateLocal();
+                        rf.V1.Set(v2);
+                        rf.V2.Set(v1);
+                        rf.Normal.Set(normal1).NegateLocal();
                     }
                 }
                 else
                 {
                     manifold.Type = Manifold.ManifoldType.FaceB;
 
-                    ie[0].v.Set(V1);
-                    ie[0].id.IndexA = 0;
-                    ie[0].id.IndexB = (sbyte)primaryAxis.Index;
-                    ie[0].id.TypeA = (sbyte)ContactID.Type.Vertex;
-                    ie[0].id.TypeB = (sbyte)ContactID.Type.Face;
+                    ie[0].V.Set(v1);
+                    ie[0].Id.IndexA = 0;
+                    ie[0].Id.IndexB = (sbyte)primaryAxis.Index;
+                    ie[0].Id.TypeA = (sbyte)ContactID.Type.Vertex;
+                    ie[0].Id.TypeB = (sbyte)ContactID.Type.Face;
 
-                    ie[1].v.Set(V2);
-                    ie[1].id.IndexA = 0;
-                    ie[1].id.IndexB = (sbyte)primaryAxis.Index;
-                    ie[1].id.TypeA = (sbyte)ContactID.Type.Vertex;
-                    ie[1].id.TypeB = (sbyte)ContactID.Type.Face;
+                    ie[1].V.Set(v2);
+                    ie[1].Id.IndexA = 0;
+                    ie[1].Id.IndexB = (sbyte)primaryAxis.Index;
+                    ie[1].Id.TypeA = (sbyte)ContactID.Type.Vertex;
+                    ie[1].Id.TypeB = (sbyte)ContactID.Type.Face;
 
                     rf.I1 = primaryAxis.Index;
-                    rf.I2 = rf.I1 + 1 < PolygonB.count ? rf.I1 + 1 : 0;
-                    rf.V1.Set(PolygonB.Vertices[rf.I1]);
-                    rf.V2.Set(PolygonB.Vertices[rf.I2]);
-                    rf.Normal.Set(PolygonB.Normals[rf.I1]);
+                    rf.I2 = rf.I1 + 1 < this.polygonB.Count ? rf.I1 + 1 : 0;
+                    rf.V1.Set(this.polygonB.Vertices[rf.I1]);
+                    rf.V2.Set(this.polygonB.Vertices[rf.I2]);
+                    rf.Normal.Set(this.polygonB.Normals[rf.I1]);
                 }
 
                 rf.SideNormal1.Set(rf.Normal.Y, -rf.Normal.X);
@@ -1509,7 +1505,7 @@ namespace Box2D.Collision
                 }
 
                 // Now clipPoints2 contains the clipped points.
-                if (primaryAxis.type == EPAxis.Type.EdgeA)
+                if (primaryAxis.Type == EPAxis.EPAxisType.EdgeA)
                 {
                     manifold.LocalNormal.Set(rf.Normal);
                     manifold.LocalPoint.Set(rf.V1);
@@ -1523,27 +1519,25 @@ namespace Box2D.Collision
                 int pointCount = 0;
                 for (int i = 0; i < Settings.MAX_MANIFOLD_POINTS; ++i)
                 {
-                    float separation;
+                    float separation = Vec2.Dot(rf.Normal, temp.Set(clipPoints2[i].V).SubLocal(rf.V1));
 
-                    separation = Vec2.Dot(rf.Normal, temp.Set(clipPoints2[i].v).SubLocal(rf.V1));
-
-                    if (separation <= Radius)
+                    if (separation <= radius)
                     {
                         ManifoldPoint cp = manifold.Points[pointCount];
 
-                        if (primaryAxis.type == EPAxis.Type.EdgeA)
+                        if (primaryAxis.Type == EPAxis.EPAxisType.EdgeA)
                         {
                             // cp.localPoint = MulT(m_xf, clipPoints2[i].v);
-                            Transform.mulTransToOutUnsafe(Xf, clipPoints2[i].v, cp.LocalPoint);
-                            cp.Id.Set(clipPoints2[i].id);
+                            Transform.mulTransToOutUnsafe(xf, clipPoints2[i].V, cp.LocalPoint);
+                            cp.Id.Set(clipPoints2[i].Id);
                         }
                         else
                         {
-                            cp.LocalPoint.Set(clipPoints2[i].v);
-                            cp.Id.TypeA = clipPoints2[i].id.TypeB;
-                            cp.Id.TypeB = clipPoints2[i].id.TypeA;
-                            cp.Id.IndexA = clipPoints2[i].id.IndexB;
-                            cp.Id.IndexB = clipPoints2[i].id.IndexA;
+                            cp.LocalPoint.Set(clipPoints2[i].V);
+                            cp.Id.TypeA = clipPoints2[i].Id.TypeB;
+                            cp.Id.TypeB = clipPoints2[i].Id.TypeA;
+                            cp.Id.IndexA = clipPoints2[i].Id.IndexB;
+                            cp.Id.IndexB = clipPoints2[i].Id.IndexA;
                         }
 
                         ++pointCount;
@@ -1554,15 +1548,15 @@ namespace Box2D.Collision
             }
 
 
-            public void ComputeEdgeSeparation(EPAxis axis)
+            private void ComputeEdgeSeparation(EPAxis axis)
             {
-                axis.type = EPAxis.Type.EdgeA;
-                axis.Index = Front ? 0 : 1;
+                axis.Type = EPAxis.EPAxisType.EdgeA;
+                axis.Index = front ? 0 : 1;
                 axis.Separation = System.Single.MaxValue;
 
-                for (int i = 0; i < PolygonB.count; ++i)
+                for (int i = 0; i < polygonB.Count; ++i)
                 {
-                    float s = Vec2.Dot(Normal, temp.Set(PolygonB.Vertices[i]).SubLocal(V1));
+                    float s = Vec2.Dot(normal, temp.Set(polygonB.Vertices[i]).SubLocal(v1));
                     if (s < axis.Separation)
                     {
                         axis.Separation = s;
@@ -1573,27 +1567,27 @@ namespace Box2D.Collision
             private readonly Vec2 perp = new Vec2();
             private readonly Vec2 n = new Vec2();
 
-            public void ComputePolygonSeparation(EPAxis axis)
+            private void ComputePolygonSeparation(EPAxis axis)
             {
-                axis.type = EPAxis.Type.Unknown;
+                axis.Type = EPAxis.EPAxisType.Unknown;
                 axis.Index = -1;
                 //UPGRADE_TODO: The equivalent in .NET for field 'java.lang.Float.MIN_VALUE' may return a different value. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1043'"
                 axis.Separation = Single.Epsilon;
 
-                perp.Set(-Normal.Y, Normal.X);
+                perp.Set(-normal.Y, normal.X);
 
-                for (int i = 0; i < PolygonB.count; ++i)
+                for (int i = 0; i < polygonB.Count; ++i)
                 {
-                    n.Set(PolygonB.Normals[i]).NegateLocal();
+                    n.Set(polygonB.Normals[i]).NegateLocal();
 
-                    float s1 = Vec2.Dot(n, temp.Set(PolygonB.Vertices[i]).SubLocal(V1));
-                    float s2 = Vec2.Dot(n, temp.Set(PolygonB.Vertices[i]).SubLocal(V2));
+                    float s1 = Vec2.Dot(n, temp.Set(polygonB.Vertices[i]).SubLocal(v1));
+                    float s2 = Vec2.Dot(n, temp.Set(polygonB.Vertices[i]).SubLocal(v2));
                     float s = MathUtils.Min(s1, s2);
 
-                    if (s > Radius)
+                    if (s > radius)
                     {
                         // No collision
-                        axis.type = EPAxis.Type.EdgeB;
+                        axis.Type = EPAxis.EPAxisType.EdgeB;
                         axis.Index = i;
                         axis.Separation = s;
                         return;
@@ -1602,14 +1596,14 @@ namespace Box2D.Collision
                     // Adjacency
                     if (Vec2.Dot(n, perp) >= 0.0f)
                     {
-                        if (Vec2.Dot(temp.Set(n).SubLocal(UpperLimit), Normal) < -Settings.ANGULAR_SLOP)
+                        if (Vec2.Dot(temp.Set(n).SubLocal(upperLimit), normal) < -Settings.ANGULAR_SLOP)
                         {
                             continue;
                         }
                     }
                     else
                     {
-                        if (Vec2.Dot(temp.Set(n).SubLocal(LowerLimit), Normal) < -Settings.ANGULAR_SLOP)
+                        if (Vec2.Dot(temp.Set(n).SubLocal(lowerLimit), normal) < -Settings.ANGULAR_SLOP)
                         {
                             continue;
                         }
@@ -1617,7 +1611,7 @@ namespace Box2D.Collision
 
                     if (s > axis.Separation)
                     {
-                        axis.type = EPAxis.Type.EdgeB;
+                        axis.Type = EPAxis.EPAxisType.EdgeB;
                         axis.Index = i;
                         axis.Separation = s;
                     }
