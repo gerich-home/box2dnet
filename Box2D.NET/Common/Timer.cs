@@ -39,17 +39,16 @@ namespace Box2D.Common
             {
                 return (float)(DateTime.Now - resetTime).TotalMilliseconds;
             }
-
         }
 
         private DateTime resetTime;
 
         public Timer()
         {
-            reset();
+            Reset();
         }
 
-        public void reset()
+        public void Reset()
         {
             resetTime = DateTime.Now;
         }

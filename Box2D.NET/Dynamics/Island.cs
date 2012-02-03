@@ -283,7 +283,7 @@ namespace Box2D.Dynamics
 				Velocities[i].w = w;
 			}
 
-			timer.reset();
+			timer.Reset();
 
 			// Solver data
 			solverData.Step = step;
@@ -315,7 +315,7 @@ namespace Box2D.Dynamics
 			profile.SolveInit = timer.Milliseconds;
 
 			// Solve velocity constraints
-			timer.reset();
+			timer.Reset();
 			//Console.WriteLine("island solving velocities");
 			for (int i = 0; i < step.VelocityIterations; ++i)
 			{
@@ -367,7 +367,7 @@ namespace Box2D.Dynamics
 			}
 
 			// Solve position constraints
-			timer.reset();
+			timer.Reset();
 			bool positionSolved = false;
 			for (int i = 0; i < step.PositionIterations; ++i)
 			{

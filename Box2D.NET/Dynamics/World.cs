@@ -513,7 +513,7 @@ namespace Box2D.Dynamics
         /// <param name="positionIterations">for the position constraint solver.</param>
         public void Step(float dt, int velocityIterations, int positionIterations)
         {
-            stepTimer.reset();
+            stepTimer.Reset();
             // log.debug("Starting step");
             // If new fixtures were added, we need to find the new contacts.
             if ((Flags & NEW_FIXTURE) == NEW_FIXTURE)
@@ -542,14 +542,14 @@ namespace Box2D.Dynamics
             step.WarmStarting = WarmStarting;
 
             // Update contacts. This is where some contacts are destroyed.
-            tempTimer.reset();
+            tempTimer.Reset();
             ContactManager.Collide();
             Profile.Collide = tempTimer.Milliseconds;
 
             // Integrate velocities, solve velocity constraints, and integrate positions.
             if (m_stepComplete && step.Dt > 0.0f)
             {
-                tempTimer.reset();
+                tempTimer.Reset();
                 Solve(step);
                 Profile.Solve = tempTimer.Milliseconds;
             }
@@ -557,7 +557,7 @@ namespace Box2D.Dynamics
             // Handle TOI events.
             if (ContinuousPhysics && step.Dt > 0.0f)
             {
-                tempTimer.reset();
+                tempTimer.Reset();
                 SolveToi(step);
                 Profile.SolveToi = tempTimer.Milliseconds;
             }
@@ -1119,7 +1119,7 @@ namespace Box2D.Dynamics
                 }
             }
 
-            broadphaseTimer.reset();
+            broadphaseTimer.Reset();
             // Synchronize fixtures, check for out of range bodies.
             for (Body b = BodyList; b != null; b = b.Next)
             {
