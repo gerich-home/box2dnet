@@ -230,12 +230,12 @@ namespace Box2D.Dynamics.Joints
             Rot qB = pool.PopRot();
             Vec2 temp = pool.PopVec2();
 
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
+            qA.Set(aA);
+            qB.Set(aB);
 
             // Compute the effective masses.
-            Rot.mulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
-            Rot.mulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
 
             m_uA.Set(cA).AddLocal(m_rA).SubLocal(m_groundAnchorA);
             m_uB.Set(cB).AddLocal(m_rB).SubLocal(m_groundAnchorB);
@@ -364,11 +364,11 @@ namespace Box2D.Dynamics.Joints
             Vec2 cB = data.Positions[m_indexB].c;
             float aB = data.Positions[m_indexB].a;
 
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
+            qA.Set(aA);
+            qB.Set(aB);
 
-            Rot.mulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.mulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
 
             uA.Set(cA).AddLocal(rA).SubLocal(m_groundAnchorA);
             uB.Set(cB).AddLocal(rB).SubLocal(m_groundAnchorB);

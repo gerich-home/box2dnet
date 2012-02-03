@@ -275,11 +275,11 @@ namespace Box2D.Dynamics.Contacts
 
                 Debug.Assert(manifold.PointCount > 0);
 
-                xfA.q.set_Renamed(aA);
-                xfB.q.set_Renamed(aB);
-                Rot.mulToOutUnsafe(xfA.q, localCenterA, temp);
+                xfA.q.Set(aA);
+                xfB.q.Set(aB);
+                Rot.MulToOutUnsafe(xfA.q, localCenterA, temp);
                 xfA.p.Set(cA).SubLocal(temp);
-                Rot.mulToOutUnsafe(xfB.q, localCenterB, temp);
+                Rot.MulToOutUnsafe(xfB.q, localCenterB, temp);
                 xfB.p.Set(cB).SubLocal(temp);
 
                 worldManifold.Initialize(manifold, xfA, radiusA, xfB, radiusB);
@@ -911,11 +911,11 @@ namespace Box2D.Dynamics.Contacts
                 // Solve normal constraints
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    xfA.q.set_Renamed(aA);
-                    xfB.q.set_Renamed(aB);
-                    Rot.mulToOutUnsafe(xfA.q, localCenterA, xfA.p);
+                    xfA.q.Set(aA);
+                    xfB.q.Set(aB);
+                    Rot.MulToOutUnsafe(xfA.q, localCenterA, xfA.p);
                     xfA.p.NegateLocal().AddLocal(cA);
-                    Rot.mulToOutUnsafe(xfB.q, localCenterB, xfB.p);
+                    Rot.MulToOutUnsafe(xfB.q, localCenterB, xfB.p);
                     xfB.p.NegateLocal().AddLocal(cB);
 
                     PositionSolverManifold psm = psolver;
@@ -1006,11 +1006,11 @@ namespace Box2D.Dynamics.Contacts
                 // Solve normal constraints
                 for (int j = 0; j < pointCount; ++j)
                 {
-                    xfA.q.set_Renamed(aA);
-                    xfB.q.set_Renamed(aB);
-                    Rot.mulToOutUnsafe(xfA.q, localCenterA, xfA.p);
+                    xfA.q.Set(aA);
+                    xfB.q.Set(aB);
+                    Rot.MulToOutUnsafe(xfA.q, localCenterA, xfA.p);
                     xfA.p.NegateLocal().AddLocal(cA);
-                    Rot.mulToOutUnsafe(xfB.q, localCenterB, xfB.p);
+                    Rot.MulToOutUnsafe(xfB.q, localCenterB, xfB.p);
                     xfB.p.NegateLocal().AddLocal(cB);
 
                     PositionSolverManifold psm = psolver;
@@ -1107,7 +1107,7 @@ namespace Box2D.Dynamics.Contacts
 
                 case Manifold.ManifoldType.FaceA:
                     {
-                        Rot.mulToOutUnsafe(xfA.q, pc.localNormal, normal);
+                        Rot.MulToOutUnsafe(xfA.q, pc.localNormal, normal);
                         Transform.mulToOutUnsafe(xfA, pc.localPoint, planePoint);
 
                         Transform.mulToOutUnsafe(xfB, pc.localPoints[index], clipPoint);
@@ -1120,7 +1120,7 @@ namespace Box2D.Dynamics.Contacts
 
                 case Manifold.ManifoldType.FaceB:
                     {
-                        Rot.mulToOutUnsafe(xfB.q, pc.localNormal, normal);
+                        Rot.MulToOutUnsafe(xfB.q, pc.localNormal, normal);
                         Transform.mulToOutUnsafe(xfB, pc.localPoint, planePoint);
 
                         Transform.mulToOutUnsafe(xfA, pc.localPoints[index], clipPoint);

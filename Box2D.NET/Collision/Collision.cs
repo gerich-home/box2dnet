@@ -476,9 +476,9 @@ namespace Box2D.Collision
             // Convert normal from poly1's frame into poly2's frame.
             // before inline:
             // Vec2 normal1World = Mul(xf1.R, normals1[edge1]);
-            Rot.mulToOutUnsafe(xf1.q, normals1[edge1], normal1World);
+            Rot.MulToOutUnsafe(xf1.q, normals1[edge1], normal1World);
             // Vec2 normal1 = MulT(xf2.R, normal1World);
-            Rot.mulTransUnsafe(xf2.q, normal1World, normal1);
+            Rot.MulTransUnsafe(xf2.q, normal1World, normal1);
             float normal1x = normal1.X;
             float normal1y = normal1.Y;
             // after inline:
@@ -553,7 +553,7 @@ namespace Box2D.Collision
             Transform.mulToOutUnsafe(xf1, poly1.Centroid, temp);
             d.SubLocal(temp);
 
-            Rot.mulTransUnsafe(xf1.q, d, dLocal1);
+            Rot.MulTransUnsafe(xf1.q, d, dLocal1);
             float dLocal1x = dLocal1.X;
             float dLocal1y = dLocal1.Y;
             // after inline:
@@ -662,9 +662,9 @@ namespace Box2D.Collision
             Debug.Assert(0 <= edge1 && edge1 < count1);
 
             // Get the normal of the reference edge in poly2's frame.
-            Rot.mulToOutUnsafe(xf1.q, normals1[edge1], normal1); // temporary
+            Rot.MulToOutUnsafe(xf1.q, normals1[edge1], normal1); // temporary
             // Vec2 normal1 = MulT(xf2.R, Mul(xf1.R, normals1[edge1]));
-            Rot.mulTrans(xf2.q, normal1, normal1);
+            Rot.MulTrans(xf2.q, normal1, normal1);
 
             // Find the incident edge on poly2.
             int index = 0;
@@ -789,7 +789,7 @@ namespace Box2D.Collision
             planePoint.Set(v11).AddLocal(v12).MulLocal(.5f); // Vec2 planePoint = 0.5f * (v11
             // + v12);
 
-            Rot.mulToOutUnsafe(xf1.q, localTangent, tangent); // Vec2 sideNormal = Mul(xf1.R, v12
+            Rot.MulToOutUnsafe(xf1.q, localTangent, tangent); // Vec2 sideNormal = Mul(xf1.R, v12
             // - v11);
             Vec2.CrossToOutUnsafe(tangent, 1f, normal); // Vec2 frontNormal = Vec2.cross(sideNormal,
             // 1.0f);
@@ -1367,7 +1367,7 @@ namespace Box2D.Collision
                 for (int i = 0; i < polygonB.VertexCount; ++i)
                 {
                     Transform.mulToOutUnsafe(Xf, polygonB.Vertices[i], PolygonB.Vertices[i]);
-                    Rot.mulToOutUnsafe(Xf.q, polygonB.Normals[i], PolygonB.Normals[i]);
+                    Rot.MulToOutUnsafe(Xf.q, polygonB.Normals[i], PolygonB.Normals[i]);
                 }
 
                 Radius = 2.0f * Settings.polygonRadius;

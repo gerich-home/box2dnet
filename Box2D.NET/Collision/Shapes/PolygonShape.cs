@@ -270,13 +270,13 @@ namespace Box2D.Collision.Shapes
 
             Transform xf = poolt1;
             xf.p.Set(center);
-            xf.q.set_Renamed(angle);
+            xf.q.Set(angle);
 
             // Transform vertices and normals.
             for (int i = 0; i < VertexCount; ++i)
             {
                 Transform.mulToOut(xf, Vertices[i], Vertices[i]);
-                Rot.mulToOut(xf.q, Normals[i], Normals[i]);
+                Rot.MulToOut(xf.q, Normals[i], Normals[i]);
             }
         }
 
@@ -294,7 +294,7 @@ namespace Box2D.Collision.Shapes
             Vec2 temp = pool2;
 
             pLocal.Set(p).SubLocal(xf.p);
-            Rot.mulTransUnsafe(xf.q, pLocal, temp);
+            Rot.MulTransUnsafe(xf.q, pLocal, temp);
             pLocal.Set(temp);
 
             if (m_debug)
@@ -328,15 +328,15 @@ namespace Box2D.Collision.Shapes
             Vec2 lower = aabb.LowerBound;
             Vec2 upper = aabb.UpperBound;
             Vec2 v1 = Vertices[0];
-            lower.X = (xf.q.c * v1.X - xf.q.s * v1.Y) + xf.p.X;
-            lower.Y = (xf.q.s * v1.X + xf.q.c * v1.Y) + xf.p.Y;
+            lower.X = (xf.q.Cos * v1.X - xf.q.Sin * v1.Y) + xf.p.X;
+            lower.Y = (xf.q.Sin * v1.X + xf.q.Cos * v1.Y) + xf.p.Y;
             upper.Set(lower);
 
             for (int i = 1; i < VertexCount; ++i)
             {
                 Vec2 v2 = Vertices[i];
-                v.X = (xf.q.c * v2.X - xf.q.s * v2.Y) + xf.p.X;
-                v.Y = (xf.q.s * v2.X + xf.q.c * v2.Y) + xf.p.Y;
+                v.X = (xf.q.Cos * v2.X - xf.q.Sin * v2.Y) + xf.p.X;
+                v.Y = (xf.q.Sin * v2.X + xf.q.Cos * v2.Y) + xf.p.Y;
                 // Vec2 v = Mul(xf, m_vertices[i]);
                 Vec2.MinToOut(lower, v, lower);
                 Vec2.MaxToOut(upper, v, upper);
@@ -437,9 +437,9 @@ namespace Box2D.Collision.Shapes
             Vec2 temp = pool4;
 
             p1.Set(input.P1).SubLocal(xf.p);
-            Rot.mulTrans(xf.q, p1, p1);
+            Rot.MulTrans(xf.q, p1, p1);
             p2.Set(input.P2).SubLocal(xf.p);
-            Rot.mulTrans(xf.q, p2, p2);
+            Rot.MulTrans(xf.q, p2, p2);
             d.Set(p2).SubLocal(p1);
 
             // if (count == 2) {
@@ -499,7 +499,7 @@ namespace Box2D.Collision.Shapes
             if (index >= 0)
             {
                 output.Fraction = lower;
-                Rot.mulToOutUnsafe(xf.q, Normals[index], output.Normal);
+                Rot.MulToOutUnsafe(xf.q, Normals[index], output.Normal);
                 // normal = Mul(xf.R, m_normals[index]);
                 return true;
             }

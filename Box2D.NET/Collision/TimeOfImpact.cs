@@ -409,7 +409,7 @@ namespace Box2D.Collision
                 Vec2.CrossToOutUnsafe(temp, 1f, Axis);
                 Axis.Normalize();
 
-                Rot.mulToOutUnsafe(xfb.q, Axis, normal);
+                Rot.MulToOutUnsafe(xfb.q, Axis, normal);
 
                 LocalPoint.Set(localPointB1).AddLocal(localPointB2).MulLocal(.5f);
                 Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
@@ -438,7 +438,7 @@ namespace Box2D.Collision
                 Vec2.CrossToOutUnsafe(temp, 1.0f, Axis);
                 Axis.Normalize();
 
-                Rot.mulToOutUnsafe(xfa.q, Axis, normal);
+                Rot.MulToOutUnsafe(xfa.q, Axis, normal);
 
                 LocalPoint.Set(localPointA1).AddLocal(localPointA2).MulLocal(.5f);
                 Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
@@ -472,8 +472,8 @@ namespace Box2D.Collision
 
                 case Type.Points:
                     {
-                        Rot.mulTransUnsafe(xfa.q, Axis, axisA);
-                        Rot.mulTransUnsafe(xfb.q, Axis.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfa.q, Axis, axisA);
+                        Rot.MulTransUnsafe(xfb.q, Axis.NegateLocal(), axisB);
                         Axis.NegateLocal();
 
                         indexes[0] = ProxyA.GetSupport(axisA);
@@ -491,10 +491,10 @@ namespace Box2D.Collision
 
                 case Type.FaceA:
                     {
-                        Rot.mulToOutUnsafe(xfa.q, Axis, normal);
+                        Rot.MulToOutUnsafe(xfa.q, Axis, normal);
                         Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
 
-                        Rot.mulTransUnsafe(xfb.q, normal.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfb.q, normal.NegateLocal(), axisB);
                         normal.NegateLocal();
 
                         indexes[0] = -1;
@@ -509,10 +509,10 @@ namespace Box2D.Collision
 
                 case Type.FaceB:
                     {
-                        Rot.mulToOutUnsafe(xfb.q, Axis, normal);
+                        Rot.MulToOutUnsafe(xfb.q, Axis, normal);
                         Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
 
-                        Rot.mulTransUnsafe(xfa.q, normal.NegateLocal(), axisA);
+                        Rot.MulTransUnsafe(xfa.q, normal.NegateLocal(), axisA);
                         normal.NegateLocal();
 
                         indexes[1] = -1;
@@ -544,8 +544,8 @@ namespace Box2D.Collision
 
                 case Type.Points:
                     {
-                        Rot.mulTransUnsafe(xfa.q, Axis, axisA);
-                        Rot.mulTransUnsafe(xfb.q, Axis.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfa.q, Axis, axisA);
+                        Rot.MulTransUnsafe(xfb.q, Axis.NegateLocal(), axisB);
                         Axis.NegateLocal();
 
                         localPointA.Set(ProxyA.GetVertex(indexA));
@@ -561,10 +561,10 @@ namespace Box2D.Collision
                 case Type.FaceA:
                     {
                         // System.out.printf("We're faceA\n");
-                        Rot.mulToOutUnsafe(xfa.q, Axis, normal);
+                        Rot.MulToOutUnsafe(xfa.q, Axis, normal);
                         Transform.mulToOutUnsafe(xfa, LocalPoint, pointA);
 
-                        Rot.mulTransUnsafe(xfb.q, normal.NegateLocal(), axisB);
+                        Rot.MulTransUnsafe(xfb.q, normal.NegateLocal(), axisB);
                         normal.NegateLocal();
 
                         localPointB.Set(ProxyB.GetVertex(indexB));
@@ -576,10 +576,10 @@ namespace Box2D.Collision
                 case Type.FaceB:
                     {
                         // System.out.printf("We're faceB\n");
-                        Rot.mulToOutUnsafe(xfb.q, Axis, normal);
+                        Rot.MulToOutUnsafe(xfb.q, Axis, normal);
                         Transform.mulToOutUnsafe(xfb, LocalPoint, pointB);
 
-                        Rot.mulTransUnsafe(xfa.q, normal.NegateLocal(), axisA);
+                        Rot.MulTransUnsafe(xfa.q, normal.NegateLocal(), axisA);
                         normal.NegateLocal();
 
                         localPointA.Set(ProxyA.GetVertex(indexA));

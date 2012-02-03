@@ -248,16 +248,16 @@ namespace Box2D.Dynamics.Joints
                 Vec2 temp3 = pc[8];
 
                 temp.Set(m_localAnchorA).SubLocal(bA.Sweep.localCenter);
-                Rot.mulToOutUnsafe(bA.Xf.q, temp, rA);
+                Rot.MulToOutUnsafe(bA.Xf.q, temp, rA);
 
                 temp.Set(m_localAnchorB).SubLocal(bB.Sweep.localCenter);
-                Rot.mulToOutUnsafe(bB.Xf.q, temp, rB);
+                Rot.MulToOutUnsafe(bB.Xf.q, temp, rB);
 
                 p1.Set(bA.Sweep.c).AddLocal(rA);
                 p2.Set(bB.Sweep.c).AddLocal(rB);
 
                 d.Set(p2).SubLocal(p1);
-                Rot.mulToOutUnsafe(bA.Xf.q, m_localXAxisA, axis);
+                Rot.MulToOutUnsafe(bA.Xf.q, m_localXAxisA, axis);
 
                 Vec2 vA = bA.m_linearVelocity;
                 Vec2 vB = bB.m_linearVelocity;
@@ -439,12 +439,12 @@ namespace Box2D.Dynamics.Joints
             Vec2 rA = pool.PopVec2();
             Vec2 rB = pool.PopVec2();
 
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
+            qA.Set(aA);
+            qB.Set(aB);
 
             // Compute the effective masses.
-            Rot.mulToOutUnsafe(qA, d.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.mulToOutUnsafe(qB, d.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, d.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.MulToOutUnsafe(qB, d.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
             d.Set(cB).SubLocal(cA).AddLocal(rB).SubLocal(rA);
 
             float mA = m_invMassA, mB = m_invMassB;
@@ -452,7 +452,7 @@ namespace Box2D.Dynamics.Joints
 
             // Compute motor Jacobian and effective mass.
             {
-                Rot.mulToOutUnsafe(qA, m_localXAxisA, m_axis);
+                Rot.MulToOutUnsafe(qA, m_localXAxisA, m_axis);
                 temp.Set(d).AddLocal(rA);
                 m_a1 = Vec2.Cross(temp, m_axis);
                 m_a2 = Vec2.Cross(rB, m_axis);
@@ -466,7 +466,7 @@ namespace Box2D.Dynamics.Joints
 
             // Prismatic constraint.
             {
-                Rot.mulToOutUnsafe(qA, m_localYAxisA, m_perp);
+                Rot.MulToOutUnsafe(qA, m_localYAxisA, m_perp);
 
                 temp.Set(d).AddLocal(rA);
                 m_s1 = Vec2.Cross(temp, m_perp);
@@ -742,21 +742,21 @@ namespace Box2D.Dynamics.Joints
             Vec2 cB = data.Positions[m_indexB].c;
             float aB = data.Positions[m_indexB].a;
 
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
+            qA.Set(aA);
+            qB.Set(aB);
 
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
 
             // Compute fresh Jacobians
-            Rot.mulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.mulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
             d.Set(cB).AddLocal(rB).SubLocal(cA).SubLocal(rA);
 
-            Rot.mulToOutUnsafe(qA, m_localXAxisA, axis);
+            Rot.MulToOutUnsafe(qA, m_localXAxisA, axis);
             float a1 = Vec2.Cross(temp.Set(d).AddLocal(rA), axis);
             float a2 = Vec2.Cross(rB, axis);
-            Rot.mulToOutUnsafe(qA, m_localYAxisA, perp);
+            Rot.MulToOutUnsafe(qA, m_localYAxisA, perp);
 
             float s1 = Vec2.Cross(temp.Set(d).AddLocal(rA), perp);
             float s2 = Vec2.Cross(rB, perp);

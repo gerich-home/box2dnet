@@ -121,7 +121,7 @@ namespace Box2D.Collision
                     {
                         Vec2 planePoint = pool3;
 
-                        Rot.mulToOutUnsafe(xfA.q, manifold.LocalNormal, Normal);
+                        Rot.MulToOutUnsafe(xfA.q, manifold.LocalNormal, Normal);
                         Transform.mulToOut(xfA, manifold.LocalPoint, planePoint);
 
                         Vec2 clipPoint = pool4;
@@ -157,7 +157,7 @@ namespace Box2D.Collision
 
                 case Manifold.ManifoldType.FaceB:
                     Vec2 planePoint2 = pool3;
-                    Rot.mulToOutUnsafe(xfB.q, manifold.LocalNormal, Normal);
+                    Rot.MulToOutUnsafe(xfB.q, manifold.LocalNormal, Normal);
                     Transform.mulToOut(xfB, manifold.LocalPoint, planePoint2);
 
                     // final Mat22 R = xfB.q;

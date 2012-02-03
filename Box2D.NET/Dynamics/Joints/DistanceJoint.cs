@@ -206,12 +206,12 @@ namespace Box2D.Dynamics.Joints
             Rot qA = pool.PopRot();
             Rot qB = pool.PopRot();
 
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
+            qA.Set(aA);
+            qB.Set(aB);
 
             // use m_u as temporary variable
-            Rot.mulToOutUnsafe(qA, m_u.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
-            Rot.mulToOutUnsafe(qB, m_u.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
+            Rot.MulToOutUnsafe(qA, m_u.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
+            Rot.MulToOutUnsafe(qB, m_u.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
             m_u.Set(cB).AddLocal(m_rB).SubLocal(cA).SubLocal(m_rA);
 
             pool.PushRot(2);
@@ -348,11 +348,11 @@ namespace Box2D.Dynamics.Joints
             Vec2 cB = data.Positions[m_indexB].c;
             float aB = data.Positions[m_indexB].a;
 
-            qA.set_Renamed(aA);
-            qB.set_Renamed(aB);
+            qA.Set(aA);
+            qB.Set(aB);
 
-            Rot.mulToOutUnsafe(qA, u.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.mulToOutUnsafe(qB, u.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, u.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.MulToOutUnsafe(qB, u.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
             u.Set(cB).AddLocal(rB).SubLocal(cA).SubLocal(rA);
 
 

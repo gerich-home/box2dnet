@@ -113,13 +113,13 @@ namespace Box2D.Common
             xf.p.Y = (1.0f - beta) * c0.Y + beta * c.Y;
             // float angle = (1.0f - alpha) * a0 + alpha * a;
             // xf.R.set(angle);
-            xf.q.set_Renamed((1.0f - beta) * a0 + beta * a);
+            xf.q.Set((1.0f - beta) * a0 + beta * a);
 
             // Shift to origin
             //xf->p -= b2Mul(xf->q, localCenter);
             Rot q = xf.q;
-            xf.p.X -= (q.c * localCenter.X - q.s * localCenter.Y);
-            xf.p.Y -= (q.s * localCenter.X + q.c * localCenter.Y);
+            xf.p.X -= (q.Cos * localCenter.X - q.Sin * localCenter.Y);
+            xf.p.Y -= (q.Sin * localCenter.X + q.Cos * localCenter.Y);
         }
 
         /// <summary>

@@ -793,11 +793,11 @@ namespace Box2D.Collision
                 // Compute a tentative new simplex vertex using support points.
                 SimplexVertex vertex = vertices[simplex.Count];
 
-                Rot.mulTransUnsafe(transformA.q, d.NegateLocal(), temp);
+                Rot.MulTransUnsafe(transformA.q, d.NegateLocal(), temp);
                 vertex.IndexA = proxyA.GetSupport(temp);
                 Transform.mulToOutUnsafe(transformA, proxyA.GetVertex(vertex.IndexA), vertex.WA);
                 // Vec2 wBLocal;
-                Rot.mulTransUnsafe(transformB.q, d.NegateLocal(), temp);
+                Rot.MulTransUnsafe(transformB.q, d.NegateLocal(), temp);
                 vertex.IndexB = proxyB.GetSupport(temp);
                 Transform.mulToOutUnsafe(transformB, proxyB.GetVertex(vertex.IndexB), vertex.WB);
                 vertex.W.Set(vertex.WB).SubLocal(vertex.WA);

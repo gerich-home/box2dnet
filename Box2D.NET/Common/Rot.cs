@@ -33,152 +33,134 @@ namespace Box2D.Common
     /// </summary>
     /// <author>Daniel</author>
     [Serializable]
-    public class Rot
+    public sealed class Rot
     {
-        private const long serialVersionUID = 1L;
-
-        public float s, c; // sin and cos
-
         public Rot()
         {
-            setIdentity();
+            SetIdentity();
         }
 
         public Rot(float angle)
         {
-            set_Renamed(angle);
+            Set(angle);
         }
 
-        virtual public float Sin
-        {
-            get
-            {
-                return s;
-            }
+        public float Sin { get; set; }
 
-        }
-
-        virtual public float Cos
-        {
-            get
-            {
-                return c;
-            }
-        }
+        public float Cos { get; set; }
 
         public override string ToString()
         {
-            return "Rot(s:" + s + ", c:" + c + ")";
+            return "Rot(s:" + Sin + ", c:" + Cos + ")";
         }
 
-        virtual public float Angle
+        public float Angle
         {
             get
             {
-                return MathUtils.Atan2(s, c);
+                return MathUtils.Atan2(Sin, Cos);
             }
-
         }
 
-        public virtual Rot set_Renamed(float angle)
+        public Rot Set(float angle)
         {
-            s = MathUtils.Sin(angle);
-            c = MathUtils.Cos(angle);
+            Sin = MathUtils.Sin(angle);
+            Cos = MathUtils.Cos(angle);
             return this;
         }
 
-        public virtual Rot set_Renamed(Rot other)
+        public Rot Set(Rot other)
         {
-            s = other.s;
-            c = other.c;
+            Sin = other.Sin;
+            Cos = other.Cos;
             return this;
         }
 
-        public virtual Rot setIdentity()
+        public Rot SetIdentity()
         {
-            s = 0;
-            c = 1;
+            Sin = 0;
+            Cos = 1;
             return this;
         }
 
-        public virtual void getXAxis(Vec2 xAxis)
+        public void GetXAxis(Vec2 xAxis)
         {
-            xAxis.Set(c, s);
+            xAxis.Set(Cos, Sin);
         }
 
-        public virtual void getYAxis(Vec2 yAxis)
+        public void GetYAxis(Vec2 yAxis)
         {
-            yAxis.Set(-s, c);
+            yAxis.Set(-Sin, Cos);
         }
 
-        public virtual Rot Clone()
+        public Rot Clone()
         {
             Rot copy = new Rot();
-            copy.s = s;
-            copy.c = c;
+            copy.Sin = Sin;
+            copy.Cos = Cos;
             return copy;
         }
 
-        public static void mul(Rot q, Rot r, Rot out_Renamed)
+        public static void Mul(Rot q, Rot r, Rot result)
         {
-            float tempc = q.c * r.c - q.s * r.s;
-            out_Renamed.s = q.s * r.c + q.c * r.s;
-            out_Renamed.c = tempc;
+            float tempc = q.Cos * r.Cos - q.Sin * r.Sin;
+            result.Sin = q.Sin * r.Cos + q.Cos * r.Sin;
+            result.Cos = tempc;
         }
 
-        public static void mulUnsafe(Rot q, Rot r, Rot out_Renamed)
+        public static void MulUnsafe(Rot q, Rot r, Rot result)
         {
-            Debug.Assert(r != out_Renamed);
-            Debug.Assert(q != out_Renamed);
+            Debug.Assert(r != result);
+            Debug.Assert(q != result);
             // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
             // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
             // s = qs * rc + qc * rs
             // c = qc * rc - qs * rs
-            out_Renamed.s = q.s * r.c + q.c * r.s;
-            out_Renamed.c = q.c * r.c - q.s * r.s;
+            result.Sin = q.Sin * r.Cos + q.Cos * r.Sin;
+            result.Cos = q.Cos * r.Cos - q.Sin * r.Sin;
         }
 
-        public static void mulTrans(Rot q, Rot r, Rot out_Renamed)
+        public static void MulTrans(Rot q, Rot r, Rot result)
         {
-            float tempc = q.c * r.c + q.s * r.s;
-            out_Renamed.s = q.c * r.s - q.s * r.c;
-            out_Renamed.c = tempc;
+            float tempc = q.Cos * r.Cos + q.Sin * r.Sin;
+            result.Sin = q.Cos * r.Sin - q.Sin * r.Cos;
+            result.Cos = tempc;
         }
 
-        public static void mulTransUnsafe(Rot q, Rot r, Rot out_Renamed)
+        public static void MulTransUnsafe(Rot q, Rot r, Rot result)
         {
             // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
             // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
             // s = qc * rs - qs * rc
             // c = qc * rc + qs * rs
-            out_Renamed.s = q.c * r.s - q.s * r.c;
-            out_Renamed.c = q.c * r.c + q.s * r.s;
+            result.Sin = q.Cos * r.Sin - q.Sin * r.Cos;
+            result.Cos = q.Cos * r.Cos + q.Sin * r.Sin;
         }
 
-        public static void mulToOut(Rot q, Vec2 v, Vec2 out_Renamed)
+        public static void MulToOut(Rot q, Vec2 v, Vec2 result)
         {
-            float tempy = q.s * v.X + q.c * v.Y;
-            out_Renamed.X = q.c * v.X - q.s * v.Y;
-            out_Renamed.Y = tempy;
+            float tempy = q.Sin * v.X + q.Cos * v.Y;
+            result.X = q.Cos * v.X - q.Sin * v.Y;
+            result.Y = tempy;
         }
 
-        public static void mulToOutUnsafe(Rot q, Vec2 v, Vec2 out_Renamed)
+        public static void MulToOutUnsafe(Rot q, Vec2 v, Vec2 result)
         {
-            out_Renamed.X = q.c * v.X - q.s * v.Y;
-            out_Renamed.Y = q.s * v.X + q.c * v.Y;
+            result.X = q.Cos * v.X - q.Sin * v.Y;
+            result.Y = q.Sin * v.X + q.Cos * v.Y;
         }
 
-        public static void mulTrans(Rot q, Vec2 v, Vec2 out_Renamed)
+        public static void MulTrans(Rot q, Vec2 v, Vec2 result)
         {
-            float tempy = (-q.s) * v.X + q.c * v.Y;
-            out_Renamed.X = q.c * v.X + q.s * v.Y;
-            out_Renamed.Y = tempy;
+            float tempy = (-q.Sin) * v.X + q.Cos * v.Y;
+            result.X = q.Cos * v.X + q.Sin * v.Y;
+            result.Y = tempy;
         }
 
-        public static void mulTransUnsafe(Rot q, Vec2 v, Vec2 out_Renamed)
+        public static void MulTransUnsafe(Rot q, Vec2 v, Vec2 result)
         {
-            out_Renamed.X = q.c * v.X + q.s * v.Y;
-            out_Renamed.Y = (-q.s) * v.X + q.c * v.Y;
+            result.X = q.Cos * v.X + q.Sin * v.Y;
+            result.Y = (-q.Sin) * v.X + q.Cos * v.Y;
         }
     }
 }
