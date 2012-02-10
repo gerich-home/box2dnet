@@ -15,24 +15,24 @@ namespace Testbed
             World world = new World(gravity);
             world.SleepingAllowed = doSleep;
             BodyDef groundBodyDef = new BodyDef();
-            groundBodyDef.position.set_Renamed(0, -10);
-            Body groundBody = world.createBody(groundBodyDef);
+            groundBodyDef.Position.Set(0, -10);
+            Body groundBody = world.CreateBody(groundBodyDef);
             PolygonShape groundBox = new PolygonShape();
-            groundBox.setAsBox(50, 10);
-            groundBody.createFixture(groundBox, 0);
+            groundBox.SetAsBox(50, 10);
+            groundBody.CreateFixture(groundBox, 0);
 
             // Dynamic Body
             BodyDef bodyDef = new BodyDef();
-            bodyDef.type = BodyType.DYNAMIC;
-            bodyDef.position.set_Renamed(0, 4);
-            Body body = world.createBody(bodyDef);
+            bodyDef.Type = BodyType.Dynamic;
+            bodyDef.Position.Set(0, 4);
+            Body body = world.CreateBody(bodyDef);
             PolygonShape dynamicBox = new PolygonShape();
-            dynamicBox.setAsBox(1, 1);
+            dynamicBox.SetAsBox(1, 1);
             FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = dynamicBox;
-            fixtureDef.density = 1;
-            fixtureDef.friction = 0.3f;
-            body.createFixture(fixtureDef);
+            fixtureDef.Shape = dynamicBox;
+            fixtureDef.Density = 1;
+            fixtureDef.Friction = 0.3f;
+            body.CreateFixture(fixtureDef);
 
             // Setup world
             float timeStep = 1.0f / 60.0f;
@@ -42,10 +42,10 @@ namespace Testbed
             // Run loop
             for (int i = 0; i < 60; ++i)
             {
-                world.step(timeStep, velocityIterations, positionIterations);
+                world.Step(timeStep, velocityIterations, positionIterations);
                 Vec2 position = body.Position;
                 float angle = body.Angle;
-                Console.WriteLine("{0:0.00} {1:0.00} {2:0.00}", position.x, position.y, angle);
+                Console.WriteLine("{0:0.00} {1:0.00} {2:0.00}", position.X, position.Y, angle);
             }
         }
     }
