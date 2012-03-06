@@ -975,7 +975,7 @@ namespace Box2D.Dynamics
             }
             for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
             {
-                c.Flags &= ~Contact.ISLAND_FLAG;
+                c.Flags &= ~Contact.ContactFlags.Island;
             }
             for (Joint j = JointList; j != null; j = j.m_next)
             {
@@ -1036,7 +1036,7 @@ namespace Box2D.Dynamics
                         Contact contact = ce.contact;
 
                         // Has this contact already been added to an island?
-                        if ((contact.Flags & Contact.ISLAND_FLAG) == Contact.ISLAND_FLAG)
+                        if ((contact.Flags & Contact.ContactFlags.Island) == Contact.ContactFlags.Island)
                         {
                             continue;
                         }
@@ -1056,7 +1056,7 @@ namespace Box2D.Dynamics
                         }
 
                         island.Add(contact);
-                        contact.Flags |= Contact.ISLAND_FLAG;
+                        contact.Flags |= Contact.ContactFlags.Island;
 
                         Body other = ce.other;
 
@@ -1164,7 +1164,7 @@ namespace Box2D.Dynamics
                 for (Contact c = ContactManager.ContactList; c != null; c = c.Next)
                 {
                     // Invalidate TOI
-                    c.Flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
+                    c.Flags &= ~(Contact.ContactFlags.ToiFlag | Contact.ContactFlags.Island);
                     c.ToiCount = 0;
                     c.Toi = 1.0f;
                 }
@@ -1192,7 +1192,7 @@ namespace Box2D.Dynamics
                     }
 
                     float alpha;
-                    if ((c.Flags & Contact.TOI_FLAG) != 0)
+                    if ((c.Flags & Contact.ContactFlags.ToiFlag) != 0)
                     {
                         // This contact has a valid cached TOI.
                         alpha = c.Toi;
@@ -1275,7 +1275,7 @@ namespace Box2D.Dynamics
                         }
 
                         c.Toi = alpha;
-                        c.Flags |= Contact.TOI_FLAG;
+                        c.Flags |= Contact.ContactFlags.ToiFlag;
                     }
 
                     if (alpha < minAlpha)
@@ -1307,7 +1307,7 @@ namespace Box2D.Dynamics
 
                 // The TOI contact likely has some new contact points.
                 minContact.Update(ContactManager.ContactListener);
-                minContact.Flags &= ~Contact.TOI_FLAG;
+                minContact.Flags &= ~Contact.ContactFlags.ToiFlag;
                 ++minContact.ToiCount;
 
                 // Is the contact solid?
@@ -1333,7 +1333,7 @@ namespace Box2D.Dynamics
 
                 bA2.Flags |= Body.TypeFlags.Island;
                 bB2.Flags |= Body.TypeFlags.Island;
-                minContact.Flags |= Contact.ISLAND_FLAG;
+                minContact.Flags |= Contact.ContactFlags.Island;
 
                 // Get contacts on bodyA and bodyB.
                 tempBodies[0] = bA2;
@@ -1358,7 +1358,7 @@ namespace Box2D.Dynamics
                             Contact contact = ce.contact;
 
                             // Has this contact already been added to the island?
-                            if ((contact.Flags & Contact.ISLAND_FLAG) != 0)
+                            if ((contact.Flags & Contact.ContactFlags.Island) != 0)
                             {
                                 continue;
                             }
@@ -1405,7 +1405,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Add the contact to the island
-                            contact.Flags |= Contact.ISLAND_FLAG;
+                            contact.Flags |= Contact.ContactFlags.Island;
                             island.Add(contact);
 
                             // Has the other body already been added to the island?
@@ -1451,7 +1451,7 @@ namespace Box2D.Dynamics
                     // Invalidate all contact TOIs on this displaced body.
                     for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
                     {
-                        ce.contact.Flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
+                        ce.contact.Flags &= ~(Contact.ContactFlags.ToiFlag | Contact.ContactFlags.ToiFlag);
                     }
                 }
 

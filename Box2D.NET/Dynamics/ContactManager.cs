@@ -263,7 +263,7 @@ namespace Box2D.Dynamics
                 Body bodyB = fixtureB.Body;
 
                 // is this contact flagged for filtering?
-                if ((c.Flags & Contact.FILTER_FLAG) == Contact.FILTER_FLAG)
+                if ((c.Flags & Contact.ContactFlags.Filter) == Contact.ContactFlags.Filter)
                 {
                     // Should these bodies collide?
                     if (bodyB.ShouldCollide(bodyA) == false)
@@ -284,7 +284,7 @@ namespace Box2D.Dynamics
                     }
 
                     // Clear the filtering flag.
-                    c.Flags &= ~Contact.FILTER_FLAG;
+                    c.Flags &= ~Contact.ContactFlags.Filter;
                 }
 
                 bool activeA = bodyA.Awake && bodyA.Type != BodyType.Static;
