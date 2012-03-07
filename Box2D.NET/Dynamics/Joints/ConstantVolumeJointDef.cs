@@ -26,44 +26,43 @@ using System.Collections.Generic;
 
 namespace Box2D.Dynamics.Joints
 {
-
     /// <summary>
     /// Definition for a {@link ConstantVolumeJoint}, which connects a group a bodies together
     /// so they maintain a constant volume within them.
     /// </summary>
     public class ConstantVolumeJointDef : JointDef
     {
-        public float frequencyHz;
-        public float dampingRatio;
+        public float FrequencyHz;
+        public float DampingRatio;
 
-        internal List<Body> bodies;
-        internal List<DistanceJoint> joints;
+        internal List<Body> Bodies;
+        internal List<DistanceJoint> Joints;
 
         //public float relaxationFactor;//1.0 is perfectly stiff (but doesn't work, unstable)
 
         public ConstantVolumeJointDef()
         {
             Type = JointType.ConstantVolume;
-            bodies = new List<Body>();
-            joints = null;
+            Bodies = new List<Body>();
+            Joints = null;
             //relaxationFactor = 0.9f;
             CollideConnected = false;
-            frequencyHz = 0.0f;
-            dampingRatio = 0.0f;
+            FrequencyHz = 0.0f;
+            DampingRatio = 0.0f;
         }
 
         /// <summary>
         /// Adds a body to the group
         /// </summary>
         /// <param name="argBody"></param>
-        public void addBody(Body argBody)
+        public void AddBody(Body argBody)
         {
-            bodies.Add(argBody);
-            if (bodies.Count == 1)
+            Bodies.Add(argBody);
+            if (Bodies.Count == 1)
             {
                 BodyA = argBody;
             }
-            if (bodies.Count == 2)
+            if (Bodies.Count == 2)
             {
                 BodyB = argBody;
             }
@@ -73,14 +72,14 @@ namespace Box2D.Dynamics.Joints
         /// Adds a body and the pre-made distance joint.
         /// Should only be used for deserialization.
         /// </summary>
-        public void addBodyAndJoint(Body argBody, DistanceJoint argJoint)
+        public void AddBodyAndJoint(Body argBody, DistanceJoint argJoint)
         {
-            addBody(argBody);
-            if (joints == null)
+            AddBody(argBody);
+            if (Joints == null)
             {
-                joints = new List<DistanceJoint>();
+                Joints = new List<DistanceJoint>();
             }
-            joints.Add(argJoint);
+            Joints.Add(argJoint);
         }
     }
 }

@@ -89,11 +89,11 @@ namespace Box2D.Dynamics.Joints
             : base(argWorld.Pool, def)
         {
             world = argWorld;
-            if (def.bodies.Count <= 2)
+            if (def.Bodies.Count <= 2)
             {
                 throw new ArgumentException("You cannot create a constant volume joint with less than three bodies.");
             }
-            bodies = def.bodies.ToArray();
+            bodies = def.Bodies.ToArray();
 
             targetLengths = new float[bodies.Length];
             for (int i = 0; i < targetLengths.Length; ++i)
@@ -104,30 +104,30 @@ namespace Box2D.Dynamics.Joints
             }
             targetVolume = Area;
 
-            if (def.joints != null && def.joints.Count != def.bodies.Count)
+            if (def.Joints != null && def.Joints.Count != def.Bodies.Count)
             {
                 throw new ArgumentException("Incorrect joint definition.  Joints have to correspond to the bodies");
             }
-            if (def.joints == null)
+            if (def.Joints == null)
             {
                 DistanceJointDef djd = new DistanceJointDef();
                 distanceJoints = new DistanceJoint[bodies.Length];
                 for (int i = 0; i < targetLengths.Length; ++i)
                 {
                     int next = (i == targetLengths.Length - 1) ? 0 : i + 1;
-                    djd.frequencyHz = def.frequencyHz; // 20.0f;
-                    djd.dampingRatio = def.dampingRatio; // 50.0f;
+                    djd.frequencyHz = def.FrequencyHz; // 20.0f;
+                    djd.dampingRatio = def.DampingRatio; // 50.0f;
                     djd.initialize(bodies[i], bodies[next], bodies[i].WorldCenter, bodies[next].WorldCenter);
                     distanceJoints[i] = (DistanceJoint)world.CreateJoint(djd);
                 }
             }
             else
             {
-                distanceJoints = def.joints.ToArray();
+                distanceJoints = def.Joints.ToArray();
             }
 
-            frequencyHz = def.frequencyHz;
-            dampingRatio = def.dampingRatio;
+            frequencyHz = def.FrequencyHz;
+            dampingRatio = def.DampingRatio;
 
             normals = new Vec2[bodies.Length];
             for (int i = 0; i < normals.Length; ++i)
