@@ -216,13 +216,13 @@ namespace Box2D.Dynamics.Joints
             m_invIA = m_bodyA.InvI;
             m_invIB = m_bodyB.InvI;
 
-            Vec2 cA = data.Positions[m_indexA].c;
-            float aA = data.Positions[m_indexA].a;
+            Vec2 cA = data.Positions[m_indexA].C;
+            float aA = data.Positions[m_indexA].A;
             Vec2 vA = data.Velocities[m_indexA].V;
             float wA = data.Velocities[m_indexA].W;
 
-            Vec2 cB = data.Positions[m_indexB].c;
-            float aB = data.Positions[m_indexB].a;
+            Vec2 cB = data.Positions[m_indexB].C;
+            float aB = data.Positions[m_indexB].A;
             Vec2 vB = data.Velocities[m_indexB].V;
             float wB = data.Velocities[m_indexB].W;
 
@@ -359,10 +359,10 @@ namespace Box2D.Dynamics.Joints
             Vec2 PA = pool.PopVec2();
             Vec2 PB = pool.PopVec2();
 
-            Vec2 cA = data.Positions[m_indexA].c;
-            float aA = data.Positions[m_indexA].a;
-            Vec2 cB = data.Positions[m_indexB].c;
-            float aB = data.Positions[m_indexB].a;
+            Vec2 cA = data.Positions[m_indexA].C;
+            float aA = data.Positions[m_indexA].A;
+            Vec2 cB = data.Positions[m_indexB].C;
+            float aB = data.Positions[m_indexB].A;
 
             qA.Set(aA);
             qB.Set(aB);
@@ -423,10 +423,10 @@ namespace Box2D.Dynamics.Joints
             cB.Y += m_invMassB * PB.Y;
             aB += m_invIB * Vec2.Cross(rB, PB);
 
-            data.Positions[m_indexA].c.Set(cA);
-            data.Positions[m_indexA].a = aA;
-            data.Positions[m_indexB].c.Set(cB);
-            data.Positions[m_indexB].a = aB;
+            data.Positions[m_indexA].C.Set(cA);
+            data.Positions[m_indexA].A = aA;
+            data.Positions[m_indexB].C.Set(cB);
+            data.Positions[m_indexB].A = aB;
 
             pool.PushRot(2);
             pool.PushVec2(7);

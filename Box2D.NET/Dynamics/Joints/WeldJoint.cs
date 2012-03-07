@@ -167,12 +167,12 @@ namespace Box2D.Dynamics.Joints
             m_invIB = m_bodyB.InvI;
 
             //    Vec2 cA = data.positions[m_indexA].c;
-            float aA = data.Positions[m_indexA].a;
+            float aA = data.Positions[m_indexA].A;
             Vec2 vA = data.Velocities[m_indexA].V;
             float wA = data.Velocities[m_indexA].W;
 
             //    Vec2 cB = data.positions[m_indexB].c;
-            float aB = data.Positions[m_indexB].a;
+            float aB = data.Positions[m_indexB].A;
             Vec2 vB = data.Velocities[m_indexB].V;
             float wB = data.Velocities[m_indexB].W;
 
@@ -360,10 +360,10 @@ namespace Box2D.Dynamics.Joints
         /// <seealso cref="Joint.solvePositionConstraints(float)"></seealso>
         public override bool solvePositionConstraints(SolverData data)
         {
-            Vec2 cA = data.Positions[m_indexA].c;
-            float aA = data.Positions[m_indexA].a;
-            Vec2 cB = data.Positions[m_indexB].c;
-            float aB = data.Positions[m_indexB].a;
+            Vec2 cA = data.Positions[m_indexA].C;
+            float aA = data.Positions[m_indexA].A;
+            Vec2 cB = data.Positions[m_indexB].C;
+            float aB = data.Positions[m_indexB].A;
             Rot qA = pool.PopRot();
             Rot qB = pool.PopRot();
             Vec2 temp = pool.PopVec2();
@@ -437,10 +437,10 @@ namespace Box2D.Dynamics.Joints
                 aB += iB * (Vec2.Cross(rB, P) + impulse.Z);
             }
 
-            data.Positions[m_indexA].c.Set(cA);
-            data.Positions[m_indexA].a = aA;
-            data.Positions[m_indexB].c.Set(cB);
-            data.Positions[m_indexB].a = aB;
+            data.Positions[m_indexA].C.Set(cA);
+            data.Positions[m_indexA].A = aA;
+            data.Positions[m_indexB].C.Set(cB);
+            data.Positions[m_indexB].A = aB;
 
             pool.PushVec2(5);
             pool.PushRot(2);

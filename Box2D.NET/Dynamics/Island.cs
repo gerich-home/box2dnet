@@ -277,8 +277,8 @@ namespace Box2D.Dynamics
 				}
 				//Debug.Assert (v.x == 0);
 
-				Positions[i].c.Set(c);
-				Positions[i].a = a;
+				Positions[i].C.Set(c);
+				Positions[i].A = a;
 				Velocities[i].V.Set(v);
 				Velocities[i].W = w;
 			}
@@ -334,8 +334,8 @@ namespace Box2D.Dynamics
 			// Integrate positions
 			for (int i = 0; i < BodyCount; ++i)
 			{
-				Vec2 c = Positions[i].c;
-				float a = Positions[i].a;
+				Vec2 c = Positions[i].C;
+				float a = Positions[i].A;
 				Vec2 v = Velocities[i].V;
 				float w = Velocities[i].W;
 
@@ -362,7 +362,7 @@ namespace Box2D.Dynamics
 				c.Y += h * v.Y;
 				a += h * w;
 
-				Positions[i].a = a;
+				Positions[i].A = a;
 				Velocities[i].W = w;
 			}
 
@@ -392,8 +392,8 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body body = Bodies[i];
-				body.Sweep.C.Set(Positions[i].c);
-				body.Sweep.A = Positions[i].a;
+				body.Sweep.C.Set(Positions[i].C);
+				body.Sweep.A = Positions[i].A;
                 body.LinearVelocity.Set(Velocities[i].V);
 				body.AngularVelocity = Velocities[i].W;
 				body.SynchronizeTransform();
@@ -453,8 +453,8 @@ namespace Box2D.Dynamics
 			for (int i = 0; i < BodyCount; ++i)
 			{
 				Body b = Bodies[i];
-				Positions[i].c.Set(b.Sweep.C);
-				Positions[i].a = b.Sweep.A;
+				Positions[i].C.Set(b.Sweep.C);
+				Positions[i].A = b.Sweep.A;
                 Velocities[i].V.Set(b.LinearVelocity);
                 Velocities[i].W = b.AngularVelocity;
 			}
@@ -510,10 +510,10 @@ namespace Box2D.Dynamics
 			// #endif
 
 			// Leap of faith to new safe state.
-			Bodies[toiIndexA].Sweep.C0.Set(Positions[toiIndexA].c);
-			Bodies[toiIndexA].Sweep.A0 = Positions[toiIndexA].a;
-			Bodies[toiIndexB].Sweep.C0.Set(Positions[toiIndexB].c);
-			Bodies[toiIndexB].Sweep.A0 = Positions[toiIndexB].a;
+			Bodies[toiIndexA].Sweep.C0.Set(Positions[toiIndexA].C);
+			Bodies[toiIndexA].Sweep.A0 = Positions[toiIndexA].A;
+			Bodies[toiIndexB].Sweep.C0.Set(Positions[toiIndexB].C);
+			Bodies[toiIndexB].Sweep.A0 = Positions[toiIndexB].A;
 
 			// No warm starting is needed for TOI events because warm
 			// starting impulses were applied in the discrete solver.
@@ -533,8 +533,8 @@ namespace Box2D.Dynamics
 			// Integrate positions
 			for (int i = 0; i < BodyCount; ++i)
 			{
-				Vec2 c = Positions[i].c;
-				float a = Positions[i].a;
+				Vec2 c = Positions[i].C;
+				float a = Positions[i].A;
 				Vec2 v = Velocities[i].V;
 				float w = Velocities[i].W;
 
@@ -558,8 +558,8 @@ namespace Box2D.Dynamics
 				c.Y += v.Y * h;
 				a += h * w;
 
-				Positions[i].c.Set(c);
-				Positions[i].a = a;
+				Positions[i].C.Set(c);
+				Positions[i].A = a;
 				Velocities[i].V.Set(v);
 				Velocities[i].W = w;
 

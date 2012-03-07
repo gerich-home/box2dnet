@@ -26,10 +26,9 @@ using Box2D.Common;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class Position
     {
-        public readonly Vec2 c = new Vec2();
-        public float a;
+        public readonly Vec2 C = new Vec2();
+        public float A;
     }
 }

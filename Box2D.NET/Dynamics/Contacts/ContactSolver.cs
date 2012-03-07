@@ -263,13 +263,13 @@ namespace Box2D.Dynamics.Contacts
                 Vec2 localCenterA = pc.localCenterA;
                 Vec2 localCenterB = pc.localCenterB;
 
-                Vec2 cA = m_positions[indexA].c;
-                float aA = m_positions[indexA].a;
+                Vec2 cA = m_positions[indexA].C;
+                float aA = m_positions[indexA].A;
                 Vec2 vA = m_velocities[indexA].V;
                 float wA = m_velocities[indexA].W;
 
-                Vec2 cB = m_positions[indexB].c;
-                float aB = m_positions[indexB].a;
+                Vec2 cB = m_positions[indexB].C;
+                float aB = m_positions[indexB].A;
                 Vec2 vB = m_velocities[indexB].V;
                 float wB = m_velocities[indexB].W;
 
@@ -901,10 +901,10 @@ namespace Box2D.Dynamics.Contacts
                 Vec2 localCenterB = pc.localCenterB;
                 int pointCount = pc.pointCount;
 
-                Vec2 cA = m_positions[indexA].c;
-                float aA = m_positions[indexA].a;
-                Vec2 cB = m_positions[indexB].c;
-                float aB = m_positions[indexB].a;
+                Vec2 cA = m_positions[indexA].C;
+                float aA = m_positions[indexA].A;
+                Vec2 cB = m_positions[indexB].C;
+                float aB = m_positions[indexB].A;
                 //Console.WriteLine("cA: " + cA.x + "," + cA.y + " - rot " + aA);
                 //Console.WriteLine("cB: " + cB.x + "," + cB.y + " - rot " + aB);
 
@@ -952,11 +952,11 @@ namespace Box2D.Dynamics.Contacts
                     aB += iB * Vec2.Cross(rB, P);
                 }
 
-                m_positions[indexA].c.Set(cA);
-                m_positions[indexA].a = aA;
+                m_positions[indexA].C.Set(cA);
+                m_positions[indexA].A = aA;
 
-                m_positions[indexB].c.Set(cB);
-                m_positions[indexB].a = aB;
+                m_positions[indexB].C.Set(cB);
+                m_positions[indexB].A = aB;
                 //Console.WriteLine("ending pos "+indexA+": " + cA.x + "," + cA.y + " - rot " + aA);
                 //Console.WriteLine("ending pos "+indexB+": " + cB.x + "," + cB.y + " - rot " + aB);
             }
@@ -997,11 +997,11 @@ namespace Box2D.Dynamics.Contacts
                     iB = pc.invIB;
                 }
 
-                Vec2 cA = m_positions[indexA].c;
-                float aA = m_positions[indexA].a;
+                Vec2 cA = m_positions[indexA].C;
+                float aA = m_positions[indexA].A;
 
-                Vec2 cB = m_positions[indexB].c;
-                float aB = m_positions[indexB].a;
+                Vec2 cB = m_positions[indexB].C;
+                float aB = m_positions[indexB].A;
 
                 // Solve normal constraints
                 for (int j = 0; j < pointCount; ++j)
@@ -1046,11 +1046,11 @@ namespace Box2D.Dynamics.Contacts
                     aB += iB * Vec2.Cross(rB, P);
                 }
 
-                m_positions[indexA].c.Set(cA);
-                m_positions[indexA].a = aA;
+                m_positions[indexA].C.Set(cA);
+                m_positions[indexA].A = aA;
 
-                m_positions[indexB].c.Set(cB);
-                m_positions[indexB].a = aB;
+                m_positions[indexB].C.Set(cB);
+                m_positions[indexB].A = aB;
             }
 
             // We can't expect minSpeparation >= -_linearSlop because we don't

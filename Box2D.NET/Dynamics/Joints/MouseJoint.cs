@@ -170,8 +170,8 @@ namespace Box2D.Dynamics.Joints
             m_invMassB = m_bodyB.InvMass;
             m_invIB = m_bodyB.InvI;
 
-            Vec2 cB = data.Positions[m_indexB].c;
-            float aB = data.Positions[m_indexB].a;
+            Vec2 cB = data.Positions[m_indexB].C;
+            float aB = data.Positions[m_indexB].A;
             Vec2 vB = data.Velocities[m_indexB].V;
             float wB = data.Velocities[m_indexB].W;
 
