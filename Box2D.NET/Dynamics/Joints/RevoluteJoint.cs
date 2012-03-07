@@ -86,18 +86,18 @@ namespace Box2D.Dynamics.Joints
         public RevoluteJoint(IWorldPool argWorld, RevoluteJointDef def)
             : base(argWorld, def)
         {
-            m_localAnchorA.Set(def.localAnchorA);
-            m_localAnchorB.Set(def.localAnchorB);
-            m_referenceAngle = def.referenceAngle;
+            m_localAnchorA.Set(def.LocalAnchorA);
+            m_localAnchorB.Set(def.LocalAnchorB);
+            m_referenceAngle = def.ReferenceAngle;
 
             m_motorImpulse = 0;
 
-            m_lowerAngle = def.lowerAngle;
-            m_upperAngle = def.upperAngle;
-            m_maxMotorTorque = def.maxMotorTorque;
-            m_motorSpeed = def.motorSpeed;
-            m_enableLimit = def.enableLimit;
-            m_enableMotor = def.enableMotor;
+            m_lowerAngle = def.LowerAngle;
+            m_upperAngle = def.UpperAngle;
+            m_maxMotorTorque = def.MaxMotorTorque;
+            m_motorSpeed = def.MotorSpeed;
+            m_enableLimit = def.EnableLimit;
+            m_enableMotor = def.EnableMotor;
             m_limitState = LimitState.Inactive;
         }
 

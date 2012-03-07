@@ -68,61 +68,61 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The local anchor point relative to body1's origin.
         /// </summary>
-        public Vec2 localAnchorA;
+        public Vec2 LocalAnchorA;
 
         /// <summary>
         /// The local anchor point relative to body2's origin.
         /// </summary>
-        public Vec2 localAnchorB;
+        public Vec2 LocalAnchorB;
 
         /// <summary>
         /// The body2 angle minus body1 angle in the reference state (radians).
         /// </summary>
-        public float referenceAngle;
+        public float ReferenceAngle;
 
         /// <summary>
         /// A flag to enable joint limits.
         /// </summary>
-        public bool enableLimit;
+        public bool EnableLimit;
 
         /// <summary>
         /// The lower angle for the joint limit (radians).
         /// </summary>
-        public float lowerAngle;
+        public float LowerAngle;
 
         /// <summary>
         /// The upper angle for the joint limit (radians).
         /// </summary>
-        public float upperAngle;
+        public float UpperAngle;
 
         /// <summary>
         /// A flag to enable the joint motor.
         /// </summary>
-        public bool enableMotor;
+        public bool EnableMotor;
 
         /// <summary>
         /// The desired motor speed. Usually in radians per second.
         /// </summary>
-        public float motorSpeed;
+        public float MotorSpeed;
 
         /// <summary>
         /// The maximum motor torque used to achieve the desired motor speed.
         /// Usually in N-m.
         /// </summary>
-        public float maxMotorTorque;
+        public float MaxMotorTorque;
 
         public RevoluteJointDef()
         {
             Type = JointType.Revolute;
-            localAnchorA = new Vec2(0.0f, 0.0f);
-            localAnchorB = new Vec2(0.0f, 0.0f);
-            referenceAngle = 0.0f;
-            lowerAngle = 0.0f;
-            upperAngle = 0.0f;
-            maxMotorTorque = 0.0f;
-            motorSpeed = 0.0f;
-            enableLimit = false;
-            enableMotor = false;
+            LocalAnchorA = new Vec2(0.0f, 0.0f);
+            LocalAnchorB = new Vec2(0.0f, 0.0f);
+            ReferenceAngle = 0.0f;
+            LowerAngle = 0.0f;
+            UpperAngle = 0.0f;
+            MaxMotorTorque = 0.0f;
+            MotorSpeed = 0.0f;
+            EnableLimit = false;
+            EnableMotor = false;
         }
 
         /// <summary>
@@ -131,13 +131,13 @@ namespace Box2D.Dynamics.Joints
         /// <param name="b1"></param>
         /// <param name="b2"></param>
         /// <param name="anchor"></param>
-        public void initialize(Body b1, Body b2, Vec2 anchor)
+        public void Initialize(Body b1, Body b2, Vec2 anchor)
         {
             BodyA = b1;
             BodyB = b2;
-            BodyA.GetLocalPointToOut(anchor, localAnchorA);
-            BodyB.GetLocalPointToOut(anchor, localAnchorB);
-            referenceAngle = BodyB.Angle - BodyA.Angle;
+            BodyA.GetLocalPointToOut(anchor, LocalAnchorA);
+            BodyB.GetLocalPointToOut(anchor, LocalAnchorB);
+            ReferenceAngle = BodyB.Angle - BodyA.Angle;
         }
     }
 }
