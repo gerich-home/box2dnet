@@ -35,35 +35,35 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The local anchor point relative to body1's origin.
         /// </summary>
-        public readonly Vec2 localAnchorA;
+        public readonly Vec2 LocalAnchorA;
 
         /// <summary>
         /// The local anchor point relative to body2's origin.
         /// </summary>
-        public readonly Vec2 localAnchorB;
+        public readonly Vec2 LocalAnchorB;
 
         /// <summary>
         /// The body2 angle minus body1 angle in the reference state (radians).
         /// </summary>
-        public float referenceAngle;
+        public float ReferenceAngle;
 
         /// <summary>
         /// The mass-spring-damper frequency in Hertz. Rotation only.
         /// Disable softness with a value of 0.
         /// </summary>
-        public float frequencyHz;
+        public float FrequencyHz;
 
         /// <summary>
         /// The damping ratio. 0 = no damping, 1 = critical damping.
         /// </summary>
-        public float dampingRatio;
+        public float DampingRatio;
 
         public WeldJointDef()
         {
             Type = JointType.Weld;
-            localAnchorA = new Vec2();
-            localAnchorB = new Vec2();
-            referenceAngle = 0.0f;
+            LocalAnchorA = new Vec2();
+            LocalAnchorB = new Vec2();
+            ReferenceAngle = 0.0f;
         }
 
         /// <summary>
@@ -72,13 +72,13 @@ namespace Box2D.Dynamics.Joints
         /// <param name="bA"></param>
         /// <param name="bB"></param>
         /// <param name="anchor"></param>
-        public void initialize(Body bA, Body bB, Vec2 anchor)
+        public void Initialize(Body bA, Body bB, Vec2 anchor)
         {
             BodyA = bA;
             BodyB = bB;
-            BodyA.GetLocalPointToOut(anchor, localAnchorA);
-            BodyB.GetLocalPointToOut(anchor, localAnchorB);
-            referenceAngle = BodyB.Angle - BodyA.Angle;
+            BodyA.GetLocalPointToOut(anchor, LocalAnchorA);
+            BodyB.GetLocalPointToOut(anchor, LocalAnchorB);
+            ReferenceAngle = BodyB.Angle - BodyA.Angle;
         }
     }
 }

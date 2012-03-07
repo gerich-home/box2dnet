@@ -81,11 +81,11 @@ namespace Box2D.Dynamics.Joints
         protected internal WeldJoint(IWorldPool argWorld, WeldJointDef def)
             : base(argWorld, def)
         {
-            m_localAnchorA = new Vec2(def.localAnchorA);
-            m_localAnchorB = new Vec2(def.localAnchorB);
-            m_referenceAngle = def.referenceAngle;
-            m_frequencyHz = def.frequencyHz;
-            m_dampingRatio = def.dampingRatio;
+            m_localAnchorA = new Vec2(def.LocalAnchorA);
+            m_localAnchorB = new Vec2(def.LocalAnchorB);
+            m_referenceAngle = def.ReferenceAngle;
+            m_frequencyHz = def.FrequencyHz;
+            m_dampingRatio = def.DampingRatio;
 
             m_impulse = new Vec3();
             m_impulse.SetZero();
