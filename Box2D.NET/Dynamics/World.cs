@@ -340,38 +340,38 @@ namespace Box2D.Dynamics
                 return null;
             }
 
-            Joint j = Joint.create(this, def);
+            Joint j = Joint.Create(this, def);
 
             // Connect to the world list.
-            j.m_prev = null;
-            j.m_next = JointList;
+            j.Prev = null;
+            j.Next = JointList;
             if (JointList != null)
             {
-                JointList.m_prev = j;
+                JointList.Prev = j;
             }
             JointList = j;
             ++JointCount;
 
             // Connect to the bodies' doubly linked lists.
-            j.m_edgeA.joint = j;
-            j.m_edgeA.other = j.m_bodyB;
-            j.m_edgeA.prev = null;
-            j.m_edgeA.next = j.m_bodyA.JointList;
-            if (j.m_bodyA.JointList != null)
+            j.EdgeA.joint = j;
+            j.EdgeA.other = j.BodyB;
+            j.EdgeA.prev = null;
+            j.EdgeA.next = j.BodyA.JointList;
+            if (j.BodyA.JointList != null)
             {
-                j.m_bodyA.JointList.prev = j.m_edgeA;
+                j.BodyA.JointList.prev = j.EdgeA;
             }
-            j.m_bodyA.JointList = j.m_edgeA;
+            j.BodyA.JointList = j.EdgeA;
 
-            j.m_edgeB.joint = j;
-            j.m_edgeB.other = j.m_bodyA;
-            j.m_edgeB.prev = null;
-            j.m_edgeB.next = j.m_bodyB.JointList;
-            if (j.m_bodyB.JointList != null)
+            j.EdgeB.joint = j;
+            j.EdgeB.other = j.BodyA;
+            j.EdgeB.prev = null;
+            j.EdgeB.next = j.BodyB.JointList;
+            if (j.BodyB.JointList != null)
             {
-                j.m_bodyB.JointList.prev = j.m_edgeB;
+                j.BodyB.JointList.prev = j.EdgeB;
             }
-            j.m_bodyB.JointList = j.m_edgeB;
+            j.BodyB.JointList = j.EdgeB;
 
             Body bodyA = def.bodyA;
             Body bodyB = def.bodyB;
@@ -411,71 +411,71 @@ namespace Box2D.Dynamics
                 return;
             }
 
-            bool collideConnected = j.m_collideConnected;
+            bool collideConnected = j.CollideConnected;
 
             // Remove from the doubly linked list.
-            if (j.m_prev != null)
+            if (j.Prev != null)
             {
-                j.m_prev.m_next = j.m_next;
+                j.Prev.Next = j.Next;
             }
 
-            if (j.m_next != null)
+            if (j.Next != null)
             {
-                j.m_next.m_prev = j.m_prev;
+                j.Next.Prev = j.Prev;
             }
 
             if (j == JointList)
             {
-                JointList = j.m_next;
+                JointList = j.Next;
             }
 
             // Disconnect from island graph.
-            Body bodyA = j.m_bodyA;
-            Body bodyB = j.m_bodyB;
+            Body bodyA = j.BodyA;
+            Body bodyB = j.BodyB;
 
             // Wake up connected bodies.
             bodyA.Awake = true;
             bodyB.Awake = true;
 
             // Remove from body 1.
-            if (j.m_edgeA.prev != null)
+            if (j.EdgeA.prev != null)
             {
-                j.m_edgeA.prev.next = j.m_edgeA.next;
+                j.EdgeA.prev.next = j.EdgeA.next;
             }
 
-            if (j.m_edgeA.next != null)
+            if (j.EdgeA.next != null)
             {
-                j.m_edgeA.next.prev = j.m_edgeA.prev;
+                j.EdgeA.next.prev = j.EdgeA.prev;
             }
 
-            if (j.m_edgeA == bodyA.JointList)
+            if (j.EdgeA == bodyA.JointList)
             {
-                bodyA.JointList = j.m_edgeA.next;
+                bodyA.JointList = j.EdgeA.next;
             }
 
-            j.m_edgeA.prev = null;
-            j.m_edgeA.next = null;
+            j.EdgeA.prev = null;
+            j.EdgeA.next = null;
 
             // Remove from body 2
-            if (j.m_edgeB.prev != null)
+            if (j.EdgeB.prev != null)
             {
-                j.m_edgeB.prev.next = j.m_edgeB.next;
+                j.EdgeB.prev.next = j.EdgeB.next;
             }
 
-            if (j.m_edgeB.next != null)
+            if (j.EdgeB.next != null)
             {
-                j.m_edgeB.next.prev = j.m_edgeB.prev;
+                j.EdgeB.next.prev = j.EdgeB.prev;
             }
 
-            if (j.m_edgeB == bodyB.JointList)
+            if (j.EdgeB == bodyB.JointList)
             {
-                bodyB.JointList = j.m_edgeB.next;
+                bodyB.JointList = j.EdgeB.next;
             }
 
-            j.m_edgeB.prev = null;
-            j.m_edgeB.next = null;
+            j.EdgeB.prev = null;
+            j.EdgeB.next = null;
 
-            Joint.destroy(j);
+            Joint.Destroy(j);
 
             Debug.Assert(JointCount > 0);
             --JointCount;
@@ -977,9 +977,9 @@ namespace Box2D.Dynamics
             {
                 c.Flags &= ~Contact.ContactFlags.Island;
             }
-            for (Joint j = JointList; j != null; j = j.m_next)
+            for (Joint j = JointList; j != null; j = j.Next)
             {
-                j.m_islandFlag = false;
+                j.IslandFlag = false;
             }
 
             // Build and simulate all awake islands.
@@ -1074,7 +1074,7 @@ namespace Box2D.Dynamics
                     // Search all joints connect to this body.
                     for (JointEdge je = b.JointList; je != null; je = je.next)
                     {
-                        if (je.joint.m_islandFlag)
+                        if (je.joint.IslandFlag)
                         {
                             continue;
                         }
@@ -1088,7 +1088,7 @@ namespace Box2D.Dynamics
                         }
 
                         island.Add(je.joint);
-                        je.joint.m_islandFlag = true;
+                        je.joint.IslandFlag = true;
 
                         if ((other.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
                         {
@@ -1477,8 +1477,8 @@ namespace Box2D.Dynamics
             Vec2 x2 = xf2.P;
             Vec2 p1 = Pool.PopVec2();
             Vec2 p2 = Pool.PopVec2();
-            joint.getAnchorA(p1);
-            joint.getAnchorB(p2);
+            joint.GetAnchorA(p1);
+            joint.GetAnchorB(p2);
 
             color.Set(0.5f, 0.8f, 0.8f);
 

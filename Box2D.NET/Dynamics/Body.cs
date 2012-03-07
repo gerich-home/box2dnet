@@ -1197,7 +1197,7 @@ namespace Box2D.Dynamics
             {
                 if (jn.other == other)
                 {
-                    if (jn.joint.m_collideConnected == false)
+                    if (jn.joint.CollideConnected == false)
                     {
                         return false;
                     }

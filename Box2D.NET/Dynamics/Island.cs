@@ -309,7 +309,7 @@ namespace Box2D.Dynamics
 
 			for (int i = 0; i < JointCount; ++i)
 			{
-				Joints[i].initVelocityConstraints(solverData);
+				Joints[i].InitVelocityConstraints(solverData);
 			}
 
 			profile.SolveInit = timer.Milliseconds;
@@ -321,7 +321,7 @@ namespace Box2D.Dynamics
 			{
 				for (int j = 0; j < JointCount; ++j)
 				{
-					Joints[j].solveVelocityConstraints(solverData);
+					Joints[j].SolveVelocityConstraints(solverData);
 				}
 
 				contactSolver.SolveVelocityConstraints();
@@ -376,7 +376,7 @@ namespace Box2D.Dynamics
 				bool jointsOkay = true;
 				for (int j = 0; j < JointCount; ++j)
 				{
-					bool jointOkay = Joints[j].solvePositionConstraints(solverData);
+					bool jointOkay = Joints[j].SolvePositionConstraints(solverData);
 					jointsOkay = jointsOkay && jointOkay;
 				}
 

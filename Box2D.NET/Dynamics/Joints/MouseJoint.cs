@@ -69,7 +69,7 @@ namespace Box2D.Dynamics.Joints
             Debug.Assert(def.dampingRatio >= 0);
 
             m_targetA.Set(def.target);
-            Transform.MulTransToOutUnsafe(m_bodyB.GetTransform(), m_targetA, m_localAnchorB);
+            Transform.MulTransToOutUnsafe(BodyB.GetTransform(), m_targetA, m_localAnchorB);
 
             m_maxForce = def.maxForce;
             m_impulse.SetZero();
@@ -81,22 +81,22 @@ namespace Box2D.Dynamics.Joints
             m_gamma = 0;
         }
 
-        public override void getAnchorA(Vec2 argOut)
+        public override void GetAnchorA(Vec2 argOut)
         {
             argOut.Set(m_targetA);
         }
 
-        public override void getAnchorB(Vec2 argOut)
+        public override void GetAnchorB(Vec2 argOut)
         {
-            m_bodyB.GetWorldPointToOut(m_localAnchorB, argOut);
+            BodyB.GetWorldPointToOut(m_localAnchorB, argOut);
         }
 
-        public override void getReactionForce(float invDt, Vec2 argOut)
+        public override void GetReactionForce(float invDt, Vec2 argOut)
         {
             argOut.Set(m_impulse).MulLocal(invDt);
         }
 
-        public override float getReactionTorque(float invDt)
+        public override float GetReactionTorque(float invDt)
         {
             return invDt * 0.0f;
         }
@@ -109,9 +109,9 @@ namespace Box2D.Dynamics.Joints
             }
             set
             {
-                if (m_bodyB.Awake == false)
+                if (BodyB.Awake == false)
                 {
-                    m_bodyB.Awake = true;
+                    BodyB.Awake = true;
                 }
                 m_targetA.Set(value);
             }
@@ -162,24 +162,24 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public override void initVelocityConstraints(SolverData data)
+        public override void InitVelocityConstraints(SolverData data)
         {
-            m_indexA = m_bodyA.IslandIndex;
-            m_indexB = m_bodyB.IslandIndex;
-            m_localCenterB.Set(m_bodyB.Sweep.LocalCenter);
-            m_invMassB = m_bodyB.InvMass;
-            m_invIB = m_bodyB.InvI;
+            m_indexA = BodyA.IslandIndex;
+            m_indexB = BodyB.IslandIndex;
+            m_localCenterB.Set(BodyB.Sweep.LocalCenter);
+            m_invMassB = BodyB.InvMass;
+            m_invIB = BodyB.InvI;
 
             Vec2 cB = data.Positions[m_indexB].C;
             float aB = data.Positions[m_indexB].A;
             Vec2 vB = data.Velocities[m_indexB].V;
             float wB = data.Velocities[m_indexB].W;
 
-            Rot qB = pool.PopRot();
+            Rot qB = Pool.PopRot();
 
             qB.Set(aB);
 
-            float mass = m_bodyB.Mass;
+            float mass = BodyB.Mass;
 
             // Frequency
             float omega = 2.0f * MathUtils.PI * m_frequencyHz;
@@ -202,7 +202,7 @@ namespace Box2D.Dynamics.Joints
             }
             m_beta = h * k * m_gamma;
 
-            Vec2 temp = pool.PopVec2();
+            Vec2 temp = Pool.PopVec2();
 
             // Compute the effective mass matrix.
             Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
@@ -210,7 +210,7 @@ namespace Box2D.Dynamics.Joints
             // K = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
             // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
             // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
-            Mat22 K = pool.PopMat22();
+            Mat22 K = Pool.PopMat22();
             K.Ex.X = m_invMassB + m_invIB * m_rB.Y * m_rB.Y + m_gamma;
             K.Ex.Y = (-m_invIB) * m_rB.X * m_rB.Y;
             K.Ey.X = K.Ex.Y;
@@ -239,29 +239,29 @@ namespace Box2D.Dynamics.Joints
             data.Velocities[m_indexB].V.Set(vB);
             data.Velocities[m_indexB].W = wB;
 
-            pool.PushVec2(1);
-            pool.PushMat22(1);
-            pool.PushRot(1);
+            Pool.PushVec2(1);
+            Pool.PushMat22(1);
+            Pool.PushRot(1);
         }
 
-        public override bool solvePositionConstraints(SolverData data)
+        public override bool SolvePositionConstraints(SolverData data)
         {
             return true;
         }
 
-        public override void solveVelocityConstraints(SolverData data)
+        public override void SolveVelocityConstraints(SolverData data)
         {
 
             Vec2 vB = data.Velocities[m_indexB].V;
             float wB = data.Velocities[m_indexB].W;
 
             // Cdot = v + cross(w, r)
-            Vec2 Cdot = pool.PopVec2();
+            Vec2 Cdot = Pool.PopVec2();
             Vec2.CrossToOutUnsafe(wB, m_rB, Cdot);
             Cdot.AddLocal(vB);
 
-            Vec2 impulse = pool.PopVec2();
-            Vec2 temp = pool.PopVec2();
+            Vec2 impulse = Pool.PopVec2();
+            Vec2 temp = Pool.PopVec2();
 
             temp.Set(m_impulse).MulLocal(m_gamma).AddLocal(m_C).AddLocal(Cdot).NegateLocal();
             Mat22.MulToOutUnsafe(m_mass, temp, impulse);
@@ -283,7 +283,7 @@ namespace Box2D.Dynamics.Joints
             data.Velocities[m_indexB].V.Set(vB);
             data.Velocities[m_indexB].W = wB;
 
-            pool.PushVec2(3);
+            Pool.PushVec2(3);
         }
     }
 }

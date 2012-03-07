@@ -38,7 +38,7 @@ namespace Box2D.Dynamics.Joints
     /// <author>Daniel Murphy</author>
     public abstract class Joint
     {
-        public static Joint create(World argWorld, JointDef def)
+        public static Joint Create(World argWorld, JointDef def)
         {
             //Joint joint = null;
             switch (def.type)
@@ -77,26 +77,52 @@ namespace Box2D.Dynamics.Joints
             return null;
         }
 
-        public static void destroy(Joint joint)
+        public static void Destroy(Joint joint)
         {
-            joint.destructor();
+            joint.Destructor();
         }
 
-        public JointType m_type;
-        public Joint m_prev;
-        public Joint m_next;
-        public JointEdge m_edgeA;
-        public JointEdge m_edgeB;
-        public Body m_bodyA;
-        public Body m_bodyB;
-        public int m_index;
+        /// <summary>
+        /// The type of the concrete joint.
+        /// </summary>
+        public JointType Type;
 
-        public bool m_islandFlag;
-        public bool m_collideConnected;
+        public Joint Prev;
 
-        public Object m_userData;
+        /// <summary>
+        /// The next joint the world joint list.
+        /// </summary>
+        public Joint Next;
 
-        protected internal IWorldPool pool;
+        public JointEdge EdgeA;
+        public JointEdge EdgeB;
+
+        /// <summary>
+        /// The first body attached to this joint.
+        /// </summary>
+        public Body BodyA;
+
+        /// <summary>
+        /// get the second body attached to this joint.
+        /// </summary>
+        public Body BodyB;
+        public int Index;
+
+        public bool IslandFlag;
+
+        /// <summary>
+        /// Get collide connected.
+        /// Note: modifying the collide connect flag won't work correctly because
+        /// the flag is only checked when fixture AABBs begin to overlap.
+        /// </summary>
+        public bool CollideConnected;
+
+        /// <summary>
+        /// The user data pointer.
+        /// </summary>
+        public Object UserData;
+
+        protected internal IWorldPool Pool;
 
         // Cache here per time step to reduce cache misses.
         //	final Vec2 m_localCenterA, m_localCenterB;
@@ -107,105 +133,31 @@ namespace Box2D.Dynamics.Joints
         {
             Debug.Assert(def.bodyA != def.bodyB);
 
-            pool = argWorldPool;
-            m_type = def.type;
-            m_prev = null;
-            m_next = null;
-            m_bodyA = def.bodyA;
-            m_bodyB = def.bodyB;
-            m_collideConnected = def.collideConnected;
-            m_islandFlag = false;
-            m_userData = def.userData;
-            m_index = 0;
+            Pool = argWorldPool;
+            Type = def.type;
+            Prev = null;
+            Next = null;
+            BodyA = def.bodyA;
+            BodyB = def.bodyB;
+            CollideConnected = def.collideConnected;
+            IslandFlag = false;
+            UserData = def.userData;
+            Index = 0;
 
-            m_edgeA = new JointEdge();
-            m_edgeA.joint = null;
-            m_edgeA.other = null;
-            m_edgeA.prev = null;
-            m_edgeA.next = null;
+            EdgeA = new JointEdge();
+            EdgeA.joint = null;
+            EdgeA.other = null;
+            EdgeA.prev = null;
+            EdgeA.next = null;
 
-            m_edgeB = new JointEdge();
-            m_edgeB.joint = null;
-            m_edgeB.other = null;
-            m_edgeB.prev = null;
-            m_edgeB.next = null;
+            EdgeB = new JointEdge();
+            EdgeB.joint = null;
+            EdgeB.other = null;
+            EdgeB.prev = null;
+            EdgeB.next = null;
 
             //		m_localCenterA = new Vec2();
             //		m_localCenterB = new Vec2();
-        }
-
-        /// <summary>
-        /// get the type of the concrete joint.
-        /// </summary>
-        /// <returns></returns>
-        public JointType Type
-        {
-            get
-            {
-                return m_type;
-            }
-        }
-
-        /// <summary>
-        /// get the first body attached to this joint.
-        /// </summary>
-        public Body BodyA
-        {
-            get
-            {
-                return m_bodyA;
-            }
-        }
-
-        /// <summary>
-        /// get the second body attached to this joint.
-        /// </summary>
-        /// <returns></returns>
-        public Body BodyB
-        {
-            get
-            {
-                return m_bodyB;
-            }
-        }
-
-        /// <summary>
-        /// get the next joint the world joint list.
-        /// </summary>
-        public Joint Next
-        {
-            get
-            {
-                return m_next;
-            }
-        }
-
-        /// <summary>
-        /// gets or sets the user data pointer.
-        /// </summary>
-        public object UserData
-        {
-            get
-            {
-                return m_userData;
-            }
-            set
-            {
-                m_userData = value;
-            }
-        }
-
-        /// <summary>
-        /// Get collide connected.
-        /// Note: modifying the collide connect flag won't work correctly because
-        /// the flag is only checked when fixture AABBs begin to overlap.
-        /// </summary>
-        public bool CollideConnected
-        {
-            get
-            {
-                return m_collideConnected;
-            }
         }
 
 
@@ -213,52 +165,55 @@ namespace Box2D.Dynamics.Joints
         /// get the anchor point on bodyA in world coordinates.
         /// </summary>
         /// <returns></returns>
-        public abstract void getAnchorA(Vec2 argOut);
+        public abstract void GetAnchorA(Vec2 argOut);
 
         /// <summary>
         /// get the anchor point on bodyB in world coordinates.
         /// </summary>
         /// <returns></returns>
-        public abstract void getAnchorB(Vec2 argOut);
+        public abstract void GetAnchorB(Vec2 argOut);
 
         /// <summary>
         /// get the reaction force on body2 at the joint anchor in Newtons.
         /// </summary>
         /// <param name="inv_dt"></param>
         /// <returns></returns>
-        public abstract void getReactionForce(float inv_dt, Vec2 argOut);
+        public abstract void GetReactionForce(float inv_dt, Vec2 argOut);
 
         /// <summary>
         /// get the reaction torque on body2 in N*m.
         /// </summary>
         /// <param name="inv_dt"></param>
         /// <returns></returns>
-        public abstract float getReactionTorque(float inv_dt);
+        public abstract float GetReactionTorque(float inv_dt);
 
         /// <summary>
         /// Short-cut function to determine if either body is inactive.
         /// </summary>
         /// <returns></returns>
-        public bool IsActive()
+        public bool Active
         {
-            return m_bodyA.Active && m_bodyB.Active;
+            get
+            {
+                return BodyA.Active && BodyB.Active;
+            }
         }
 
-        public abstract void initVelocityConstraints(SolverData data);
+        public abstract void InitVelocityConstraints(SolverData data);
 
-        public abstract void solveVelocityConstraints(SolverData data);
+        public abstract void SolveVelocityConstraints(SolverData data);
 
         /// <summary>
         /// This returns true if the position errors are within tolerance.
         /// </summary>
         /// <param name="baumgarte"></param>
         /// <returns></returns>
-        public abstract bool solvePositionConstraints(SolverData data);
+        public abstract bool SolvePositionConstraints(SolverData data);
 
         /// <summary>
         /// Override to handle destruction of joint
         /// </summary>
-        public virtual void destructor()
+        public virtual void Destructor()
         {
         }
     }

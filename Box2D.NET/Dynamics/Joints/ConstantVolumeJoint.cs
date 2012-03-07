@@ -135,13 +135,13 @@ namespace Box2D.Dynamics.Joints
                 normals[i] = new Vec2();
             }
 
-            this.m_bodyA = bodies[0];
-            this.m_bodyB = bodies[1];
-            this.m_collideConnected = false;
+            this.BodyA = bodies[0];
+            this.BodyB = bodies[1];
+            this.CollideConnected = false;
         }
 
 
-        public override void destructor()
+        public override void Destructor()
         {
             for (int i = 0; i < distanceJoints.Length; ++i)
             {
@@ -171,7 +171,7 @@ namespace Box2D.Dynamics.Joints
                 perimeter += dist;
             }
 
-            Vec2 delta = pool.PopVec2();
+            Vec2 delta = Pool.PopVec2();
 
             float deltaArea = targetVolume - Area;
             float toExtrude = 0.5f * deltaArea / perimeter; // *relaxationFactor
@@ -198,14 +198,14 @@ namespace Box2D.Dynamics.Joints
                 // bodies[next].m_linearVelocity.y += delta.y * step.inv_dt;
             }
 
-            pool.PushVec2(1);
+            Pool.PushVec2(1);
             // System.out.println(sumdeltax);
             return done;
         }
 
-        public override void initVelocityConstraints(SolverData data)
+        public override void InitVelocityConstraints(SolverData data)
         {
-            Vec2[] d = pool.GetVec2Array(bodies.Length);
+            Vec2[] d = Pool.GetVec2Array(bodies.Length);
 
             for (int i = 0; i < bodies.Length; ++i)
             {
@@ -235,18 +235,18 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public override bool solvePositionConstraints(SolverData data)
+        public override bool SolvePositionConstraints(SolverData data)
         {
             return constrainEdges(data.Step);
         }
 
-        public override void solveVelocityConstraints(SolverData data)
+        public override void SolveVelocityConstraints(SolverData data)
         {
             float crossMassSum = 0.0f;
             float dotMassSum = 0.0f;
 
 
-            Vec2[] d = pool.GetVec2Array(bodies.Length);
+            Vec2[] d = Pool.GetVec2Array(bodies.Length);
 
             for (int i = 0; i < bodies.Length; ++i)
             {
@@ -270,19 +270,19 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        public override void getAnchorA(Vec2 argOut)
+        public override void GetAnchorA(Vec2 argOut)
         {
         }
 
-        public override void getAnchorB(Vec2 argOut)
+        public override void GetAnchorB(Vec2 argOut)
         {
         }
 
-        public override void getReactionForce(float inv_dt, Vec2 argOut)
+        public override void GetReactionForce(float inv_dt, Vec2 argOut)
         {
         }
 
-        public override float getReactionTorque(float inv_dt)
+        public override float GetReactionTorque(float inv_dt)
         {
             return 0;
         }
