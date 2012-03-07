@@ -26,12 +26,11 @@ using Box2D.Pooling;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     // updated to rev 100
-    public interface ContactCreator
+    public interface IContactCreator
     {
-        Contact contactCreateFcn(IWorldPool argPool, Fixture fixtureA, Fixture fixtureB);
+        Contact ContactCreate(IWorldPool argPool, Fixture fixtureA, Fixture fixtureB);
 
-        void contactDestroyFcn(IWorldPool argPool, Contact contact);
+        void ContactDestroy(IWorldPool argPool, Contact contact);
     }
 }

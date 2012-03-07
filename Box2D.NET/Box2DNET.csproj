@@ -162,7 +162,6 @@
     <Compile Include="Dynamics\Contacts\ChainAndPolygonContact.cs" />
     <Compile Include="Dynamics\Contacts\CircleContact.cs" />
     <Compile Include="Dynamics\Contacts\Contact.cs" />
-    <Compile Include="Dynamics\Contacts\ContactCreator.cs" />
     <Compile Include="Dynamics\Contacts\ContactEdge.cs" />
     <Compile Include="Dynamics\Contacts\ContactPositionConstraint.cs" />
     <Compile Include="Dynamics\Contacts\ContactRegister.cs" />
@@ -170,6 +169,7 @@
     <Compile Include="Dynamics\Contacts\ContactVelocityConstraint.cs" />
     <Compile Include="Dynamics\Contacts\EdgeAndCircleContact.cs" />
     <Compile Include="Dynamics\Contacts\EdgeAndPolygonContact.cs" />
+    <Compile Include="Dynamics\Contacts\IContactCreator.cs" />
     <Compile Include="Dynamics\Contacts\PolygonAndCircleContact.cs" />
     <Compile Include="Dynamics\Contacts\PolygonContact.cs" />
     <Compile Include="Dynamics\Contacts\Position.cs" />
