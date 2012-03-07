@@ -172,8 +172,8 @@ namespace Box2D.Dynamics.Contacts
                         vcp.TangentImpulse = 0;
                     }
 
-                    vcp.rA.SetZero();
-                    vcp.rB.SetZero();
+                    vcp.RA.SetZero();
+                    vcp.RB.SetZero();
                     vcp.NormalMass = 0;
                     vcp.TangentMass = 0;
                     vcp.VelocityBias = 0;
@@ -217,11 +217,11 @@ namespace Box2D.Dynamics.Contacts
                     //Console.WriteLine("vcp normal impulse is " + vcp.normalImpulse);
                     temp.Set(normal).MulLocal(vcp.NormalImpulse);
                     P.Set(tangent).MulLocal(vcp.TangentImpulse).AddLocal(temp);
-                    wA -= iA * Vec2.Cross(vcp.rA, P);
+                    wA -= iA * Vec2.Cross(vcp.RA, P);
                     vA.SubLocal(temp.Set(P).MulLocal(mA));
                     //Debug.Assert(vA.x == 0);
                     //Debug.Assert(wA == 0);
-                    wB += iB * Vec2.Cross(vcp.rB, P);
+                    wB += iB * Vec2.Cross(vcp.RB, P);
                     vB.AddLocal(temp.Set(P).MulLocal(mB));
                     //Debug.Assert(vB.x == 0);
                     //Debug.Assert(wB == 0);
@@ -290,11 +290,11 @@ namespace Box2D.Dynamics.Contacts
                 {
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.Points[j];
 
-                    vcp.rA.Set(worldManifold.Points[j]).SubLocal(cA);
-                    vcp.rB.Set(worldManifold.Points[j]).SubLocal(cB);
+                    vcp.RA.Set(worldManifold.Points[j]).SubLocal(cA);
+                    vcp.RB.Set(worldManifold.Points[j]).SubLocal(cB);
 
-                    float rnA = Vec2.Cross(vcp.rA, vc.Normal);
-                    float rnB = Vec2.Cross(vcp.rB, vc.Normal);
+                    float rnA = Vec2.Cross(vcp.RA, vc.Normal);
+                    float rnB = Vec2.Cross(vcp.RB, vc.Normal);
 
                     float kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 
@@ -302,8 +302,8 @@ namespace Box2D.Dynamics.Contacts
 
                     Vec2.CrossToOutUnsafe(vc.Normal, 1.0f, tangent);
 
-                    float rtA = Vec2.Cross(vcp.rA, tangent);
-                    float rtB = Vec2.Cross(vcp.rB, tangent);
+                    float rtA = Vec2.Cross(vcp.RA, tangent);
+                    float rtB = Vec2.Cross(vcp.RB, tangent);
 
                     float kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 
@@ -311,8 +311,8 @@ namespace Box2D.Dynamics.Contacts
 
                     // Setup a velocity bias for restitution.
                     vcp.VelocityBias = 0.0f;
-                    Vec2.CrossToOutUnsafe(wB, vcp.rB, temp1);
-                    Vec2.CrossToOutUnsafe(wA, vcp.rA, temp2);
+                    Vec2.CrossToOutUnsafe(wB, vcp.RB, temp1);
+                    Vec2.CrossToOutUnsafe(wA, vcp.RA, temp2);
                     temp.Set(vB).AddLocal(temp1).SubLocal(vA).SubLocal(temp2);
                     float vRel = Vec2.Dot(vc.Normal, temp);
                     if (vRel < -Settings.VELOCITY_THRESHOLD)
@@ -327,10 +327,10 @@ namespace Box2D.Dynamics.Contacts
                     ContactVelocityConstraint.VelocityConstraintPoint vcp1 = vc.Points[0];
                     ContactVelocityConstraint.VelocityConstraintPoint vcp2 = vc.Points[1];
 
-                    float rn1A = Vec2.Cross(vcp1.rA, vc.Normal);
-                    float rn1B = Vec2.Cross(vcp1.rB, vc.Normal);
-                    float rn2A = Vec2.Cross(vcp2.rA, vc.Normal);
-                    float rn2B = Vec2.Cross(vcp2.rB, vc.Normal);
+                    float rn1A = Vec2.Cross(vcp1.RA, vc.Normal);
+                    float rn1B = Vec2.Cross(vcp1.RB, vc.Normal);
+                    float rn2A = Vec2.Cross(vcp2.RA, vc.Normal);
+                    float rn2B = Vec2.Cross(vcp2.RB, vc.Normal);
 
                     float k11 = mA + mB + iA * rn1A * rn1A + iB * rn1B * rn1B;
                     float k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
@@ -400,10 +400,10 @@ namespace Box2D.Dynamics.Contacts
                     //Vec2.crossToOutUnsafe(wA, vcp.rA, temp);
                     //Vec2.crossToOutUnsafe(wB, vcp.rB, dv);
                     //dv.addLocal(vB).subLocal(vA).subLocal(temp);
-                    Vec2 a = vcp.rA;
+                    Vec2 a = vcp.RA;
 
-                    dv.X = (-wB) * vcp.rB.Y + vB.X - vA.X + wA * a.Y;
-                    dv.Y = wB * vcp.rB.X + vB.Y - vA.Y - wA * a.X;
+                    dv.X = (-wB) * vcp.RB.Y + vB.X - vA.X + wA * a.Y;
+                    dv.Y = wB * vcp.RB.X + vB.Y - vA.Y - wA * a.X;
 
                     // Compute tangent force
                     float vt = dv.X * tangent.X + dv.Y * tangent.Y - vc.TangentSpeed;
@@ -424,12 +424,12 @@ namespace Box2D.Dynamics.Contacts
                     // vA -= invMassA * P;
                     vA.X -= Px * mA;
                     vA.Y -= Py * mA;
-                    wA -= iA * (vcp.rA.X * Py - vcp.rA.Y * Px);
+                    wA -= iA * (vcp.RA.X * Py - vcp.RA.Y * Px);
 
                     // vB += invMassB * P;
                     vB.X += Px * mB;
                     vB.Y += Py * mB;
-                    wB += iB * (vcp.rB.X * Py - vcp.rB.Y * Px);
+                    wB += iB * (vcp.RB.X * Py - vcp.RB.Y * Px);
 
                     //Console.WriteLine("tangent solve velocity (point "+j+") for " + indexA + " is " + vA.x + "," + vA.y + " rot " + wA);
                     //Console.WriteLine("tangent solve velocity (point "+j+") for " + indexB + " is " + vB.x + "," + vB.y + " rot " + wB);
@@ -439,7 +439,7 @@ namespace Box2D.Dynamics.Contacts
                 if (vc.PointCount == 1)
                 {
                     ContactVelocityConstraint.VelocityConstraintPoint vcp = vc.Points[0];
-                    Vec2 a1 = vcp.rA;
+                    Vec2 a1 = vcp.RA;
 
                     // Relative velocity at contact
                     //Vec2 dv = vB + Cross(wB, vcp.rB) - vA - Cross(wA, vcp.rA);
@@ -448,8 +448,8 @@ namespace Box2D.Dynamics.Contacts
                     //Vec2.crossToOut(wB, vcp.rB, dv);
                     //dv.addLocal(vB).subLocal(vA).subLocal(temp1);
 
-                    dv.X = (-wB) * vcp.rB.Y + vB.X - vA.X + wA * a1.Y;
-                    dv.Y = wB * vcp.rB.X + vB.Y - vA.Y - wA * a1.X;
+                    dv.X = (-wB) * vcp.RB.Y + vB.X - vA.X + wA * a1.Y;
+                    dv.Y = wB * vcp.RB.X + vB.Y - vA.Y - wA * a1.X;
 
                     // Compute normal impulse
                     float vn = dv.X * normal.X + dv.Y * normal.Y;
@@ -469,13 +469,13 @@ namespace Box2D.Dynamics.Contacts
                     // vA -= invMassA * P;
                     vA.X -= Px * mA;
                     vA.Y -= Py * mA;
-                    wA -= iA * (vcp.rA.X * Py - vcp.rA.Y * Px);
+                    wA -= iA * (vcp.RA.X * Py - vcp.RA.Y * Px);
                     //Debug.Assert(vA.x == 0);
 
                     // vB += invMassB * P;
                     vB.X += Px * mB;
                     vB.Y += Py * mB;
-                    wB += iB * (vcp.rB.X * Py - vcp.rB.Y * Px);
+                    wB += iB * (vcp.RB.X * Py - vcp.RB.Y * Px);
                     //Debug.Assert(vB.x == 0);
                 }
                 else
@@ -527,12 +527,12 @@ namespace Box2D.Dynamics.Contacts
                     Debug.Assert(a.X >= 0.0f && a.Y >= 0.0f);
                     // Relative velocity at contact
                     // Vec2 dv1 = vB + Cross(wB, cp1.rB) - vA - Cross(wA, cp1.rA);
-                    dv1.X = (-wB) * cp1.rB.Y + vB.X - vA.X + wA * cp1.rA.Y;
-                    dv1.Y = wB * cp1.rB.X + vB.Y - vA.Y - wA * cp1.rA.X;
+                    dv1.X = (-wB) * cp1.RB.Y + vB.X - vA.X + wA * cp1.RA.Y;
+                    dv1.Y = wB * cp1.RB.X + vB.Y - vA.Y - wA * cp1.RA.X;
 
                     // Vec2 dv2 = vB + Cross(wB, cp2.rB) - vA - Cross(wA, cp2.rA);
-                    dv2.X = (-wB) * cp2.rB.Y + vB.X - vA.X + wA * cp2.rA.Y;
-                    dv2.Y = wB * cp2.rB.X + vB.Y - vA.Y - wA * cp2.rA.X;
+                    dv2.X = (-wB) * cp2.RB.Y + vB.X - vA.X + wA * cp2.RA.Y;
+                    dv2.Y = wB * cp2.RB.X + vB.Y - vA.Y - wA * cp2.RA.X;
 
                     // Compute normal velocity
                     float vn1 = dv1.X * normal.X + dv1.Y * normal.Y;
@@ -592,8 +592,8 @@ namespace Box2D.Dynamics.Contacts
                             //Debug.Assert(vA.x == 0);
                             //Debug.Assert(vB.x == 0);
 
-                            wA -= iA * (Vec2.Cross(cp1.rA, P1) + Vec2.Cross(cp2.rA, P2));
-                            wB += iB * (Vec2.Cross(cp1.rB, P1) + Vec2.Cross(cp2.rB, P2));
+                            wA -= iA * (Vec2.Cross(cp1.RA, P1) + Vec2.Cross(cp2.RA, P2));
+                            wB += iB * (Vec2.Cross(cp1.RB, P1) + Vec2.Cross(cp2.RB, P2));
 
                             // Accumulate
                             cp1.NormalImpulse = x.X;
@@ -611,8 +611,8 @@ namespace Box2D.Dynamics.Contacts
                             if (DEBUG_SOLVER)
                             {
                                 // Postconditions
-                                Vec2 _dv1 = vB.Add(Vec2.Cross(wB, cp1.rB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp1.rA)));
-                                Vec2 _dv2 = vB.Add(Vec2.Cross(wB, cp2.rB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp2.rA)));
+                                Vec2 _dv1 = vB.Add(Vec2.Cross(wB, cp1.RB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp1.RA)));
+                                Vec2 _dv2 = vB.Add(Vec2.Cross(wB, cp2.RB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp2.RA)));
                                 // Compute normal velocity
                                 vn1 = Vec2.Dot(_dv1, normal);
                                 vn2 = Vec2.Dot(_dv2, normal);
@@ -661,8 +661,8 @@ namespace Box2D.Dynamics.Contacts
                             //Debug.Assert(vA.x == 0);
                             //Debug.Assert(vB.x == 0);
 
-                            wA -= iA * (Vec2.Cross(cp1.rA, P1) + Vec2.Cross(cp2.rA, P2));
-                            wB += iB * (Vec2.Cross(cp1.rB, P1) + Vec2.Cross(cp2.rB, P2));
+                            wA -= iA * (Vec2.Cross(cp1.RA, P1) + Vec2.Cross(cp2.RA, P2));
+                            wB += iB * (Vec2.Cross(cp1.RB, P1) + Vec2.Cross(cp2.RB, P2));
 
 
                             // Accumulate
@@ -681,7 +681,7 @@ namespace Box2D.Dynamics.Contacts
                             if (DEBUG_SOLVER)
                             {
                                 // Postconditions
-                                Vec2 _dv1 = vB.Add(Vec2.Cross(wB, cp1.rB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp1.rA)));
+                                Vec2 _dv1 = vB.Add(Vec2.Cross(wB, cp1.RB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp1.RA)));
                                 // Compute normal velocity
                                 vn1 = Vec2.Dot(_dv1, normal);
 
@@ -727,8 +727,8 @@ namespace Box2D.Dynamics.Contacts
                             //Debug.Assert(vA.x == 0);
                             //Debug.Assert(vB.x == 0);
 
-                            wA -= iA * (Vec2.Cross(cp1.rA, P1) + Vec2.Cross(cp2.rA, P2));
-                            wB += iB * (Vec2.Cross(cp1.rB, P1) + Vec2.Cross(cp2.rB, P2));
+                            wA -= iA * (Vec2.Cross(cp1.RA, P1) + Vec2.Cross(cp2.RA, P2));
+                            wB += iB * (Vec2.Cross(cp1.RB, P1) + Vec2.Cross(cp2.RB, P2));
 
                             // Accumulate
                             //Debug.Assert(x.x == 0 && x.y == 0);
@@ -747,7 +747,7 @@ namespace Box2D.Dynamics.Contacts
                             {
                                 // Postconditions
                                 Vec2 _dv2 =
-                                    vB.Add(Vec2.Cross(wB, cp2.rB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp2.rA)));
+                                    vB.Add(Vec2.Cross(wB, cp2.RB).SubLocal(vA).SubLocal(Vec2.Cross(wA, cp2.RA)));
                                 // Compute normal velocity
                                 vn2 = Vec2.Dot(_dv2, normal);
 
@@ -791,8 +791,8 @@ namespace Box2D.Dynamics.Contacts
                             //Debug.Assert(vA.x == 0);
                             //Debug.Assert(vB.x == 0);
 
-                            wA -= iA * (Vec2.Cross(cp1.rA, P1) + Vec2.Cross(cp2.rA, P2));
-                            wB += iB * (Vec2.Cross(cp1.rB, P1) + Vec2.Cross(cp2.rB, P2));
+                            wA -= iA * (Vec2.Cross(cp1.RA, P1) + Vec2.Cross(cp2.RA, P2));
+                            wB += iB * (Vec2.Cross(cp1.RB, P1) + Vec2.Cross(cp2.RB, P2));
 
 
                             // Accumulate

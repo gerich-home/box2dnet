@@ -54,8 +54,8 @@ namespace Box2D.Dynamics.Contacts
 
         public class VelocityConstraintPoint
         {
-            public readonly Vec2 rA = new Vec2();
-            public readonly Vec2 rB = new Vec2();
+            public readonly Vec2 RA = new Vec2();
+            public readonly Vec2 RB = new Vec2();
             public float NormalImpulse;
             public float TangentImpulse;
             public float NormalMass;
