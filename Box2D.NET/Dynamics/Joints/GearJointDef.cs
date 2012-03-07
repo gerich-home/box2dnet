@@ -26,7 +26,6 @@
 
 namespace Box2D.Dynamics.Joints
 {
-
     /// <summary>
     /// Gear joint definition. This definition requires two existing
     /// revolute or prismatic joints (any combination will work).
@@ -38,24 +37,24 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The first revolute/prismatic joint attached to the gear joint.
         /// </summary>
-        public Joint joint1;
+        public Joint Joint1;
 
         /// <summary>
         /// The second revolute/prismatic joint attached to the gear joint.
         /// </summary>
-        public Joint joint2;
+        public Joint Joint2;
 
         /// <summary>
         /// Gear ratio.
         /// </summary>
         /// <seealso cref="GearJoint"></seealso>
-        public float ratio;
+        public float Ratio;
 
         public GearJointDef()
         {
             Type = JointType.Gear;
-            joint1 = null;
-            joint2 = null;
+            Joint1 = null;
+            Joint2 = null;
         }
     }
 }
