@@ -27,62 +27,29 @@ using Box2D.Common;
 
 namespace Box2D.Dynamics.Joints
 {
-
     // TODO(dmurph): clean this up a bit, add docs
     public class ConstantVolumeJoint : Joint
     {
-        public readonly Body[] bodies;
-        internal float[] targetLengths;
-        public float targetVolume;
+        public readonly Body[] Bodies;
+        internal float[] TargetLengths;
+        public float TargetVolume;
         // float relaxationFactor;//1.0 is perfectly stiff (but doesn't work, unstable)
 
-        internal Vec2[] normals;
+        internal Vec2[] Normals;
 
-        internal TimeStep m_step;
+        internal TimeStep Step;
         private float m_impulse = 0.0f;
 
         private World world;
 
-        internal DistanceJoint[] distanceJoints;
+        internal DistanceJoint[] Joints;
 
-        public readonly float frequencyHz;
-        public readonly float dampingRatio;
+        public readonly float FrequencyHz;
+        public readonly float DampingRatio;
 
-        public Body[] Bodies
+        public void Inflate(float factor)
         {
-            get
-            {
-                return bodies;
-            }
-        }
-
-        public DistanceJoint[] Joints
-        {
-            get
-            {
-                return distanceJoints;
-            }
-        }
-
-        private float Area
-        {
-            get
-            {
-                float area = 0.0f;
-                // i'm glad i changed these all to member access
-                area += bodies[bodies.Length - 1].WorldCenter.X * bodies[0].WorldCenter.Y - bodies[0].WorldCenter.X * bodies[bodies.Length - 1].WorldCenter.Y;
-                for (int i = 0; i < bodies.Length - 1; ++i)
-                {
-                    area += bodies[i].WorldCenter.X * bodies[i + 1].WorldCenter.Y - bodies[i + 1].WorldCenter.X * bodies[i].WorldCenter.Y;
-                }
-                area *= .5f;
-                return area;
-            }
-        }
-
-        public void inflate(float factor)
-        {
-            targetVolume *= factor;
+            TargetVolume *= factor;
         }
 
         public ConstantVolumeJoint(World argWorld, ConstantVolumeJointDef def)
@@ -93,16 +60,16 @@ namespace Box2D.Dynamics.Joints
             {
                 throw new ArgumentException("You cannot create a constant volume joint with less than three bodies.");
             }
-            bodies = def.Bodies.ToArray();
+            Bodies = def.Bodies.ToArray();
 
-            targetLengths = new float[bodies.Length];
-            for (int i = 0; i < targetLengths.Length; ++i)
+            TargetLengths = new float[Bodies.Length];
+            for (int i = 0; i < TargetLengths.Length; ++i)
             {
-                int next = (i == targetLengths.Length - 1) ? 0 : i + 1;
-                float dist = bodies[i].WorldCenter.Sub(bodies[next].WorldCenter).Length();
-                targetLengths[i] = dist;
+                int next = (i == TargetLengths.Length - 1) ? 0 : i + 1;
+                float dist = Bodies[i].WorldCenter.Sub(Bodies[next].WorldCenter).Length();
+                TargetLengths[i] = dist;
             }
-            targetVolume = Area;
+            TargetVolume = Area;
 
             if (def.Joints != null && def.Joints.Count != def.Bodies.Count)
             {
@@ -111,41 +78,57 @@ namespace Box2D.Dynamics.Joints
             if (def.Joints == null)
             {
                 DistanceJointDef djd = new DistanceJointDef();
-                distanceJoints = new DistanceJoint[bodies.Length];
-                for (int i = 0; i < targetLengths.Length; ++i)
+                Joints = new DistanceJoint[Bodies.Length];
+                for (int i = 0; i < TargetLengths.Length; ++i)
                 {
-                    int next = (i == targetLengths.Length - 1) ? 0 : i + 1;
+                    int next = (i == TargetLengths.Length - 1) ? 0 : i + 1;
                     djd.frequencyHz = def.FrequencyHz; // 20.0f;
                     djd.dampingRatio = def.DampingRatio; // 50.0f;
-                    djd.initialize(bodies[i], bodies[next], bodies[i].WorldCenter, bodies[next].WorldCenter);
-                    distanceJoints[i] = (DistanceJoint)world.CreateJoint(djd);
+                    djd.initialize(Bodies[i], Bodies[next], Bodies[i].WorldCenter, Bodies[next].WorldCenter);
+                    Joints[i] = (DistanceJoint)world.CreateJoint(djd);
                 }
             }
             else
             {
-                distanceJoints = def.Joints.ToArray();
+                Joints = def.Joints.ToArray();
             }
 
-            frequencyHz = def.FrequencyHz;
-            dampingRatio = def.DampingRatio;
+            FrequencyHz = def.FrequencyHz;
+            DampingRatio = def.DampingRatio;
 
-            normals = new Vec2[bodies.Length];
-            for (int i = 0; i < normals.Length; ++i)
+            Normals = new Vec2[Bodies.Length];
+            for (int i = 0; i < Normals.Length; ++i)
             {
-                normals[i] = new Vec2();
+                Normals[i] = new Vec2();
             }
 
-            this.BodyA = bodies[0];
-            this.BodyB = bodies[1];
+            this.BodyA = Bodies[0];
+            this.BodyB = Bodies[1];
             this.CollideConnected = false;
         }
 
 
         public override void Destructor()
         {
-            for (int i = 0; i < distanceJoints.Length; ++i)
+            for (int i = 0; i < Joints.Length; ++i)
             {
-                world.DestroyJoint(distanceJoints[i]);
+                world.DestroyJoint(Joints[i]);
+            }
+        }
+
+        private float Area
+        {
+            get
+            {
+                float area = 0.0f;
+                // i'm glad i changed these all to member access
+                area += Bodies[Bodies.Length - 1].WorldCenter.X * Bodies[0].WorldCenter.Y - Bodies[0].WorldCenter.X * Bodies[Bodies.Length - 1].WorldCenter.Y;
+                for (int i = 0; i < Bodies.Length - 1; ++i)
+                {
+                    area += Bodies[i].WorldCenter.X * Bodies[i + 1].WorldCenter.Y - Bodies[i + 1].WorldCenter.X * Bodies[i].WorldCenter.Y;
+                }
+                area *= .5f;
+                return area;
             }
         }
 
@@ -153,34 +136,34 @@ namespace Box2D.Dynamics.Joints
         /// Apply the position correction to the particles.
         /// </summary>
         /// <param name="step"></param>
-        public bool constrainEdges(TimeStep step)
+        public bool ConstrainEdges(TimeStep step)
         {
             float perimeter = 0.0f;
-            for (int i = 0; i < bodies.Length; ++i)
+            for (int i = 0; i < Bodies.Length; ++i)
             {
-                int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                float dx = bodies[next].WorldCenter.X - bodies[i].WorldCenter.X;
-                float dy = bodies[next].WorldCenter.Y - bodies[i].WorldCenter.Y;
+                int next = (i == Bodies.Length - 1) ? 0 : i + 1;
+                float dx = Bodies[next].WorldCenter.X - Bodies[i].WorldCenter.X;
+                float dy = Bodies[next].WorldCenter.Y - Bodies[i].WorldCenter.Y;
                 float dist = MathUtils.Sqrt(dx * dx + dy * dy);
                 if (dist < Settings.EPSILON)
                 {
                     dist = 1.0f;
                 }
-                normals[i].X = dy / dist;
-                normals[i].Y = (-dx) / dist;
+                Normals[i].X = dy / dist;
+                Normals[i].Y = (-dx) / dist;
                 perimeter += dist;
             }
 
             Vec2 delta = Pool.PopVec2();
 
-            float deltaArea = targetVolume - Area;
+            float deltaArea = TargetVolume - Area;
             float toExtrude = 0.5f * deltaArea / perimeter; // *relaxationFactor
             // float sumdeltax = 0.0f;
             bool done = true;
-            for (int i = 0; i < bodies.Length; ++i)
+            for (int i = 0; i < Bodies.Length; ++i)
             {
-                int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                delta.Set(toExtrude * (normals[i].X + normals[next].X), toExtrude * (normals[i].Y + normals[next].Y));
+                int next = (i == Bodies.Length - 1) ? 0 : i + 1;
+                delta.Set(toExtrude * (Normals[i].X + Normals[next].X), toExtrude * (Normals[i].Y + Normals[next].Y));
                 // sumdeltax += dx;
                 float norm = delta.Length();
                 if (norm > Settings.MAX_LINEAR_CORRECTION)
@@ -191,9 +174,9 @@ namespace Box2D.Dynamics.Joints
                 {
                     done = false;
                 }
-                bodies[next].Sweep.C.X += delta.X;
-                bodies[next].Sweep.C.Y += delta.Y;
-                bodies[next].SynchronizeTransform();
+                Bodies[next].Sweep.C.X += delta.X;
+                Bodies[next].Sweep.C.Y += delta.Y;
+                Bodies[next].SynchronizeTransform();
                 // bodies[next].m_linearVelocity.x += delta.x * step.inv_dt;
                 // bodies[next].m_linearVelocity.y += delta.y * step.inv_dt;
             }
@@ -205,14 +188,14 @@ namespace Box2D.Dynamics.Joints
 
         public override void InitVelocityConstraints(SolverData data)
         {
-            Vec2[] d = Pool.GetVec2Array(bodies.Length);
+            Vec2[] d = Pool.GetVec2Array(Bodies.Length);
 
-            for (int i = 0; i < bodies.Length; ++i)
+            for (int i = 0; i < Bodies.Length; ++i)
             {
-                int prev = (i == 0) ? bodies.Length - 1 : i - 1;
-                int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                d[i].Set(bodies[next].WorldCenter);
-                d[i].SubLocal(bodies[prev].WorldCenter);
+                int prev = (i == 0) ? Bodies.Length - 1 : i - 1;
+                int next = (i == Bodies.Length - 1) ? 0 : i + 1;
+                d[i].Set(Bodies[next].WorldCenter);
+                d[i].SubLocal(Bodies[prev].WorldCenter);
             }
 
             if (data.Step.WarmStarting)
@@ -223,10 +206,10 @@ namespace Box2D.Dynamics.Joints
                 // lambda = MathUtils.clamp(lambda, -Settings.maxLinearCorrection,
                 // Settings.maxLinearCorrection);
                 // m_impulse = lambda;
-                for (int i = 0; i < bodies.Length; ++i)
+                for (int i = 0; i < Bodies.Length; ++i)
                 {
-                    bodies[i].LinearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * m_impulse;
-                    bodies[i].LinearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * m_impulse;
+                    Bodies[i].LinearVelocity.X += Bodies[i].InvMass * d[i].Y * .5f * m_impulse;
+                    Bodies[i].LinearVelocity.Y += Bodies[i].InvMass * (-d[i].X) * .5f * m_impulse;
                 }
             }
             else
@@ -237,7 +220,7 @@ namespace Box2D.Dynamics.Joints
 
         public override bool SolvePositionConstraints(SolverData data)
         {
-            return constrainEdges(data.Step);
+            return ConstrainEdges(data.Step);
         }
 
         public override void SolveVelocityConstraints(SolverData data)
@@ -246,16 +229,16 @@ namespace Box2D.Dynamics.Joints
             float dotMassSum = 0.0f;
 
 
-            Vec2[] d = Pool.GetVec2Array(bodies.Length);
+            Vec2[] d = Pool.GetVec2Array(Bodies.Length);
 
-            for (int i = 0; i < bodies.Length; ++i)
+            for (int i = 0; i < Bodies.Length; ++i)
             {
-                int prev = (i == 0) ? bodies.Length - 1 : i - 1;
-                int next = (i == bodies.Length - 1) ? 0 : i + 1;
-                d[i].Set(bodies[next].WorldCenter);
-                d[i].SubLocal(bodies[prev].WorldCenter);
-                dotMassSum += (d[i].LengthSquared()) / bodies[i].Mass;
-                crossMassSum += Vec2.Cross(bodies[i].LinearVelocity, d[i]);
+                int prev = (i == 0) ? Bodies.Length - 1 : i - 1;
+                int next = (i == Bodies.Length - 1) ? 0 : i + 1;
+                d[i].Set(Bodies[next].WorldCenter);
+                d[i].SubLocal(Bodies[prev].WorldCenter);
+                dotMassSum += (d[i].LengthSquared()) / Bodies[i].Mass;
+                crossMassSum += Vec2.Cross(Bodies[i].LinearVelocity, d[i]);
             }
             float lambda = (-2.0f) * crossMassSum / dotMassSum;
             // System.out.println(crossMassSum + " " +dotMassSum);
@@ -263,10 +246,10 @@ namespace Box2D.Dynamics.Joints
             // Settings.maxLinearCorrection);
             m_impulse += lambda;
             // System.out.println(m_impulse);
-            for (int i = 0; i < bodies.Length; ++i)
+            for (int i = 0; i < Bodies.Length; ++i)
             {
-                bodies[i].LinearVelocity.X += bodies[i].InvMass * d[i].Y * .5f * lambda;
-                bodies[i].LinearVelocity.Y += bodies[i].InvMass * (-d[i].X) * .5f * lambda;
+                Bodies[i].LinearVelocity.X += Bodies[i].InvMass * d[i].Y * .5f * lambda;
+                Bodies[i].LinearVelocity.Y += Bodies[i].InvMass * (-d[i].X) * .5f * lambda;
             }
         }
 
