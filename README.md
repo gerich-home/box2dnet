@@ -21,4 +21,7 @@ Current tasks:
 3) Refactor code
 4) Try to implement some test framework
 
+TODO:
+GearJoint.cs
+
 Feel free to contribute.
