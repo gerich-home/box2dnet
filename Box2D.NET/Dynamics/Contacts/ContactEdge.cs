@@ -36,21 +36,21 @@ namespace Box2D.Dynamics.Contacts
         /// <summary>
         /// provides quick access to the other body attached.
         /// </summary>
-        public Body other = null;
+        public Body Other;
 
         /// <summary>
         /// the contact
         /// </summary>
-        public Contact contact = null;
+        public Contact Contact;
 
         /// <summary>
         /// the previous contact edge in the body's contact list
         /// </summary>
-        public ContactEdge prev = null;
+        public ContactEdge Prev;
 
         /// <summary>
         /// the next contact edge in the body's contact list
         /// </summary>
-        public ContactEdge next = null;
+        public ContactEdge Next;
     }
 }

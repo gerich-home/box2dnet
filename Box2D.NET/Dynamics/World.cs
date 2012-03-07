@@ -280,8 +280,8 @@ namespace Box2D.Dynamics
             while (ce != null)
             {
                 ContactEdge ce0 = ce;
-                ce = ce.next;
-                ContactManager.Destroy(ce0.contact);
+                ce = ce.Next;
+                ContactManager.Destroy(ce0.Contact);
             }
             body.ContactList = null;
 
@@ -382,14 +382,14 @@ namespace Box2D.Dynamics
                 ContactEdge edge = bodyB.ContactList;
                 while (edge != null)
                 {
-                    if (edge.other == bodyA)
+                    if (edge.Other == bodyA)
                     {
                         // Flag the contact for filtering at the next time step (where either
                         // body is awake).
-                        edge.contact.SetFlagForFiltering();
+                        edge.Contact.SetFlagForFiltering();
                     }
 
-                    edge = edge.next;
+                    edge = edge.Next;
                 }
             }
 
@@ -486,14 +486,14 @@ namespace Box2D.Dynamics
                 ContactEdge edge = bodyB.ContactList;
                 while (edge != null)
                 {
-                    if (edge.other == bodyA)
+                    if (edge.Other == bodyA)
                     {
                         // Flag the contact for filtering at the next time step (where either
                         // body is awake).
-                        edge.contact.SetFlagForFiltering();
+                        edge.Contact.SetFlagForFiltering();
                     }
 
-                    edge = edge.next;
+                    edge = edge.Next;
                 }
             }
         }
@@ -1031,9 +1031,9 @@ namespace Box2D.Dynamics
                     }
 
                     // Search all contacts connected to this body.
-                    for (ContactEdge ce = b.ContactList; ce != null; ce = ce.next)
+                    for (ContactEdge ce = b.ContactList; ce != null; ce = ce.Next)
                     {
-                        Contact contact = ce.contact;
+                        Contact contact = ce.Contact;
 
                         // Has this contact already been added to an island?
                         if ((contact.Flags & Contact.ContactFlags.Island) == Contact.ContactFlags.Island)
@@ -1058,7 +1058,7 @@ namespace Box2D.Dynamics
                         island.Add(contact);
                         contact.Flags |= Contact.ContactFlags.Island;
 
-                        Body other = ce.other;
+                        Body other = ce.Other;
 
                         // Was the other body already added to this island?
                         if ((other.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
@@ -1343,7 +1343,7 @@ namespace Box2D.Dynamics
                     Body body = tempBodies[i];
                     if (body.Type == BodyType.Dynamic)
                     {
-                        for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
+                        for (ContactEdge ce = body.ContactList; ce != null; ce = ce.Next)
                         {
                             if (island.BodyCount == island.BodyCapacity)
                             {
@@ -1355,7 +1355,7 @@ namespace Box2D.Dynamics
                                 break;
                             }
 
-                            Contact contact = ce.contact;
+                            Contact contact = ce.Contact;
 
                             // Has this contact already been added to the island?
                             if ((contact.Flags & Contact.ContactFlags.Island) != 0)
@@ -1364,7 +1364,7 @@ namespace Box2D.Dynamics
                             }
 
                             // Only add static, kinematic, or bullet bodies.
-                            Body other = ce.other;
+                            Body other = ce.Other;
                             if (other.Type == BodyType.Dynamic && body.Bullet == false && other.Bullet == false)
                             {
                                 continue;
@@ -1449,9 +1449,9 @@ namespace Box2D.Dynamics
                     body.SynchronizeFixtures();
 
                     // Invalidate all contact TOIs on this displaced body.
-                    for (ContactEdge ce = body.ContactList; ce != null; ce = ce.next)
+                    for (ContactEdge ce = body.ContactList; ce != null; ce = ce.Next)
                     {
-                        ce.contact.Flags &= ~(Contact.ContactFlags.ToiFlag | Contact.ContactFlags.ToiFlag);
+                        ce.Contact.Flags &= ~(Contact.ContactFlags.ToiFlag | Contact.ContactFlags.ToiFlag);
                     }
                 }
 

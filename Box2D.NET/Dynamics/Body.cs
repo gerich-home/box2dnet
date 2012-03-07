@@ -280,8 +280,8 @@ namespace Box2D.Dynamics
             ContactEdge edge = ContactList;
             while (edge != null)
             {
-                Contact c = edge.contact;
-                edge = edge.next;
+                Contact c = edge.Contact;
+                edge = edge.Next;
 
                 Fixture fixtureA = c.FixtureA;
                 Fixture fixtureB = c.FixtureB;
@@ -527,8 +527,8 @@ namespace Box2D.Dynamics
                 while (ce != null)
                 {
                     ContactEdge ce0 = ce;
-                    ce = ce.next;
-                    World.ContactManager.Destroy(ce0.contact);
+                    ce = ce.Next;
+                    World.ContactManager.Destroy(ce0.Contact);
                 }
                 ContactList = null;
 
@@ -679,8 +679,8 @@ namespace Box2D.Dynamics
                     while (ce != null)
                     {
                         ContactEdge ce0 = ce;
-                        ce = ce.next;
-                        World.ContactManager.Destroy(ce0.contact);
+                        ce = ce.Next;
+                        World.ContactManager.Destroy(ce0.Contact);
                     }
                     ContactList = null;
                 }

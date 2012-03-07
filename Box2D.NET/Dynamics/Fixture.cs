@@ -180,14 +180,14 @@ namespace Box2D.Dynamics
             ContactEdge edge = Body.ContactList;
             while (edge != null)
             {
-                Contact contact = edge.contact;
+                Contact contact = edge.Contact;
                 Fixture fixtureA = contact.FixtureA;
                 Fixture fixtureB = contact.FixtureB;
                 if (fixtureA == this || fixtureB == this)
                 {
                     contact.SetFlagForFiltering();
                 }
-                edge = edge.next;
+                edge = edge.Next;
             }
 
             World world = Body.World;

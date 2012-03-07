@@ -85,12 +85,12 @@ namespace Box2D.Dynamics
             ContactEdge edge = bodyB.ContactList;
             while (edge != null)
             {
-                if (edge.other == bodyA)
+                if (edge.Other == bodyA)
                 {
-                    Fixture fA = edge.contact.FixtureA;
-                    Fixture fB = edge.contact.FixtureB;
-                    int iA = edge.contact.ChildIndexA;
-                    int iB = edge.contact.ChildIndexB;
+                    Fixture fA = edge.Contact.FixtureA;
+                    Fixture fB = edge.Contact.FixtureB;
+                    int iA = edge.Contact.ChildIndexA;
+                    int iB = edge.Contact.ChildIndexB;
 
                     if (fA == fixtureA && iA == indexA && fB == fixtureB && iB == indexB)
                     {
@@ -105,7 +105,7 @@ namespace Box2D.Dynamics
                     }
                 }
 
-                edge = edge.next;
+                edge = edge.Next;
             }
 
             // Does a joint override collision? is at least one body dynamic?
@@ -145,26 +145,26 @@ namespace Box2D.Dynamics
             // Connect to island graph.
 
             // Connect to body A
-            c.NodeA.contact = c;
-            c.NodeA.other = bodyB;
+            c.NodeA.Contact = c;
+            c.NodeA.Other = bodyB;
 
-            c.NodeA.prev = null;
-            c.NodeA.next = bodyA.ContactList;
+            c.NodeA.Prev = null;
+            c.NodeA.Next = bodyA.ContactList;
             if (bodyA.ContactList != null)
             {
-                bodyA.ContactList.prev = c.NodeA;
+                bodyA.ContactList.Prev = c.NodeA;
             }
             bodyA.ContactList = c.NodeA;
 
             // Connect to body B
-            c.NodeB.contact = c;
-            c.NodeB.other = bodyA;
+            c.NodeB.Contact = c;
+            c.NodeB.Other = bodyA;
 
-            c.NodeB.prev = null;
-            c.NodeB.next = bodyB.ContactList;
+            c.NodeB.Prev = null;
+            c.NodeB.Next = bodyB.ContactList;
             if (bodyB.ContactList != null)
             {
-                bodyB.ContactList.prev = c.NodeB;
+                bodyB.ContactList.Prev = c.NodeB;
             }
             bodyB.ContactList = c.NodeB;
 
@@ -209,35 +209,35 @@ namespace Box2D.Dynamics
             }
 
             // Remove from body 1
-            if (c.NodeA.prev != null)
+            if (c.NodeA.Prev != null)
             {
-                c.NodeA.prev.next = c.NodeA.next;
+                c.NodeA.Prev.Next = c.NodeA.Next;
             }
 
-            if (c.NodeA.next != null)
+            if (c.NodeA.Next != null)
             {
-                c.NodeA.next.prev = c.NodeA.prev;
+                c.NodeA.Next.Prev = c.NodeA.Prev;
             }
 
             if (c.NodeA == bodyA.ContactList)
             {
-                bodyA.ContactList = c.NodeA.next;
+                bodyA.ContactList = c.NodeA.Next;
             }
 
             // Remove from body 2
-            if (c.NodeB.prev != null)
+            if (c.NodeB.Prev != null)
             {
-                c.NodeB.prev.next = c.NodeB.next;
+                c.NodeB.Prev.Next = c.NodeB.Next;
             }
 
-            if (c.NodeB.next != null)
+            if (c.NodeB.Next != null)
             {
-                c.NodeB.next.prev = c.NodeB.prev;
+                c.NodeB.Next.Prev = c.NodeB.Prev;
             }
 
             if (c.NodeB == bodyB.ContactList)
             {
-                bodyB.ContactList = c.NodeB.next;
+                bodyB.ContactList = c.NodeB.Next;
             }
 
             // Call the factory.

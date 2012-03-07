@@ -117,15 +117,15 @@ namespace Box2D.Dynamics.Contacts
             Prev = null;
             Next = null;
 
-            NodeA.contact = null;
-            NodeA.prev = null;
-            NodeA.next = null;
-            NodeA.other = null;
+            NodeA.Contact = null;
+            NodeA.Prev = null;
+            NodeA.Next = null;
+            NodeA.Other = null;
 
-            NodeB.contact = null;
-            NodeB.prev = null;
-            NodeB.next = null;
-            NodeB.other = null;
+            NodeB.Contact = null;
+            NodeB.Prev = null;
+            NodeB.Next = null;
+            NodeB.Other = null;
 
             ToiCount = 0;
             Friction = MixFriction(fA.Friction, fB.Friction);
