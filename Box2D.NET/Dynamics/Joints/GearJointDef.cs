@@ -53,7 +53,7 @@ namespace Box2D.Dynamics.Joints
 
         public GearJointDef()
         {
-            type = JointType.GEAR;
+            type = JointType.Gear;
             joint1 = null;
             joint2 = null;
         }

@@ -43,7 +43,7 @@ namespace Box2D.Dynamics.Joints
 
         public ConstantVolumeJointDef()
         {
-            type = JointType.CONSTANT_VOLUME;
+            type = JointType.ConstantVolume;
             bodies = new List<Body>();
             joints = null;
             //relaxationFactor = 0.9f;

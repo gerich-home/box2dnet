@@ -24,21 +24,20 @@
 
 namespace Box2D.Dynamics.Joints
 {
-
     //updated to rev 100 - ec
     public enum JointType
     {
-        UNKNOWN,
-        REVOLUTE,
-        PRISMATIC,
-        DISTANCE,
-        PULLEY,
-        MOUSE,
-        GEAR,
-        WHEEL,
-        WELD,
-        FRICTION,
-        ROPE,
-        CONSTANT_VOLUME
+        Unknown,
+        Revolute,
+        Prismatic,
+        Distance,
+        Pulley,
+        Mouse,
+        Gear,
+        Wheel,
+        Weld,
+        Friction,
+        Rope,
+        ConstantVolume
     }
 }

@@ -88,7 +88,7 @@ namespace Box2D.Dynamics.Joints
 
         public DistanceJointDef()
         {
-            type = JointType.DISTANCE;
+            type = JointType.Distance;
             localAnchorA = new Vec2(0.0f, 0.0f);
             localAnchorB = new Vec2(0.0f, 0.0f);
             length = 1.0f;

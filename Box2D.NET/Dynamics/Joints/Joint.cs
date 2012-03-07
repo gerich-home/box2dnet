@@ -44,22 +44,22 @@ namespace Box2D.Dynamics.Joints
             switch (def.type)
             {
 
-                case JointType.MOUSE:
+                case JointType.Mouse:
                     return new MouseJoint(argWorld.Pool, (MouseJointDef)def);
 
-                case JointType.DISTANCE:
+                case JointType.Distance:
                     return new DistanceJoint(argWorld.Pool, (DistanceJointDef)def);
 
-                case JointType.PRISMATIC:
+                case JointType.Prismatic:
                     return new PrismaticJoint(argWorld.Pool, (PrismaticJointDef)def);
 
-                case JointType.REVOLUTE:
+                case JointType.Revolute:
                     return new RevoluteJoint(argWorld.Pool, (RevoluteJointDef)def);
 
-                case JointType.WELD:
+                case JointType.Weld:
                     return new WeldJoint(argWorld.Pool, (WeldJointDef)def);
 
-                case JointType.FRICTION:
+                case JointType.Friction:
                     return new FrictionJoint(argWorld.Pool, (FrictionJointDef)def);
 
                 //case JointType.WHEEL:
@@ -68,10 +68,10 @@ namespace Box2D.Dynamics.Joints
                 //case JointType.GEAR:
                 //    return new GearJoint(argWorld.Pool, (GearJointDef)def);
 
-                case JointType.PULLEY:
+                case JointType.Pulley:
                     return new PulleyJoint(argWorld.Pool, (PulleyJointDef)def);
 
-                case JointType.CONSTANT_VOLUME:
+                case JointType.ConstantVolume:
                     return new ConstantVolumeJoint(argWorld, (ConstantVolumeJointDef)def);
             }
             return null;

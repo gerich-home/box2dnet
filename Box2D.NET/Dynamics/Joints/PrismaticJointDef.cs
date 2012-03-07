@@ -91,7 +91,7 @@ namespace Box2D.Dynamics.Joints
 
         public PrismaticJointDef()
         {
-            type = JointType.PRISMATIC;
+            type = JointType.Prismatic;
             localAnchorA = new Vec2();
             localAnchorB = new Vec2();
             localAxisA = new Vec2(1.0f, 0.0f);

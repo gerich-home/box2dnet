@@ -57,7 +57,7 @@ namespace Box2D.Dynamics.Joints
 
         public FrictionJointDef()
         {
-            type = JointType.FRICTION;
+            type = JointType.Friction;
             localAnchorA = new Vec2();
             localAnchorB = new Vec2();
             maxForce = 0f;

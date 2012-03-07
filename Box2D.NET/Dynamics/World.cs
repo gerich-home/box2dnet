@@ -1486,12 +1486,12 @@ namespace Box2D.Dynamics
             {
 
                 // TODO djm write after writing joints
-                case JointType.DISTANCE:
+                case JointType.Distance:
                     DebugDraw.DrawSegment(p1, p2, color);
                     break;
 
 
-                case JointType.PULLEY:
+                case JointType.Pulley:
                     {
                         PulleyJoint pulley = (PulleyJoint)joint;
                         Vec2 s1 = pulley.GroundAnchorA;
@@ -1502,8 +1502,8 @@ namespace Box2D.Dynamics
                     }
                     break;
 
-                case JointType.CONSTANT_VOLUME:
-                case JointType.MOUSE:
+                case JointType.ConstantVolume:
+                case JointType.Mouse:
                     // don't draw this
                     break;
 

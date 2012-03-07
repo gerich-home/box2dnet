@@ -34,7 +34,7 @@ namespace Box2D.Dynamics.Joints
     {
         public JointDef()
         {
-            type = JointType.UNKNOWN;
+            type = JointType.Unknown;
             userData = null;
             bodyA = null;
             bodyB = null;
