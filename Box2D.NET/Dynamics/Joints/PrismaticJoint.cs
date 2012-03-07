@@ -114,10 +114,10 @@ namespace Box2D.Dynamics.Joints
         public float MotorImpulse;
         public float LowerTranslation;
         public float UpperTranslation;
-        public float m_maxMotorForce;
-        public float m_motorSpeed;
-        public bool m_limitEnabled;
-        public bool m_motorEnabled;
+        private float m_maxMotorForce;
+        private float m_motorSpeed;
+        private bool m_limitEnabled;
+        private bool m_motorEnabled;
         public LimitState LimitState;
 
         // Solver temp
