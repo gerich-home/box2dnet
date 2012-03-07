@@ -105,104 +105,90 @@ namespace Box2D.Dynamics.Joints
     public class PrismaticJoint : Joint
     {
         // Solver shared
-        public readonly Vec2 m_localAnchorA;
-        public readonly Vec2 m_localAnchorB;
-        public readonly Vec2 m_localXAxisA;
-        public readonly Vec2 m_localYAxisA;
-        public float m_referenceAngle;
-        public readonly Vec3 m_impulse;
-        public float m_motorImpulse;
-        public float m_lowerTranslation;
-        public float m_upperTranslation;
+        public readonly Vec2 LocalAnchorA;
+        public readonly Vec2 LocalAnchorB;
+        public readonly Vec2 LocalXAxisA;
+        public readonly Vec2 LocalYAxisA;
+        public float ReferenceAngle;
+        public readonly Vec3 Impulse;
+        public float MotorImpulse;
+        public float LowerTranslation;
+        public float UpperTranslation;
         public float m_maxMotorForce;
         public float m_motorSpeed;
-        public bool m_enableLimit;
-        public bool m_enableMotor;
-        public LimitState m_limitState;
+        public bool m_limitEnabled;
+        public bool m_motorEnabled;
+        public LimitState LimitState;
 
         // Solver temp
-        public int m_indexA;
-        public int m_indexB;
-        public readonly Vec2 m_rA = new Vec2();
-        public readonly Vec2 m_rB = new Vec2();
-        public readonly Vec2 m_localCenterA = new Vec2();
-        public readonly Vec2 m_localCenterB = new Vec2();
-        public float m_invMassA;
-        public float m_invMassB;
-        public float m_invIA;
-        public float m_invIB;
-        public readonly Vec2 m_axis;
-        public readonly Vec2 m_perp;
-        public float m_s1, m_s2;
-        public float m_a1, m_a2;
-        public readonly Mat33 m_K;
-        public float m_motorMass; // effective mass for motor/limit translational constraint.
+        public int IndexA;
+        public int IndexB;
+        public readonly Vec2 RA = new Vec2();
+        public readonly Vec2 RB = new Vec2();
+        public readonly Vec2 LocalCenterA = new Vec2();
+        public readonly Vec2 LocalCenterB = new Vec2();
+        public float InvMassA;
+        public float InvMassB;
+        public float InvIA;
+        public float InvIB;
+        public readonly Vec2 Axis;
+        public readonly Vec2 Perp;
+        public float S1;
+        public float S2;
+        public float A1;
+        public float A2;
+        public readonly Mat33 K;
+        public float MotorMass; // effective mass for motor/limit translational constraint.
 
         public PrismaticJoint(IWorldPool argWorld, PrismaticJointDef def)
             : base(argWorld, def)
         {
-            m_localAnchorA = new Vec2(def.LocalAnchorA);
-            m_localAnchorB = new Vec2(def.LocalAnchorB);
-            m_localXAxisA = new Vec2(def.LocalAxisA);
-            m_localXAxisA.Normalize();
-            m_localYAxisA = new Vec2();
-            Vec2.CrossToOutUnsafe(1f, m_localXAxisA, m_localYAxisA);
-            m_referenceAngle = def.ReferenceAngle;
+            LocalAnchorA = new Vec2(def.LocalAnchorA);
+            LocalAnchorB = new Vec2(def.LocalAnchorB);
+            LocalXAxisA = new Vec2(def.LocalAxisA);
+            LocalXAxisA.Normalize();
+            LocalYAxisA = new Vec2();
+            Vec2.CrossToOutUnsafe(1f, LocalXAxisA, LocalYAxisA);
+            ReferenceAngle = def.ReferenceAngle;
 
-            m_impulse = new Vec3();
-            m_motorMass = 0.0f;
-            m_motorImpulse = 0.0f;
+            Impulse = new Vec3();
+            MotorMass = 0.0f;
+            MotorImpulse = 0.0f;
 
-            m_lowerTranslation = def.LowerTranslation;
-            m_upperTranslation = def.UpperTranslation;
+            LowerTranslation = def.LowerTranslation;
+            UpperTranslation = def.UpperTranslation;
             m_maxMotorForce = def.MaxMotorForce;
             m_motorSpeed = def.MotorSpeed;
-            m_enableLimit = def.EnableLimit;
-            m_enableMotor = def.EnableMotor;
-            m_limitState = LimitState.Inactive;
+            m_limitEnabled = def.EnableLimit;
+            m_motorEnabled = def.EnableMotor;
+            LimitState = LimitState.Inactive;
 
-            m_K = new Mat33();
-            m_axis = new Vec2();
-            m_perp = new Vec2();
-        }
-
-        public Vec2 LocalAnchorA
-        {
-            get
-            {
-                return m_localAnchorA;
-            }
-        }
-
-        public Vec2 LocalAnchorB
-        {
-            get
-            {
-                return m_localAnchorB;
-            }
+            K = new Mat33();
+            Axis = new Vec2();
+            Perp = new Vec2();
         }
 
         public override void GetAnchorA(Vec2 argOut)
         {
-            BodyA.GetWorldPointToOut(m_localAnchorA, argOut);
+            BodyA.GetWorldPointToOut(LocalAnchorA, argOut);
         }
 
         public override void GetAnchorB(Vec2 argOut)
         {
-            BodyB.GetWorldPointToOut(m_localAnchorB, argOut);
+            BodyB.GetWorldPointToOut(LocalAnchorB, argOut);
         }
 
         public override void GetReactionForce(float inv_dt, Vec2 argOut)
         {
             Vec2 temp = Pool.PopVec2();
-            temp.Set(m_axis).MulLocal(m_motorImpulse + m_impulse.Z);
-            argOut.Set(m_perp).MulLocal(m_impulse.X).AddLocal(temp).MulLocal(inv_dt);
+            temp.Set(Axis).MulLocal(MotorImpulse + Impulse.Z);
+            argOut.Set(Perp).MulLocal(Impulse.X).AddLocal(temp).MulLocal(inv_dt);
             Pool.PushVec2(1);
         }
 
         public override float GetReactionTorque(float inv_dt)
         {
-            return inv_dt * m_impulse.Y;
+            return inv_dt * Impulse.Y;
         }
 
         ///// <summary>
@@ -247,17 +233,17 @@ namespace Box2D.Dynamics.Joints
                 Vec2 temp2 = pc[7];
                 Vec2 temp3 = pc[8];
 
-                temp.Set(m_localAnchorA).SubLocal(bA.Sweep.LocalCenter);
+                temp.Set(LocalAnchorA).SubLocal(bA.Sweep.LocalCenter);
                 Rot.MulToOutUnsafe(bA.Xf.Q, temp, rA);
 
-                temp.Set(m_localAnchorB).SubLocal(bB.Sweep.LocalCenter);
+                temp.Set(LocalAnchorB).SubLocal(bB.Sweep.LocalCenter);
                 Rot.MulToOutUnsafe(bB.Xf.Q, temp, rB);
 
                 p1.Set(bA.Sweep.C).AddLocal(rA);
                 p2.Set(bB.Sweep.C).AddLocal(rB);
 
                 d.Set(p2).SubLocal(p1);
-                Rot.MulToOutUnsafe(bA.Xf.Q, m_localXAxisA, axis);
+                Rot.MulToOutUnsafe(bA.Xf.Q, LocalXAxisA, axis);
 
                 Vec2 vA = bA.LinearVelocity;
                 Vec2 vB = bB.LinearVelocity;
@@ -286,23 +272,17 @@ namespace Box2D.Dynamics.Joints
         {
             get
             {
-                return m_enableLimit;
+                return m_limitEnabled;
             }
-
-        }
-
-        /// <summary>
-        /// Enable/disable the joint limit.
-        /// </summary>
-        /// <param name="flag"></param>
-        public void enableLimit(bool flag)
-        {
-            if (flag != m_enableLimit)
+            set
             {
-                BodyA.Awake = true;
-                BodyB.Awake = true;
-                m_enableLimit = flag;
-                m_impulse.Z = 0.0f;
+                if (value != m_limitEnabled)
+                {
+                    BodyA.Awake = true;
+                    BodyB.Awake = true;
+                    m_limitEnabled = value;
+                    Impulse.Z = 0.0f;
+                }
             }
         }
 
@@ -314,7 +294,7 @@ namespace Box2D.Dynamics.Joints
         {
             get
             {
-                return m_lowerTranslation;
+                return LowerTranslation;
             }
         }
 
@@ -325,7 +305,7 @@ namespace Box2D.Dynamics.Joints
         {
             get
             {
-                return m_upperTranslation;
+                return UpperTranslation;
             }
         }
 
@@ -334,16 +314,16 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         /// <param name="lower"></param>
         /// <param name="upper"></param>
-        public void setLimits(float lower, float upper)
+        public void SetLimits(float lower, float upper)
         {
             Debug.Assert(lower <= upper);
-            if (lower != m_lowerTranslation || upper != m_upperTranslation)
+            if (lower != LowerTranslation || upper != UpperTranslation)
             {
                 BodyA.Awake = true;
                 BodyB.Awake = true;
-                m_lowerTranslation = lower;
-                m_upperTranslation = upper;
-                m_impulse.Z = 0.0f;
+                LowerTranslation = lower;
+                UpperTranslation = upper;
+                Impulse.Z = 0.0f;
             }
         }
 
@@ -355,19 +335,14 @@ namespace Box2D.Dynamics.Joints
         {
             get
             {
-                return m_enableMotor;
+                return m_motorEnabled;
             }
-        }
-
-        /// <summary>
-        /// Enable/disable the joint motor.
-        /// </summary>
-        /// <param name="flag"></param>
-        public void enableMotor(bool flag)
-        {
-            BodyA.Awake = true;
-            BodyB.Awake = true;
-            m_enableMotor = flag;
+            set
+            {
+                BodyA.Awake = true;
+                BodyB.Awake = true;
+                m_motorEnabled = value;
+            }
         }
 
         /// <summary>
@@ -406,31 +381,31 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         /// <param name="inv_dt"></param>
         /// <returns></returns>
-        public float getMotorForce(float inv_dt)
+        public float GetMotorForce(float inv_dt)
         {
-            return m_motorImpulse * inv_dt;
+            return MotorImpulse * inv_dt;
         }
 
         public override void InitVelocityConstraints(SolverData data)
         {
-            m_indexA = BodyA.IslandIndex;
-            m_indexB = BodyB.IslandIndex;
-            m_localCenterA.Set(BodyA.Sweep.LocalCenter);
-            m_localCenterB.Set(BodyB.Sweep.LocalCenter);
-            m_invMassA = BodyA.InvMass;
-            m_invMassB = BodyB.InvMass;
-            m_invIA = BodyA.InvI;
-            m_invIB = BodyB.InvI;
+            IndexA = BodyA.IslandIndex;
+            IndexB = BodyB.IslandIndex;
+            LocalCenterA.Set(BodyA.Sweep.LocalCenter);
+            LocalCenterB.Set(BodyB.Sweep.LocalCenter);
+            InvMassA = BodyA.InvMass;
+            InvMassB = BodyB.InvMass;
+            InvIA = BodyA.InvI;
+            InvIB = BodyB.InvI;
 
-            Vec2 cA = data.Positions[m_indexA].C;
-            float aA = data.Positions[m_indexA].A;
-            Vec2 vA = data.Velocities[m_indexA].V;
-            float wA = data.Velocities[m_indexA].W;
+            Vec2 cA = data.Positions[IndexA].C;
+            float aA = data.Positions[IndexA].A;
+            Vec2 vA = data.Velocities[IndexA].V;
+            float wA = data.Velocities[IndexA].W;
 
-            Vec2 cB = data.Positions[m_indexB].C;
-            float aB = data.Positions[m_indexB].A;
-            Vec2 vB = data.Velocities[m_indexB].V;
-            float wB = data.Velocities[m_indexB].W;
+            Vec2 cB = data.Positions[IndexB].C;
+            float aB = data.Positions[IndexB].A;
+            Vec2 vB = data.Velocities[IndexB].V;
+            float wB = data.Velocities[IndexB].W;
 
             Rot qA = Pool.PopRot();
             Rot qB = Pool.PopRot();
@@ -443,106 +418,106 @@ namespace Box2D.Dynamics.Joints
             qB.Set(aB);
 
             // Compute the effective masses.
-            Rot.MulToOutUnsafe(qA, d.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.MulToOutUnsafe(qB, d.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, d.Set(LocalAnchorA).SubLocal(LocalCenterA), rA);
+            Rot.MulToOutUnsafe(qB, d.Set(LocalAnchorB).SubLocal(LocalCenterB), rB);
             d.Set(cB).SubLocal(cA).AddLocal(rB).SubLocal(rA);
 
-            float mA = m_invMassA, mB = m_invMassB;
-            float iA = m_invIA, iB = m_invIB;
+            float mA = InvMassA, mB = InvMassB;
+            float iA = InvIA, iB = InvIB;
 
             // Compute motor Jacobian and effective mass.
             {
-                Rot.MulToOutUnsafe(qA, m_localXAxisA, m_axis);
+                Rot.MulToOutUnsafe(qA, LocalXAxisA, Axis);
                 temp.Set(d).AddLocal(rA);
-                m_a1 = Vec2.Cross(temp, m_axis);
-                m_a2 = Vec2.Cross(rB, m_axis);
+                A1 = Vec2.Cross(temp, Axis);
+                A2 = Vec2.Cross(rB, Axis);
 
-                m_motorMass = mA + mB + iA * m_a1 * m_a1 + iB * m_a2 * m_a2;
-                if (m_motorMass > 0.0f)
+                MotorMass = mA + mB + iA * A1 * A1 + iB * A2 * A2;
+                if (MotorMass > 0.0f)
                 {
-                    m_motorMass = 1.0f / m_motorMass;
+                    MotorMass = 1.0f / MotorMass;
                 }
             }
 
             // Prismatic constraint.
             {
-                Rot.MulToOutUnsafe(qA, m_localYAxisA, m_perp);
+                Rot.MulToOutUnsafe(qA, LocalYAxisA, Perp);
 
                 temp.Set(d).AddLocal(rA);
-                m_s1 = Vec2.Cross(temp, m_perp);
-                m_s2 = Vec2.Cross(rB, m_perp);
+                S1 = Vec2.Cross(temp, Perp);
+                S2 = Vec2.Cross(rB, Perp);
 
-                float k11 = mA + mB + iA * m_s1 * m_s1 + iB * m_s2 * m_s2;
-                float k12 = iA * m_s1 + iB * m_s2;
-                float k13 = iA * m_s1 * m_a1 + iB * m_s2 * m_a2;
+                float k11 = mA + mB + iA * S1 * S1 + iB * S2 * S2;
+                float k12 = iA * S1 + iB * S2;
+                float k13 = iA * S1 * A1 + iB * S2 * A2;
                 float k22 = iA + iB;
                 if (k22 == 0.0f)
                 {
                     // For bodies with fixed rotation.
                     k22 = 1.0f;
                 }
-                float k23 = iA * m_a1 + iB * m_a2;
-                float k33 = mA + mB + iA * m_a1 * m_a1 + iB * m_a2 * m_a2;
+                float k23 = iA * A1 + iB * A2;
+                float k33 = mA + mB + iA * A1 * A1 + iB * A2 * A2;
 
-                m_K.Ex.Set(k11, k12, k13);
-                m_K.Ey.Set(k12, k22, k23);
-                m_K.Ez.Set(k13, k23, k33);
+                K.Ex.Set(k11, k12, k13);
+                K.Ey.Set(k12, k22, k23);
+                K.Ez.Set(k13, k23, k33);
             }
 
             // Compute motor and limit terms.
-            if (m_enableLimit)
+            if (m_limitEnabled)
             {
 
-                float jointTranslation = Vec2.Dot(m_axis, d);
-                if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
+                float jointTranslation = Vec2.Dot(Axis, d);
+                if (MathUtils.Abs(UpperTranslation - LowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
                 {
-                    m_limitState = LimitState.Equal;
+                    LimitState = LimitState.Equal;
                 }
-                else if (jointTranslation <= m_lowerTranslation)
+                else if (jointTranslation <= LowerTranslation)
                 {
-                    if (m_limitState != LimitState.AtLower)
+                    if (LimitState != LimitState.AtLower)
                     {
-                        m_limitState = LimitState.AtLower;
-                        m_impulse.Z = 0.0f;
+                        LimitState = LimitState.AtLower;
+                        Impulse.Z = 0.0f;
                     }
                 }
-                else if (jointTranslation >= m_upperTranslation)
+                else if (jointTranslation >= UpperTranslation)
                 {
-                    if (m_limitState != LimitState.AtUpper)
+                    if (LimitState != LimitState.AtUpper)
                     {
-                        m_limitState = LimitState.AtUpper;
-                        m_impulse.Z = 0.0f;
+                        LimitState = LimitState.AtUpper;
+                        Impulse.Z = 0.0f;
                     }
                 }
                 else
                 {
-                    m_limitState = LimitState.Inactive;
-                    m_impulse.Z = 0.0f;
+                    LimitState = LimitState.Inactive;
+                    Impulse.Z = 0.0f;
                 }
             }
             else
             {
-                m_limitState = LimitState.Inactive;
-                m_impulse.Z = 0.0f;
+                LimitState = LimitState.Inactive;
+                Impulse.Z = 0.0f;
             }
 
-            if (m_enableMotor == false)
+            if (m_motorEnabled == false)
             {
-                m_motorImpulse = 0.0f;
+                MotorImpulse = 0.0f;
             }
 
             if (data.Step.WarmStarting)
             {
                 // Account for variable time step.
-                m_impulse.MulLocal(data.Step.DtRatio);
-                m_motorImpulse *= data.Step.DtRatio;
+                Impulse.MulLocal(data.Step.DtRatio);
+                MotorImpulse *= data.Step.DtRatio;
 
                 Vec2 P = Pool.PopVec2();
-                temp.Set(m_axis).MulLocal(m_motorImpulse + m_impulse.Z);
-                P.Set(m_perp).MulLocal(m_impulse.X).AddLocal(temp);
+                temp.Set(Axis).MulLocal(MotorImpulse + Impulse.Z);
+                P.Set(Perp).MulLocal(Impulse.X).AddLocal(temp);
 
-                float LA = m_impulse.X * m_s1 + m_impulse.Y + (m_motorImpulse + m_impulse.Z) * m_a1;
-                float LB = m_impulse.X * m_s2 + m_impulse.Y + (m_motorImpulse + m_impulse.Z) * m_a2;
+                float LA = Impulse.X * S1 + Impulse.Y + (MotorImpulse + Impulse.Z) * A1;
+                float LB = Impulse.X * S2 + Impulse.Y + (MotorImpulse + Impulse.Z) * A2;
 
                 vA.X -= mA * P.X;
                 vA.Y -= mA * P.Y;
@@ -556,14 +531,14 @@ namespace Box2D.Dynamics.Joints
             }
             else
             {
-                m_impulse.SetZero();
-                m_motorImpulse = 0.0f;
+                Impulse.SetZero();
+                MotorImpulse = 0.0f;
             }
 
-            data.Velocities[m_indexA].V.Set(vA);
-            data.Velocities[m_indexA].W = wA;
-            data.Velocities[m_indexB].V.Set(vB);
-            data.Velocities[m_indexB].W = wB;
+            data.Velocities[IndexA].V.Set(vA);
+            data.Velocities[IndexA].W = wA;
+            data.Velocities[IndexB].V.Set(vB);
+            data.Velocities[IndexB].W = wB;
 
             Pool.PushRot(2);
             Pool.PushVec2(4);
@@ -571,31 +546,31 @@ namespace Box2D.Dynamics.Joints
 
         public override void SolveVelocityConstraints(SolverData data)
         {
-            Vec2 vA = data.Velocities[m_indexA].V;
-            float wA = data.Velocities[m_indexA].W;
-            Vec2 vB = data.Velocities[m_indexB].V;
-            float wB = data.Velocities[m_indexB].W;
+            Vec2 vA = data.Velocities[IndexA].V;
+            float wA = data.Velocities[IndexA].W;
+            Vec2 vB = data.Velocities[IndexB].V;
+            float wB = data.Velocities[IndexB].W;
 
-            float mA = m_invMassA, mB = m_invMassB;
-            float iA = m_invIA, iB = m_invIB;
+            float mA = InvMassA, mB = InvMassB;
+            float iA = InvIA, iB = InvIB;
 
             Vec2 temp = Pool.PopVec2();
 
             // Solve linear motor constraint.
-            if (m_enableMotor && m_limitState != LimitState.Equal)
+            if (m_motorEnabled && LimitState != LimitState.Equal)
             {
                 temp.Set(vB).SubLocal(vA);
-                float Cdot = Vec2.Dot(m_axis, temp) + m_a2 * wB - m_a1 * wA;
-                float impulse = m_motorMass * (m_motorSpeed - Cdot);
-                float oldImpulse = m_motorImpulse;
+                float Cdot = Vec2.Dot(Axis, temp) + A2 * wB - A1 * wA;
+                float impulse = MotorMass * (m_motorSpeed - Cdot);
+                float oldImpulse = MotorImpulse;
                 float maxImpulse = data.Step.Dt * m_maxMotorForce;
-                m_motorImpulse = MathUtils.Clamp(m_motorImpulse + impulse, -maxImpulse, maxImpulse);
-                impulse = m_motorImpulse - oldImpulse;
+                MotorImpulse = MathUtils.Clamp(MotorImpulse + impulse, -maxImpulse, maxImpulse);
+                impulse = MotorImpulse - oldImpulse;
 
                 Vec2 P = Pool.PopVec2();
-                P.Set(m_axis).MulLocal(impulse);
-                float LA = impulse * m_a1;
-                float LB = impulse * m_a2;
+                P.Set(Axis).MulLocal(impulse);
+                float LA = impulse * A1;
+                float LB = impulse * A2;
 
                 vA.X -= mA * P.X;
                 vA.Y -= mA * P.Y;
@@ -610,16 +585,16 @@ namespace Box2D.Dynamics.Joints
 
             Vec2 Cdot1 = Pool.PopVec2();
             temp.Set(vB).SubLocal(vA);
-            Cdot1.X = Vec2.Dot(m_perp, temp) + m_s2 * wB - m_s1 * wA;
+            Cdot1.X = Vec2.Dot(Perp, temp) + S2 * wB - S1 * wA;
             Cdot1.Y = wB - wA;
             // System.out.println(Cdot1);
 
-            if (m_enableLimit && m_limitState != LimitState.Inactive)
+            if (m_limitEnabled && LimitState != LimitState.Inactive)
             {
                 // Solve prismatic and limit constraint in block form.
                 float Cdot2;
                 temp.Set(vB).SubLocal(vA);
-                Cdot2 = Vec2.Dot(m_axis, temp) + m_a2 * wB - m_a1 * wA;
+                Cdot2 = Vec2.Dot(Axis, temp) + A2 * wB - A1 * wA;
 
                 Vec3 Cdot = Pool.PopVec3();
                 Cdot.Set(Cdot1.X, Cdot1.Y, Cdot2);
@@ -628,18 +603,18 @@ namespace Box2D.Dynamics.Joints
                 Vec3 f1 = Pool.PopVec3();
                 Vec3 df = Pool.PopVec3();
 
-                f1.Set(m_impulse);
-                m_K.Solve33ToOut(Cdot.NegateLocal(), df);
+                f1.Set(Impulse);
+                K.Solve33ToOut(Cdot.NegateLocal(), df);
                 //Cdot.negateLocal(); not used anymore
-                m_impulse.AddLocal(df);
+                Impulse.AddLocal(df);
 
-                if (m_limitState == LimitState.AtLower)
+                if (LimitState == LimitState.AtLower)
                 {
-                    m_impulse.Z = MathUtils.Max(m_impulse.Z, 0.0f);
+                    Impulse.Z = MathUtils.Max(Impulse.Z, 0.0f);
                 }
-                else if (m_limitState == LimitState.AtUpper)
+                else if (LimitState == LimitState.AtUpper)
                 {
-                    m_impulse.Z = MathUtils.Min(m_impulse.Z, 0.0f);
+                    Impulse.Z = MathUtils.Min(Impulse.Z, 0.0f);
                 }
 
                 // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
@@ -647,23 +622,23 @@ namespace Box2D.Dynamics.Joints
                 Vec2 b = Pool.PopVec2();
                 Vec2 f2r = Pool.PopVec2();
 
-                temp.Set(m_K.Ez.X, m_K.Ez.Y).MulLocal(m_impulse.Z - f1.Z);
+                temp.Set(K.Ez.X, K.Ez.Y).MulLocal(Impulse.Z - f1.Z);
                 b.Set(Cdot1).NegateLocal().SubLocal(temp);
 
                 temp.Set(f1.X, f1.Y);
-                m_K.Solve22ToOut(b, f2r);
+                K.Solve22ToOut(b, f2r);
                 f2r.AddLocal(temp);
-                m_impulse.X = f2r.X;
-                m_impulse.Y = f2r.Y;
+                Impulse.X = f2r.X;
+                Impulse.Y = f2r.Y;
 
-                df.Set(m_impulse).SubLocal(f1);
+                df.Set(Impulse).SubLocal(f1);
 
                 Vec2 P = Pool.PopVec2();
-                temp.Set(m_axis).MulLocal(df.Z);
-                P.Set(m_perp).MulLocal(df.X).AddLocal(temp);
+                temp.Set(Axis).MulLocal(df.Z);
+                P.Set(Perp).MulLocal(df.X).AddLocal(temp);
 
-                float LA = df.X * m_s1 + df.Y + df.Z * m_a1;
-                float LB = df.X * m_s2 + df.Y + df.Z * m_a2;
+                float LA = df.X * S1 + df.Y + df.Z * A1;
+                float LB = df.X * S2 + df.Y + df.Z * A2;
 
                 vA.X -= mA * P.X;
                 vA.Y -= mA * P.Y;
@@ -680,16 +655,16 @@ namespace Box2D.Dynamics.Joints
             {
                 // Limit is inactive, just solve the prismatic constraint in block form.
                 Vec2 df = Pool.PopVec2();
-                m_K.Solve22ToOut(Cdot1.NegateLocal(), df);
+                K.Solve22ToOut(Cdot1.NegateLocal(), df);
                 Cdot1.NegateLocal();
 
-                m_impulse.X += df.X;
-                m_impulse.Y += df.Y;
+                Impulse.X += df.X;
+                Impulse.Y += df.Y;
 
                 Vec2 P = Pool.PopVec2();
-                P.Set(m_perp).MulLocal(df.X);
-                float LA = df.X * m_s1 + df.Y;
-                float LB = df.X * m_s2 + df.Y;
+                P.Set(Perp).MulLocal(df.X);
+                float LA = df.X * S1 + df.Y;
+                float LB = df.X * S2 + df.Y;
 
                 vA.X -= mA * P.X;
                 vA.Y -= mA * P.Y;
@@ -702,23 +677,23 @@ namespace Box2D.Dynamics.Joints
                 Vec2 Cdot10 = Pool.PopVec2();
                 Cdot10.Set(Cdot1);
 
-                Cdot1.X = Vec2.Dot(m_perp, temp.Set(vB).SubLocal(vA)) + m_s2 * wB - m_s1 * wA;
+                Cdot1.X = Vec2.Dot(Perp, temp.Set(vB).SubLocal(vA)) + S2 * wB - S1 * wA;
                 Cdot1.Y = wB - wA;
 
                 if (MathUtils.Abs(Cdot1.X) > 0.01f || MathUtils.Abs(Cdot1.Y) > 0.01f)
                 {
                     // djm note: what's happening here?
-                    Mat33.Mul22ToOutUnsafe(m_K, df, temp);
+                    Mat33.Mul22ToOutUnsafe(K, df, temp);
                     Cdot1.X += 0.0f;
                 }
 
                 Pool.PushVec2(3);
             }
 
-            data.Velocities[m_indexA].V.Set(vA);
-            data.Velocities[m_indexA].W = wA;
-            data.Velocities[m_indexB].V.Set(vB);
-            data.Velocities[m_indexB].W = wB;
+            data.Velocities[IndexA].V.Set(vA);
+            data.Velocities[IndexA].W = wA;
+            data.Velocities[IndexB].V.Set(vB);
+            data.Velocities[IndexB].W = wB;
 
             Pool.PushVec2(2);
         }
@@ -737,60 +712,60 @@ namespace Box2D.Dynamics.Joints
 
             Vec3 impulse = Pool.PopVec3();
 
-            Vec2 cA = data.Positions[m_indexA].C;
-            float aA = data.Positions[m_indexA].A;
-            Vec2 cB = data.Positions[m_indexB].C;
-            float aB = data.Positions[m_indexB].A;
+            Vec2 cA = data.Positions[IndexA].C;
+            float aA = data.Positions[IndexA].A;
+            Vec2 cB = data.Positions[IndexB].C;
+            float aB = data.Positions[IndexB].A;
 
             qA.Set(aA);
             qB.Set(aB);
 
-            float mA = m_invMassA, mB = m_invMassB;
-            float iA = m_invIA, iB = m_invIB;
+            float mA = InvMassA, mB = InvMassB;
+            float iA = InvIA, iB = InvIB;
 
             // Compute fresh Jacobians
-            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(LocalAnchorA).SubLocal(LocalCenterA), rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(LocalAnchorB).SubLocal(LocalCenterB), rB);
             d.Set(cB).AddLocal(rB).SubLocal(cA).SubLocal(rA);
 
-            Rot.MulToOutUnsafe(qA, m_localXAxisA, axis);
+            Rot.MulToOutUnsafe(qA, LocalXAxisA, axis);
             float a1 = Vec2.Cross(temp.Set(d).AddLocal(rA), axis);
             float a2 = Vec2.Cross(rB, axis);
-            Rot.MulToOutUnsafe(qA, m_localYAxisA, perp);
+            Rot.MulToOutUnsafe(qA, LocalYAxisA, perp);
 
             float s1 = Vec2.Cross(temp.Set(d).AddLocal(rA), perp);
             float s2 = Vec2.Cross(rB, perp);
 
             C1.X = Vec2.Dot(perp, d);
-            C1.Y = aB - aA - m_referenceAngle;
+            C1.Y = aB - aA - ReferenceAngle;
 
             float linearError = MathUtils.Abs(C1.X);
             float angularError = MathUtils.Abs(C1.Y);
 
             bool active = false;
             float C2 = 0.0f;
-            if (m_enableLimit)
+            if (m_limitEnabled)
             {
                 float translation = Vec2.Dot(axis, d);
-                if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
+                if (MathUtils.Abs(UpperTranslation - LowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
                 {
                     // Prevent large angular corrections
                     C2 = MathUtils.Clamp(translation, -Settings.MAX_LINEAR_CORRECTION, Settings.MAX_LINEAR_CORRECTION);
                     linearError = MathUtils.Max(linearError, MathUtils.Abs(translation));
                     active = true;
                 }
-                else if (translation <= m_lowerTranslation)
+                else if (translation <= LowerTranslation)
                 {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = MathUtils.Clamp(translation - m_lowerTranslation + Settings.LINEAR_SLOP, -Settings.MAX_LINEAR_CORRECTION, 0.0f);
-                    linearError = MathUtils.Max(linearError, m_lowerTranslation - translation);
+                    C2 = MathUtils.Clamp(translation - LowerTranslation + Settings.LINEAR_SLOP, -Settings.MAX_LINEAR_CORRECTION, 0.0f);
+                    linearError = MathUtils.Max(linearError, LowerTranslation - translation);
                     active = true;
                 }
-                else if (translation >= m_upperTranslation)
+                else if (translation >= UpperTranslation)
                 {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = MathUtils.Clamp(translation - m_upperTranslation - Settings.LINEAR_SLOP, 0.0f, Settings.MAX_LINEAR_CORRECTION);
-                    linearError = MathUtils.Max(linearError, translation - m_upperTranslation);
+                    C2 = MathUtils.Clamp(translation - UpperTranslation - Settings.LINEAR_SLOP, 0.0f, Settings.MAX_LINEAR_CORRECTION);
+                    linearError = MathUtils.Max(linearError, translation - UpperTranslation);
                     active = true;
                 }
             }
@@ -860,10 +835,10 @@ namespace Box2D.Dynamics.Joints
             cB.Y += mB * Py;
             aB += iB * LB;
 
-            data.Positions[m_indexA].C.Set(cA);
-            data.Positions[m_indexA].A = aA;
-            data.Positions[m_indexB].C.Set(cB);
-            data.Positions[m_indexB].A = aB;
+            data.Positions[IndexA].C.Set(cA);
+            data.Positions[IndexA].A = aA;
+            data.Positions[IndexB].C.Set(cB);
+            data.Positions[IndexB].A = aB;
 
             Pool.PushVec2(7);
             Pool.PushVec3(1);
