@@ -609,11 +609,11 @@ namespace Box2D.Dynamics
 				Contact c = Contacts[i];
 
 				ContactVelocityConstraint vc = constraints[i];
-				impulse.Count = vc.pointCount;
-				for (int j = 0; j < vc.pointCount; ++j)
+				impulse.Count = vc.PointCount;
+				for (int j = 0; j < vc.PointCount; ++j)
 				{
-					impulse.NormalImpulses[j] = vc.points[j].normalImpulse;
-					impulse.TangentImpulses[j] = vc.points[j].tangentImpulse;
+					impulse.NormalImpulses[j] = vc.Points[j].NormalImpulse;
+					impulse.TangentImpulses[j] = vc.Points[j].TangentImpulse;
 				}
 
 				Listener.PostSolve(c, impulse);

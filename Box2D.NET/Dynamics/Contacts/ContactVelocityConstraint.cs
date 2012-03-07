@@ -26,28 +26,29 @@ using Box2D.Common;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class ContactVelocityConstraint
     {
-        public VelocityConstraintPoint[] points = new VelocityConstraintPoint[Settings.MAX_MANIFOLD_POINTS];
-        public readonly Vec2 normal = new Vec2();
-        public readonly Mat22 normalMass = new Mat22();
+        public VelocityConstraintPoint[] Points = new VelocityConstraintPoint[Settings.MAX_MANIFOLD_POINTS];
+        public readonly Vec2 Normal = new Vec2();
+        public readonly Mat22 NormalMass = new Mat22();
         public readonly Mat22 K = new Mat22();
-        public int indexA;
-        public int indexB;
-        public float invMassA, invMassB;
-        public float invIA, invIB;
-        public float friction;
-        public float restitution;
-        public float tangentSpeed;
-        public int pointCount;
-        public int contactIndex;
+        public int IndexA;
+        public int IndexB;
+        public float InvMassA;
+        public float InvMassB;
+        public float InvIA;
+        public float InvIB;
+        public float Friction;
+        public float Restitution;
+        public float TangentSpeed;
+        public int PointCount;
+        public int ContactIndex;
 
         public ContactVelocityConstraint()
         {
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < Points.Length; i++)
             {
-                points[i] = new VelocityConstraintPoint();
+                Points[i] = new VelocityConstraintPoint();
             }
         }
 
@@ -55,11 +56,11 @@ namespace Box2D.Dynamics.Contacts
         {
             public readonly Vec2 rA = new Vec2();
             public readonly Vec2 rB = new Vec2();
-            public float normalImpulse;
-            public float tangentImpulse;
-            public float normalMass;
-            public float tangentMass;
-            public float velocityBias;
+            public float NormalImpulse;
+            public float TangentImpulse;
+            public float NormalMass;
+            public float TangentMass;
+            public float VelocityBias;
         }
     }
 }
