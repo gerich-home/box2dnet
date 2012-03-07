@@ -263,13 +263,13 @@ namespace Box2D.Dynamics
             while (je != null)
             {
                 JointEdge je0 = je;
-                je = je.next;
+                je = je.Next;
                 if (DestructionListener != null)
                 {
-                    DestructionListener.SayGoodbye(je0.joint);
+                    DestructionListener.SayGoodbye(je0.Joint);
                 }
 
-                DestroyJoint(je0.joint);
+                DestroyJoint(je0.Joint);
 
                 body.JointList = je;
             }
@@ -353,23 +353,23 @@ namespace Box2D.Dynamics
             ++JointCount;
 
             // Connect to the bodies' doubly linked lists.
-            j.EdgeA.joint = j;
-            j.EdgeA.other = j.BodyB;
-            j.EdgeA.prev = null;
-            j.EdgeA.next = j.BodyA.JointList;
+            j.EdgeA.Joint = j;
+            j.EdgeA.Other = j.BodyB;
+            j.EdgeA.Prev = null;
+            j.EdgeA.Next = j.BodyA.JointList;
             if (j.BodyA.JointList != null)
             {
-                j.BodyA.JointList.prev = j.EdgeA;
+                j.BodyA.JointList.Prev = j.EdgeA;
             }
             j.BodyA.JointList = j.EdgeA;
 
-            j.EdgeB.joint = j;
-            j.EdgeB.other = j.BodyA;
-            j.EdgeB.prev = null;
-            j.EdgeB.next = j.BodyB.JointList;
+            j.EdgeB.Joint = j;
+            j.EdgeB.Other = j.BodyA;
+            j.EdgeB.Prev = null;
+            j.EdgeB.Next = j.BodyB.JointList;
             if (j.BodyB.JointList != null)
             {
-                j.BodyB.JointList.prev = j.EdgeB;
+                j.BodyB.JointList.Prev = j.EdgeB;
             }
             j.BodyB.JointList = j.EdgeB;
 
@@ -438,42 +438,42 @@ namespace Box2D.Dynamics
             bodyB.Awake = true;
 
             // Remove from body 1.
-            if (j.EdgeA.prev != null)
+            if (j.EdgeA.Prev != null)
             {
-                j.EdgeA.prev.next = j.EdgeA.next;
+                j.EdgeA.Prev.Next = j.EdgeA.Next;
             }
 
-            if (j.EdgeA.next != null)
+            if (j.EdgeA.Next != null)
             {
-                j.EdgeA.next.prev = j.EdgeA.prev;
+                j.EdgeA.Next.Prev = j.EdgeA.Prev;
             }
 
             if (j.EdgeA == bodyA.JointList)
             {
-                bodyA.JointList = j.EdgeA.next;
+                bodyA.JointList = j.EdgeA.Next;
             }
 
-            j.EdgeA.prev = null;
-            j.EdgeA.next = null;
+            j.EdgeA.Prev = null;
+            j.EdgeA.Next = null;
 
             // Remove from body 2
-            if (j.EdgeB.prev != null)
+            if (j.EdgeB.Prev != null)
             {
-                j.EdgeB.prev.next = j.EdgeB.next;
+                j.EdgeB.Prev.Next = j.EdgeB.Next;
             }
 
-            if (j.EdgeB.next != null)
+            if (j.EdgeB.Next != null)
             {
-                j.EdgeB.next.prev = j.EdgeB.prev;
+                j.EdgeB.Next.Prev = j.EdgeB.Prev;
             }
 
             if (j.EdgeB == bodyB.JointList)
             {
-                bodyB.JointList = j.EdgeB.next;
+                bodyB.JointList = j.EdgeB.Next;
             }
 
-            j.EdgeB.prev = null;
-            j.EdgeB.next = null;
+            j.EdgeB.Prev = null;
+            j.EdgeB.Next = null;
 
             Joint.Destroy(j);
 
@@ -1072,14 +1072,14 @@ namespace Box2D.Dynamics
                     }
 
                     // Search all joints connect to this body.
-                    for (JointEdge je = b.JointList; je != null; je = je.next)
+                    for (JointEdge je = b.JointList; je != null; je = je.Next)
                     {
-                        if (je.joint.IslandFlag)
+                        if (je.Joint.IslandFlag)
                         {
                             continue;
                         }
 
-                        Body other = je.other;
+                        Body other = je.Other;
 
                         // Don't simulate joints connected to inactive bodies.
                         if (other.Active == false)
@@ -1087,8 +1087,8 @@ namespace Box2D.Dynamics
                             continue;
                         }
 
-                        island.Add(je.joint);
-                        je.joint.IslandFlag = true;
+                        island.Add(je.Joint);
+                        je.Joint.IslandFlag = true;
 
                         if ((other.Flags & Body.TypeFlags.Island) == Body.TypeFlags.Island)
                         {

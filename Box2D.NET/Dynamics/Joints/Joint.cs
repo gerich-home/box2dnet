@@ -145,16 +145,16 @@ namespace Box2D.Dynamics.Joints
             Index = 0;
 
             EdgeA = new JointEdge();
-            EdgeA.joint = null;
-            EdgeA.other = null;
-            EdgeA.prev = null;
-            EdgeA.next = null;
+            EdgeA.Joint = null;
+            EdgeA.Other = null;
+            EdgeA.Prev = null;
+            EdgeA.Next = null;
 
             EdgeB = new JointEdge();
-            EdgeB.joint = null;
-            EdgeB.other = null;
-            EdgeB.prev = null;
-            EdgeB.next = null;
+            EdgeB.Joint = null;
+            EdgeB.Other = null;
+            EdgeB.Prev = null;
+            EdgeB.Next = null;
 
             //		m_localCenterA = new Vec2();
             //		m_localCenterB = new Vec2();

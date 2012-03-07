@@ -24,7 +24,6 @@
 
 namespace Box2D.Dynamics.Joints
 {
-
     //updated to rev 100 - ec
     /// <summary>
     /// A joint edge is used to connect bodies and joints together
@@ -39,21 +38,21 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Provides quick access to the other body attached
         /// </summary>
-        public Body other = null;
+        public Body Other;
 
         /// <summary>
         /// the joint
         /// </summary>
-        public Joint joint = null;
+        public Joint Joint;
 
         /// <summary>
         /// the previous joint edge in the body's joint list
         /// </summary>
-        public JointEdge prev = null;
+        public JointEdge Prev;
 
         /// <summary>
         /// the next joint edge in the body's joint list
         /// </summary>
-        public JointEdge next = null;
+        public JointEdge Next;
     }
 }
