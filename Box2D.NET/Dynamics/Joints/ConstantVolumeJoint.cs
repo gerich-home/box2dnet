@@ -82,9 +82,9 @@ namespace Box2D.Dynamics.Joints
                 for (int i = 0; i < TargetLengths.Length; ++i)
                 {
                     int next = (i == TargetLengths.Length - 1) ? 0 : i + 1;
-                    djd.frequencyHz = def.FrequencyHz; // 20.0f;
-                    djd.dampingRatio = def.DampingRatio; // 50.0f;
-                    djd.initialize(Bodies[i], Bodies[next], Bodies[i].WorldCenter, Bodies[next].WorldCenter);
+                    djd.FrequencyHz = def.FrequencyHz; // 20.0f;
+                    djd.DampingRatio = def.DampingRatio; // 50.0f;
+                    djd.Initialize(Bodies[i], Bodies[next], Bodies[i].WorldCenter, Bodies[next].WorldCenter);
                     Joints[i] = (DistanceJoint)world.CreateJoint(djd);
                 }
             }

@@ -91,12 +91,12 @@ namespace Box2D.Dynamics.Joints
         public DistanceJoint(IWorldPool argWorld, DistanceJointDef def)
             : base(argWorld, def)
         {
-            m_localAnchorA = def.localAnchorA.Clone();
-            m_localAnchorB = def.localAnchorB.Clone();
-            m_length = def.length;
+            m_localAnchorA = def.LocalAnchorA.Clone();
+            m_localAnchorB = def.LocalAnchorB.Clone();
+            m_length = def.Length;
             m_impulse = 0.0f;
-            m_frequencyHz = def.frequencyHz;
-            m_dampingRatio = def.dampingRatio;
+            m_frequencyHz = def.FrequencyHz;
+            m_dampingRatio = def.DampingRatio;
             m_gamma = 0.0f;
             m_bias = 0.0f;
         }

@@ -63,37 +63,38 @@ namespace Box2D.Dynamics.Joints
     public class DistanceJointDef : JointDef
     {
         /// <summary>
-        /// The local anchor point relative to body1's origin.</summary>
-        public readonly Vec2 localAnchorA;
+        /// The local anchor point relative to body1's origin.
+        /// </summary>
+        public readonly Vec2 LocalAnchorA;
 
         /// <summary>
         /// The local anchor point relative to body2's origin.
         /// </summary>
-        public readonly Vec2 localAnchorB;
+        public readonly Vec2 LocalAnchorB;
 
         /// <summary>
         /// The equilibrium length between the anchor points.
         /// </summary>
-        public float length;
+        public float Length;
 
         /// <summary>
         /// The mass-spring-damper frequency in Hertz.
         /// </summary>
-        public float frequencyHz;
+        public float FrequencyHz;
 
         /// <summary>
         /// The damping ratio. 0 = no damping, 1 = critical damping.
         /// </summary>
-        public float dampingRatio;
+        public float DampingRatio;
 
         public DistanceJointDef()
         {
             Type = JointType.Distance;
-            localAnchorA = new Vec2(0.0f, 0.0f);
-            localAnchorB = new Vec2(0.0f, 0.0f);
-            length = 1.0f;
-            frequencyHz = 0.0f;
-            dampingRatio = 0.0f;
+            LocalAnchorA = new Vec2(0.0f, 0.0f);
+            LocalAnchorB = new Vec2(0.0f, 0.0f);
+            Length = 1.0f;
+            FrequencyHz = 0.0f;
+            DampingRatio = 0.0f;
         }
 
         /// <summary>
@@ -103,14 +104,14 @@ namespace Box2D.Dynamics.Joints
         /// <param name="b2">Second body</param>
         /// <param name="anchor1">World anchor on first body</param>
         /// <param name="anchor2">World anchor on second body</param>
-        public void initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
+        public void Initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
         {
             BodyA = b1;
             BodyB = b2;
-            localAnchorA.Set(BodyA.GetLocalPoint(anchor1));
-            localAnchorB.Set(BodyB.GetLocalPoint(anchor2));
+            LocalAnchorA.Set(BodyA.GetLocalPoint(anchor1));
+            LocalAnchorB.Set(BodyB.GetLocalPoint(anchor2));
             Vec2 d = anchor2.Sub(anchor1);
-            length = d.Length();
+            Length = d.Length();
         }
     }
 }
