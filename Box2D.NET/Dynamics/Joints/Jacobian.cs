@@ -30,9 +30,9 @@ namespace Box2D.Dynamics.Joints
     //updated to rev 100
     public class Jacobian
     {
-        public readonly Vec2 linearA = new Vec2();
-        public float angularA;
-        public float angularB;
+        public readonly Vec2 LinearA = new Vec2();
+        public float AngularA;
+        public float AngularB;
 
         //	public void setZero(){
         //		linearA.setZero();
