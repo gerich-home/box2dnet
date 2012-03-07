@@ -30,7 +30,6 @@ using Box2D.Pooling;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class CircleContact : Contact
     {
         public CircleContact(IWorldPool argPool)
@@ -38,7 +37,7 @@ namespace Box2D.Dynamics.Contacts
         {
         }
 
-        public void init(Fixture fixtureA, Fixture fixtureB)
+        public void Init(Fixture fixtureA, Fixture fixtureB)
         {
             base.Init(fixtureA, 0, fixtureB, 0);
             Debug.Assert(FixtureA.Type == ShapeType.Circle);
