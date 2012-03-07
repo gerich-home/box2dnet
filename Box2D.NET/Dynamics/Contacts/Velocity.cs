@@ -26,10 +26,9 @@ using Box2D.Common;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class Velocity
     {
-        public readonly Vec2 v = new Vec2();
-        public float w;
+        public readonly Vec2 V = new Vec2();
+        public float W;
     }
 }

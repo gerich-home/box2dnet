@@ -204,10 +204,10 @@ namespace Box2D.Dynamics.Contacts
                 int pointCount = vc.pointCount;
 
 
-                Vec2 vA = m_velocities[indexA].v;
-                float wA = m_velocities[indexA].w;
-                Vec2 vB = m_velocities[indexB].v;
-                float wB = m_velocities[indexB].w;
+                Vec2 vA = m_velocities[indexA].V;
+                float wA = m_velocities[indexA].W;
+                Vec2 vB = m_velocities[indexB].V;
+                float wB = m_velocities[indexB].W;
 
                 Vec2 normal = vc.normal;
                 Vec2.CrossToOutUnsafe(normal, 1.0f, tangent);
@@ -227,8 +227,8 @@ namespace Box2D.Dynamics.Contacts
                     //Debug.Assert(vB.x == 0);
                     //Debug.Assert(wB == 0);
                 }
-                m_velocities[indexA].w = wA;
-                m_velocities[indexB].w = wB;
+                m_velocities[indexA].W = wA;
+                m_velocities[indexB].W = wB;
 
                 //Console.WriteLine("Ending velocity for " + indexA + " is " + vA.x + "," + vA.y + " - " + wA);
                 //Console.WriteLine("Ending velocity for " + indexB + " is " + vB.x + "," + vB.y + " - " + wB);
@@ -265,13 +265,13 @@ namespace Box2D.Dynamics.Contacts
 
                 Vec2 cA = m_positions[indexA].c;
                 float aA = m_positions[indexA].a;
-                Vec2 vA = m_velocities[indexA].v;
-                float wA = m_velocities[indexA].w;
+                Vec2 vA = m_velocities[indexA].V;
+                float wA = m_velocities[indexA].W;
 
                 Vec2 cB = m_positions[indexB].c;
                 float aB = m_positions[indexB].a;
-                Vec2 vB = m_velocities[indexB].v;
-                float wB = m_velocities[indexB].w;
+                Vec2 vB = m_velocities[indexB].V;
+                float wB = m_velocities[indexB].W;
 
                 Debug.Assert(manifold.PointCount > 0);
 
@@ -379,10 +379,10 @@ namespace Box2D.Dynamics.Contacts
                 float iB = vc.invIB;
                 int pointCount = vc.pointCount;
 
-                Vec2 vA = m_velocities[indexA].v;
-                float wA = m_velocities[indexA].w;
-                Vec2 vB = m_velocities[indexB].v;
-                float wB = m_velocities[indexB].w;
+                Vec2 vA = m_velocities[indexA].V;
+                float wA = m_velocities[indexA].W;
+                Vec2 vB = m_velocities[indexB].V;
+                float wB = m_velocities[indexB].W;
                 //Debug.Assert(wA == 0);
                 //Debug.Assert(wB == 0);
 
@@ -809,10 +809,10 @@ namespace Box2D.Dynamics.Contacts
                     }
                 }
 
-                m_velocities[indexA].v.Set(vA);
-                m_velocities[indexA].w = wA;
-                m_velocities[indexB].v.Set(vB);
-                m_velocities[indexB].w = wB;
+                m_velocities[indexA].V.Set(vA);
+                m_velocities[indexA].W = wA;
+                m_velocities[indexB].V.Set(vB);
+                m_velocities[indexB].W = wB;
 
                 //Console.WriteLine("Ending velocity for " + indexA + " is " + vA.x + "," + vA.y + " rot " + wA);
                 //Console.WriteLine("Ending velocity for " + indexB + " is " + vB.x + "," + vB.y + " rot " + wB);

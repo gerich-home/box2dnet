@@ -279,8 +279,8 @@ namespace Box2D.Dynamics
 
 				Positions[i].c.Set(c);
 				Positions[i].a = a;
-				Velocities[i].v.Set(v);
-				Velocities[i].w = w;
+				Velocities[i].V.Set(v);
+				Velocities[i].W = w;
 			}
 
 			timer.Reset();
@@ -336,8 +336,8 @@ namespace Box2D.Dynamics
 			{
 				Vec2 c = Positions[i].c;
 				float a = Positions[i].a;
-				Vec2 v = Velocities[i].v;
-				float w = Velocities[i].w;
+				Vec2 v = Velocities[i].V;
+				float w = Velocities[i].W;
 
 				// Check for large velocities
 				translation.X = v.X * h;
@@ -363,7 +363,7 @@ namespace Box2D.Dynamics
 				a += h * w;
 
 				Positions[i].a = a;
-				Velocities[i].w = w;
+				Velocities[i].W = w;
 			}
 
 			// Solve position constraints
@@ -394,8 +394,8 @@ namespace Box2D.Dynamics
 				Body body = Bodies[i];
 				body.Sweep.C.Set(Positions[i].c);
 				body.Sweep.A = Positions[i].a;
-                body.LinearVelocity.Set(Velocities[i].v);
-				body.AngularVelocity = Velocities[i].w;
+                body.LinearVelocity.Set(Velocities[i].V);
+				body.AngularVelocity = Velocities[i].W;
 				body.SynchronizeTransform();
 			}
 
@@ -455,8 +455,8 @@ namespace Box2D.Dynamics
 				Body b = Bodies[i];
 				Positions[i].c.Set(b.Sweep.C);
 				Positions[i].a = b.Sweep.A;
-                Velocities[i].v.Set(b.LinearVelocity);
-                Velocities[i].w = b.AngularVelocity;
+                Velocities[i].V.Set(b.LinearVelocity);
+                Velocities[i].W = b.AngularVelocity;
 			}
 
 			toiSolverDef.contacts = Contacts;
@@ -535,8 +535,8 @@ namespace Box2D.Dynamics
 			{
 				Vec2 c = Positions[i].c;
 				float a = Positions[i].a;
-				Vec2 v = Velocities[i].v;
-				float w = Velocities[i].w;
+				Vec2 v = Velocities[i].V;
+				float w = Velocities[i].W;
 
 				// Check for large velocities
 				translation.Set(v).MulLocal(h);
@@ -560,8 +560,8 @@ namespace Box2D.Dynamics
 
 				Positions[i].c.Set(c);
 				Positions[i].a = a;
-				Velocities[i].v.Set(v);
-				Velocities[i].w = w;
+				Velocities[i].V.Set(v);
+				Velocities[i].W = w;
 
 				// Sync bodies
 				Body body = Bodies[i];

@@ -114,13 +114,13 @@ namespace Box2D.Dynamics.Joints
 
             // Vec2 cA = data.positions[m_indexA].c;
             float aA = data.Positions[m_indexA].a;
-            Vec2 vA = data.Velocities[m_indexA].v;
-            float wA = data.Velocities[m_indexA].w;
+            Vec2 vA = data.Velocities[m_indexA].V;
+            float wA = data.Velocities[m_indexA].W;
 
             // Vec2 cB = data.positions[m_indexB].c;
             float aB = data.Positions[m_indexB].a;
-            Vec2 vB = data.Velocities[m_indexB].v;
-            float wB = data.Velocities[m_indexB].w;
+            Vec2 vB = data.Velocities[m_indexB].V;
+            float wB = data.Velocities[m_indexB].W;
 
             Rot qA = pool.PopRot();
             Rot qB = pool.PopRot();
@@ -228,10 +228,10 @@ namespace Box2D.Dynamics.Joints
                 m_motorImpulse = 0.0f;
             }
 
-            data.Velocities[m_indexA].v.Set(vA);
-            data.Velocities[m_indexA].w = wA;
-            data.Velocities[m_indexB].v.Set(vB);
-            data.Velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].V.Set(vA);
+            data.Velocities[m_indexA].W = wA;
+            data.Velocities[m_indexB].V.Set(vB);
+            data.Velocities[m_indexB].W = wB;
 
 
             pool.PushVec2(1);
@@ -240,10 +240,10 @@ namespace Box2D.Dynamics.Joints
 
         public override void solveVelocityConstraints(SolverData data)
         {
-            Vec2 vA = data.Velocities[m_indexA].v;
-            float wA = data.Velocities[m_indexA].w;
-            Vec2 vB = data.Velocities[m_indexB].v;
-            float wB = data.Velocities[m_indexB].w;
+            Vec2 vA = data.Velocities[m_indexA].V;
+            float wA = data.Velocities[m_indexA].W;
+            Vec2 vB = data.Velocities[m_indexB].V;
+            float wB = data.Velocities[m_indexB].W;
 
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
@@ -370,10 +370,10 @@ namespace Box2D.Dynamics.Joints
                 pool.PushVec2(2);
             }
 
-            data.Velocities[m_indexA].v.Set(vA);
-            data.Velocities[m_indexA].w = wA;
-            data.Velocities[m_indexB].v.Set(vB);
-            data.Velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].V.Set(vA);
+            data.Velocities[m_indexA].W = wA;
+            data.Velocities[m_indexB].V.Set(vB);
+            data.Velocities[m_indexB].W = wB;
 
             pool.PushVec2(1);
         }

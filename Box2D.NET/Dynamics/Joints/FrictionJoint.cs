@@ -146,12 +146,12 @@ namespace Box2D.Dynamics.Joints
             m_invIB = m_bodyB.InvI;
 
             float aA = data.Positions[m_indexA].a;
-            Vec2 vA = data.Velocities[m_indexA].v;
-            float wA = data.Velocities[m_indexA].w;
+            Vec2 vA = data.Velocities[m_indexA].V;
+            float wA = data.Velocities[m_indexA].W;
 
             float aB = data.Positions[m_indexB].a;
-            Vec2 vB = data.Velocities[m_indexB].v;
-            float wB = data.Velocities[m_indexB].w;
+            Vec2 vB = data.Velocities[m_indexB].V;
+            float wB = data.Velocities[m_indexB].W;
 
 
             Vec2 temp = pool.PopVec2();
@@ -215,14 +215,14 @@ namespace Box2D.Dynamics.Joints
                 m_linearImpulse.SetZero();
                 m_angularImpulse = 0.0f;
             }
-            data.Velocities[m_indexA].v.Set(vA);
-            if (data.Velocities[m_indexA].w != wA)
+            data.Velocities[m_indexA].V.Set(vA);
+            if (data.Velocities[m_indexA].W != wA)
             {
-                Debug.Assert(data.Velocities[m_indexA].w != wA);
+                Debug.Assert(data.Velocities[m_indexA].W != wA);
             }
-            data.Velocities[m_indexA].w = wA;
-            data.Velocities[m_indexB].v.Set(vB);
-            data.Velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].W = wA;
+            data.Velocities[m_indexB].V.Set(vB);
+            data.Velocities[m_indexB].W = wB;
 
             pool.PushRot(2);
             pool.PushVec2(1);
@@ -231,10 +231,10 @@ namespace Box2D.Dynamics.Joints
 
         public override void solveVelocityConstraints(SolverData data)
         {
-            Vec2 vA = data.Velocities[m_indexA].v;
-            float wA = data.Velocities[m_indexA].w;
-            Vec2 vB = data.Velocities[m_indexB].v;
-            float wB = data.Velocities[m_indexB].w;
+            Vec2 vA = data.Velocities[m_indexA].V;
+            float wA = data.Velocities[m_indexA].W;
+            Vec2 vB = data.Velocities[m_indexB].V;
+            float wB = data.Velocities[m_indexB].W;
 
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
@@ -292,14 +292,14 @@ namespace Box2D.Dynamics.Joints
                 wB += iB * Vec2.Cross(m_rB, impulse);
             }
 
-            data.Velocities[m_indexA].v.Set(vA);
-            if (data.Velocities[m_indexA].w != wA)
+            data.Velocities[m_indexA].V.Set(vA);
+            if (data.Velocities[m_indexA].W != wA)
             {
-                Debug.Assert(data.Velocities[m_indexA].w != wA);
+                Debug.Assert(data.Velocities[m_indexA].W != wA);
             }
-            data.Velocities[m_indexA].w = wA;
-            data.Velocities[m_indexB].v.Set(vB);
-            data.Velocities[m_indexB].w = wB;
+            data.Velocities[m_indexA].W = wA;
+            data.Velocities[m_indexB].V.Set(vB);
+            data.Velocities[m_indexB].W = wB;
 
             pool.PushVec2(4);
         }
