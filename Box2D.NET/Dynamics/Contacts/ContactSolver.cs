@@ -138,20 +138,20 @@ namespace Box2D.Dynamics.Contacts
                 vc.NormalMass.SetZero();
 
                 ContactPositionConstraint pc = PositionConstraints[i];
-                pc.indexA = bodyA.IslandIndex;
-                pc.indexB = bodyB.IslandIndex;
-                pc.invMassA = bodyA.InvMass;
-                pc.invMassB = bodyB.InvMass;
-                pc.localCenterA.Set(bodyA.Sweep.LocalCenter);
-                pc.localCenterB.Set(bodyB.Sweep.LocalCenter);
-                pc.invIA = bodyA.InvI;
-                pc.invIB = bodyB.InvI;
-                pc.localNormal.Set(manifold.LocalNormal);
-                pc.localPoint.Set(manifold.LocalPoint);
-                pc.pointCount = pointCount;
-                pc.radiusA = radiusA;
-                pc.radiusB = radiusB;
-                pc.type = manifold.Type;
+                pc.IndexA = bodyA.IslandIndex;
+                pc.IndexB = bodyB.IslandIndex;
+                pc.InvMassA = bodyA.InvMass;
+                pc.InvMassB = bodyB.InvMass;
+                pc.LocalCenterA.Set(bodyA.Sweep.LocalCenter);
+                pc.LocalCenterB.Set(bodyB.Sweep.LocalCenter);
+                pc.InvIA = bodyA.InvI;
+                pc.InvIB = bodyB.InvI;
+                pc.LocalNormal.Set(manifold.LocalNormal);
+                pc.LocalPoint.Set(manifold.LocalPoint);
+                pc.PointCount = pointCount;
+                pc.RadiusA = radiusA;
+                pc.RadiusB = radiusB;
+                pc.Type = manifold.Type;
 
                 //Console.WriteLine("contact point count: " + pointCount);
                 for (int j = 0; j < pointCount; j++)
@@ -178,7 +178,7 @@ namespace Box2D.Dynamics.Contacts
                     vcp.TangentMass = 0;
                     vcp.VelocityBias = 0;
 
-                    pc.localPoints[j].Set(cp.LocalPoint);
+                    pc.LocalPoints[j].Set(cp.LocalPoint);
                 }
             }
         }
@@ -248,8 +248,8 @@ namespace Box2D.Dynamics.Contacts
                 ContactVelocityConstraint vc = VelocityConstraints[i];
                 ContactPositionConstraint pc = PositionConstraints[i];
 
-                float radiusA = pc.radiusA;
-                float radiusB = pc.radiusB;
+                float radiusA = pc.RadiusA;
+                float radiusB = pc.RadiusB;
                 Manifold manifold = Contacts[vc.ContactIndex].Manifold;
 
                 int indexA = vc.IndexA;
@@ -259,8 +259,8 @@ namespace Box2D.Dynamics.Contacts
                 float mB = vc.InvMassB;
                 float iA = vc.InvIA;
                 float iB = vc.InvIB;
-                Vec2 localCenterA = pc.localCenterA;
-                Vec2 localCenterB = pc.localCenterB;
+                Vec2 localCenterA = pc.LocalCenterA;
+                Vec2 localCenterB = pc.LocalCenterB;
 
                 Vec2 cA = Positions[indexA].C;
                 float aA = Positions[indexA].A;
@@ -889,16 +889,16 @@ namespace Box2D.Dynamics.Contacts
             {
                 ContactPositionConstraint pc = PositionConstraints[i];
 
-                int indexA = pc.indexA;
-                int indexB = pc.indexB;
+                int indexA = pc.IndexA;
+                int indexB = pc.IndexB;
 
-                float mA = pc.invMassA;
-                float iA = pc.invIA;
-                Vec2 localCenterA = pc.localCenterA;
-                float mB = pc.invMassB;
-                float iB = pc.invIB;
-                Vec2 localCenterB = pc.localCenterB;
-                int pointCount = pc.pointCount;
+                float mA = pc.InvMassA;
+                float iA = pc.InvIA;
+                Vec2 localCenterA = pc.LocalCenterA;
+                float mB = pc.InvMassB;
+                float iB = pc.InvIB;
+                Vec2 localCenterB = pc.LocalCenterB;
+                int pointCount = pc.PointCount;
 
                 Vec2 cA = Positions[indexA].C;
                 float aA = Positions[indexA].A;
@@ -974,26 +974,26 @@ namespace Box2D.Dynamics.Contacts
             {
                 ContactPositionConstraint pc = PositionConstraints[i];
 
-                int indexA = pc.indexA;
-                int indexB = pc.indexB;
-                Vec2 localCenterA = pc.localCenterA;
-                Vec2 localCenterB = pc.localCenterB;
-                int pointCount = pc.pointCount;
+                int indexA = pc.IndexA;
+                int indexB = pc.IndexB;
+                Vec2 localCenterA = pc.LocalCenterA;
+                Vec2 localCenterB = pc.LocalCenterB;
+                int pointCount = pc.PointCount;
 
                 float mA = 0.0f;
                 float iA = 0.0f;
                 if (indexA == toiIndexA || indexA == toiIndexB)
                 {
-                    mA = pc.invMassA;
-                    iA = pc.invIA;
+                    mA = pc.InvMassA;
+                    iA = pc.InvIA;
                 }
 
-                float mB = pc.invMassB;
-                float iB = pc.invIB;
+                float mB = pc.InvMassB;
+                float iB = pc.InvIB;
                 if (indexB == toiIndexA || indexB == toiIndexB)
                 {
-                    mB = pc.invMassB;
-                    iB = pc.invIB;
+                    mB = pc.InvMassB;
+                    iB = pc.InvIB;
                 }
 
                 Vec2 cA = Positions[indexA].C;
@@ -1083,33 +1083,33 @@ namespace Box2D.Dynamics.Contacts
 
         public void Initialize(ContactPositionConstraint pc, Transform xfA, Transform xfB, int index)
         {
-            Debug.Assert(pc.pointCount > 0);
+            Debug.Assert(pc.PointCount > 0);
 
-            switch (pc.type)
+            switch (pc.Type)
             {
 
                 case Manifold.ManifoldType.Circles:
                     {
-                        Transform.MulToOutUnsafe(xfA, pc.localPoint, pointA);
-                        Transform.MulToOutUnsafe(xfB, pc.localPoints[0], pointB);
+                        Transform.MulToOutUnsafe(xfA, pc.LocalPoint, pointA);
+                        Transform.MulToOutUnsafe(xfB, pc.LocalPoints[0], pointB);
                         Normal.Set(pointB).SubLocal(pointA);
                         Normal.Normalize();
 
                         Point.Set(pointA).AddLocal(pointB).MulLocal(.5f);
                         temp.Set(pointB).SubLocal(pointA);
-                        Separation = Vec2.Dot(temp, Normal) - pc.radiusA - pc.radiusB;
+                        Separation = Vec2.Dot(temp, Normal) - pc.RadiusA - pc.RadiusB;
                         break;
                     }
 
 
                 case Manifold.ManifoldType.FaceA:
                     {
-                        Rot.MulToOutUnsafe(xfA.Q, pc.localNormal, Normal);
-                        Transform.MulToOutUnsafe(xfA, pc.localPoint, planePoint);
+                        Rot.MulToOutUnsafe(xfA.Q, pc.LocalNormal, Normal);
+                        Transform.MulToOutUnsafe(xfA, pc.LocalPoint, planePoint);
 
-                        Transform.MulToOutUnsafe(xfB, pc.localPoints[index], clipPoint);
+                        Transform.MulToOutUnsafe(xfB, pc.LocalPoints[index], clipPoint);
                         temp.Set(clipPoint).SubLocal(planePoint);
-                        Separation = Vec2.Dot(temp, Normal) - pc.radiusA - pc.radiusB;
+                        Separation = Vec2.Dot(temp, Normal) - pc.RadiusA - pc.RadiusB;
                         Point.Set(clipPoint);
                         break;
                     }
@@ -1117,12 +1117,12 @@ namespace Box2D.Dynamics.Contacts
 
                 case Manifold.ManifoldType.FaceB:
                     {
-                        Rot.MulToOutUnsafe(xfB.Q, pc.localNormal, Normal);
-                        Transform.MulToOutUnsafe(xfB, pc.localPoint, planePoint);
+                        Rot.MulToOutUnsafe(xfB.Q, pc.LocalNormal, Normal);
+                        Transform.MulToOutUnsafe(xfB, pc.LocalPoint, planePoint);
 
-                        Transform.MulToOutUnsafe(xfA, pc.localPoints[index], clipPoint);
+                        Transform.MulToOutUnsafe(xfA, pc.LocalPoints[index], clipPoint);
                         temp.Set(clipPoint).SubLocal(planePoint);
-                        Separation = Vec2.Dot(temp, Normal) - pc.radiusA - pc.radiusB;
+                        Separation = Vec2.Dot(temp, Normal) - pc.RadiusA - pc.RadiusB;
                         Point.Set(clipPoint);
 
                         // Ensure normal points from A to B

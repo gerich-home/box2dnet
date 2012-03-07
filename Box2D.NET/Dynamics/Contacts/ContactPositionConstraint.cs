@@ -27,27 +27,29 @@ using Box2D.Common;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class ContactPositionConstraint
     {
-        internal Vec2[] localPoints = new Vec2[Settings.MAX_MANIFOLD_POINTS];
-        internal readonly Vec2 localNormal = new Vec2();
-        internal readonly Vec2 localPoint = new Vec2();
-        internal int indexA;
-        internal int indexB;
-        internal float invMassA, invMassB;
-        internal readonly Vec2 localCenterA = new Vec2();
-        internal readonly Vec2 localCenterB = new Vec2();
-        internal float invIA, invIB;
-        internal Manifold.ManifoldType type;
-        internal float radiusA, radiusB;
-        internal int pointCount;
+        internal Vec2[] LocalPoints = new Vec2[Settings.MAX_MANIFOLD_POINTS];
+        internal readonly Vec2 LocalNormal = new Vec2();
+        internal readonly Vec2 LocalPoint = new Vec2();
+        internal int IndexA;
+        internal int IndexB;
+        internal float InvMassA;
+        internal float InvMassB;
+        internal readonly Vec2 LocalCenterA = new Vec2();
+        internal readonly Vec2 LocalCenterB = new Vec2();
+        internal float InvIA;
+        internal float InvIB;
+        internal Manifold.ManifoldType Type;
+        internal float RadiusA;
+        internal float RadiusB;
+        internal int PointCount;
 
         public ContactPositionConstraint()
         {
-            for (int i = 0; i < localPoints.Length; i++)
+            for (int i = 0; i < LocalPoints.Length; i++)
             {
-                localPoints[i] = new Vec2();
+                LocalPoints[i] = new Vec2();
             }
         }
     }
