@@ -62,14 +62,14 @@ namespace Box2D.Dynamics.Joints
         public FrictionJoint(IWorldPool argWorldPool, FrictionJointDef def)
             : base(argWorldPool, def)
         {
-            m_localAnchorA = new Vec2(def.localAnchorA);
-            m_localAnchorB = new Vec2(def.localAnchorB);
+            m_localAnchorA = new Vec2(def.LocalAnchorA);
+            m_localAnchorB = new Vec2(def.LocalAnchorB);
 
             m_linearImpulse = new Vec2();
             m_angularImpulse = 0.0f;
 
-            m_maxForce = def.maxForce;
-            m_maxTorque = def.maxTorque;
+            m_maxForce = def.MaxForce;
+            m_maxTorque = def.MaxTorque;
         }
 
         public Vec2 LocalAnchorA

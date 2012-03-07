@@ -38,41 +38,41 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The local anchor point relative to bodyA's origin.
         /// </summary>
-        public readonly Vec2 localAnchorA;
+        public readonly Vec2 LocalAnchorA;
 
         /// <summary>
         /// The local anchor point relative to bodyB's origin.
         /// </summary>
-        public readonly Vec2 localAnchorB;
+        public readonly Vec2 LocalAnchorB;
 
         /// <summary>
         /// The maximum friction force in N.
         /// </summary>
-        public float maxForce;
+        public float MaxForce;
 
         /// <summary>
         /// The maximum friction torque in N-m.
         /// </summary>
-        public float maxTorque;
+        public float MaxTorque;
 
         public FrictionJointDef()
         {
             Type = JointType.Friction;
-            localAnchorA = new Vec2();
-            localAnchorB = new Vec2();
-            maxForce = 0f;
-            maxTorque = 0f;
+            LocalAnchorA = new Vec2();
+            LocalAnchorB = new Vec2();
+            MaxForce = 0f;
+            MaxTorque = 0f;
         }
 
         /// <summary>
         /// Initialize the bodies, anchors, axis, and reference angle using the world anchor and world axis.
         /// </summary>
-        public void initialize(Body bA, Body bB, Vec2 anchor)
+        public void Initialize(Body bA, Body bB, Vec2 anchor)
         {
             BodyA = bA;
             BodyB = bB;
-            bA.GetLocalPointToOut(anchor, localAnchorA);
-            bB.GetLocalPointToOut(anchor, localAnchorB);
+            bA.GetLocalPointToOut(anchor, LocalAnchorA);
+            bB.GetLocalPointToOut(anchor, LocalAnchorB);
         }
     }
 }
