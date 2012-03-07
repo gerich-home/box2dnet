@@ -49,7 +49,7 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// Gets or sets the damping ratio (dimensionless).
         /// </summary>
-        public float DampingRatio
+        public float DampingRatio;
 
         private float m_beta;
 
