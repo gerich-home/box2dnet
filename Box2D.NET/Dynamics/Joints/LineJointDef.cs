@@ -34,67 +34,67 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The local anchor point relative to body1's origin.
         /// </summary>
-        public readonly Vec2 localAnchorA = new Vec2();
+        public readonly Vec2 LocalAnchorA = new Vec2();
 
         /// <summary>
         /// The local anchor point relative to body2's origin.
         /// </summary>
-        public readonly Vec2 localAnchorB = new Vec2();
+        public readonly Vec2 LocalAnchorB = new Vec2();
 
         /// <summary>
         /// The local translation axis in body1.
         /// </summary>
-        public readonly Vec2 localAxisA = new Vec2();
+        public readonly Vec2 LocalAxisA = new Vec2();
 
         /// <summary>
         /// Enable/disable the joint limit.
         /// </summary>
-        public bool enableLimit;
+        public bool EnableLimit;
 
         /// <summary>
         /// The lower translation limit, usually in meters.
         /// </summary>
-        public float lowerTranslation;
+        public float LowerTranslation;
 
         /// <summary>
         /// The upper translation limit, usually in meters.
         /// </summary>
-        public float upperTranslation;
+        public float UpperTranslation;
 
         /// <summary>
         /// Enable/disable the joint motor.
         /// </summary>
-        public bool enableMotor;
+        public bool EnableMotor;
 
         /// <summary>
         /// The maximum motor torque, usually in N-m.
         /// </summary>
-        public float maxMotorForce;
+        public float MaxMotorForce;
 
         /// <summary>
         /// The desired motor speed in radians per second.
         /// </summary>
-        public float motorSpeed;
+        public float MotorSpeed;
 
         public LineJointDef()
         {
             Type = JointType.Wheel;
-            localAxisA.Set(1, 0);
-            enableLimit = false;
-            lowerTranslation = 0;
-            upperTranslation = 0;
-            enableMotor = false;
-            maxMotorForce = 0f;
-            motorSpeed = 0f;
+            LocalAxisA.Set(1, 0);
+            EnableLimit = false;
+            LowerTranslation = 0;
+            UpperTranslation = 0;
+            EnableMotor = false;
+            MaxMotorForce = 0f;
+            MotorSpeed = 0f;
         }
 
-        public void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
+        public void Initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
         {
             BodyA = b1;
             BodyB = b2;
-            b1.GetLocalPointToOut(anchor, localAnchorA);
-            b2.GetLocalPointToOut(anchor, localAnchorB);
-            BodyA.GetLocalVectorToOut(axis, localAxisA);
+            b1.GetLocalPointToOut(anchor, LocalAnchorA);
+            b2.GetLocalPointToOut(anchor, LocalAnchorB);
+            BodyA.GetLocalVectorToOut(axis, LocalAxisA);
         }
     }
 }
