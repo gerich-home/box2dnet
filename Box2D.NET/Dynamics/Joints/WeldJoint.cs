@@ -51,13 +51,13 @@ namespace Box2D.Dynamics.Joints
     /// <author>Daniel Murphy</author>
     public class WeldJoint : Joint
     {
-        private float m_frequencyHz;
-        private float m_dampingRatio;
+        public float Frequency;
+        public float DampingRatio;
         private float m_bias;
 
         // Solver shared
-        private readonly Vec2 m_localAnchorA;
-        private readonly Vec2 m_localAnchorB;
+        public readonly Vec2 LocalAnchorA;
+        public readonly Vec2 LocalAnchorB;
         private float m_referenceAngle;
         private float m_gamma;
         private readonly Vec3 m_impulse;
@@ -81,11 +81,11 @@ namespace Box2D.Dynamics.Joints
         protected internal WeldJoint(IWorldPool argWorld, WeldJointDef def)
             : base(argWorld, def)
         {
-            m_localAnchorA = new Vec2(def.LocalAnchorA);
-            m_localAnchorB = new Vec2(def.LocalAnchorB);
+            LocalAnchorA = new Vec2(def.LocalAnchorA);
+            LocalAnchorB = new Vec2(def.LocalAnchorB);
             m_referenceAngle = def.ReferenceAngle;
-            m_frequencyHz = def.FrequencyHz;
-            m_dampingRatio = def.DampingRatio;
+            Frequency = def.FrequencyHz;
+            DampingRatio = def.DampingRatio;
 
             m_impulse = new Vec3();
             m_impulse.SetZero();
@@ -93,12 +93,12 @@ namespace Box2D.Dynamics.Joints
 
         public override void GetAnchorA(Vec2 argOut)
         {
-            BodyA.GetWorldPointToOut(m_localAnchorA, argOut);
+            BodyA.GetWorldPointToOut(LocalAnchorA, argOut);
         }
 
         public override void GetAnchorB(Vec2 argOut)
         {
-            BodyB.GetWorldPointToOut(m_localAnchorB, argOut);
+            BodyB.GetWorldPointToOut(LocalAnchorB, argOut);
         }
 
         /// <seealso cref="Joint.GetReactionForce(float, Vec2)"></seealso>
@@ -112,46 +112,6 @@ namespace Box2D.Dynamics.Joints
         public override float GetReactionTorque(float inv_dt)
         {
             return inv_dt * m_impulse.Z;
-        }
-
-        public Vec2 LocalAnchorA
-        {
-            get
-            {
-                return m_localAnchorA;
-            }
-        }
-
-        public Vec2 LocalAnchorB
-        {
-            get
-            {
-                return m_localAnchorB;
-            }
-        }
-
-        public float Frequency
-        {
-            get
-            {
-                return m_frequencyHz;
-            }
-            set
-            {
-                this.m_frequencyHz = value;
-            }
-        }
-
-        public float DampingRatio
-        {
-            get
-            {
-                return m_dampingRatio;
-            }
-            set
-            {
-                this.m_dampingRatio = value;
-            }
         }
 
         /// <seealso cref="Joint.initVelocityConstraints(TimeStep)"></seealso>
@@ -184,8 +144,8 @@ namespace Box2D.Dynamics.Joints
             qB.Set(aB);
 
             // Compute the effective masses.
-            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
-            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(LocalAnchorA).SubLocal(m_localCenterA), m_rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(LocalAnchorB).SubLocal(m_localCenterB), m_rB);
 
             // J = [-I -r1_skew I r2_skew]
             // [ 0 -1 0 1]
@@ -211,7 +171,7 @@ namespace Box2D.Dynamics.Joints
             K.Ey.Z = K.Ez.Y;
             K.Ez.Z = iA + iB;
 
-            if (m_frequencyHz > 0.0f)
+            if (Frequency > 0.0f)
             {
                 K.GetInverse22(m_mass);
 
@@ -221,10 +181,10 @@ namespace Box2D.Dynamics.Joints
                 float C = aB - aA - m_referenceAngle;
 
                 // Frequency
-                float omega = 2.0f * MathUtils.PI * m_frequencyHz;
+                float omega = 2.0f * MathUtils.PI * Frequency;
 
                 // Damping coefficient
-                float d = 2.0f * m * m_dampingRatio * omega;
+                float d = 2.0f * m * DampingRatio * omega;
 
                 // Spring stiffness
                 float k = m * omega * omega;
@@ -292,7 +252,7 @@ namespace Box2D.Dynamics.Joints
             Vec2 P = Pool.PopVec2();
             Vec2 temp = Pool.PopVec2();
 
-            if (m_frequencyHz > 0.0f)
+            if (Frequency > 0.0f)
             {
                 float Cdot2 = wB - wA;
 
@@ -376,8 +336,8 @@ namespace Box2D.Dynamics.Joints
             float mA = m_invMassA, mB = m_invMassB;
             float iA = m_invIA, iB = m_invIB;
 
-            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(LocalAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(LocalAnchorB).SubLocal(m_localCenterB), rB);
             float positionError, angularError;
 
             Mat33 K = Pool.PopMat33();
@@ -394,7 +354,7 @@ namespace Box2D.Dynamics.Joints
             K.Ey.Z = K.Ez.Y;
             K.Ez.Z = iA + iB;
 
-            if (m_frequencyHz > 0.0f)
+            if (Frequency > 0.0f)
             {
                 C1.Set(cB).AddLocal(rB).SubLocal(cA).SubLocal(rA);
 
