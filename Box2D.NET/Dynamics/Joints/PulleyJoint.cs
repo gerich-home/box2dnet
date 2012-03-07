@@ -43,31 +43,31 @@ namespace Box2D.Dynamics.Joints
     {
         public const float MIN_PULLEY_LENGTH = 2.0f;
 
-        public readonly Vec2 m_groundAnchorA = new Vec2();
-        public readonly Vec2 m_groundAnchorB = new Vec2();
+        private readonly Vec2 m_groundAnchorA = new Vec2();
+        private readonly Vec2 m_groundAnchorB = new Vec2();
         private float m_lengthA;
         private float m_LengthB;
 
         // Solver shared
-        public readonly Vec2 m_localAnchorA = new Vec2();
-        public readonly Vec2 m_localAnchorB = new Vec2();
+        public readonly Vec2 LocalAnchorA = new Vec2();
+        public readonly Vec2 LocalAnchorB = new Vec2();
         private float m_constant;
         private float m_ratio;
         private float m_impulse;
 
         // Solver temp
-        public int m_indexA;
-        public int m_indexB;
+        public int IndexA;
+        public int IndexB;
         private readonly Vec2 m_uA = new Vec2();
         private readonly Vec2 m_uB = new Vec2();
-        public readonly Vec2 m_rA = new Vec2();
-        public readonly Vec2 m_rB = new Vec2();
+        public readonly Vec2 RA = new Vec2();
+        public readonly Vec2 RB = new Vec2();
         private readonly Vec2 m_localCenterA = new Vec2();
         private readonly Vec2 m_localCenterB = new Vec2();
-        public float m_invMassA;
-        public float m_invMassB;
-        public float m_invIA;
-        public float m_invIB;
+        public float InvMassA;
+        public float InvMassB;
+        public float InvIA;
+        public float InvIB;
         private float m_mass;
 
         /// <param name="argWorldPool"></param>
@@ -77,8 +77,8 @@ namespace Box2D.Dynamics.Joints
         {
             m_groundAnchorA.Set(def.GroundAnchorA);
             m_groundAnchorB.Set(def.GroundAnchorB);
-            m_localAnchorA.Set(def.LocalAnchorA);
-            m_localAnchorB.Set(def.LocalAnchorB);
+            LocalAnchorA.Set(def.LocalAnchorA);
+            LocalAnchorB.Set(def.LocalAnchorB);
 
             Debug.Assert(def.Ratio != 0.0f);
             m_ratio = def.Ratio;
@@ -112,7 +112,7 @@ namespace Box2D.Dynamics.Joints
             get
             {
                 Vec2 p = Pool.PopVec2();
-                BodyA.GetWorldPointToOut(m_localAnchorA, p);
+                BodyA.GetWorldPointToOut(LocalAnchorA, p);
                 p.SubLocal(m_groundAnchorA);
                 float length = p.Length();
                 Pool.PushVec2(1);
@@ -125,7 +125,7 @@ namespace Box2D.Dynamics.Joints
             get
             {
                 Vec2 p = Pool.PopVec2();
-                BodyB.GetWorldPointToOut(m_localAnchorB, p);
+                BodyB.GetWorldPointToOut(LocalAnchorB, p);
                 p.SubLocal(m_groundAnchorB);
                 float length = p.Length();
                 Pool.PushVec2(1);
@@ -135,12 +135,12 @@ namespace Box2D.Dynamics.Joints
 
         public override void GetAnchorA(Vec2 argOut)
         {
-            BodyA.GetWorldPointToOut(m_localAnchorA, argOut);
+            BodyA.GetWorldPointToOut(LocalAnchorA, argOut);
         }
 
         public override void GetAnchorB(Vec2 argOut)
         {
-            BodyB.GetWorldPointToOut(m_localAnchorB, argOut);
+            BodyB.GetWorldPointToOut(LocalAnchorB, argOut);
         }
 
         public override void GetReactionForce(float inv_dt, Vec2 argOut)
@@ -174,7 +174,7 @@ namespace Box2D.Dynamics.Joints
             get
             {
                 Vec2 p = Pool.PopVec2();
-                BodyA.GetWorldPointToOut(m_localAnchorA, p);
+                BodyA.GetWorldPointToOut(LocalAnchorA, p);
                 p.SubLocal(m_groundAnchorA);
 
                 float len = p.Length();
@@ -188,7 +188,7 @@ namespace Box2D.Dynamics.Joints
             get
             {
                 Vec2 p = Pool.PopVec2();
-                BodyB.GetWorldPointToOut(m_localAnchorB, p);
+                BodyB.GetWorldPointToOut(LocalAnchorB, p);
                 p.SubLocal(m_groundAnchorB);
 
                 float len = p.Length();
@@ -207,24 +207,24 @@ namespace Box2D.Dynamics.Joints
 
         public override void InitVelocityConstraints(SolverData data)
         {
-            m_indexA = BodyA.IslandIndex;
-            m_indexB = BodyB.IslandIndex;
+            IndexA = BodyA.IslandIndex;
+            IndexB = BodyB.IslandIndex;
             m_localCenterA.Set(BodyA.Sweep.LocalCenter);
             m_localCenterB.Set(BodyB.Sweep.LocalCenter);
-            m_invMassA = BodyA.InvMass;
-            m_invMassB = BodyB.InvMass;
-            m_invIA = BodyA.InvI;
-            m_invIB = BodyB.InvI;
+            InvMassA = BodyA.InvMass;
+            InvMassB = BodyB.InvMass;
+            InvIA = BodyA.InvI;
+            InvIB = BodyB.InvI;
 
-            Vec2 cA = data.Positions[m_indexA].C;
-            float aA = data.Positions[m_indexA].A;
-            Vec2 vA = data.Velocities[m_indexA].V;
-            float wA = data.Velocities[m_indexA].W;
+            Vec2 cA = data.Positions[IndexA].C;
+            float aA = data.Positions[IndexA].A;
+            Vec2 vA = data.Velocities[IndexA].V;
+            float wA = data.Velocities[IndexA].W;
 
-            Vec2 cB = data.Positions[m_indexB].C;
-            float aB = data.Positions[m_indexB].A;
-            Vec2 vB = data.Velocities[m_indexB].V;
-            float wB = data.Velocities[m_indexB].W;
+            Vec2 cB = data.Positions[IndexB].C;
+            float aB = data.Positions[IndexB].A;
+            Vec2 vB = data.Velocities[IndexB].V;
+            float wB = data.Velocities[IndexB].W;
 
             Rot qA = Pool.PopRot();
             Rot qB = Pool.PopRot();
@@ -234,11 +234,11 @@ namespace Box2D.Dynamics.Joints
             qB.Set(aB);
 
             // Compute the effective masses.
-            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), m_rA);
-            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(LocalAnchorA).SubLocal(m_localCenterA), RA);
+            Rot.MulToOutUnsafe(qB, temp.Set(LocalAnchorB).SubLocal(m_localCenterB), RB);
 
-            m_uA.Set(cA).AddLocal(m_rA).SubLocal(m_groundAnchorA);
-            m_uB.Set(cB).AddLocal(m_rB).SubLocal(m_groundAnchorB);
+            m_uA.Set(cA).AddLocal(RA).SubLocal(m_groundAnchorA);
+            m_uB.Set(cB).AddLocal(RB).SubLocal(m_groundAnchorB);
 
             float lengthA = m_uA.Length();
             float lengthB = m_uB.Length();
@@ -262,11 +262,11 @@ namespace Box2D.Dynamics.Joints
             }
 
             // Compute effective mass.
-            float ruA = Vec2.Cross(m_rA, m_uA);
-            float ruB = Vec2.Cross(m_rB, m_uB);
+            float ruA = Vec2.Cross(RA, m_uA);
+            float ruB = Vec2.Cross(RB, m_uB);
 
-            float mA = m_invMassA + m_invIA * ruA * ruA;
-            float mB = m_invMassB + m_invIB * ruB * ruB;
+            float mA = InvMassA + InvIA * ruA * ruA;
+            float mB = InvMassB + InvIB * ruB * ruB;
 
             m_mass = mA + m_ratio * m_ratio * mB;
 
@@ -288,12 +288,12 @@ namespace Box2D.Dynamics.Joints
                 PA.Set(m_uA).MulLocal(-m_impulse);
                 PB.Set(m_uB).MulLocal((-m_ratio) * m_impulse);
 
-                vA.X += m_invMassA * PA.X;
-                vA.Y += m_invMassA * PA.Y;
-                wA += m_invIA * Vec2.Cross(m_rA, PA);
-                vB.X += m_invMassB * PB.X;
-                vB.Y += m_invMassB * PB.Y;
-                wB += m_invIB * Vec2.Cross(m_rB, PB);
+                vA.X += InvMassA * PA.X;
+                vA.Y += InvMassA * PA.Y;
+                wA += InvIA * Vec2.Cross(RA, PA);
+                vB.X += InvMassB * PB.X;
+                vB.Y += InvMassB * PB.Y;
+                wB += InvIB * Vec2.Cross(RB, PB);
 
                 Pool.PushVec2(2);
             }
@@ -301,10 +301,10 @@ namespace Box2D.Dynamics.Joints
             {
                 m_impulse = 0.0f;
             }
-            data.Velocities[m_indexA].V.Set(vA);
-            data.Velocities[m_indexA].W = wA;
-            data.Velocities[m_indexB].V.Set(vB);
-            data.Velocities[m_indexB].W = wB;
+            data.Velocities[IndexA].V.Set(vA);
+            data.Velocities[IndexA].W = wA;
+            data.Velocities[IndexB].V.Set(vB);
+            data.Velocities[IndexB].W = wB;
 
             Pool.PushVec2(1);
             Pool.PushRot(2);
@@ -312,19 +312,19 @@ namespace Box2D.Dynamics.Joints
 
         public override void SolveVelocityConstraints(SolverData data)
         {
-            Vec2 vA = data.Velocities[m_indexA].V;
-            float wA = data.Velocities[m_indexA].W;
-            Vec2 vB = data.Velocities[m_indexB].V;
-            float wB = data.Velocities[m_indexB].W;
+            Vec2 vA = data.Velocities[IndexA].V;
+            float wA = data.Velocities[IndexA].W;
+            Vec2 vB = data.Velocities[IndexB].V;
+            float wB = data.Velocities[IndexB].W;
 
             Vec2 vpA = Pool.PopVec2();
             Vec2 vpB = Pool.PopVec2();
             Vec2 PA = Pool.PopVec2();
             Vec2 PB = Pool.PopVec2();
 
-            Vec2.CrossToOutUnsafe(wA, m_rA, vpA);
+            Vec2.CrossToOutUnsafe(wA, RA, vpA);
             vpA.AddLocal(vA);
-            Vec2.CrossToOutUnsafe(wB, m_rB, vpB);
+            Vec2.CrossToOutUnsafe(wB, RB, vpB);
             vpB.AddLocal(vB);
 
             float Cdot = -Vec2.Dot(m_uA, vpA) - m_ratio * Vec2.Dot(m_uB, vpB);
@@ -333,17 +333,17 @@ namespace Box2D.Dynamics.Joints
 
             PA.Set(m_uA).MulLocal(-impulse);
             PB.Set(m_uB).MulLocal((-m_ratio) * impulse);
-            vA.X += m_invMassA * PA.X;
-            vA.Y += m_invMassA * PA.Y;
-            wA += m_invIA * Vec2.Cross(m_rA, PA);
-            vB.X += m_invMassB * PB.X;
-            vB.Y += m_invMassB * PB.Y;
-            wB += m_invIB * Vec2.Cross(m_rB, PB);
+            vA.X += InvMassA * PA.X;
+            vA.Y += InvMassA * PA.Y;
+            wA += InvIA * Vec2.Cross(RA, PA);
+            vB.X += InvMassB * PB.X;
+            vB.Y += InvMassB * PB.Y;
+            wB += InvIB * Vec2.Cross(RB, PB);
 
-            data.Velocities[m_indexA].V.Set(vA);
-            data.Velocities[m_indexA].W = wA;
-            data.Velocities[m_indexB].V.Set(vB);
-            data.Velocities[m_indexB].W = wB;
+            data.Velocities[IndexA].V.Set(vA);
+            data.Velocities[IndexA].W = wA;
+            data.Velocities[IndexB].V.Set(vB);
+            data.Velocities[IndexB].W = wB;
 
             Pool.PushVec2(4);
         }
@@ -359,16 +359,16 @@ namespace Box2D.Dynamics.Joints
             Vec2 PA = Pool.PopVec2();
             Vec2 PB = Pool.PopVec2();
 
-            Vec2 cA = data.Positions[m_indexA].C;
-            float aA = data.Positions[m_indexA].A;
-            Vec2 cB = data.Positions[m_indexB].C;
-            float aB = data.Positions[m_indexB].A;
+            Vec2 cA = data.Positions[IndexA].C;
+            float aA = data.Positions[IndexA].A;
+            Vec2 cB = data.Positions[IndexB].C;
+            float aB = data.Positions[IndexB].A;
 
             qA.Set(aA);
             qB.Set(aB);
 
-            Rot.MulToOutUnsafe(qA, temp.Set(m_localAnchorA).SubLocal(m_localCenterA), rA);
-            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), rB);
+            Rot.MulToOutUnsafe(qA, temp.Set(LocalAnchorA).SubLocal(m_localCenterA), rA);
+            Rot.MulToOutUnsafe(qB, temp.Set(LocalAnchorB).SubLocal(m_localCenterB), rB);
 
             uA.Set(cA).AddLocal(rA).SubLocal(m_groundAnchorA);
             uB.Set(cB).AddLocal(rB).SubLocal(m_groundAnchorB);
@@ -398,8 +398,8 @@ namespace Box2D.Dynamics.Joints
             float ruA = Vec2.Cross(rA, uA);
             float ruB = Vec2.Cross(rB, uB);
 
-            float mA = m_invMassA + m_invIA * ruA * ruA;
-            float mB = m_invMassB + m_invIB * ruB * ruB;
+            float mA = InvMassA + InvIA * ruA * ruA;
+            float mB = InvMassB + InvIB * ruB * ruB;
 
             float mass = mA + m_ratio * m_ratio * mB;
 
@@ -416,17 +416,17 @@ namespace Box2D.Dynamics.Joints
             PA.Set(uA).MulLocal(-impulse);
             PB.Set(uB).MulLocal((-m_ratio) * impulse);
 
-            cA.X += m_invMassA * PA.X;
-            cA.Y += m_invMassA * PA.Y;
-            aA += m_invIA * Vec2.Cross(rA, PA);
-            cB.X += m_invMassB * PB.X;
-            cB.Y += m_invMassB * PB.Y;
-            aB += m_invIB * Vec2.Cross(rB, PB);
+            cA.X += InvMassA * PA.X;
+            cA.Y += InvMassA * PA.Y;
+            aA += InvIA * Vec2.Cross(rA, PA);
+            cB.X += InvMassB * PB.X;
+            cB.Y += InvMassB * PB.Y;
+            aB += InvIB * Vec2.Cross(rB, PB);
 
-            data.Positions[m_indexA].C.Set(cA);
-            data.Positions[m_indexA].A = aA;
-            data.Positions[m_indexB].C.Set(cB);
-            data.Positions[m_indexB].A = aB;
+            data.Positions[IndexA].C.Set(cA);
+            data.Positions[IndexA].A = aA;
+            data.Positions[IndexB].C.Set(cB);
+            data.Positions[IndexB].A = aB;
 
             Pool.PushRot(2);
             Pool.PushVec2(7);
