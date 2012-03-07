@@ -141,24 +141,24 @@ namespace Box2D.Dynamics.Joints
         public PrismaticJoint(IWorldPool argWorld, PrismaticJointDef def)
             : base(argWorld, def)
         {
-            m_localAnchorA = new Vec2(def.localAnchorA);
-            m_localAnchorB = new Vec2(def.localAnchorB);
-            m_localXAxisA = new Vec2(def.localAxisA);
+            m_localAnchorA = new Vec2(def.LocalAnchorA);
+            m_localAnchorB = new Vec2(def.LocalAnchorB);
+            m_localXAxisA = new Vec2(def.LocalAxisA);
             m_localXAxisA.Normalize();
             m_localYAxisA = new Vec2();
             Vec2.CrossToOutUnsafe(1f, m_localXAxisA, m_localYAxisA);
-            m_referenceAngle = def.referenceAngle;
+            m_referenceAngle = def.ReferenceAngle;
 
             m_impulse = new Vec3();
             m_motorMass = 0.0f;
             m_motorImpulse = 0.0f;
 
-            m_lowerTranslation = def.lowerTranslation;
-            m_upperTranslation = def.upperTranslation;
-            m_maxMotorForce = def.maxMotorForce;
-            m_motorSpeed = def.motorSpeed;
-            m_enableLimit = def.enableLimit;
-            m_enableMotor = def.enableMotor;
+            m_lowerTranslation = def.LowerTranslation;
+            m_upperTranslation = def.UpperTranslation;
+            m_maxMotorForce = def.MaxMotorForce;
+            m_motorSpeed = def.MotorSpeed;
+            m_enableLimit = def.EnableLimit;
+            m_enableMotor = def.EnableMotor;
             m_limitState = LimitState.Inactive;
 
             m_K = new Mat33();
