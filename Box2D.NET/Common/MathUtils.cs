@@ -461,10 +461,12 @@ namespace Box2D.Common
             }
         }
 
+        static private Random Random = new Random();
+
         public static float RandomFloat(float argLow, float argHigh)
         {
             //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            return (float)SupportClass.Random.NextDouble() * (argHigh - argLow) + argLow;
+            return (float)Random.NextDouble() * (argHigh - argLow) + argLow;
         }
 
         public static float RandomFloat(Random r, float argLow, float argHigh)

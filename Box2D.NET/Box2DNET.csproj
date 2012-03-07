@@ -220,7 +220,6 @@
     <Compile Include="Pooling\Normal\MutableStack.cs" />
     <Compile Include="Pooling\Normal\OrderedStack.cs" />
     <Compile Include="Pooling\Stacks\DynamicIntStack.cs" />
-    <Compile Include="SupportClass.cs" />
     <Compile Include="Test\java\org\jbox2d\utests\MathTest.cs" />
     <None Include="_ConversionReport.htm">
       <SubType>Preview</SubType>
