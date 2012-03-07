@@ -291,20 +291,20 @@ namespace Box2D.Dynamics
 			solverData.Velocities = Velocities;
 
 			// Initialize velocity constraints.
-			solverDef.step = step;
-			solverDef.contacts = Contacts;
-			solverDef.count = ContactCount;
-			solverDef.positions = Positions;
-			solverDef.velocities = Velocities;
+			solverDef.Step = step;
+			solverDef.Contacts = Contacts;
+			solverDef.Count = ContactCount;
+			solverDef.Positions = Positions;
+			solverDef.Velocities = Velocities;
 
-			contactSolver.init(solverDef);
+			contactSolver.Init(solverDef);
 			//Console.WriteLine("island init vel");
-			contactSolver.initializeVelocityConstraints();
+			contactSolver.InitializeVelocityConstraints();
 
 			if (step.WarmStarting)
 			{
 				//Console.WriteLine("island warm start");
-				contactSolver.warmStart();
+				contactSolver.WarmStart();
 			}
 
 			for (int i = 0; i < JointCount; ++i)
@@ -324,11 +324,11 @@ namespace Box2D.Dynamics
 					Joints[j].solveVelocityConstraints(solverData);
 				}
 
-				contactSolver.solveVelocityConstraints();
+				contactSolver.SolveVelocityConstraints();
 			}
 
 			// Store impulses for warm starting
-			contactSolver.storeImpulses();
+			contactSolver.StoreImpulses();
 			profile.SolveVelocity = timer.Milliseconds;
 
 			// Integrate positions
@@ -371,7 +371,7 @@ namespace Box2D.Dynamics
 			bool positionSolved = false;
 			for (int i = 0; i < step.PositionIterations; ++i)
 			{
-				bool contactsOkay = contactSolver.solvePositionConstraints();
+				bool contactsOkay = contactSolver.SolvePositionConstraints();
 
 				bool jointsOkay = true;
 				for (int j = 0; j < JointCount; ++j)
@@ -401,7 +401,7 @@ namespace Box2D.Dynamics
 
 			profile.SolvePosition = timer.Milliseconds;
 
-			Report(contactSolver.m_velocityConstraints);
+			Report(contactSolver.VelocityConstraints);
 
 			if (allowSleep)
 			{
@@ -459,17 +459,17 @@ namespace Box2D.Dynamics
                 Velocities[i].W = b.AngularVelocity;
 			}
 
-			toiSolverDef.contacts = Contacts;
-			toiSolverDef.count = ContactCount;
-			toiSolverDef.step = subStep;
-			toiSolverDef.positions = Positions;
-			toiSolverDef.velocities = Velocities;
-			toiContactSolver.init(toiSolverDef);
+			toiSolverDef.Contacts = Contacts;
+			toiSolverDef.Count = ContactCount;
+			toiSolverDef.Step = subStep;
+			toiSolverDef.Positions = Positions;
+			toiSolverDef.Velocities = Velocities;
+			toiContactSolver.Init(toiSolverDef);
 
 			// Solve position constraints.
 			for (int i = 0; i < subStep.PositionIterations; ++i)
 			{
-				bool contactsOkay = toiContactSolver.solveTOIPositionConstraints(toiIndexA, toiIndexB);
+				bool contactsOkay = toiContactSolver.SolveTOIPositionConstraints(toiIndexA, toiIndexB);
 				if (contactsOkay)
 				{
 					break;
@@ -517,12 +517,12 @@ namespace Box2D.Dynamics
 
 			// No warm starting is needed for TOI events because warm
 			// starting impulses were applied in the discrete solver.
-			toiContactSolver.initializeVelocityConstraints();
+			toiContactSolver.InitializeVelocityConstraints();
 
 			// Solve velocity constraints.
 			for (int i = 0; i < subStep.VelocityIterations; ++i)
 			{
-				toiContactSolver.solveVelocityConstraints();
+				toiContactSolver.SolveVelocityConstraints();
 			}
 
 			// Don't store the TOI contact forces for warm starting
@@ -572,7 +572,7 @@ namespace Box2D.Dynamics
 				body.SynchronizeTransform();
 			}
 
-			Report(toiContactSolver.m_velocityConstraints);
+			Report(toiContactSolver.VelocityConstraints);
 		}
 
 		public void Add(Body body)
