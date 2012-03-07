@@ -149,12 +149,12 @@ namespace Box2D.Dynamics
 
         private void AddType(IDynamicStack<Contact> creator, ShapeType type1, ShapeType type2)
         {
-            ContactRegister register = new ContactRegister {creator = creator, primary = true};
+            ContactRegister register = new ContactRegister {Creator = creator, Primary = true};
             contactStacks[(int)type1][(int)type2] = register;
 
             if (type1 != type2)
             {
-                ContactRegister register2 = new ContactRegister {creator = creator, primary = false};
+                ContactRegister register2 = new ContactRegister {Creator = creator, Primary = false};
                 contactStacks[(int)type2][(int)type1] = register2;
             }
         }
@@ -176,11 +176,11 @@ namespace Box2D.Dynamics
             ShapeType type2 = fixtureB.Type;
 
             ContactRegister reg = contactStacks[(int)type1][(int)type2];
-            IDynamicStack<Contact> creator = reg.creator;
+            IDynamicStack<Contact> creator = reg.Creator;
 
             if (creator != null)
             {
-                if (reg.primary)
+                if (reg.Primary)
                 {
                     Contact c = creator.Pop();
                     c.Init(fixtureA, indexA, fixtureB, indexB);
@@ -209,7 +209,7 @@ namespace Box2D.Dynamics
             ShapeType type1 = contact.FixtureA.Type;
             ShapeType type2 = contact.FixtureB.Type;
 
-            IDynamicStack<Contact> creator = contactStacks[(int)type1][(int)type2].creator;
+            IDynamicStack<Contact> creator = contactStacks[(int)type1][(int)type2].Creator;
             creator.Push(contact);
         }
 

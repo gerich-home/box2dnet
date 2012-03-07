@@ -26,10 +26,9 @@ using Box2D.Pooling;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class ContactRegister
     {
-        public IDynamicStack<Contact> creator;
-        public bool primary;
+        public IDynamicStack<Contact> Creator;
+        public bool Primary;
     }
 }
