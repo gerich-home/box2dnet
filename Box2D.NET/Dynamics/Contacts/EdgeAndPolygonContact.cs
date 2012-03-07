@@ -30,10 +30,8 @@ using Box2D.Pooling;
 
 namespace Box2D.Dynamics.Contacts
 {
-
     public class EdgeAndPolygonContact : Contact
     {
-
         public EdgeAndPolygonContact(IWorldPool argPool)
             : base(argPool)
         {
