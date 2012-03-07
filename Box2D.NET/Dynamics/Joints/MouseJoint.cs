@@ -40,22 +40,36 @@ namespace Box2D.Dynamics.Joints
     {
         private readonly Vec2 m_localAnchorB = new Vec2();
         private readonly Vec2 m_targetA = new Vec2();
-        private float m_frequencyHz;
-        private float m_dampingRatio;
+        
+        /// <summary>
+        /// Frequency in Hertz.
+        /// </summary>
+        public float Frequency;
+
+        /// <summary>
+        /// Gets or sets the damping ratio (dimensionless).
+        /// </summary>
+        public float DampingRatio
+
         private float m_beta;
 
         // Solver shared
         private readonly Vec2 m_impulse = new Vec2();
-        private float m_maxForce;
+
+        /// <summary>
+        /// The maximum force in Newtons.
+        /// </summary>
+        private float MaxForce;
+
         private float m_gamma;
 
         // Solver temp
-        public int m_indexA;
-        public int m_indexB;
-        public readonly Vec2 m_rB = new Vec2();
-        public readonly Vec2 m_localCenterB = new Vec2();
-        public float m_invMassB;
-        public float m_invIB;
+        public int IndexA;
+        public int IndexB;
+        public readonly Vec2 RB = new Vec2();
+        public readonly Vec2 LocalCenterB = new Vec2();
+        public float InvMassB;
+        public float InvIB;
         private readonly Mat22 m_mass = new Mat22();
         private readonly Vec2 m_C = new Vec2();
 
@@ -74,8 +88,8 @@ namespace Box2D.Dynamics.Joints
             m_maxForce = def.MaxForce;
             m_impulse.SetZero();
 
-            m_frequencyHz = def.FrequencyHz;
-            m_dampingRatio = def.DampingRatio;
+            Frequency = def.FrequencyHz;
+            DampingRatio = def.DampingRatio;
 
             m_beta = 0;
             m_gamma = 0;
@@ -117,63 +131,18 @@ namespace Box2D.Dynamics.Joints
             }
         }
 
-        /// <summary>
-        /// Gets or sets the maximum force in Newtons.
-        /// </summary>
-        public float MaxForce
-        {
-            get
-            {
-                return m_maxForce;
-            }
-            set
-            {
-                m_maxForce = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the frequency in Hertz.
-        /// </summary>
-        public float Frequency
-        {
-            get
-            {
-                return m_frequencyHz;
-            }
-            set
-            {
-                m_frequencyHz = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the damping ratio (dimensionless).
-        /// </summary>
-        public float DampingRatio
-        {
-            get
-            {
-                return m_dampingRatio;
-            }
-            set
-            {
-                m_dampingRatio = value;
-            }
-        }
-
         public override void InitVelocityConstraints(SolverData data)
         {
-            m_indexA = BodyA.IslandIndex;
-            m_indexB = BodyB.IslandIndex;
-            m_localCenterB.Set(BodyB.Sweep.LocalCenter);
-            m_invMassB = BodyB.InvMass;
-            m_invIB = BodyB.InvI;
+            IndexA = BodyA.IslandIndex;
+            IndexB = BodyB.IslandIndex;
+            LocalCenterB.Set(BodyB.Sweep.LocalCenter);
+            InvMassB = BodyB.InvMass;
+            InvIB = BodyB.InvI;
 
-            Vec2 cB = data.Positions[m_indexB].C;
-            float aB = data.Positions[m_indexB].A;
-            Vec2 vB = data.Velocities[m_indexB].V;
-            float wB = data.Velocities[m_indexB].W;
+            Vec2 cB = data.Positions[IndexB].C;
+            float aB = data.Positions[IndexB].A;
+            Vec2 vB = data.Velocities[IndexB].V;
+            float wB = data.Velocities[IndexB].W;
 
             Rot qB = Pool.PopRot();
 
@@ -182,10 +151,10 @@ namespace Box2D.Dynamics.Joints
             float mass = BodyB.Mass;
 
             // Frequency
-            float omega = 2.0f * MathUtils.PI * m_frequencyHz;
+            float omega = 2.0f * MathUtils.PI * Frequency;
 
             // Damping coefficient
-            float d = 2.0f * mass * m_dampingRatio * omega;
+            float d = 2.0f * mass * DampingRatio * omega;
 
             // Spring stiffness
             float k = mass * (omega * omega);
@@ -205,20 +174,20 @@ namespace Box2D.Dynamics.Joints
             Vec2 temp = Pool.PopVec2();
 
             // Compute the effective mass matrix.
-            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(m_localCenterB), m_rB);
+            Rot.MulToOutUnsafe(qB, temp.Set(m_localAnchorB).SubLocal(LocalCenterB), RB);
 
             // K = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
             // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
             // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
             Mat22 K = Pool.PopMat22();
-            K.Ex.X = m_invMassB + m_invIB * m_rB.Y * m_rB.Y + m_gamma;
-            K.Ex.Y = (-m_invIB) * m_rB.X * m_rB.Y;
+            K.Ex.X = InvMassB + InvIB * RB.Y * RB.Y + m_gamma;
+            K.Ex.Y = (-InvIB) * RB.X * RB.Y;
             K.Ey.X = K.Ex.Y;
-            K.Ey.Y = m_invMassB + m_invIB * m_rB.X * m_rB.X + m_gamma;
+            K.Ey.Y = InvMassB + InvIB * RB.X * RB.X + m_gamma;
 
             K.InvertToOut(m_mass);
 
-            m_C.Set(cB).AddLocal(m_rB).SubLocal(m_targetA);
+            m_C.Set(cB).AddLocal(RB).SubLocal(m_targetA);
             m_C.MulLocal(m_beta);
 
             // Cheat with some damping
@@ -227,17 +196,17 @@ namespace Box2D.Dynamics.Joints
             if (data.Step.WarmStarting)
             {
                 m_impulse.MulLocal(data.Step.DtRatio);
-                vB.X += m_invMassB * m_impulse.X;
-                vB.Y += m_invMassB * m_impulse.Y;
-                wB += m_invIB * Vec2.Cross(m_rB, m_impulse);
+                vB.X += InvMassB * m_impulse.X;
+                vB.Y += InvMassB * m_impulse.Y;
+                wB += InvIB * Vec2.Cross(RB, m_impulse);
             }
             else
             {
                 m_impulse.SetZero();
             }
 
-            data.Velocities[m_indexB].V.Set(vB);
-            data.Velocities[m_indexB].W = wB;
+            data.Velocities[IndexB].V.Set(vB);
+            data.Velocities[IndexB].W = wB;
 
             Pool.PushVec2(1);
             Pool.PushMat22(1);
@@ -252,12 +221,12 @@ namespace Box2D.Dynamics.Joints
         public override void SolveVelocityConstraints(SolverData data)
         {
 
-            Vec2 vB = data.Velocities[m_indexB].V;
-            float wB = data.Velocities[m_indexB].W;
+            Vec2 vB = data.Velocities[IndexB].V;
+            float wB = data.Velocities[IndexB].W;
 
             // Cdot = v + cross(w, r)
             Vec2 Cdot = Pool.PopVec2();
-            Vec2.CrossToOutUnsafe(wB, m_rB, Cdot);
+            Vec2.CrossToOutUnsafe(wB, RB, Cdot);
             Cdot.AddLocal(vB);
 
             Vec2 impulse = Pool.PopVec2();
@@ -276,12 +245,12 @@ namespace Box2D.Dynamics.Joints
             }
             impulse.Set(m_impulse).SubLocal(oldImpulse);
 
-            vB.X += m_invMassB * m_impulse.X;
-            vB.Y += m_invMassB * m_impulse.Y;
-            wB += m_invIB * Vec2.Cross(m_rB, impulse);
+            vB.X += InvMassB * m_impulse.X;
+            vB.Y += InvMassB * m_impulse.Y;
+            wB += InvIB * Vec2.Cross(RB, impulse);
 
-            data.Velocities[m_indexB].V.Set(vB);
-            data.Velocities[m_indexB].W = wB;
+            data.Velocities[IndexB].V.Set(vB);
+            data.Velocities[IndexB].W = wB;
 
             Pool.PushVec2(3);
         }
