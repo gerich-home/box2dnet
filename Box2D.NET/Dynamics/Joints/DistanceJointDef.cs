@@ -88,7 +88,7 @@ namespace Box2D.Dynamics.Joints
 
         public DistanceJointDef()
         {
-            type = JointType.Distance;
+            Type = JointType.Distance;
             localAnchorA = new Vec2(0.0f, 0.0f);
             localAnchorB = new Vec2(0.0f, 0.0f);
             length = 1.0f;
@@ -105,10 +105,10 @@ namespace Box2D.Dynamics.Joints
         /// <param name="anchor2">World anchor on second body</param>
         public void initialize(Body b1, Body b2, Vec2 anchor1, Vec2 anchor2)
         {
-            bodyA = b1;
-            bodyB = b2;
-            localAnchorA.Set(bodyA.GetLocalPoint(anchor1));
-            localAnchorB.Set(bodyB.GetLocalPoint(anchor2));
+            BodyA = b1;
+            BodyB = b2;
+            localAnchorA.Set(BodyA.GetLocalPoint(anchor1));
+            localAnchorB.Set(BodyB.GetLocalPoint(anchor2));
             Vec2 d = anchor2.Sub(anchor1);
             length = d.Length();
         }

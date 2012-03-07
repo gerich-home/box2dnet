@@ -373,11 +373,11 @@ namespace Box2D.Dynamics
             }
             j.BodyB.JointList = j.EdgeB;
 
-            Body bodyA = def.bodyA;
-            Body bodyB = def.bodyB;
+            Body bodyA = def.BodyA;
+            Body bodyB = def.BodyB;
 
             // If the joint prevents collisions, then flag any contacts for filtering.
-            if (def.collideConnected == false)
+            if (def.CollideConnected == false)
             {
                 ContactEdge edge = bodyB.ContactList;
                 while (edge != null)

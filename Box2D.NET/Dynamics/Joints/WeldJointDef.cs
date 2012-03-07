@@ -60,7 +60,7 @@ namespace Box2D.Dynamics.Joints
 
         public WeldJointDef()
         {
-            type = JointType.Weld;
+            Type = JointType.Weld;
             localAnchorA = new Vec2();
             localAnchorB = new Vec2();
             referenceAngle = 0.0f;
@@ -74,11 +74,11 @@ namespace Box2D.Dynamics.Joints
         /// <param name="anchor"></param>
         public void initialize(Body bA, Body bB, Vec2 anchor)
         {
-            bodyA = bA;
-            bodyB = bB;
-            bodyA.GetLocalPointToOut(anchor, localAnchorA);
-            bodyB.GetLocalPointToOut(anchor, localAnchorB);
-            referenceAngle = bodyB.Angle - bodyA.Angle;
+            BodyA = bA;
+            BodyB = bB;
+            BodyA.GetLocalPointToOut(anchor, localAnchorA);
+            BodyB.GetLocalPointToOut(anchor, localAnchorB);
+            referenceAngle = BodyB.Angle - BodyA.Angle;
         }
     }
 }

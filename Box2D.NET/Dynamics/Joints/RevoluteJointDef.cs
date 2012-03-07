@@ -113,7 +113,7 @@ namespace Box2D.Dynamics.Joints
 
         public RevoluteJointDef()
         {
-            type = JointType.Revolute;
+            Type = JointType.Revolute;
             localAnchorA = new Vec2(0.0f, 0.0f);
             localAnchorB = new Vec2(0.0f, 0.0f);
             referenceAngle = 0.0f;
@@ -133,11 +133,11 @@ namespace Box2D.Dynamics.Joints
         /// <param name="anchor"></param>
         public void initialize(Body b1, Body b2, Vec2 anchor)
         {
-            bodyA = b1;
-            bodyB = b2;
-            bodyA.GetLocalPointToOut(anchor, localAnchorA);
-            bodyB.GetLocalPointToOut(anchor, localAnchorB);
-            referenceAngle = bodyB.Angle - bodyA.Angle;
+            BodyA = b1;
+            BodyB = b2;
+            BodyA.GetLocalPointToOut(anchor, localAnchorA);
+            BodyB.GetLocalPointToOut(anchor, localAnchorB);
+            referenceAngle = BodyB.Angle - BodyA.Angle;
         }
     }
 }

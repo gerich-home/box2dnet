@@ -24,7 +24,6 @@
 
 namespace Box2D.Dynamics.Joints
 {
-
     //updated to rev 100
     /// <summary>
     /// Joint definitions are used to construct joints.
@@ -34,36 +33,36 @@ namespace Box2D.Dynamics.Joints
     {
         public JointDef()
         {
-            type = JointType.Unknown;
-            userData = null;
-            bodyA = null;
-            bodyB = null;
-            collideConnected = false;
+            Type = JointType.Unknown;
+            UserData = null;
+            BodyA = null;
+            BodyB = null;
+            CollideConnected = false;
         }
 
         /// <summary>
         /// The joint type is set automatically for concrete joint types.
         /// </summary>
-        public JointType type;
+        public JointType Type;
 
         /// <summary>
         /// Use this to attach application specific data to your joints.
         /// </summary>
-        public object userData;
+        public object UserData;
 
         /// <summary>
         /// The first attached body.
         /// </summary>
-        public Body bodyA;
+        public Body BodyA;
 
         /// <summary>
         /// The second attached body.
         /// </summary>
-        public Body bodyB;
+        public Body BodyB;
 
         /// <summary>
         /// Set this flag to true if the attached bodies should collide.
         /// </summary>
-        public bool collideConnected;
+        public bool CollideConnected;
     }
 }

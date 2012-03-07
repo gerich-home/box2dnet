@@ -91,7 +91,7 @@ namespace Box2D.Dynamics.Joints
 
         public PrismaticJointDef()
         {
-            type = JointType.Prismatic;
+            Type = JointType.Prismatic;
             localAnchorA = new Vec2();
             localAnchorB = new Vec2();
             localAxisA = new Vec2(1.0f, 0.0f);
@@ -109,12 +109,12 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         public void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
         {
-            bodyA = b1;
-            bodyB = b2;
-            bodyA.GetLocalPointToOut(anchor, localAnchorA);
-            bodyB.GetLocalPointToOut(anchor, localAnchorB);
-            bodyA.GetLocalVectorToOut(axis, localAxisA);
-            referenceAngle = bodyB.Angle - bodyA.Angle;
+            BodyA = b1;
+            BodyB = b2;
+            BodyA.GetLocalPointToOut(anchor, localAnchorA);
+            BodyB.GetLocalPointToOut(anchor, localAnchorB);
+            BodyA.GetLocalVectorToOut(axis, localAxisA);
+            referenceAngle = BodyB.Angle - BodyA.Angle;
         }
     }
 }

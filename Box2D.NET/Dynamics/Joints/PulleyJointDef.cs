@@ -72,7 +72,7 @@ namespace Box2D.Dynamics.Joints
 
         public PulleyJointDef()
         {
-            type = JointType.Pulley;
+            Type = JointType.Pulley;
             groundAnchorA = new Vec2(-1.0f, 1.0f);
             groundAnchorB = new Vec2(1.0f, 1.0f);
             localAnchorA = new Vec2(-1.0f, 0.0f);
@@ -80,7 +80,7 @@ namespace Box2D.Dynamics.Joints
             lengthA = 0.0f;
             lengthB = 0.0f;
             ratio = 1.0f;
-            collideConnected = true;
+            CollideConnected = true;
         }
 
         /// <summary>
@@ -88,12 +88,12 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         public void initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
         {
-            bodyA = b1;
-            bodyB = b2;
+            BodyA = b1;
+            BodyB = b2;
             groundAnchorA = ga1;
             groundAnchorB = ga2;
-            localAnchorA = bodyA.GetLocalPoint(anchor1);
-            localAnchorB = bodyB.GetLocalPoint(anchor2);
+            localAnchorA = BodyA.GetLocalPoint(anchor1);
+            localAnchorB = BodyB.GetLocalPoint(anchor2);
             Vec2 d1 = anchor1.Sub(ga1);
             lengthA = d1.Length();
             Vec2 d2 = anchor2.Sub(ga2);

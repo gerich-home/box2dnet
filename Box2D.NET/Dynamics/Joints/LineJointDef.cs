@@ -78,7 +78,7 @@ namespace Box2D.Dynamics.Joints
 
         public LineJointDef()
         {
-            type = JointType.Wheel;
+            Type = JointType.Wheel;
             localAxisA.Set(1, 0);
             enableLimit = false;
             lowerTranslation = 0;
@@ -90,11 +90,11 @@ namespace Box2D.Dynamics.Joints
 
         public void initialize(Body b1, Body b2, Vec2 anchor, Vec2 axis)
         {
-            bodyA = b1;
-            bodyB = b2;
+            BodyA = b1;
+            BodyB = b2;
             b1.GetLocalPointToOut(anchor, localAnchorA);
             b2.GetLocalPointToOut(anchor, localAnchorB);
-            bodyA.GetLocalVectorToOut(axis, localAxisA);
+            BodyA.GetLocalVectorToOut(axis, localAxisA);
         }
     }
 }

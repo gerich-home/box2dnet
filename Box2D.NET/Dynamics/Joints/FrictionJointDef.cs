@@ -57,7 +57,7 @@ namespace Box2D.Dynamics.Joints
 
         public FrictionJointDef()
         {
-            type = JointType.Friction;
+            Type = JointType.Friction;
             localAnchorA = new Vec2();
             localAnchorB = new Vec2();
             maxForce = 0f;
@@ -69,8 +69,8 @@ namespace Box2D.Dynamics.Joints
         /// </summary>
         public void initialize(Body bA, Body bB, Vec2 anchor)
         {
-            bodyA = bA;
-            bodyB = bB;
+            BodyA = bA;
+            BodyB = bB;
             bA.GetLocalPointToOut(anchor, localAnchorA);
             bB.GetLocalPointToOut(anchor, localAnchorB);
         }

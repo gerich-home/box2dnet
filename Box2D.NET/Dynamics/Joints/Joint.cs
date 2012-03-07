@@ -41,7 +41,7 @@ namespace Box2D.Dynamics.Joints
         public static Joint Create(World argWorld, JointDef def)
         {
             //Joint joint = null;
-            switch (def.type)
+            switch (def.Type)
             {
 
                 case JointType.Mouse:
@@ -131,17 +131,17 @@ namespace Box2D.Dynamics.Joints
 
         protected internal Joint(IWorldPool argWorldPool, JointDef def)
         {
-            Debug.Assert(def.bodyA != def.bodyB);
+            Debug.Assert(def.BodyA != def.BodyB);
 
             Pool = argWorldPool;
-            Type = def.type;
+            Type = def.Type;
             Prev = null;
             Next = null;
-            BodyA = def.bodyA;
-            BodyB = def.bodyB;
-            CollideConnected = def.collideConnected;
+            BodyA = def.BodyA;
+            BodyB = def.BodyB;
+            CollideConnected = def.CollideConnected;
             IslandFlag = false;
-            UserData = def.userData;
+            UserData = def.UserData;
             Index = 0;
 
             EdgeA = new JointEdge();

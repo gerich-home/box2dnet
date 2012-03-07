@@ -43,11 +43,11 @@ namespace Box2D.Dynamics.Joints
 
         public ConstantVolumeJointDef()
         {
-            type = JointType.ConstantVolume;
+            Type = JointType.ConstantVolume;
             bodies = new List<Body>();
             joints = null;
             //relaxationFactor = 0.9f;
-            collideConnected = false;
+            CollideConnected = false;
             frequencyHz = 0.0f;
             dampingRatio = 0.0f;
         }
@@ -61,11 +61,11 @@ namespace Box2D.Dynamics.Joints
             bodies.Add(argBody);
             if (bodies.Count == 1)
             {
-                bodyA = argBody;
+                BodyA = argBody;
             }
             if (bodies.Count == 2)
             {
-                bodyB = argBody;
+                BodyB = argBody;
             }
         }
 
