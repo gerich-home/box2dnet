@@ -75,18 +75,18 @@ namespace Box2D.Dynamics.Joints
         public PulleyJoint(IWorldPool argWorldPool, PulleyJointDef def)
             : base(argWorldPool, def)
         {
-            m_groundAnchorA.Set(def.groundAnchorA);
-            m_groundAnchorB.Set(def.groundAnchorB);
-            m_localAnchorA.Set(def.localAnchorA);
-            m_localAnchorB.Set(def.localAnchorB);
+            m_groundAnchorA.Set(def.GroundAnchorA);
+            m_groundAnchorB.Set(def.GroundAnchorB);
+            m_localAnchorA.Set(def.LocalAnchorA);
+            m_localAnchorB.Set(def.LocalAnchorB);
 
-            Debug.Assert(def.ratio != 0.0f);
-            m_ratio = def.ratio;
+            Debug.Assert(def.Ratio != 0.0f);
+            m_ratio = def.Ratio;
 
-            m_lengthA = def.lengthA;
-            m_LengthB = def.lengthB;
+            m_lengthA = def.LengthA;
+            m_LengthB = def.LengthB;
 
-            m_constant = def.lengthA + m_ratio * def.lengthB;
+            m_constant = def.LengthA + m_ratio * def.LengthB;
             m_impulse = 0.0f;
         }
 

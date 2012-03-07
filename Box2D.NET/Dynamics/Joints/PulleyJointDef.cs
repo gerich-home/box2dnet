@@ -39,67 +39,68 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The first ground anchor in world coordinates. This point never moves.
         /// </summary>
-        public Vec2 groundAnchorA;
+        public Vec2 GroundAnchorA;
 
-        /// <summary> The second ground anchor in world coordinates. This point never moves.
+        /// <summary>
+        /// The second ground anchor in world coordinates. This point never moves.
         /// </summary>
-        public Vec2 groundAnchorB;
+        public Vec2 GroundAnchorB;
 
         /// <summary>
         /// The local anchor point relative to bodyA's origin.
         /// </summary>
-        public Vec2 localAnchorA;
+        public Vec2 LocalAnchorA;
 
         /// <summary>
         /// The local anchor point relative to bodyB's origin.
         /// </summary>
-        public Vec2 localAnchorB;
+        public Vec2 LocalAnchorB;
 
         /// <summary>
         /// The a reference length for the segment attached to bodyA.
         /// </summary>
-        public float lengthA;
+        public float LengthA;
 
         /// <summary>
         /// The a reference length for the segment attached to bodyB.
         /// </summary>
-        public float lengthB;
+        public float LengthB;
 
         /// <summary>
         /// The pulley ratio, used to simulate a block-and-tackle.
         /// </summary>
-        public float ratio;
+        public float Ratio;
 
         public PulleyJointDef()
         {
             Type = JointType.Pulley;
-            groundAnchorA = new Vec2(-1.0f, 1.0f);
-            groundAnchorB = new Vec2(1.0f, 1.0f);
-            localAnchorA = new Vec2(-1.0f, 0.0f);
-            localAnchorB = new Vec2(1.0f, 0.0f);
-            lengthA = 0.0f;
-            lengthB = 0.0f;
-            ratio = 1.0f;
+            GroundAnchorA = new Vec2(-1.0f, 1.0f);
+            GroundAnchorB = new Vec2(1.0f, 1.0f);
+            LocalAnchorA = new Vec2(-1.0f, 0.0f);
+            LocalAnchorB = new Vec2(1.0f, 0.0f);
+            LengthA = 0.0f;
+            LengthB = 0.0f;
+            Ratio = 1.0f;
             CollideConnected = true;
         }
 
         /// <summary>
         /// Initialize the bodies, anchors, lengths, max lengths, and ratio using the world anchors.
         /// </summary>
-        public void initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
+        public void Initialize(Body b1, Body b2, Vec2 ga1, Vec2 ga2, Vec2 anchor1, Vec2 anchor2, float r)
         {
             BodyA = b1;
             BodyB = b2;
-            groundAnchorA = ga1;
-            groundAnchorB = ga2;
-            localAnchorA = BodyA.GetLocalPoint(anchor1);
-            localAnchorB = BodyB.GetLocalPoint(anchor2);
+            GroundAnchorA = ga1;
+            GroundAnchorB = ga2;
+            LocalAnchorA = BodyA.GetLocalPoint(anchor1);
+            LocalAnchorB = BodyB.GetLocalPoint(anchor2);
             Vec2 d1 = anchor1.Sub(ga1);
-            lengthA = d1.Length();
+            LengthA = d1.Length();
             Vec2 d2 = anchor2.Sub(ga2);
-            lengthB = d2.Length();
-            ratio = r;
-            Debug.Assert(ratio > Settings.EPSILON);
+            LengthB = d2.Length();
+            Ratio = r;
+            Debug.Assert(Ratio > Settings.EPSILON);
         }
     }
 }
