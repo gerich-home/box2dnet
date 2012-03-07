@@ -98,7 +98,7 @@ namespace Box2D.Dynamics.Joints
             m_motorSpeed = def.motorSpeed;
             m_enableLimit = def.enableLimit;
             m_enableMotor = def.enableMotor;
-            m_limitState = LimitState.INACTIVE;
+            m_limitState = LimitState.Inactive;
         }
 
         public override void InitVelocityConstraints(SolverData data)
@@ -173,33 +173,33 @@ namespace Box2D.Dynamics.Joints
                 float jointAngle = aB - aA - m_referenceAngle;
                 if (MathUtils.Abs(m_upperAngle - m_lowerAngle) < 2.0f * Settings.ANGULAR_SLOP)
                 {
-                    m_limitState = LimitState.EQUAL;
+                    m_limitState = LimitState.Equal;
                 }
                 else if (jointAngle <= m_lowerAngle)
                 {
-                    if (m_limitState != LimitState.AT_LOWER)
+                    if (m_limitState != LimitState.AtLower)
                     {
                         m_impulse.Z = 0.0f;
                     }
-                    m_limitState = LimitState.AT_LOWER;
+                    m_limitState = LimitState.AtLower;
                 }
                 else if (jointAngle >= m_upperAngle)
                 {
-                    if (m_limitState != LimitState.AT_UPPER)
+                    if (m_limitState != LimitState.AtUpper)
                     {
                         m_impulse.Z = 0.0f;
                     }
-                    m_limitState = LimitState.AT_UPPER;
+                    m_limitState = LimitState.AtUpper;
                 }
                 else
                 {
-                    m_limitState = LimitState.INACTIVE;
+                    m_limitState = LimitState.Inactive;
                     m_impulse.Z = 0.0f;
                 }
             }
             else
             {
-                m_limitState = LimitState.INACTIVE;
+                m_limitState = LimitState.Inactive;
             }
 
             if (data.Step.WarmStarting)
@@ -251,7 +251,7 @@ namespace Box2D.Dynamics.Joints
             bool fixedRotation = (iA + iB == 0.0f);
 
             // Solve motor constraint.
-            if (m_enableMotor && m_limitState != LimitState.EQUAL && fixedRotation == false)
+            if (m_enableMotor && m_limitState != LimitState.Equal && fixedRotation == false)
             {
                 float Cdot = wB - wA - m_motorSpeed;
                 float impulse = (-m_motorMass) * Cdot;
@@ -266,7 +266,7 @@ namespace Box2D.Dynamics.Joints
             Vec2 temp = Pool.PopVec2();
 
             // Solve limit constraint.
-            if (m_enableLimit && m_limitState != LimitState.INACTIVE && fixedRotation == false)
+            if (m_enableLimit && m_limitState != LimitState.Inactive && fixedRotation == false)
             {
                 Vec2 Cdot1 = Pool.PopVec2();
                 Vec3 Cdot = Pool.PopVec3();
@@ -282,11 +282,11 @@ namespace Box2D.Dynamics.Joints
                 m_mass.Solve33ToOut(Cdot, impulse);
                 impulse.NegateLocal();
 
-                if (m_limitState == LimitState.EQUAL)
+                if (m_limitState == LimitState.Equal)
                 {
                     m_impulse.AddLocal(impulse);
                 }
-                else if (m_limitState == LimitState.AT_LOWER)
+                else if (m_limitState == LimitState.AtLower)
                 {
                     float newImpulse = m_impulse.Z + impulse.Z;
                     if (newImpulse < 0.0f)
@@ -308,7 +308,7 @@ namespace Box2D.Dynamics.Joints
                         m_impulse.AddLocal(impulse);
                     }
                 }
-                else if (m_limitState == LimitState.AT_UPPER)
+                else if (m_limitState == LimitState.AtUpper)
                 {
                     float newImpulse = m_impulse.Z + impulse.Z;
                     if (newImpulse > 0.0f)
@@ -396,19 +396,19 @@ namespace Box2D.Dynamics.Joints
             bool fixedRotation = (m_invIA + m_invIB == 0.0f);
 
             // Solve angular limit constraint.
-            if (m_enableLimit && m_limitState != LimitState.INACTIVE && fixedRotation == false)
+            if (m_enableLimit && m_limitState != LimitState.Inactive && fixedRotation == false)
             {
                 float angle = aB - aA - m_referenceAngle;
                 float limitImpulse = 0.0f;
 
-                if (m_limitState == LimitState.EQUAL)
+                if (m_limitState == LimitState.Equal)
                 {
                     // Prevent large angular corrections
                     float C = MathUtils.Clamp(angle - m_lowerAngle, -Settings.MAX_ANGULAR_CORRECTION, Settings.MAX_ANGULAR_CORRECTION);
                     limitImpulse = (-m_motorMass) * C;
                     angularError = MathUtils.Abs(C);
                 }
-                else if (m_limitState == LimitState.AT_LOWER)
+                else if (m_limitState == LimitState.AtLower)
                 {
                     float C = angle - m_lowerAngle;
                     angularError = -C;
@@ -417,7 +417,7 @@ namespace Box2D.Dynamics.Joints
                     C = MathUtils.Clamp(C + Settings.ANGULAR_SLOP, -Settings.MAX_ANGULAR_CORRECTION, 0.0f);
                     limitImpulse = (-m_motorMass) * C;
                 }
-                else if (m_limitState == LimitState.AT_UPPER)
+                else if (m_limitState == LimitState.AtUpper)
                 {
                     float C = angle - m_upperAngle;
                     angularError = C;

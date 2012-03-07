@@ -159,7 +159,7 @@ namespace Box2D.Dynamics.Joints
             m_motorSpeed = def.motorSpeed;
             m_enableLimit = def.enableLimit;
             m_enableMotor = def.enableMotor;
-            m_limitState = LimitState.INACTIVE;
+            m_limitState = LimitState.Inactive;
 
             m_K = new Mat33();
             m_axis = new Vec2();
@@ -496,33 +496,33 @@ namespace Box2D.Dynamics.Joints
                 float jointTranslation = Vec2.Dot(m_axis, d);
                 if (MathUtils.Abs(m_upperTranslation - m_lowerTranslation) < 2.0f * Settings.LINEAR_SLOP)
                 {
-                    m_limitState = LimitState.EQUAL;
+                    m_limitState = LimitState.Equal;
                 }
                 else if (jointTranslation <= m_lowerTranslation)
                 {
-                    if (m_limitState != LimitState.AT_LOWER)
+                    if (m_limitState != LimitState.AtLower)
                     {
-                        m_limitState = LimitState.AT_LOWER;
+                        m_limitState = LimitState.AtLower;
                         m_impulse.Z = 0.0f;
                     }
                 }
                 else if (jointTranslation >= m_upperTranslation)
                 {
-                    if (m_limitState != LimitState.AT_UPPER)
+                    if (m_limitState != LimitState.AtUpper)
                     {
-                        m_limitState = LimitState.AT_UPPER;
+                        m_limitState = LimitState.AtUpper;
                         m_impulse.Z = 0.0f;
                     }
                 }
                 else
                 {
-                    m_limitState = LimitState.INACTIVE;
+                    m_limitState = LimitState.Inactive;
                     m_impulse.Z = 0.0f;
                 }
             }
             else
             {
-                m_limitState = LimitState.INACTIVE;
+                m_limitState = LimitState.Inactive;
                 m_impulse.Z = 0.0f;
             }
 
@@ -582,7 +582,7 @@ namespace Box2D.Dynamics.Joints
             Vec2 temp = Pool.PopVec2();
 
             // Solve linear motor constraint.
-            if (m_enableMotor && m_limitState != LimitState.EQUAL)
+            if (m_enableMotor && m_limitState != LimitState.Equal)
             {
                 temp.Set(vB).SubLocal(vA);
                 float Cdot = Vec2.Dot(m_axis, temp) + m_a2 * wB - m_a1 * wA;
@@ -614,7 +614,7 @@ namespace Box2D.Dynamics.Joints
             Cdot1.Y = wB - wA;
             // System.out.println(Cdot1);
 
-            if (m_enableLimit && m_limitState != LimitState.INACTIVE)
+            if (m_enableLimit && m_limitState != LimitState.Inactive)
             {
                 // Solve prismatic and limit constraint in block form.
                 float Cdot2;
@@ -633,11 +633,11 @@ namespace Box2D.Dynamics.Joints
                 //Cdot.negateLocal(); not used anymore
                 m_impulse.AddLocal(df);
 
-                if (m_limitState == LimitState.AT_LOWER)
+                if (m_limitState == LimitState.AtLower)
                 {
                     m_impulse.Z = MathUtils.Max(m_impulse.Z, 0.0f);
                 }
-                else if (m_limitState == LimitState.AT_UPPER)
+                else if (m_limitState == LimitState.AtUpper)
                 {
                     m_impulse.Z = MathUtils.Min(m_impulse.Z, 0.0f);
                 }
