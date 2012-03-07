@@ -36,31 +36,31 @@ namespace Box2D.Dynamics.Joints
         /// <summary>
         /// The initial world target point. This is assumed to coincide with the body anchor initially.
         /// </summary>
-        public readonly Vec2 target = new Vec2();
+        public readonly Vec2 Target = new Vec2();
 
         /// <summary>
         /// The maximum constraint force that can be exerted to move the candidate body. Usually you will
         /// express as some multiple of the weight (multiplier * mass * gravity).
         /// </summary>
-        public float maxForce;
+        public float MaxForce;
 
         /// <summary>
         /// The response speed.
         /// </summary>
-        public float frequencyHz;
+        public float FrequencyHz;
 
         /// <summary>
         /// The damping ratio. 0 = no damping, 1 = critical damping.
         /// </summary>
-        public float dampingRatio;
+        public float DampingRatio;
 
         public MouseJointDef()
         {
             Type = JointType.Mouse;
-            target.Set(0, 0);
-            maxForce = 0;
-            frequencyHz = 5;
-            dampingRatio = .7f;
+            Target.Set(0, 0);
+            MaxForce = 0;
+            FrequencyHz = 5;
+            DampingRatio = .7f;
         }
     }
 }

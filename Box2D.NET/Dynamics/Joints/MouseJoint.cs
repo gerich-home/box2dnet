@@ -63,19 +63,19 @@ namespace Box2D.Dynamics.Joints
         protected internal MouseJoint(IWorldPool argWorld, MouseJointDef def)
             : base(argWorld, def)
         {
-            Debug.Assert(def.target.Valid);
-            Debug.Assert(def.maxForce >= 0);
-            Debug.Assert(def.frequencyHz >= 0);
-            Debug.Assert(def.dampingRatio >= 0);
+            Debug.Assert(def.Target.Valid);
+            Debug.Assert(def.MaxForce >= 0);
+            Debug.Assert(def.FrequencyHz >= 0);
+            Debug.Assert(def.DampingRatio >= 0);
 
-            m_targetA.Set(def.target);
+            m_targetA.Set(def.Target);
             Transform.MulTransToOutUnsafe(BodyB.GetTransform(), m_targetA, m_localAnchorB);
 
-            m_maxForce = def.maxForce;
+            m_maxForce = def.MaxForce;
             m_impulse.SetZero();
 
-            m_frequencyHz = def.frequencyHz;
-            m_dampingRatio = def.dampingRatio;
+            m_frequencyHz = def.FrequencyHz;
+            m_dampingRatio = def.DampingRatio;
 
             m_beta = 0;
             m_gamma = 0;
