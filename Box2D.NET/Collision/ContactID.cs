@@ -92,7 +92,7 @@ namespace Box2D.Collision
         public void Set(ContactID c)
         {
             IndexA = c.IndexA;
-            IndexB = c.IndexA;
+            IndexB = c.IndexB;
             TypeA = c.TypeA;
             TypeB = c.TypeB;
         }
