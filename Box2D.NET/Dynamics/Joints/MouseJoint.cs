@@ -72,6 +72,7 @@ namespace Box2D.Dynamics.Joints
         public float InvIB;
         private readonly Mat22 m_mass = new Mat22();
         private readonly Vec2 m_C = new Vec2();
+        private float m_maxForce;
 
 
         protected internal MouseJoint(IWorldPool argWorld, MouseJointDef def)

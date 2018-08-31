@@ -528,7 +528,7 @@ namespace Box2D.Dynamics.Joints
             {
                 BodyA.Awake = true;
                 BodyB.Awake = true;
-                m_motorEnabled = flag;
+                m_motorEnabled = value;
             }
         }
 
