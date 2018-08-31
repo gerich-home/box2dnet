@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Box2D.Collision.Shapes;
 using Box2D.Common;
 using Box2D.Dynamics;
@@ -40,13 +41,22 @@ namespace Testbed
             int positionIterations = 2;
 
             // Run loop
-            for (int i = 0; i < 60; ++i)
+            var sw = new Stopwatch();
+
+            sw.Start();
+            const int iterations = 6000000;
+            for (int j = 0; j < iterations; j++)
             {
                 world.Step(timeStep, velocityIterations, positionIterations);
-                Vec2 position = body.Position;
-                float angle = body.Angle;
-                Console.WriteLine("{0:0.00} {1:0.00} {2:0.00}", position.X, position.Y, angle);
             }
+
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed.TotalSeconds + " sec, " + );
+
+            Vec2 position = body.Position;
+            float angle = body.Angle;
+
+            Console.WriteLine("{0:0.00} {1:0.00} {2:0.00}", position.X, position.Y, angle);
         }
     }
 }
